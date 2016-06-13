@@ -92,6 +92,10 @@ macro vdivsd a,b,c {
  match =0, CPU_HAS_AVX1 \{
     if a eq b
 	      divsd   a, c
+    else if a eq c
+	   display 'arguments of vdivsd are strange for no avx1'
+	   display 13,10
+	   err
     else
 	     movaps   a, b
 	      divsd   a, c

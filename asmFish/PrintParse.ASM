@@ -202,6 +202,22 @@ SkipSpaces:	cmp   byte[rsi], ' '
 		 je   @b
 		ret
 
+
+
+	; write at most ecx characters of string at rsi to rdi
+	@@:	add   rsi, 1
+	      stosb
+ParseToEndLine:
+	      movzx   eax, byte[rsi]
+		sub   ecx, 1
+		 js   @f
+		cmp   eax, ' '
+		jae   @b
+	@@:	ret
+
+
+
+
 	; write at most ecx characters of string at rsi to rdi
 	@@:	add   rsi, 1
 	      stosb
@@ -211,6 +227,8 @@ _ParseToken:  movzx   eax, byte[rsi]
 		 bt   [TokenCharacters], eax
 		 jc   @b
 	@@:	ret
+
+
 
 	; skip at most ecx characters of string at rsi
 	@@:	add   rsi,1
@@ -222,7 +240,7 @@ _SkipToken:   movzx   eax, byte[rsi]
 	@@:	ret
 align 4
 TokenCharacters:dd 0
-		dd 00000011111111111000000000000000b
+		dd 00000111111111111000000000000000b
 		dd 00010111111111111111111111111110b
 		dd 00000111111111111111111111111110b
 

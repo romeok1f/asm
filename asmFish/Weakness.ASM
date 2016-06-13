@@ -1,140 +1,120 @@
-; this file is obsolete
-
-; if x1, ..., xn  are the sorted scores
-; and k is the weakness
-; assign weight wi to score xi as
-;
-; wi = (1 + Sqrt[c * k * (x1 - xi)]) * Exp[(d / k ^ 0.25) * (x1 - xi)^2]
-;
-; where c and -d are certain positive constants
-;
-; we then accumuate the weights and choose a random real in the interval [0,w1+...+wn)
-; in order to choose a move
-
-
-
-
-; this is called when weakness <> 0
-; should return a root move
 
 Weakness_PickMove:
 	; in: rbp address of position
-	;     ecx number of root moves to consider  ecx>0
-	; out: rax address of root move
+	;     ecx weakness in average cp loss
+	;     edx multipv
+	; out: the root moves vector will have the top move swapped with a lower one
 
 virtual at rsp
-  .prng    rq 1
-  .count   rd 1
-           rd 1
   .weights rq MAX_MOVES
   .localend    rb 0
 end virtual
 .localsize = ((.localend-rsp+15) and (-16))
 
-	       push   rbx rsi rdi
-	        sub   rsp, .localsize
-	        mov   dword[.count], ecx
-	; get some randomness into the generator
+	       push   rbx rsi rdi r14 r15
+		sub   rsp, .localsize
+
+	  vcvtsi2sd   xmm4, xmm4, ecx
+	; xmm4 = target cp loss
+
+		lea   rcx, [rbp+Pos.rootMovesVec]
+	       call   RootMovesVec_Size
+		mov   ecx, dword[options.multiPV]
+		cmp   eax, ecx
+	      cmova   eax, ecx
+	       imul   ebx, eax, sizeof.RootMove
+		add   rbx, qword[rbp+Pos.rootMovesVec.table]
+	; rbx = end of moves to consider
+
+
+	; assign weights to the scores based on our target cp loss
+	;  and accumulate them into xmm3
+		lea   rdx, [.weights]
+		mov   rsi, qword[rbp+Pos.rootMovesVec.table]
+	     vmovsd   xmm5, qword[.a]
+	     vmovsd   xmm6, qword[.b]
+	     vmovsd   xmm7, qword[.c]
+	     vxorps   xmm3, xmm3, xmm3
+.WeightLoop:
+		mov   eax, dword[rsi+RootMove.score]
+		cmp   eax, -VALUE_INFINITE
+	      cmove   eax, dword[rsi+RootMove.prevScore]
+match =1, DEBUG {
+cmp eax, -VALUE_INFINITE
+jne  @f
+DebugDisplay 'both scores are -infinity in Weakness_PickMove'
+@@:
+}
+	; convert from internal score to something reasonable
+	;               x
+	;  ----------------------------
+	;  (2.58 + a*x^2) * (1 + b*x^2)
+	  vcvtsi2sd   xmm0, xmm0, eax
+	     vmulsd   xmm1, xmm0, xmm0
+	   vfmaddsd   xmm2, xmm1, xmm5, qword[.pawn_value]
+	   vfmaddsd   xmm1, xmm1, xmm6, qword[constd.1p0]
+	     vmulsd   xmm1, xmm1, xmm2
+	     vdivsd   xmm0, xmm0, xmm1
+		cmp   rsi, qword[rbp+Pos.rootMovesVec.table]
+		jne   .not_top
+	     vsubsd   xmm4, xmm4, xmm0
+	     ; xmm5 = - target score   (   target score = top score - target cp loss)
+	.not_top:
+	     vaddsd   xmm0, xmm0, xmm4
+	; xmm0 = difference
+	;   now compute weight
+	;     c
+	; ---------
+	;  c + x^2
+	     vmulsd   xmm0, xmm0, xmm0
+	     vaddsd   xmm0, xmm0, xmm7
+	     vdivsd   xmm1, xmm7, xmm0
+	     vaddsd   xmm3, xmm3, xmm1
+	     vmovsd   qword[rdx], xmm3
+		add   rsi, sizeof.RootMove
+		add   rdx, 8
+		cmp   rsi, rbx
+		 jb   .WeightLoop
+
+	; get a random number in [0,xmm3)
 	       call   _GetTime
 		xor   rax, rdx
-		mov   qword[.prng], rax
-	        
-	        lea   rdi, [.weights]
-	        mov   rsi, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
-	   cvtsd2si   xmm4, dword[option.weakness]
-	        xor   ecx, ecx
-.WeightLoop:
-	   cvtsd2si   xmm0, dword[rsi+RootMoves.score]
-	      subsd   xmm0, xmm4
-	      mulsd   xmm0, xmm0
-	      
-		
-		add   ecx, 1
-		cmp   ecx, dword[.count]
-		 jb   .WeightLoop
-	        
-	        
-	        add   rsp, .localsize
-	        pop   rdi rsi rbx
-	        ret
-	        
-		       push   rdi
-			sub   rsp, .localsize
-			mov   edi, ecx
+		lea   rcx, [prng]
+		xor   qword[rcx], rax
+	       call   Math_Rand_d
+	     vmulsd   xmm0, xmm0, xmm3
 
-		; get some randomness into the generator
-		       call   _GetTime
-			xor   rax, rdx
-			mov   qword[.prng+Prng.seed], rax
+	; find the move corresponding to xmm0
+		lea   rdx, [.weights]
+		mov   rsi, qword[rbp+Pos.rootMovesVec.table]
+.FindMoveLoop:
+	     comisd   xmm0, qword[rdx]
+		jbe   .Found
+		add   rsi, sizeof.RootMove
+		add   rdx, 8
+		cmp   rsi, rbx
+		 jb   .FindMoveLoop
+DebugDisplay 'did not find a move in Weakness_PickMove'
+		jmp   .Return
 
-			mov   ecx, edi
-			lea   rdi, [rootMoves]
-
-		; xmm5 = c*k
-		  vcvtsi2sd   xmm0, xmm0, ecx
-		     vmulsd   xmm5, xmm0, qword [.c]
-
-		; xmm6 = d/k^0.25
-		    vsqrtsd   xmm0, xmm0, xmm0
-		    vsqrtsd   xmm0, xmm0, xmm0
-		     vmovsd   xmm6, qword[.d]
-		     vdivsd   xmm6, xmm6, xmm0
-
-		; xmm7 hold the sum of the weights
-			xor   edx, edx
-		     vxorps   xmm7, xmm7, xmm7
-.NextWeight:
-		      movsx   eax, word [rdi+RootMoves.moves+sizeof.RMove*0+RMove.score]
-		      movsx   ecx, word [rdi+RootMoves.moves+sizeof.RMove*rdx+RMove.score]
-			sub   eax, ecx
-		  vcvtsi2sd   xmm0, xmm0, eax
-		     vmulsd   xmm1, xmm0, xmm5
-		    vsqrtsd   xmm1, xmm1, xmm1
-		     vaddsd   xmm1, xmm1, qword [.one]
-		     vmulsd   xmm0, xmm0, xmm0
-		     vmulsd   xmm0, xmm0, xmm6
-		       call   expd
-		     vmulsd   xmm0, xmm0, xmm1
-		     vaddsd   xmm7, xmm7, xmm0
-		     vmovsd   qword [.weights+8*rdx], xmm7
-			add   edx, 1
-			cmp   edx, dword [rdi+RootMoves.multiPv]
-			 jb   .NextWeight
-.WeightsDone:
-			lea   rcx, [.prng]
-		       call   randd
-		     vmulsd   xmm0, xmm0, xmm7
-			xor   eax, eax
-.SearchNext:
-		    vcomisd   xmm0, qword [.weights+8*rax]
-			jbe   .Found
-			add   eax, 1
-			cmp   eax, dword [rdi+RootMoves.multiPv]
-			 jb   .SearchNext
-			sub   eax, 1	    ; in case something bad happend, return last move
 .Found:
-		      movzx   eax, word [rdi+RootMoves.moves+sizeof.RMove*rax+RMove.move]
-			add   rsp, .localsize
-			pop   rdi
-			ret
+	; swap that move with the top move
+		mov   ecx, (sizeof.RootMove/4) - 1
+		mov   rdi, qword[rbp+Pos.rootMovesVec.table]
+.SwapLoop:
+		mov   eax, dword[rsi+4*rcx]
+		mov   edx, dword[rdi+4*rcx]
+		mov   dword[rdi+4*rcx], eax
+		mov   dword[rsi+4*rcx], edx
+		sub   ecx, 1
+		jns   .SwapLoop
+.Return:
+		add   rsp, .localsize
+		pop   r15 r14 rdi rsi rbx
+		ret
 
 align 8
-.one dq +1.0
-.c   dq +0.0001
-.d   dq -0.0002
-
-
-
-; this is called when weakness <> 0
-; should set rootsMoves.multiPv
-
-Weakness_SetMultiPv:
-	; in: ecx weakness
-			lea   rdx, [rootMoves]
-			shr   ecx, 5
-			add   ecx, 2
-			mov   eax, dword [rdx+RootMoves.size]
-			cmp   ecx, eax
-		      cmova   ecx, eax
-			mov   dword [rdx+RootMoves.multiPv], ecx
-			ret
+.a dq 2.5e-9
+.b dq -9.0e-10
+.c dq 200.0
+.pawn_value dq 2.58

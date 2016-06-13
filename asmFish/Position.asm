@@ -562,18 +562,20 @@ end virtual
 
 	     szcall   PrintString, 'castlingRights: '
 	      movzx   ecx, byte[rbx+State.castlingRights]
-		mov   byte [rdi], 'K'
-		shr   ecx, 1
+		mov   byte[rdi], '-'
+		cmp   ecx, 1
 		adc   rdi, 0
-		mov   byte [rdi], 'Q'
-		shr   ecx, 1
+		mov   eax, 'KQkq'
+		mov   edx, dword[castling_rfrom]
+		add   edx, 'AAaa'
+		cmp   byte[rbp+Pos.chess960], 0
+	     cmovne   eax, edx
+	irps i, 0 1 2 3 {
+		mov   byte[rdi], al
+		shr   eax, 8
+		 bt   ecx, i
 		adc   rdi, 0
-		mov   byte [rdi], 'k'
-		shr   ecx, 1
-		adc   rdi, 0
-		mov   byte [rdi], 'q'
-		shr   ecx, 1
-		adc   rdi, 0
+	}
 		mov   al, 10
 	      stosb
 
@@ -740,24 +742,33 @@ Position_PrintSmall:
 Position_ParseFEN:
 	; in: rsi address of fen string
 	;     rbp address of Pos
+	;     ecx isChess960
 	; out: eax = 0 success
 	;      eax = -1 failure
 
 	       push   rbp rbx rdi r12 r13 r14 r15
 
+
 		mov   rbx, qword[rbp+Pos.stateTable]
 	       test   rbx, rbx
 		 jz   .alloc
 .alloc_ret:
+		mov   edx, ecx
 		xor   eax, eax
 		mov   ecx, Pos._copy_size/8
 		mov   rdi, rbp
 	  rep stosq
+		mov   dword[rbp+Pos.chess960], edx
 
 		xor   eax, eax
 		mov   ecx, sizeof.State/8
 		mov   rdi, rbx
 	  rep stosq
+
+		xor   eax, eax
+		mov   ecx, castling_end-castling_rightsMask
+		lea   rdi, [castling_rightsMask]
+	  rep stosb
 
 	       call   SkipSpaces
 
@@ -842,7 +853,6 @@ Position_ParseFEN:
 		cmp   al, 'b'
 	       sete   cl
 		mov   dword[rbp+Pos.sideToMove], ecx
-
       .Castling:
 	       call   SkipSpaces
 		xor   eax, eax

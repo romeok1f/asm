@@ -101,7 +101,7 @@ mov   r9d, dword[.quietsCnt]
 
 		mov   eax, edx
 	       imul   eax, edx
-		lea   eax, [rax+rdx-1]
+		lea   eax, [rax+2*rdx-2]
 		mov   dword[.bonus], eax
 
 		mov   eax, dword[rbx+State.killers+4*0]
@@ -242,6 +242,8 @@ pop rdi r12
 		jmp   .next_quiet
 .quiets_done:
 
+
+
 		mov   eax, dword[rbx-1*sizeof.State+State.moveCount]
 		cmp   eax, 1
 		jne   .done
@@ -253,9 +255,7 @@ VerboseDisplay <db 'extra penalty',10>
 
 		mov   eax, dword[.depth]
 		mov   ecx, dword[.absbonus]
-		add   eax, 1
-		add   eax, eax
-		add   ecx, eax
+		lea   ecx, [rcx+2*(rax+1)+1]
 		mov   dword[.absbonus], ecx
 		cmp   ecx, 324
 		jae   .done
@@ -293,7 +293,6 @@ VerboseDisplay <db 'extra penalty',10>
 
 
 .bonus_too_big:
-
 		mov   rsi, qword[rbx-1*sizeof.State+State.counterMoves]
 	       test   rsi, rsi
 		 jz   .done

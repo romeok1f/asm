@@ -12,6 +12,16 @@ local ..message, ..over
 	       call   fxn
 }
 
+macro stdcall fxn, m {
+local ..message, ..over
+		lea   rcx, [..message]
+		jmp   ..over
+   ..message:  db m
+	      db 0
+   ..over:
+	       call   fxn
+}
+
 
 ; should work for registers or immediates
 macro ClampUnsigned x, min, max {

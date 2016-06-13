@@ -275,7 +275,6 @@ match = 1, DEBUG \{
 		div   rcx
 	     Assert   e, rdx, 0     , '[rbx-1*sizeof.State+State.counterMoves] is bad rem'
 	     Assert   b, rax, 16*64 , '[rbx-1*sizeof.State+State.counterMoves] is bad quo'
-
 		mov   rax, r10
 		lea   rcx, [CounterMoveHistory]
 		sub   rax, rcx
@@ -284,8 +283,6 @@ match = 1, DEBUG \{
 		div   rcx
 	     Assert   e, rdx, 0     , '[rbx-2*sizeof.State+State.counterMoves] is bad rem'
 	     Assert   b, rax, 16*64 , '[rbx-2*sizeof.State+State.counterMoves] is bad quo'
-
-
 		mov   rax, r11
 		lea   rcx, [CounterMoveHistory]
 		sub   rax, rcx
@@ -294,8 +291,6 @@ match = 1, DEBUG \{
 		div   rcx
 	     Assert   e, rdx, 0     , '[rbx-4*sizeof.State+State.counterMoves] is bad rem'
 	     Assert   b, rax, 16*64 , '[rbx-4*sizeof.State+State.counterMoves] is bad quo'
-
-
 \}
 
 		cmp   start, ender

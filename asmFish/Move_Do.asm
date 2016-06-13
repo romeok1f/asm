@@ -66,6 +66,64 @@ match =1, DEBUG {
 		jmp   Move_Do
 @@: db 'DoMove__ProbCut',0	   }
 
+Move_Do__Tablebase_ProbeAB:
+match =1, DEBUG {
+		lea   rax, [@f]
+		mov   [rbp+Pos.debugPointer], rax
+		jmp   Move_Do
+@@: db 'Move_Do__Tablebase_ProbeAB',0	      }
+
+Move_Do__Tablebase_ProbeWDL:
+match =1, DEBUG {
+		lea   rax, [@f]
+		mov   [rbp+Pos.debugPointer], rax
+		jmp   Move_Do
+@@: db 'Move_Do__Tablebase_ProbeWDL',0	       }
+
+Move_Do__Tablebase_ProbeDTZNoEP:
+match =1, DEBUG {
+		lea   rax, [@f]
+		mov   [rbp+Pos.debugPointer], rax
+		jmp   Move_Do
+@@: db 'Move_Do__Tablebase_ProbeDTZNoEP',0	   }
+
+Move_Do__Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsPositive:
+match =1, DEBUG {
+		lea   rax, [@f]
+		mov   [rbp+Pos.debugPointer], rax
+		jmp   Move_Do
+@@: db 'Move_Do__Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsPositive',0	      }
+
+Move_Do__Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsNonpositive:
+match =1, DEBUG {
+		lea   rax, [@f]
+		mov   [rbp+Pos.debugPointer], rax
+		jmp   Move_Do
+@@: db 'Move_Do__Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsNonpositive',0	 }
+
+Move_Do__Tablebase_ProbeDTZ:
+match =1, DEBUG {
+		lea   rax, [@f]
+		mov   [rbp+Pos.debugPointer], rax
+		jmp   Move_Do
+@@: db 'Move_Do__Tablebase_ProbeDTZ',0	       }
+
+Move_Do__Tablebase_RootProbe:
+match =1, DEBUG {
+		lea   rax, [@f]
+		mov   [rbp+Pos.debugPointer], rax
+		jmp   Move_Do
+@@: db 'Move_Do__Tablebase_RootProbe',0 	}
+
+Move_Do__Tablebase_RootProbeWDL:
+match =1, DEBUG {
+		lea   rax, [@f]
+		mov   [rbp+Pos.debugPointer], rax
+		jmp   Move_Do
+@@: db 'Move_Do__Tablebase_RootProbeWDL',0	   }
+
+
+
 
 Move_Do:
 	; in: rbp  address of Pos

@@ -92,6 +92,40 @@ macro SD_Int x {
 }
 
 
+macro SD_UInt64 x {
+ match =2, VERBOSE \{
+	push  x
+	push  rdi rax rcx rdx r8 r9 r10 r11
+	lea  rdi, [VerboseOutput]
+	mov rax, qword[rsp+8*8]
+	call PrintUnsignedInteger
+	lea  rcx, [VerboseOutput]
+	call _WriteOut
+	pop r11 r10 r9 r8 rdx rcx rax rdi
+	add  rsp, 8
+ \}
+}
+
+
+
+macro SD_Bool8 x {
+ match =2, VERBOSE \{
+	push  x
+	push  rdi rax rcx rdx r8 r9 r10 r11
+	lea  rdi, [VerboseOutput]
+	movzx eax, byte[rsp+8*8]
+	neg eax
+	sbb eax, eax
+	and eax, 1
+	add eax, '0'
+	stosb
+	lea  rcx, [VerboseOutput]
+	call _WriteOut
+	pop r11 r10 r9 r8 rdx rcx rax rdi
+	add  rsp, 8
+ \}
+}
+
 
 
 

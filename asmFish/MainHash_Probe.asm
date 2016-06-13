@@ -89,6 +89,12 @@ mov r15, rax
 movzx  r14d, dx
 lea rdi, [VerboseOutput]
 szcall PrintString, 'tt hit key='
+
+;cmp r14d, 42069
+;jne @f
+;int3
+;@@:
+
 mov rax, r14
 call PrintUnsignedInteger
 szcall PrintString, ' move='

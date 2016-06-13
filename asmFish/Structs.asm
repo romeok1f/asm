@@ -244,7 +244,7 @@ struct Options
  moveOverhead	rd 1
  ponder 	rb 1
 		rb 3
- syzygy50MoveRule rb 1
+ syzygy50MoveRule rb 1	    ; bool 0 or -1
 		  rb 7
  syzygyProbeDepth rd 1
  syzygyProbeLimit rd 1

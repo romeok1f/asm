@@ -173,9 +173,9 @@ VerboseDisplayInt rax
 	       call   RootMovesVec_StableSort
 
 match =1, VERBOSE {
-		lea   rdi, [VerboseOutput]
+		lea   rdi, [Output]
 	       call   RootMovesVec_Print
-		lea   rcx, [VerboseOutput]
+		lea   rcx, [Output]
 	       call   _WriteOut
 }
 	; Write PV back to the transposition table in case the relevant entries have been overwritten during the search.
@@ -442,6 +442,20 @@ MainThread_Think:
 		mov   dword[DrawValue+4*rax], ecx
 		add   byte[mainHash.date], 4
 
+	; when weakness is not 0, set multipv and change maximumTime
+		mov   ecx, dword[options.weakness]
+	       test   ecx, ecx
+		 jz   .no_weakness
+		shr   ecx, 4
+		add   ecx, 2
+		mov   dword[options.multiPV], ecx
+		lea   eax, [rcx-1]
+		mul   dword[time.optimumTime]
+		add   eax, dword[time.maximumTime]
+		div   ecx
+		mov   dword[time.maximumTime], eax
+.no_weakness:
+
 	; Skip TB probing when no TB found
 		xor   eax, eax
 		mov   dl, byte[options.syzygy50MoveRule]
@@ -463,13 +477,13 @@ MainThread_Think:
 		 je   .mate
 
 	; check tb
-;                mov   rcx, qword[rbp+Pos.typeBB+8*White]
-;                 or   rcx, qword[rbp+Pos.typeBB+8*Black]
-;             popcnt   rcx, rcx, rdx
-;                sub   eax, ecx
-;                sar   eax, 31
-;                 or   al, byte[rbx+State.castlingRights]
-;                 jz   .check_tb
+		mov   rcx, qword[rbp+Pos.typeBB+8*White]
+		 or   rcx, qword[rbp+Pos.typeBB+8*Black]
+	     popcnt   rcx, rcx, rdx
+		sub   eax, ecx
+		sar   eax, 31
+		 or   al, byte[rbx+State.castlingRights]
+		 jz   .check_tb
 .check_tb_ret:
 
 	; start workers
@@ -488,7 +502,6 @@ MainThread_Think:
 	       call   Thread_Think
 
 .search_done:
-
 
 	; check for wait
 		mov   al, byte[signals.stop]
@@ -516,6 +529,10 @@ MainThread_Think:
 		jmp   .next_worker2
 	.workers_done2:
 
+
+		mov   ecx, dword[options.weakness]
+	       test   ecx, ecx
+		jnz   .pick_weak_move
 
 	; find best thread  rsi
 		lea   rsi, [rbp-Thread.rootPos]
@@ -549,19 +566,53 @@ MainThread_Think:
 		jmp   .next_worker3
 	.workers_done3:
 .best_done:
-
 		mov   dword[rbp-Thread.rootPos+Thread.previousScore], r9d
-		cmp   rsi, mainThread
-		 je   .dont_send_pv
-.dont_send_pv:
 
+.display_move:
 		mov   rcx, rsi
 	       call   qword[options.displayMoveFxn]
 
       VerboseDisplay  <db 'MainThread_Think returning',10>
-
 		pop   r15 rdi rsi rbx rbp
 		ret
+
+
+
+
+.check_tb:
+	       call   Tablebase_RootProbe
+		mov   byte[Tablebase_RootInTB], al
+		xor   edx, edx
+	       test   eax, eax
+		jnz   .root_in
+	       call   Tablebase_RootProbeWDL
+		mov   byte[Tablebase_RootInTB], al
+		xor   edx, edx
+		cmp   edx, dword[Tablebase_Score]
+	      cmovg   edx, dword[Tablebase_Cardinality]
+	.root_in:
+		lea   rcx, [rbp+Pos.rootMovesVec]
+		mov   dword[Tablebase_Cardinality], edx
+	       call   RootMovesVec_Size
+		mov   dword[Tablebase_Hits], eax
+		mov   dl, byte[Tablebase_UseRule50]
+		mov   eax, dword[Tablebase_Score]
+	       test   dl, dl
+		jnz   .check_tb_ret
+		mov   ecx, VALUE_MATE - MAX_PLY - 1
+		cmp   eax, 0
+	      cmovg   eax, ecx
+		neg   ecx
+		cmp   eax, 0
+	      cmovl   eax, ecx
+		mov   dword[Tablebase_Score], eax
+		jmp   .check_tb_ret
+
+.pick_weak_move:
+	       call   Weakness_PickMove
+		lea   rsi, [mainThread]
+		jmp   .display_move
+
 
 
 
@@ -585,41 +636,6 @@ MainThread_Think:
 		lea   rcx, [Output]
 	       call   _WriteOut
 		jmp   .search_done
-
-
-
-
-.check_tb:
-	       call   Tablebase_RootProbe
-		mov   byte[Tablebase_RootInTB], al
-		xor   edx, edx
-	       test   eax, eax
-		jnz   .root_in
-	       call   Tablebase_RootProbeWDL
-		mov   byte[Tablebase_RootInTB], al
-		xor   edx, edx
-		cmp   edx, dword[Tablebase_Score]
-	      cmovg   edx, dword[Tablebase_Cardinality]
- .root_in:
-		lea   rcx, [rbp+Pos.rootMovesVec]
-		mov   dword[Tablebase_Cardinality], edx
-	       call   RootMovesVec_Size
-		mov   dword[Tablebase_Hits], eax
-		mov   dl, byte[Tablebase_UseRule50]
-		mov   eax, dword[Tablebase_Score]
-	       test   dl, dl
-		jnz   .check_tb_ret
-		mov   ecx, VALUE_MATE - MAX_PLY - 1
-		cmp   eax, 0
-	      cmovg   eax, ecx
-		neg   ecx
-		cmp   eax, 0
-	      cmovl   eax, ecx
-		mov   dword[Tablebase_Score], eax
-		jmp   .check_tb_ret
-
-
-
 
 
 
@@ -852,6 +868,17 @@ match =0, VERBOSE {
 		mov   rax, qword[.nps]
 	       call   PrintUnsignedInteger
 }
+
+	      movsx   r13d, byte[Tablebase_RootInTB]
+		mov   eax, r12d
+		cdq
+		xor   eax, edx
+		sub   eax, edx
+		sub   eax, VALUE_MATE - MAX_PLY
+		sar   eax, 31
+		and   r13d, eax
+	     cmovnz   r12d, dword[Tablebase_Score]
+
 		mov   rax, ' score '
 	      stosq
 		sub   rdi, 1
@@ -859,6 +886,8 @@ match =0, VERBOSE {
 	       call   PrintScore_Uci
 
 		mov   ecx, 'und'
+	       test   r13d, r13d
+		jnz   .no_bound
 		cmp   r15d, dword[rbp-Thread.rootPos+Thread.PVIdx]
 		jne   .no_bound
 		mov   rax, ' lowerbo'
@@ -878,6 +907,11 @@ match =0, VERBOSE {
 	      stosq
 		sub   rdi, 1
 		mov   rax, qword[.nodes]
+	       call   PrintUnsignedInteger
+
+		mov   rax, ' tbhits '
+	      stosq
+		mov   rax, qword[Tablebase_Hits]
 	       call   PrintUnsignedInteger
 
 		mov   eax, ' pv'

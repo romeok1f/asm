@@ -10,10 +10,25 @@ match =1, DEBUG {
 		mov   dword[rbp+Pos.debugMove], ecx
 }
 
-match =2, VERBOSE {
+match=2, VERBOSE {
 		sub   dword[rbp+Pos.gamePly], 1
+push rax rcx rsi rdi
+mov esi, ecx
+lea rdi, [VerboseOutput]
+movsxd rax, dword[rbp+Pos.gamePly]
+call PrintSignedInteger
+mov rax, 'undomove'
+stosq
+mov al, ':'
+stosb
+mov ecx, esi
+call PrintUciMove
+mov al, '|'
+stosb
+lea rcx, [VerboseOutput]
+call _WriteOut
+pop rdi rsi rcx rax
 }
-
 
 		mov   esi, dword[rbp+Pos.sideToMove]
 		xor   esi, 1

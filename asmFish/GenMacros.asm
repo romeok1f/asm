@@ -60,7 +60,7 @@ macro CastlingJmp Rights, JmpTrue, JmpFalse {
 	;     eax = -1 if castling is legal
 	; assumed to have passed path test and rights test
 
-local .ksq_loop
+local ..ksq_loop
 		mov   rax, qword[rbp+Pos.typeBB+8*Pawn]
 		 or   rax, qword[rbp+Pos.typeBB+8*King]
 		and   rax, r13
@@ -90,7 +90,7 @@ local .ksq_loop
 
 	       test   r11d, r11d
 		 jz   JmpTrue
-.ksq_loop:
+..ksq_loop:
 	      movzx   edx, byte[castling_ksqpath+8*(Rights)+r11]
 	RookAttacks   rax, rdx, r14, r8
 	       test   rax, r10
@@ -99,7 +99,7 @@ local .ksq_loop
 	       test   rax, r9
 		jnz   JmpFalse
 		sub   r11d, 1
-		jnz   .ksq_loop
+		jnz   ..ksq_loop
 
 }
 

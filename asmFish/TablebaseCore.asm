@@ -43,8 +43,45 @@
 _Z16pos_material_keyR8Position:
 	; in: rcx address of position
 	; out: rax material key
-		mov   rax, qword[rcx+Pos.state]
-		mov   rax, qword[rax+State.materialKey]
+
+	       push   rbx rsi rdi r12 r13 r14 r15
+		sub   rsp, 64
+		mov   rbp, rcx
+
+		xor   r14, r14
+		xor   r13, r13
+
+	      vpxor   xmm0, xmm0, xmm0	; npMaterial
+	    vmovdqu   dqword[rsp], xmm0
+
+		xor   esi, esi
+.NextSquare:
+	      movzx   eax, byte [rbp+Pos.board+rsi]
+		mov   edx, eax
+		and   edx, 7	; edx = piece type
+		 jz   .Empty
+
+	       imul   ecx, eax, 64*8
+       ;       vmovq   xmm1, qword[Scores_Pieces+rcx+8*rsi]
+       ;      vpaddd   xmm0, xmm0, xmm1
+       ;
+       ;         xor   r15, qword[Zobrist_Pieces+rcx+8*rsi]
+       ;         cmp   edx, Pawn
+       ;         jne   @f
+       ;         xor   r14, qword[Zobrist_Pieces+rcx+8*rsi]
+       ;  @@:
+	      movzx   edx, byte [rsp+rax]
+		xor   r13, qword[Zobrist_Pieces+rcx+8*rdx]
+		add   edx, 1
+		mov   byte[rsp+rax], dl
+.Empty:
+		add   esi, 1
+		cmp   esi, 64
+		 jb   .NextSquare
+
+		mov   rax, r13
+		add   rsp, 64
+		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
 
 
@@ -61,8 +98,10 @@ _Z10pos_piecesR8Position5Color9PieceType:
 	;     edx color
 	;     r8d piece type (1=pawn, 2=knight, ..., 6=king)
 	; out: rax bitboard of pieces
+
+
 		mov   rax, qword[rcx+Pos.typeBB+8*rdx]
-		and   rax, qword[rax+Pos.typeBB+8*(r8+1)]   ; we are shifted by one
+		and   rax, qword[rcx+Pos.typeBB+8*(r8+1)]   ; we are shifted by one
 		ret
 
 
@@ -85,8 +124,8 @@ _Z17calc_key_from_pcsPii:
 irps color, White Black {
  irps pt, Pawn Knight Bishop Rook Queen King \{
   \local ..Next, ..Done
-		lea   r8, [Zobrist_Pieces+8*(64*(8*color+Pawn))]
-		mov   r9d, dword[rcx+rdx+Pawn-1]
+		lea   r8, [Zobrist_Pieces+8*(64*(8*color+pt))]
+		mov   r9d, dword[rcx+4*(rdx+pt-1)]
 		sub   r9d, 1
 		 js   ..Done
 	..Next:
@@ -97,7 +136,6 @@ irps color, White Black {
  \}
 		xor   edx, 8
 }
-		xor   rax, rax
 		ret
 
 
@@ -112,7 +150,7 @@ _Z8calc_keyR8Positioni:
 irps color, White Black {
  irps pt, Pawn Knight Bishop Rook Queen King \{
   \local ..Next, ..Done
-		lea   r8, [Zobrist_Pieces+8*(64*(8*color+Pawn))]
+		lea   r8, [Zobrist_Pieces+8*(64*(8*color+pt))]
 		mov   r9, qword[rcx+Pos.typeBB+8*pt]
 		and   r9, qword[rcx+Pos.typeBB+rdx]
 	     popcnt   r9, r9, r10
@@ -126,7 +164,6 @@ irps color, White Black {
  \}
 		xor   edx, 8
 }
-		xor   rax, rax
 		ret
 
 
@@ -142,7 +179,7 @@ _Z7prt_strR8PositionPci:
 		sbb   edx, edx
 		and   edx, 8
 irps color, White Black {     ; not used;  edx has the color
- irps pt, King Queen Rook Bishop Pawn \{
+ irps pt, King Queen Rook Bishop Knight Pawn \{
   local ..Next, ..Done
 		mov   r9, qword[rbp+Pos.typeBB+8*pt]
 		and   r9, qword[rbp+Pos.typeBB+rdx]
@@ -154,6 +191,8 @@ irps color, White Black {     ; not used;  edx has the color
 	      stosb
 		xor   edx, 8
 }
+		mov   byte[rdi-1], 0
+
 		pop   rbp rdi
 		ret
 
@@ -193,9 +232,6 @@ __chkstk_ms:
 	ret
 
 
-
-rel equ
-
 _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
 	push	r15					
 	push	r14					
@@ -230,7 +266,7 @@ _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
 	jmp	?_006					
 
 ?_007:	movsxd	rbx, dword [r8+r11*4]			
-	lea	rsi, [rel _ZL7offdiag]			
+	lea	rsi, [ _ZL7offdiag]			
 	inc	r11					
 	cmp	byte [rsi+rbx], 0			
 	jnz	?_009					
@@ -247,29 +283,29 @@ _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
 	movsxd	rbx, dword [r8] 			
 	dec	al					
 	mov	ecx, dword [r8+4H]			
-	lea	rbp, [rel _ZL8triangle] 		
-	lea	rdi, [rel _ZL6KK_idx]			
+	lea	rbp, [ _ZL8triangle]		
+	lea	rdi, [ _ZL6KK_idx]			
 	je	?_022					
 	jmp	?_024					
 
 ?_011:	cmp	eax, 2					
 	jg	?_014					
 ?_012:	movsxd	r11, dword [r8+rax*4]			
-	lea	rbx, [rel _ZL7offdiag]			
+	lea	rbx, [ _ZL7offdiag]			
 	xor	eax, eax				
 	cmp	byte [rbx+r11], 0			
 	jle	?_010					
 ?_013:	cmp	r10d, eax				
 	jle	?_010					
 	movsxd	r11, dword [r8+rax*4]			
-	lea	rbx, [rel _ZL8flipdiag] 		
+	lea	rbx, [ _ZL8flipdiag]		
 	movzx	r11d, byte [rbx+r11]			
 	mov	dword [r8+rax*4], r11d			
 	inc	rax					
 	jmp	?_013					
 
 ?_014:	movsxd	r11, dword [r8] 			
-	lea	rbp, [rel _ZL7offdiag]			
+	lea	rbp, [ _ZL7offdiag]			
 	xor	edi, edi				
 	movsxd	rcx, dword [r8+4H]			
 	movsxd	rax, dword [r8+8H]			
@@ -284,7 +320,7 @@ _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
 	add	ebx, esi				
 	cmp	byte [rbp+r11], 0			
 	jz	?_015					
-	lea	rsi, [rel _ZL8triangle] 		
+	lea	rsi, [ _ZL8triangle]		
 	sub	ecx, edi				
 	movzx	r11d, byte [rsi+r11]			
 	imul	ecx, ecx, 62				
@@ -293,10 +329,10 @@ _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
 	jmp	?_020					
 
 ?_015:	cmp	byte [rbp+rcx], 0			
-	lea	rsi, [rel _ZL4diag]			
+	lea	rsi, [ _ZL4diag]			
 	jz	?_018					
 	movzx	r11d, byte [rsi+r11]			
-	lea	rsi, [rel _ZL5lower]			
+	lea	rsi, [ _ZL5lower]			
 	movzx	ecx, byte [rsi+rcx]			
 	imul	r11d, r11d, 1736			
 	imul	ecx, ecx, 62				
@@ -315,7 +351,7 @@ _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
 	sub	ecx, edi				
 	imul	ecx, ecx, 28				
 	lea	ecx, [r11+rcx+76ACH]			
-	lea	r11, [rel _ZL5lower]			
+	lea	r11, [ _ZL5lower]			
 	movzx	eax, byte [r11+rax]			
 	jmp	?_021					
 
@@ -350,9 +386,9 @@ _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
 	add	rax, rcx				
 	jmp	?_017					
 
-?_023:	lea	rbx, [rel _ZL7offdiag]			
+?_023:	lea	rbx, [ _ZL7offdiag]			
 	movsxd	r11, eax				
-	lea	rax, [rel _ZL5lower]			
+	lea	rax, [ _ZL5lower]			
 	movzx	eax, byte [rax+r11]			
 	imul	rax, rax, 21				
 	cmp	byte [rbx+r11], 0			
@@ -421,7 +457,7 @@ _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
 	inc	r12					
 	shl	r11, 6					
 	add	r11, rbx				
-	lea	rbx, [rel _ZL8binomial] 		
+	lea	rbx, [ _ZL8binomial]		
 	add	ebp, dword [rbx+r11*4]			
 	jmp	?_032					
 
@@ -476,7 +512,7 @@ _ZL11encode_pawnP12TBEntry_pawnPhPiS2_:
 	cmp	esi, ebx				
 	jge	?_041					
 	movsxd	r13, dword [r11-4H]			
-	lea	rdi, [rel _ZL6ptwist]			
+	lea	rdi, [ _ZL6ptwist]			
 	movsxd	rbp, dword [r11+r10*4]			
 	mov	r15b, byte [rdi+rbp]			
 	cmp	byte [rdi+r13], r15b			
@@ -491,7 +527,7 @@ _ZL11encode_pawnP12TBEntry_pawnPhPiS2_:
 
 ?_042:	
 	movsxd	rax, dword [r8] 			
-	lea	rbx, [rel _ZL4flap]			
+	lea	rbx, [ _ZL4flap]			
 	lea	r11d, [r10-1H]				
 	movzx	eax, byte [rbx+rax]			
 	movsxd	rbx, r11d				
@@ -499,20 +535,20 @@ _ZL11encode_pawnP12TBEntry_pawnPhPiS2_:
 	lea	r13, [r8+rbx*4] 			
 	xor	ebx, ebx				
 	add	rax, rsi				
-	lea	rsi, [rel _ZL7pawnidx]			
+	lea	rsi, [ _ZL7pawnidx]			
 	movsxd	rax, dword [rsi+rax*4]			
 ?_043:	test	r11d, r11d				
 	jle	?_044					
 	imul	rsi, rbx, -4				
 	dec	r11d					
-	lea	rdi, [rel _ZL6ptwist]			
+	lea	rdi, [ _ZL6ptwist]			
 	movsxd	rsi, dword [r13+rsi]			
 	movzx	edi, byte [rdi+rsi]			
 	movsxd	rsi, ebx				
 	inc	rbx					
 	shl	rsi, 6					
 	add	rsi, rdi				
-	lea	rdi, [rel _ZL8binomial] 		
+	lea	rdi, [ _ZL8binomial]		
 	movsxd	rsi, dword [rdi+rsi*4]			
 	add	rax, rsi				
 	jmp	?_043					
@@ -572,7 +608,7 @@ _ZL11encode_pawnP12TBEntry_pawnPhPiS2_:
 	inc	rdi					
 	shl	rcx, 6					
 	add	rcx, r11				
-	lea	r11, [rel _ZL8binomial] 		
+	lea	r11, [ _ZL8binomial]		
 	add	esi, dword [r11+rcx*4]			
 	jmp	?_050					
 
@@ -632,7 +668,7 @@ _ZL11encode_pawnP12TBEntry_pawnPhPiS2_:
 	inc	rbp					
 	shl	rcx, 6					
 	add	rcx, r11				
-	lea	r11, [rel _ZL8binomial] 		
+	lea	r11, [ _ZL8binomial]		
 	add	edi, dword [r11+rcx*4]			
 	jmp	?_061					
 
@@ -888,7 +924,9 @@ _ZL11setup_pairsPhyPyPS_S_i:
 	shl	esi, 8					
 	or	esi, eax				
 	movzx	ecx, si 				
-	movzx	r13d, si				
+	movzx	r13d, si
+;SD_String db 'num_syms='
+;SD_Int r13
 	and	esi, 01H				
 	add	rcx, r10				
 	call	malloc					
@@ -1013,14 +1051,14 @@ _ZL7open_tbPKcS0_:
 	lea	rbx, [rsp+40H]				
 	mov	rdi, rcx				
 	mov	rbp, rdx				
-?_099:	cmp	dword [rel _ZL9num_paths], esi		
+?_099:	cmp	dword [ _ZL9num_paths], esi		
 	jle	?_100					
-	mov	rax, qword [rel _ZL5paths]		
+	mov	rax, qword [ _ZL5paths] 	
 	mov	rcx, rbx				
 	mov	rdx, qword [rax+rsi*8]			
 	inc	rsi					
 	call	strcpy					
-	lea	rdx, [rel ?_338]			
+	lea	rdx, [ ?_338]			
 	mov	rcx, rbx				
 	call	strcat					
 	mov	rdx, rdi				
@@ -1036,7 +1074,7 @@ _ZL7open_tbPKcS0_:
 	mov	r8d, 1					
 	mov	dword [rsp+28H], 128			
 	mov	dword [rsp+20H], 3			
-	call	near [rel __imp_CreateFileA]		
+	call	near [ __imp_CreateFileA]		
 	cmp	rax, -1 				
 	jz	?_099					
 	jmp	?_101					
@@ -1064,17 +1102,17 @@ _ZL8map_filePKcS0_Py:
 	je	?_105					
 	lea	rdx, [rsp+3CH]				
 	mov	rcx, rax				
-	call	near [rel __imp_GetFileSize]		
+	call	near [ __imp_GetFileSize]		
 	xor	edx, edx				
 	mov	r9d, dword [rsp+3CH]			
 	mov	rcx, rsi				
 	mov	qword [rsp+28H], 0			
 	mov	r8d, 2					
 	mov	dword [rsp+20H], eax			
-	call	near [rel __imp_CreateFileMappingA]	
+	call	near [ __imp_CreateFileMappingA]	
 	test	rax, rax				
 	jnz	?_102					
-	lea	rcx, [rel ?_339]			
+	lea	rcx, [ ?_339]			
 	call	puts					
 	jmp	?_103					
 
@@ -1084,20 +1122,20 @@ _ZL8map_filePKcS0_Py:
 	mov	edx, 4					
 	mov	qword [rsp+20H], 0			
 	mov	rcx, rax				
-	call	near [rel __imp_MapViewOfFile]		
+	call	near [ __imp_MapViewOfFile]		
 	test	rax, rax				
 	mov	rbx, rax				
 	jnz	?_104					
-	call	near [rel __imp_GetLastError]		
+	call	near [ __imp_GetLastError]		
 	mov	r8, rbp 				
 	mov	rdx, rdi				
-	lea	rcx, [rel ?_340]			
+	lea	rcx, [ ?_340]			
 	mov	r9d, eax				
 	call	printf					
 ?_103:	mov	ecx, 1					
 	call	exit					
 ?_104:	mov	rcx, rsi				
-	call	near [rel __imp_CloseHandle]		
+	call	near [ __imp_CloseHandle]		
 	mov	rax, rbx				
 	jmp	?_106					
 
@@ -1260,7 +1298,7 @@ _ZL9pawn_fileP12TBEntry_pawnPi.isra.0:
 	mov	eax, dword [rdx]			
 	jge	?_120					
 	movsxd	rbx, dword [rdx+r8*4+4H]		
-	lea	r11, [rel _ZL4flap]			
+	lea	r11, [ _ZL4flap]			
 	movsxd	r9, eax 				
 	mov	r10, rbx				
 	mov	bl, byte [r11+rbx]			
@@ -1272,16 +1310,22 @@ _ZL9pawn_fileP12TBEntry_pawnPi.isra.0:
 	jmp	?_118					
 
 ?_120:	
-	lea	rdx, [rel _ZL12file_to_file]		
+	lea	rdx, [ _ZL12file_to_file]		
 	and	eax, 07H				
 	movzx	eax, byte [rdx+rax]			
 	pop	rbx					
 	ret						
 
 _ZL11add_to_hashP7TBEntryy:
+
+;SD_String db 'add_to_hash: key='
+;SD_UInt64 rdx
+;SD_String db 10
+
+
 	push	rbx					
 	sub	rsp, 32 				
-	lea	rax, [rel _ZL7TB_hash]			
+	lea	rax, [ _ZL7TB_hash]			
 	xor	r9d, r9d				
 	mov	r10, rax				
 	mov	r11, rdx				
@@ -1296,7 +1340,7 @@ _ZL11add_to_hashP7TBEntryy:
 	inc	r9					
 	cmp	r9, 5					
 	jnz	?_121					
-	lea	rcx, [rel ?_341]			
+	lea	rcx, [ ?_341]			
 	call	puts					
 	mov	ecx, 1					
 	call	exit					
@@ -1315,15 +1359,15 @@ _ZL7init_tbPc.constprop.4:
 	push	rdi					
 	push	rsi					
 	push	rbx					
-	sub	rsp, 104				
-	lea	rdx, [rel ?_342]			
+	sub	rsp, 104
+	lea	rdx, [ ?_342]			
 	mov	rbx, rcx				
 	call	_ZL7open_tbPKcS0_			
 	cmp	rax, -1 				
 	je	?_149					
 	lea	rdi, [rsp+20H]				
 	mov	rcx, rax				
-	call	near [rel __imp_CloseHandle]		
+	call	near [ __imp_CloseHandle]		
 	xor	eax, eax				
 ?_123:	mov	dword [rax+rdi], 0			
 	add	rax, 4					
@@ -1390,29 +1434,29 @@ _ZL7init_tbPc.constprop.4:
 	mov	r9d, ecx				
 	add	r9d, eax				
 	jnz	?_135					
-	movsxd	rbx, dword [rel _ZL11TBnum_piece]	
+	movsxd	rbx, dword [ _ZL11TBnum_piece]	
 	cmp	ebx, 254				
 	jnz	?_134					
-	lea	rcx, [rel ?_343]			
+	lea	rcx, [ ?_343]			
 	jmp	?_136					
 
 ?_134:	lea	edx, [rbx+1H]				
-	mov	dword [rel _ZL11TBnum_piece], edx	
+	mov	dword [ _ZL11TBnum_piece], edx	
 	imul	rbx, rbx, 120				
-	lea	rdx, [rel _ZL8TB_piece] 		
+	lea	rdx, [ _ZL8TB_piece]		
 	jmp	?_138					
 
-?_135:	movsxd	rbx, dword [rel _ZL10TBnum_pawn]	
+?_135:	movsxd	rbx, dword [ _ZL10TBnum_pawn]	
 	cmp	ebx, 256				
 	jnz	?_137					
-	lea	rcx, [rel ?_344]			
+	lea	rcx, [ ?_344]			
 ?_136:	call	puts					
 	mov	ecx, 1					
 	call	exit					
 ?_137:	lea	edx, [rbx+1H]				
 	imul	rbx, rbx, 384				
-	mov	dword [rel _ZL10TBnum_pawn], edx	
-	lea	rdx, [rel _ZL7TB_pawn]			
+	mov	dword [ _ZL10TBnum_pawn], edx	
+	lea	rdx, [ _ZL7TB_pawn]			
 ?_138:	add	rbx, rdx				
 	xor	r8d, r8d				
 	xor	edx, edx				
@@ -1428,10 +1472,10 @@ _ZL7init_tbPc.constprop.4:
 	sete	byte [rbx+1AH]				
 	test	r9d, r9d				
 	setg	dl					
-	cmp	r8d, dword [rel _ZN13TablebaseCore14MaxCardinalityE]
+	cmp	r8d, dword [ _ZN13TablebaseCore14MaxCardinalityE]
 	mov	byte [rbx+1BH], dl			
 	jle	?_140					
-	mov	dword [rel _ZN13TablebaseCore14MaxCardinalityE], r8d
+	mov	dword [ _ZN13TablebaseCore14MaxCardinalityE], r8d
 ?_140:	test	dl, dl					
 	jz	?_142					
 	test	eax, eax				
@@ -1509,7 +1553,7 @@ _ZL18calc_factors_piecePiiiPhh:
 	sub	ebx, esi				
 ?_150:	cmp	edi, r8d				
 	jnz	?_153					
-	lea	rax, [rel _ZZL18calc_factors_piecePiiiPhhE6pivfac]
+	lea	rax, [ _ZZL18calc_factors_piecePiiiPhhE6pivfac]
 	mov	dword [rcx], r11d			
 	movsxd	rax, dword [rax+r13*4]			
 	imul	r11, rax				
@@ -1563,9 +1607,9 @@ _ZL14free_dtz_entryP7TBEntry:
 	mov	rcx, qword [rcx]			
 	test	rcx, rcx				
 	jz	?_156					
-	call	near [rel __imp_UnmapViewOfFile]	
+	call	near [ __imp_UnmapViewOfFile]	
 	mov	rcx, rsi				
-	call	near [rel __imp_CloseHandle]		
+	call	near [ __imp_CloseHandle]		
 ?_156:	xor	esi, esi				
 	cmp	byte [rbx+1BH], 0			
 	jnz	?_157					
@@ -1613,7 +1657,7 @@ _ZL17calc_factors_pawnPiiiiPhi:
 	dec	eax					
 	cdqe						
 	lea	rdx, [r14+rax*4]			
-	lea	rax, [rel _ZL7pfactor]			
+	lea	rax, [ _ZL7pfactor]			
 	movsxd	rax, dword [rax+rdx*4]			
 	jmp	?_162					
 
@@ -1695,9 +1739,9 @@ _ZL14free_wdl_entryP7TBEntry:
 	mov	rcx, qword [rcx]			
 	test	rcx, rcx				
 	jz	?_171					
-	call	near [rel __imp_UnmapViewOfFile]	
+	call	near [ __imp_UnmapViewOfFile]	
 	mov	rcx, rsi				
-	call	near [rel __imp_CloseHandle]		
+	call	near [ __imp_CloseHandle]		
 ?_171:	xor	esi, esi				
 	cmp	byte [rbx+1BH], 0			
 	jnz	?_173					
@@ -1742,21 +1786,21 @@ _ZN13TablebaseCore4initEPKc:
 	push	rsi					
 	push	rbx					
 	sub	rsp, 72 				
-	cmp	byte [rel _ZL11initialized], 0		
+	cmp	byte [ _ZL11initialized], 0		
 	mov	rbx, rcx				
 	jnz	?_175					
-	lea	r9, [rel _ZL8binomial]			
+	lea	r9, [ _ZL8binomial]			
 	xor	r10d, r10d				
 	mov	rcx, r9 				
 	jmp	?_182					
 
-?_175:	mov	rcx, qword [rel _ZL11path_string]	
-	lea	rdi, [rel _ZL8TB_piece] 		
+?_175:	mov	rcx, qword [ _ZL11path_string]	
+	lea	rdi, [ _ZL8TB_piece]		
 	xor	esi, esi				
 	call	free					
-	mov	rcx, qword [rel _ZL5paths]		
+	mov	rcx, qword [ _ZL5paths] 	
 	call	free					
-?_176:	cmp	esi, dword [rel _ZL11TBnum_piece]	
+?_176:	cmp	esi, dword [ _ZL11TBnum_piece]	
 	jge	?_177					
 	mov	rcx, rdi				
 	inc	esi					
@@ -1764,9 +1808,9 @@ _ZN13TablebaseCore4initEPKc:
 	call	_ZL14free_wdl_entryP7TBEntry		
 	jmp	?_176					
 
-?_177:	lea	rdi, [rel _ZL7TB_pawn]			
+?_177:	lea	rdi, [ _ZL7TB_pawn]			
 	xor	esi, esi				
-?_178:	cmp	esi, dword [rel _ZL10TBnum_pawn]	
+?_178:	cmp	esi, dword [ _ZL10TBnum_pawn]	
 	jge	?_179					
 	mov	rcx, rdi				
 	inc	esi					
@@ -1775,7 +1819,7 @@ _ZN13TablebaseCore4initEPKc:
 	jmp	?_178					
 
 ?_179:	xor	esi, esi				
-?_180:	lea	rax, [rel ?_334]			
+?_180:	lea	rax, [ ?_334]			
 	mov	rcx, qword [rax+rsi]			
 	test	rcx, rcx				
 	jz	?_181					
@@ -1808,10 +1852,10 @@ _ZN13TablebaseCore4initEPKc:
 	add	r9, 256 				
 	cmp	r10d, 5 				
 	jnz	?_182					
-	lea	r9, [rel _ZL7pfactor]			
+	lea	r9, [ _ZL7pfactor]			
 	or	r8d, 0FFFFFFFFH 			
 	xor	eax, eax				
-	lea	r10, [rel _ZL7pawnidx]			
+	lea	r10, [ _ZL7pawnidx]			
 ?_186:	movsxd	rsi, r8d				
 	xor	edx, edx				
 	xor	r11d, r11d				
@@ -1820,9 +1864,9 @@ _ZN13TablebaseCore4initEPKc:
 	mov	dword [r10+rdx*4], r11d 		
 	mov	edi, 1					
 	jz	?_188					
-	lea	rdi, [rel _ZL7invflap]			
+	lea	rdi, [ _ZL7invflap]			
 	movzx	edi, byte [rdi+rdx]			
-	lea	rbp, [rel _ZL6ptwist]			
+	lea	rbp, [ _ZL6ptwist]			
 	movzx	edi, byte [rbp+rdi]			
 	add	rdi, rsi				
 	mov	edi, dword [rcx+rdi*4]			
@@ -1839,9 +1883,9 @@ _ZN13TablebaseCore4initEPKc:
 	mov	dword [r10+rdx*4+18H], r11d		
 	mov	edi, 1					
 	jz	?_190					
-	lea	rdi, [rel ?_350]			
+	lea	rdi, [ ?_350]			
 	movzx	edi, byte [rdi+rdx]			
-	lea	rbp, [rel _ZL6ptwist]			
+	lea	rbp, [ _ZL6ptwist]			
 	movzx	edi, byte [rbp+rdi]			
 	add	rdi, rsi				
 	mov	edi, dword [rcx+rdi*4]			
@@ -1858,9 +1902,9 @@ _ZN13TablebaseCore4initEPKc:
 	mov	dword [r10+rdx*4+30H], r11d		
 	mov	edi, 1					
 	jz	?_192					
-	lea	rdi, [rel ?_351]			
+	lea	rdi, [ ?_351]			
 	movzx	edi, byte [rdi+rdx]			
-	lea	rbp, [rel _ZL6ptwist]			
+	lea	rbp, [ _ZL6ptwist]			
 	movzx	edi, byte [rbp+rdi]			
 	add	rdi, rsi				
 	mov	edi, dword [rcx+rdi*4]			
@@ -1877,9 +1921,9 @@ _ZN13TablebaseCore4initEPKc:
 	mov	dword [r10+rdx*4+48H], r11d		
 	mov	edi, 1					
 	jz	?_194					
-	lea	rdi, [rel ?_352]			
+	lea	rdi, [ ?_352]			
 	movzx	edi, byte [rdi+rdx]			
-	lea	rbp, [rel _ZL6ptwist]			
+	lea	rbp, [ _ZL6ptwist]			
 	movzx	edi, byte [rbp+rdi]			
 	add	rdi, rsi				
 	mov	edi, dword [rcx+rdi*4]			
@@ -1894,10 +1938,10 @@ _ZN13TablebaseCore4initEPKc:
 	inc	r8d					
 	cmp	eax, 5					
 	jne	?_186					
-	mov	byte [rel _ZL11initialized], 1		
+	mov	byte [ _ZL11initialized], 1		
 ?_195:	cmp	byte [rbx], 0				
 	je	?_233					
-	lea	rdx, [rel ?_345]			
+	lea	rdx, [ ?_345]			
 	mov	rcx, rbx				
 	call	strcmp					
 	test	eax, eax				
@@ -1912,7 +1956,7 @@ _ZN13TablebaseCore4initEPKc:
 	xor	ebx, ebx				
 	mov	rcx, rax				
 	mov	rsi, rax				
-	mov	qword [rel _ZL11path_string], rax	
+	mov	qword [ _ZL11path_string], rax	
 	call	strcpy					
 	xor	eax, eax				
 ?_196:	movsxd	rdx, eax				
@@ -1938,12 +1982,12 @@ _ZN13TablebaseCore4initEPKc:
 	jmp	?_196					
 
 ?_199:	movsxd	rcx, ebx				
-	mov	dword [rel _ZL9num_paths], ebx		
+	mov	dword [ _ZL9num_paths], ebx		
 	shl	rcx, 3					
 	call	malloc					
 	xor	ecx, ecx				
 	xor	r8d, r8d				
-	mov	qword [rel _ZL5paths], rax		
+	mov	qword [ _ZL5paths], rax 	
 ?_200:	cmp	ebx, ecx				
 	jle	?_204					
 	movsxd	rdx, r8d				
@@ -1970,13 +2014,13 @@ _ZN13TablebaseCore4initEPKc:
 ?_204:	xor	edx, edx				
 	xor	ecx, ecx				
 	xor	r8d, r8d				
-	call	near [rel __imp_CreateMutexA]		
-	lea	rdx, [rel _ZL7TB_hash]			
-	mov	dword [rel _ZL10TBnum_pawn], 0		
-	mov	qword [rel _ZL8TB_mutex], rax		
-	lea	rcx, [rel _ZL7TB_pawn]			
-	mov	dword [rel _ZL11TBnum_piece], 0 	
-	mov	dword [rel _ZN13TablebaseCore14MaxCardinalityE], 0
+	call	near [ __imp_CreateMutexA]		
+	lea	rdx, [ _ZL7TB_hash]			
+	mov	dword [ _ZL10TBnum_pawn], 0		
+	mov	qword [ _ZL8TB_mutex], rax		
+	lea	rcx, [ _ZL7TB_pawn]			
+	mov	dword [ _ZL11TBnum_piece], 0	
+	mov	dword [ _ZN13TablebaseCore14MaxCardinalityE], 0
 ?_205:	xor	eax, eax				
 ?_206:	mov	qword [rdx+rax], 0			
 	mov	qword [rdx+rax+8H], 0			
@@ -1987,12 +2031,12 @@ _ZN13TablebaseCore4initEPKc:
 	cmp	rdx, rcx				
 	jnz	?_205					
 	xor	eax, eax				
-?_207:	lea	rdx, [rel ?_334]			
+?_207:	lea	rdx, [ ?_334]			
 	mov	qword [rdx+rax], 0			
 	add	rax, 24 				
 	cmp	rax, 1536				
 	jnz	?_207					
-	lea	rsi, [rel ?_353]			
+	lea	rsi, [ ?_353]			
 	xor	ebx, ebx				
 	lea	rdi, [rsp+30H]				
 ?_208:	mov	al, byte [rbx+rsi]			
@@ -2000,14 +2044,14 @@ _ZN13TablebaseCore4initEPKc:
 	inc	rbx					
 	mov	byte [rsp+30H], 75			
 	mov	byte [rsp+32H], 118			
-	lea	r13, [rel ?_353]			
+	lea	r13, [ ?_353]			
 	mov	byte [rsp+33H], 75			
 	mov	byte [rsp+34H], 0			
 	mov	byte [rsp+31H], al			
 	call	_ZL7init_tbPc.constprop.4		
 	cmp	rbx, 5					
 	jnz	?_208					
-	lea	r14, [rel _ZL4pchr]			
+	lea	r14, [ _ZL4pchr]			
 	xor	esi, esi				
 ?_209:	mov	r12b, byte [r13+rsi]			
 	lea	ebp, [rsi+1H]				
@@ -2017,7 +2061,7 @@ _ZN13TablebaseCore4initEPKc:
 	mov	byte [rsp+30H], 75			
 	mov	al, byte [r14+rax]			
 	mov	byte [rsp+31H], r12b			
-	lea	rbx, [rel _ZL4pchr]			
+	lea	rbx, [ _ZL4pchr]			
 	mov	byte [rsp+32H], 118			
 	mov	byte [rsp+33H], 75			
 	mov	byte [rsp+35H], 0			
@@ -2046,30 +2090,35 @@ _ZN13TablebaseCore4initEPKc:
 	jnz	?_212					
 	inc	rsi					
 	cmp	rsi, 5					
-	jnz	?_211					
-	xor	esi, esi				
+	jnz	?_211
+
+	xor	esi, esi	      ; esi = i-1
 ?_213:	mov	r15b, byte [r13+rsi]			
 	lea	ebp, [rsi+1H]				
 ?_214:	movsxd	rax, ebp				
-	mov	r12d, 5 				
+	mov	r12d, 1       ; r12d = k
 	mov	r14b, byte [rbx+rax]			
 ?_215:	mov	rcx, rdi				
 	mov	byte [rsp+30H], 75			
 	mov	byte [rsp+31H], r15b			
 	mov	byte [rsp+32H], r14b			
 	mov	byte [rsp+33H], 118			
-	mov	byte [rsp+34H], 75			
-	mov	byte [rsp+35H], r14b			
+	mov	byte [rsp+34H], 75
+	mov	al, byte[_ZL4pchr+r12]
+	mov	byte [rsp+35H], al
 	mov	byte [rsp+36H], 0			
 	call	_ZL7init_tbPc.constprop.4		
-	dec	r12d					
-	jnz	?_215					
+	add	r12d, 1
+	cmp	r12d, 6
+	 jb	?_215
 	inc	ebp					
 	cmp	ebp, 6					
 	jnz	?_214					
 	inc	rsi					
 	cmp	rsi, 5					
-	jnz	?_213					
+	jnz	?_213
+
+
 	xor	esi, esi				
 ?_216:	mov	r14b, byte [r13+rsi]			
 	lea	ebp, [rsi+1H]				
@@ -2141,7 +2190,7 @@ _ZN13TablebaseCore4initEPKc:
 	inc	r12					
 	cmp	r12, 5					
 	jne	?_219					
-	lea	r14, [rel ?_353]			
+	lea	r14, [ ?_353]			
 	xor	edi, edi				
 	lea	r12, [rsp+30H]				
 ?_225:	lea	esi, [rdi+1H]				
@@ -2154,7 +2203,7 @@ _ZN13TablebaseCore4initEPKc:
 	inc	r13					
 	mov	byte [rsp+32H], al			
 	mov	byte [rsp+28H], al			
-	lea	r15, [rel ?_353]			
+	lea	r15, [ ?_353]			
 	mov	qword [rsp+20H], rdx			
 	mov	byte [rsp+30H], 75			
 	mov	byte [rsp+31H], cl			
@@ -2180,7 +2229,7 @@ _ZN13TablebaseCore4initEPKc:
 	inc	rdi					
 	cmp	rdi, 5					
 	jne	?_225					
-	lea	r13, [rel _ZL4pchr]			
+	lea	r13, [ _ZL4pchr]			
 	xor	ebx, ebx				
 ?_229:	mov	r14b, byte [r15+rbx]			
 	lea	esi, [rbx+1H]				
@@ -2218,9 +2267,9 @@ _ZN13TablebaseCore4initEPKc:
 	inc	rbx					
 	cmp	rbx, 5					
 	jnz	?_229					
-	mov	edx, dword [rel _ZL10TBnum_pawn]	
-	lea	rcx, [rel ?_346]			
-	add	edx, dword [rel _ZL11TBnum_piece]	
+	mov	edx, dword [ _ZL10TBnum_pawn]	
+	lea	rcx, [ ?_346]			
+	add	edx, dword [ _ZL11TBnum_piece]	
 	call	printf					
 	nop						
 ?_233:	add	rsp, 72 				
@@ -2235,6 +2284,9 @@ _ZN13TablebaseCore4initEPKc:
 	ret						
 
 _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
+
+;SD_String <db 'probe_wdl_table()',10>
+
 	push	r15					
 	push	r14					
 	push	r13					
@@ -2247,7 +2299,13 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	xor	ebx, ebx				
 	mov	rdi, rcx				
 	mov	r13, rdx				
-	call	_Z16pos_material_keyR8Position		
+	call	_Z16pos_material_keyR8Position
+
+;SD_String db 'key='
+;SD_UInt64 rax
+;SD_String db 10
+
+
 	mov	rcx, rdi				
 	mov	qword [rsp+38H], rax			
 	call	_Z11pos_KvK_keyR8Position		
@@ -2256,7 +2314,7 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	mov	rsi, qword [rsp+38H]			
 	shr	rsi, 54 				
 	imul	rax, rsi, 80				
-	lea	rsi, [rel _ZL7TB_hash]			
+	lea	rsi, [ _ZL7TB_hash]			
 	add	rsi, rax				
 	lea	rax, [rsi+50H]				
 ?_234:	mov	rbx, qword [rsp+38H]			
@@ -2273,8 +2331,8 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	cmp	byte [rbx+18H], 0			
 	jne	?_268					
 	or	edx, 0FFFFFFFFH 			
-	mov	rcx, qword [rel _ZL8TB_mutex]		
-	call	near [rel __imp_WaitForSingleObject]	
+	mov	rcx, qword [ _ZL8TB_mutex]		
+	call	near [ __imp_WaitForSingleObject]	
 	cmp	byte [rbx+18H], 0			
 	jne	?_267					
 	mov	rax, qword [rsp+38H]			
@@ -2287,13 +2345,13 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	call	_Z7prt_strR8PositionPci 		
 	lea	r8, [rbx+10H]				
 	mov	rcx, r12				
-	lea	rdx, [rel ?_342]			
+	lea	rdx, [ ?_342]			
 	call	_ZL8map_filePKcS0_Py			
 	test	rax, rax				
 	mov	rbp, rax				
 	mov	qword [rbx], rax			
 	jnz	?_236					
-	lea	rcx, [rel ?_347]			
+	lea	rcx, [ ?_347]			
 	mov	rdx, r12				
 	call	printf					
 	jmp	?_239					
@@ -2306,21 +2364,21 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	jnz	?_237					
 	cmp	byte [rax+3H], 93			
 	jz	?_240					
-?_237:	lea	rcx, [rel ?_348]			
+?_237:	lea	rcx, [ ?_348]			
 	call	puts					
 	mov	rcx, qword [rbx]			
 	mov	rdi, qword [rbx+10H]			
 	test	rcx, rcx				
 	jz	?_238					
-	call	near [rel __imp_UnmapViewOfFile]	
+	call	near [ __imp_UnmapViewOfFile]	
 	mov	rcx, rdi				
-	call	near [rel __imp_CloseHandle]		
+	call	near [ __imp_CloseHandle]		
 ?_238:	mov	qword [rbx], 0				
 ?_239:	mov	qword [rsi], 0				
 	xor	ebx, ebx				
-	mov	rcx, qword [rel _ZL8TB_mutex]		
+	mov	rcx, qword [ _ZL8TB_mutex]		
 	mov	dword [r13], 0				
-	call	near [rel __imp_ReleaseMutex]		
+	call	near [ __imp_ReleaseMutex]
 	jmp	?_281					
 
 ?_240:	mov	al, byte [rax+4H]			
@@ -2630,8 +2688,8 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	cmp	edx, dword [rsp+30H]			
 	jnz	?_264					
 ?_266:	mov	byte [rbx+18H], 1			
-?_267:	mov	rcx, qword [rel _ZL8TB_mutex]		
-	call	near [rel __imp_ReleaseMutex]		
+?_267:	mov	rcx, qword [ _ZL8TB_mutex]		
+	call	near [ __imp_ReleaseMutex]
 ?_268:	cmp	byte [rbx+1AH], 0			
 	jnz	?_270					
 	mov	rax, qword [rsp+38H]			
@@ -2669,7 +2727,10 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	and	r12d, 38H				
 ?_271:	cmp	byte [rbx+1BH], 0			
 	jnz	?_275					
-	imul	rax, rsi, 6				
+
+;SD_String <db 'yes pawns',10>
+
+	imul	rax, rsi, 6
 	xor	r12d, r12d				
 	lea	r13, [rbx+rax+60H]			
 ?_272:	movzx	eax, byte [rbx+19H]			
@@ -2683,6 +2744,10 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	sar	edx, 3					
 	and	r8d, 07H				
 	call	_Z10pos_piecesR8Position5Color9PieceType
+;SD_String db 'bb='
+;SD_UInt64 rax
+;SD_String db 10
+
 ?_273:	lea	rdx, [rax-1H]				
 	movsxd	rcx, r12d				
 	inc	r12d					
@@ -2700,10 +2765,17 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	lea	r9, [rbx+rax+30H]			
 	lea	rdx, [rbx+rdx+6CH]			
 	call	_ZL12encode_pieceP13TBEntry_piecePhPiS2_
+;SD_String db 'idx='
+;SD_UInt64 rax
+;SD_String db 10
 	mov	rcx, qword [rbx+rsi*8]			
 	jmp	?_280					
 
-?_275:	movzx	r8d, byte [rbx+60H]			
+?_275:
+
+;SD_String <db 'yes pawns',10>
+
+	movzx	r8d, byte [rbx+60H]
 	lea	r14, [rsp+0C0H] 			
 	mov	rcx, rdi				
 	xor	r8d, ebp				
@@ -2711,7 +2783,10 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	and	r8d, 07H				
 	sar	edx, 3					
 	call	_Z10pos_piecesR8Position5Color9PieceType
-	xor	edx, edx				
+;SD_String db 'bb='
+;SD_UInt64 rax
+;SD_String db 10
+	xor	edx, edx
 ?_276:	bsf	rcx, rax				
 	lea	r8, [rax-1H]				
 	xor	ecx, r12d				
@@ -2741,7 +2816,10 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	sar	edx, 3					
 	and	r8d, 07H				
 	call	_Z10pos_piecesR8Position5Color9PieceType
-?_278:	lea	rcx, [rax-1H]				
+;SD_String db 'bb='
+;SD_UInt64 rax
+;SD_String db 10
+?_278:	lea	rcx, [rax-1H]
 	movsxd	r8, r13d				
 	inc	r13d					
 	bsf	rdx, rax				
@@ -2761,12 +2839,19 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	lea	rax, [rax+rdx+60H]			
 	lea	rdx, [rbx+rax+0CH]			
 	call	_ZL11encode_pawnP12TBEntry_pawnPhPiS2_	
-	imul	r13, qword [rsp+30H], 11		
+;SD_String db 'idx='
+;SD_UInt64 rax
+;SD_String db 10
+	imul	r13, qword [rsp+30H], 11
 	lea	rdx, [rsi+r13+4H]			
 	mov	rcx, qword [rbx+rdx*8]			
 ?_280:	mov	rdx, rax				
-	call	_Z16decompress_pairsILb1EEhP9PairsDatay 
-	movzx	eax, al 				
+	call	_Z16decompress_pairsILb1EEhP9PairsDatay
+	movzx	eax, al
+
+
+
+
 	lea	ebx, [rax-2H]				
 ?_281:	mov	eax, ebx				
 	add	rsp, 392				
@@ -2778,7 +2863,12 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	pop	r13					
 	pop	r14					
 	pop	r15					
-	ret						
+
+
+SD_String db 'probe_wdl_table '
+SD_Int rax
+SD_String db '|'
+	ret
 
 _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	push	r15					
@@ -2794,12 +2884,12 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	mov	dword [rsp+148H], edx			
 	mov	qword [rsp+150H], r8			
 	call	_Z16pos_material_keyR8Position		
-	cmp	qword [rel _ZL9DTZ_table], rax		
+	cmp	qword [ _ZL9DTZ_table], rax		
 	mov	rbp, rax				
 	je	?_286					
-	cmp	qword [rel ?_333], rax			
+	cmp	qword [ ?_333], rax			
 	je	?_286					
-	lea	rdx, [rel _ZL9DTZ_table]		
+	lea	rdx, [ _ZL9DTZ_table]		
 	mov	eax, 1					
 	mov	r8, rdx 				
 ?_282:	cmp	qword [rdx+18H], rbp			
@@ -2808,7 +2898,7 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	add	rdx, 24 				
 	cmp	eax, 64 				
 	jnz	?_282					
-	lea	r13, [rel _ZL7TB_hash]			
+	lea	r13, [ _ZL7TB_hash]			
 	mov	rax, rbp				
 	shr	rax, 54 				
 	imul	rax, rax, 80				
@@ -2841,10 +2931,10 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	rep movsd					
 	mov	eax, r9d				
 	jnz	?_285					
-	mov	qword [rel _ZL9DTZ_table], r12		
-	mov	qword [rel ?_333], r11			
-	mov	qword [rel ?_334], r10			
-?_286:	mov	rsi, qword [rel ?_334]			
+	mov	qword [ _ZL9DTZ_table], r12		
+	mov	qword [ ?_333], r11			
+	mov	qword [ ?_334], r10			
+?_286:	mov	rsi, qword [ ?_334]			
 	test	rsi, rsi				
 	je	?_304					
 	cmp	byte [rsi+1AH], 0			
@@ -2929,7 +3019,7 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	test	r8b, 02H				
 	lea	ecx, [rax+2H]				
 	je	?_302					
-	lea	r9, [rel _ZL10wdl_to_map]		
+	lea	r9, [ _ZL10wdl_to_map]		
 	movsxd	rax, ecx				
 	movsxd	rax, dword [r9+rax*4]			
 	movzx	eax, word [rsi+rax*2+4EH]		
@@ -3001,7 +3091,7 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	test	r8b, 02H				
 	lea	ecx, [rax+2H]				
 	jz	?_302					
-	lea	r9, [rel _ZL10wdl_to_map]		
+	lea	r9, [ _ZL10wdl_to_map]		
 	movsxd	rax, ecx				
 	movsxd	rax, dword [r9+rax*4]			
 	lea	rax, [rax+r12*4+70H]			
@@ -3010,7 +3100,7 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	mov	rax, qword [rsi+108H]			
 	movsxd	rdx, edx				
 ?_301:	movzx	edx, byte [rax+rdx]			
-?_302:	lea	rax, [rel _ZL8pa_flags] 		
+?_302:	lea	rax, [ _ZL8pa_flags]		
 	movsxd	rcx, ecx				
 	test	byte [rax+rcx], r8b			
 	jz	?_303					
@@ -3033,14 +3123,14 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	movzx	r15d, r12b				
 	mov	r8d, r15d				
 	call	_Z7prt_strR8PositionPci 		
-	mov	rcx, qword [rel ?_337]			
+	mov	rcx, qword [ ?_337]			
 	test	rcx, rcx				
 	jz	?_306					
 	call	_ZL14free_dtz_entryP7TBEntry		
-?_306:	lea	r9, [rel ?_336] 			
+?_306:	lea	r9, [ ?_336]			
 	xor	eax, eax				
 	mov	edx, 6					
-	lea	r8, [rel ?_335] 			
+	lea	r8, [ ?_335]			
 ?_307:	lea	rdi, [r9+rax]				
 	mov	rcx, rdx				
 	lea	rsi, [r8+rax]				
@@ -3056,11 +3146,11 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	mov	rcx, rbx				
 	mov	rsi, rax				
 	call	_Z8calc_keyR8Positioni			
-	mov	qword [rel ?_333], rsi			
+	mov	qword [ ?_333], rsi			
 	mov	rdx, rax				
 	mov	rcx, rax				
-	mov	qword [rel _ZL9DTZ_table], rax		
-	mov	qword [rel ?_334], 0			
+	mov	qword [ _ZL9DTZ_table], rax		
+	mov	qword [ ?_334], 0			
 	shr	rdx, 54 				
 	imul	rdx, rdx, 80				
 	add	r13, rdx				
@@ -3078,7 +3168,7 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	and	cl, 50H 				
 	add	rcx, 272				
 	call	malloc					
-	lea	rdx, [rel ?_349]			
+	lea	rdx, [ ?_349]			
 	mov	rcx, r14				
 	lea	r8, [rax+10H]				
 	mov	r12, rax				
@@ -3112,7 +3202,7 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	jnz	?_312					
 	cmp	byte [rax+3H], -91			
 	jz	?_313					
-?_312:	lea	rcx, [rel ?_348]			
+?_312:	lea	rcx, [ ?_348]			
 	call	puts					
 	jmp	?_330					
 
@@ -3327,7 +3417,7 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	call	free					
 	jmp	?_286					
 
-?_331:	mov	qword [rel ?_334], r12			
+?_331:	mov	qword [ ?_334], r12			
 	jmp	?_286					
 
 ?_332:	
@@ -3339,6 +3429,11 @@ _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi:
 	pop	r12					
 	pop	r13					
 	pop	r14					
-	pop	r15					
+	pop	r15
+
+SD_String db 'probe_dtz_table '
+SD_Int rax
+SD_String db '|'
+
 	ret						
 

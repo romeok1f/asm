@@ -21,6 +21,13 @@ Tablebase_ProbeAB:
 	;     r8  address of success
 	; out: eax v
 
+SD_String db 'probe_ab('
+SD_Int rcx
+SD_String db ','
+SD_Int rdx
+SD_String db ')'
+
+
 	       push   rsi rdi r13 r14 r15
 virtual at rsp
   .stack rb 64*sizeof.ExtMove
@@ -32,6 +39,10 @@ end virtual
 		mov   r14d, ecx
 		mov   r15d, edx
 		mov   r13, r8
+
+
+
+
 		lea   rdi, [.stack]
 	       test   rax, rax
 		jnz   .InCheck
@@ -51,14 +62,14 @@ end virtual
 		jae   .NextMove
 	       test   eax, eax
 		 jz   .NextMove
-		sub   eax, 1 shl 12
+		lea   eax, [rcx-(1 shl 12)]
 	      stosq
 		sub   eax, 1 shl 12
 	      stosq
 		sub   eax, 1 shl 12
 	      stosq
 		jmp   .NextMove
-.InCheck:      call   Gen_Captures
+.InCheck:      call   Gen_Evasions
 .GenDone:      call   SetCheckInfo
 
 		lea   rsi, [.stack-8]
@@ -81,7 +92,7 @@ end virtual
 	       call   Move_GivesCheck
 		mov   ecx, dword[rsi+ExtMove.move]
 		mov   edx, eax
-	       call   Move_Do
+	       call   Move_Do__Tablebase_ProbeAB
 		mov   ecx, r15d
 		mov   edx, r14d
 		neg   ecx
@@ -110,6 +121,7 @@ end virtual
 		sub   rsp, 8*4
 	       call   _ZN13TablebaseCore15probe_wdl_tableER8PositionPi
 		add   rsp, 8*4
+
 		xor   edx, edx
 		cmp   edx, dword[r13]
 	      cmove   eax, edx
@@ -122,8 +134,14 @@ end virtual
 		sub   edx, r14d
 .Return:
 		mov   dword[r13], edx
+
+SD_String db 'probe_ab '
+SD_Int rax
+SD_String db ','
+SD_Int qword[r13]
+SD_String db 10
 		add   rsp, .localsize
-		pop   r15 r14 r13 rsi rdi
+		pop   r15 r14 r13 rdi rsi
 		ret
 
 
@@ -136,8 +154,11 @@ Tablebase_ProbeWDL:
 	;     rbx address of state
 	;     rcx  address of success
 	; out: eax v
+
+SD_String db 'probe_wdl()'
+
 	       push   r15
-		mov   dword[rcx], 1	        
+		mov   dword[rcx], 1		
 		mov   r15, rcx
 		mov   r8, rcx
 		mov   ecx, -2
@@ -147,6 +168,11 @@ Tablebase_ProbeWDL:
 		cmp   byte[rbx+State.epSquare], 64
 		 jb   .HaveEP
 .Return1:
+SD_String db 'probe_wdl '
+SD_Int rax
+SD_String db ','
+SD_Int qword[r15]
+SD_String db 10
 		pop   r15
 		ret
 
@@ -188,7 +214,7 @@ end virtual
 	       call   Move_GivesCheck
 		mov   ecx, dword[rsi+ExtMove.move]
 		mov   edx, eax
-	       call   Move_Do
+	       call   Move_Do__Tablebase_ProbeWDL
 		mov   ecx, -2
 		mov   edx, 2
 		mov   r8, r15
@@ -232,6 +258,11 @@ end virtual
 .Return2:
 		add   rsp, .localsize
 		pop   rdi rsi r13 r14
+SD_String db 'probe_wdl '
+SD_Int rax
+SD_String db ','
+SD_Int qword[r15]
+SD_String db 10
 		pop   r15
 		ret
 
@@ -243,13 +274,16 @@ Tablebase_ProbeDTZNoEP:
 	;     rcx  address of success
 	; out: eax best
 
-	       push   rbx rsi rdi r12 r13 r14 r15
+SD_String db 'probe_dtz_no_ep()'
 
 virtual at rsp
   .stack rb 192*sizeof.ExtMove
   .localend rb 0
 end virtual
 .localsize = ((.localend-rsp+15) and (-16))
+
+	       push   rbx rsi rdi r12 r13 r14 r15
+		sub   rsp, .localsize
 
 		mov   r15, rcx
 	; r15 = address of success
@@ -258,6 +292,11 @@ end virtual
 		mov   edx, 2
 	       call   Tablebase_ProbeAB
 		mov   r14d, eax
+
+;SD_String db 'probe_dtz_no_ep() wdl='
+;SD_Int r14
+;SD_String db 10
+
 	; r14d = wdl
 		mov   edx, dword[r15]
 	       test   edx, edx
@@ -274,8 +313,14 @@ end virtual
 .WdlIsPositive:
 	; Generate at least all legal non-capturing pawn moves
 	; including non-capturing promotions.
+		mov   rcx, qword[rbx+State.checkersBB]
 		lea   rdi, [.stack]
-	       call   Gen_Legal
+	       test   rcx, rcx
+		jnz   .InCheck
+.NotInCheck:   call   Gen_NonEvasions
+		jmp   .GenDone
+.InCheck:      call   Gen_Evasions
+.GenDone:
 		lea   rsi, [.stack-8]
 .MoveLoop:
 		add   rsi, 8
@@ -289,23 +334,25 @@ end virtual
 	      movzx   edx, byte[rbp+Pos.board+rdx]
 		cmp   rsi, rdi
 		jae   .MovesDone
-		add   rsi, 8
 		and   eax, 7
 		cmp   ecx, MOVE_TYPE_EPCAP shl 12
 		jae   .MoveLoop
 		cmp   eax, Pawn
 		jne   .MoveLoop
+		cmp   ecx, MOVE_TYPE_CASTLE shl 12
+		jae   @f
 	       test   edx, edx
 		jnz   .MoveLoop
+	@@:    call   Move_IsLegal
+	       test   eax, eax
+		 jz   .MoveLoop
+		mov   ecx, dword[rsi+ExtMove.move]
 	       call   Move_GivesCheck
 		mov   ecx, dword[rsi+ExtMove.move]
 		mov   edx, eax
-	       call   Move_Do
-		mov   ecx, -2
-		mov   edx, 1
-		sub   edx, r14d
-		mov   r8, r15
-	       call   Tablebase_ProbeAB
+	       call   Move_Do__Tablebase_ProbeDTZNoEP
+		mov   rcx, r15
+	       call   Tablebase_ProbeWDL
 		neg   eax
 	       push   rax
 		mov   ecx, dword[rsi+ExtMove.move]
@@ -319,12 +366,17 @@ end virtual
 		jmp   .MoveLoop
 .MovesDone:
 .WdlIsNonpositive:
+
+;SD_String db 'wdl='
+;SD_Int r14
+
 		sub   rsp, 8*4
 		mov   rcx, rbp
 		mov   edx, r14d
 		mov   r8, r15
 	       call   _ZN13TablebaseCore15probe_dtz_tableER8PositioniPi
 		add   rsp, 8*4
+
 		mov   edx, dword[r15]
 		add   eax, 1
 	       test   edx, edx
@@ -338,6 +390,11 @@ end virtual
 		xor   eax, ecx
 		sub   eax, ecx
 .Return:
+SD_String db 'probe_dtz_no_ep '
+SD_Int rax
+SD_String db ','
+SD_Int qword[r15]
+SD_String db 10
 		add   rsp, .localsize
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
@@ -386,10 +443,15 @@ Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsPositive:
 		jae   @f
 	       test   edx, edx
 		jnz   .MoveLoop
-	@@:    call   Move_GivesCheck
+	@@:
+	       call   Move_IsLegal
+	       test   eax, eax
+		 jz   .MoveLoop
+		mov   ecx, dword[rsi+ExtMove.move]
+	       call   Move_GivesCheck
 		mov   ecx, dword[rsi+ExtMove.move]
 		mov   edx, eax
-	       call   Move_Do
+	       call   Move_Do__Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsPositive
 		mov   rcx, r15
 	       call   Tablebase_ProbeDTZ
 		neg   eax
@@ -409,6 +471,11 @@ Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsPositive:
 .MovesDone:
 		mov   eax, r13d
 .Return:
+SD_String db 'probe_dtz_no_ep '
+SD_Int rax
+SD_String db ','
+SD_Int qword[r15]
+SD_String db 10
 		add   rsp, Tablebase_ProbeDTZNoEP.localsize
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
@@ -420,18 +487,29 @@ Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsPositive:
 Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsNonpositive:
 
 		 or   r13d, -1
+		mov   rcx, qword[rbx+State.checkersBB]
 		lea   rdi, [Tablebase_ProbeDTZNoEP.stack]
-	       call   Gen_Legal
+	       test   rcx, rcx
+		jnz   .InCheck
+.NotInCheck:   call   Gen_NonEvasions
+		jmp   .GenDone
+.InCheck:      call   Gen_Evasions
+.GenDone:
+
 		lea   rsi, [Tablebase_ProbeDTZNoEP.stack-8]
 .MoveLoop:
 		add   rsi, 8
 		mov   ecx, dword[rsi+ExtMove.move]
 		cmp   rsi, rdi
 		jae   .MovesDone
+	       call   Move_IsLegal
+	       test   eax, eax
+		 jz   .MoveLoop
+		mov   ecx, dword[rsi+ExtMove.move]
 	       call   Move_GivesCheck
 		mov   ecx, dword[rsi+ExtMove.move]
 		mov   edx, eax
-	       call   Move_Do
+	       call   Move_Do__Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsNonpositive
 		mov   al, byte[rbx+State.rule50]
 	       test   al, al
 		jnz   .Rule50IsNot0
@@ -465,6 +543,11 @@ Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsNonpositive:
 .MovesDone:
 		mov   eax, r13d
 .Return:
+SD_String db 'probe_dtz_no_ep '
+SD_Int rax
+SD_String db ','
+SD_Int qword[r15]
+SD_String db 10
 		add   rsp, Tablebase_ProbeDTZNoEP.localsize
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
@@ -479,6 +562,8 @@ Tablebase_ProbeDTZ:
 	;     rcx  address of success
 	; out: eax v
 
+SD_String db 'probe_dtz()'
+
 	       push   r15
 		mov   dword[rcx], 1
 		mov   r15, rcx
@@ -487,6 +572,11 @@ Tablebase_ProbeDTZ:
 		cmp   byte[rbx+State.epSquare], 64
 		 jb   .HaveEP
 .Return:
+SD_String db 'probe_dtz '
+SD_Int rax
+SD_String db ','
+SD_Int qword[r15]
+SD_String db 10
 		pop   r15
 		ret
 
@@ -533,7 +623,7 @@ end virtual
 	       call   Move_GivesCheck
 		mov   ecx, dword[rsi+ExtMove.move]
 		mov   edx, eax
-	       call   Move_Do
+	       call   Move_Do__Tablebase_ProbeDTZ
 		mov   ecx, -2
 		mov   edx, 2
 		mov   r8, r15
@@ -623,6 +713,11 @@ end virtual
 .V1GreaterEqual0:
 		mov   eax, r14d
 .Return:
+SD_String db 'probe_dtz '
+SD_Int rax
+SD_String db ','
+SD_Int qword[r15]
+SD_String db 10
 		add   rsp, .localsize
 		pop   r14 r13 rdi rsi
 		pop   r15
@@ -644,9 +739,11 @@ Tablebase_RootProbe:
 	;     rbx address of state
 	; out: eax bool
 	;          score is in Tablebase_Score
+SD_String db 'root_probe()'
 
 	       push   rbx rsi rdi r12 r13 r14 r15
 virtual at rsp
+	   rq 1
   .success rd 1
 	   rd 1
   .mlist  rb MAX_MOVES*sizeof.ExtMove
@@ -654,15 +751,15 @@ virtual at rsp
 end virtual
 .localsize = ((.localend-rsp+15) and (-16))
 		sub   rsp, .localsize
-
 		lea   rcx, [.success]
 	       call   Tablebase_ProbeDTZ
+
 		mov   edx, dword[.success]
 		mov   r15d, eax
 	; r15d = dtz
 	       test   edx, edx
 	      cmovz   eax, edx
-		jmp   .Return
+		 jz   .Return
 
 	       call   SetCheckInfo
 
@@ -675,7 +772,7 @@ end virtual
 	       call   Move_GivesCheck
 		mov   ecx, dword[r12+RootMove.pv+4*0]
 		mov   edx, eax
-	       call   Move_Do
+	       call   Move_Do__Tablebase_RootProbe
 
 		mov   rcx, qword[rbx+State.checkersBB]
 		xor   esi, esi
@@ -720,7 +817,7 @@ end virtual
 		mov   edx, dword[.success]
 	       test   edx, edx
 	      cmovz   eax, edx
-		jmp   .Return
+		 jz   .Return
 		mov   dword[r12+RootMove.score], esi
 		add   r12, sizeof.RootMove
 		jmp   .RootMoveLoop
@@ -728,12 +825,12 @@ end virtual
 
 	      movzx   r14d, byte[rbx+State.rule50]
 	; r14d = cnt50
-		xor   esi, esi
+		xor   edi, edi
 	; esi = wdl
-
 		mov   eax, r14d
 		cmp   r15d, 0
 		 jg   .DtzPos
+		 je   @f
 		mov   edi, -1
 		mov   ecx, -2
 		sub   eax, r15d
@@ -748,8 +845,8 @@ end virtual
 	     cmovle   edi, ecx
 @@:
 	; edi = wdl
-
-		mov   eax, dword[wdl_to_Value5+4*(rdi+2)]
+	     movsxd   rax, edi
+		mov   eax, dword[wdl_to_Value5+4*(rax+2)]
 	; eax = score
 .TestA:
 		cmp   edi, 1
@@ -783,6 +880,9 @@ end virtual
 		mov   dword[Tablebase_Score], eax
 
 
+SD_String db 'score='
+SD_Int rax
+SD_String db 10
 
 		mov   rdi, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
 		cmp   r15d, 0
@@ -812,6 +912,44 @@ end virtual
 .ReturnTrue:
 		 or   eax, -1
 .Return:
+
+
+match =2, VERBOSE {
+test eax, eax
+jnz  @f
+SD_String <db 'root_probe false', 10>
+		add   rsp, .localsize
+		pop   r15 r14 r13 r12 rdi rsi rbx
+		ret
+@@:
+
+		mov   rsi, qword[rbp+Pos.rootMovesVec.table]
+		xor   r15d, r15d
+.printnext:
+		cmp   rsi, qword[rbp+Pos.rootMovesVec.ender]
+		jae   .printdone
+
+       SD_String db 'rm['
+       SD_Int r15
+       SD_String db '].score='
+       SD_Int qword[rsi+RootMove.score]
+       SD_String db 10
+
+
+		add   r15d, 1
+		add   rsi, sizeof.RootMove
+		jmp   .printnext
+
+.printdone:
+SD_String <db 'root_probe true', 10>
+		 or   eax, -1
+		add   rsp, .localsize
+		pop   r15 r14 r13 r12 rdi rsi rbx
+		ret
+}
+
+
+
 		add   rsp, .localsize
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
@@ -934,6 +1072,9 @@ Tablebase_RootProbeWDL:
 	; out: eax bool
 	;          score is in Tablebase_Score
 
+SD_String db 'root_probe_wdl()'
+
+
 	       push   rsi rdi r15
 virtual at rsp
   .success rd 1
@@ -952,6 +1093,8 @@ end virtual
 		mov   eax, dword[wdl_to_Value5+4*rax]
 		mov   dword[Tablebase_Score], eax
 
+
+
 		mov   r15d, -2
 	; r15d = best
 
@@ -963,7 +1106,7 @@ end virtual
 	       call   Move_GivesCheck
 		mov   ecx, dword[rsi+RootMove.pv+4*0]
 		mov   edx, eax
-	       call   Move_Do
+	       call   Move_Do__Tablebase_RootProbeWDL
 		lea   rcx, [.success]
 	       call   Tablebase_ProbeWDL
 		neg   rax
@@ -997,6 +1140,40 @@ end virtual
 		 or   eax, -1
 .Return:
 		sub   rsp, .localsize
+
+match =2, VERBOSE {
+test eax, eax
+jnz  @f
+SD_String <db 'root_probe_wdl false', 10>
+		pop   r15 rdi rsi
+		ret
+@@:
+
+		mov   rsi, qword[rbp+Pos.rootMovesVec.table]
+		xor   r15d, r15d
+.printnext:
+		cmp   rsi, qword[rbp+Pos.rootMovesVec.ender]
+		jae   .printdone
+
+       SD_String db 'rm['
+       SD_Int r15
+       SD_String db '].score='
+       SD_Int qword[rsi+RootMove.score]
+       SD_String db 10
+
+
+		add   r15d, 1
+		add   rsi, sizeof.RootMove
+		jmp   .printnext
+
+.printdone:
+SD_String <db 'root_probe_wdl true', 10>
+		 or   eax, -1
+
+		pop   r15 rdi rsi
+		ret
+}
+
 		pop   r15 rdi rsi
 		ret
 

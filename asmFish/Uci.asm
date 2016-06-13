@@ -57,6 +57,7 @@ end virtual
 		mov   qword[UciLoop.th1.rootPos.stateTable], rax
 		mov   qword[UciLoop.th1.rootPos.stateEnd], rax
 		lea   rsi, [szStartFEN]
+		xor   ecx, ecx
 	       call   Position_ParseFEN
 
 match =2, VERBOSE {
@@ -334,10 +335,12 @@ UciPosition:
 .Start:
 		mov   r15, rsi
 		lea   rsi, [szStartFEN]
+		xor   ecx, ecx
 	       call   Position_ParseFEN
 		mov   rsi, r15
 		jmp   .check
 .Fen:
+	      movzx   ecx, byte[options.chess960]
 	       call   Position_ParseFEN
 .check:
 	       test   eax, eax
@@ -534,7 +537,7 @@ UciSetOption:
 		jmp   UciGetInput
 .Weakness:
 	       call   ParseInteger
-      ClampUnsigned   eax, 0, 1000
+      ClampUnsigned   eax, 0, 200
 		mov   dword[options.weakness], eax
 		jmp   UciGetInput
 .Chess960:
@@ -568,13 +571,6 @@ UciSetOption:
 .ClearHash:
 	       call   Search_Clear
 		jmp   UciGetInput
-.SyzygyPath:
-		lea   rdi, [options.syzygyPath]
-		mov   ecx, 60
-	       call   _ParseToken
-		xor   eax, eax
-	      stosb
-		jmp   UciGetInput
 .SyzygyProbeDepth:
 	       call   ParseInteger
       ClampUnsigned   eax, 1, 100
@@ -589,12 +585,24 @@ UciSetOption:
       ClampUnsigned   eax, 0, 6
 		mov   dword[options.syzygyProbeLimit], eax
 		jmp   UciGetInput
-
-
-
-
-
-
+.SyzygyPath:
+		lea   rdi, [options.syzygyPath]
+		mov   ecx, 62
+	       call   ParseToEndLine
+		xor   eax, eax
+	       test   ecx, ecx
+		 js   .SyzygyPath_TooLong
+	      stosb
+		lea   rcx, [options.syzygyPath]
+	       call   TableBase_Init
+		jmp   UciGetInput
+.SyzygyPath_TooLong:
+		lea   rdi, [Output]
+	     szcall   PrintString, 'error: path is too long'
+		mov   al, 10
+	      stosb
+	       call   _WriteOut_Output
+		jmp   UciGetInput
 
 ;;;;;;;;;;;;
 ; *extras*

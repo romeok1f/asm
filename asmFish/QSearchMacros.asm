@@ -410,14 +410,19 @@ VerboseDisplayInt qword[.alpha]
 
 	; do not search moves with negative see value
 	if InCheck eq 0
-		cmp   esi, MOVE_TYPE_PROM
+	     Assert   ne, esi, MOVE_TYPE_PROM+0, 'knight promotion encountered in qsearch<InCheck=false>'
+	     Assert   ne, esi, MOVE_TYPE_PROM+1, 'bishop promotion encountered in qsearch<InCheck=false>'
+	     Assert   ne, esi, MOVE_TYPE_PROM+2, 'rook promotion encountered in qsearch<InCheck=false>'
+		cmp   esi, MOVE_TYPE_PROM+3
 		 je   .DontContinue
 	else
 		mov   eax, dword[rbp+Pos.sideToMove]
 		cmp   edi, VALUE_MATED_IN_MAX_PLY
 		jle   .DontContinue
-		cmp   esi, MOVE_TYPE_CASTLE
-		 je   .MovePickLoop
+
+	     Assert   ne, esi, MOVE_TYPE_CASTLE, 'castling encountered in qsearch<InCheck=true>'
+	     ;   cmp   esi, MOVE_TYPE_CASTLE
+	     ;    je   .DontContinue
 	       ; cmp   esi, MOVE_TYPE_EPCAP
 	       ;  je   .DontContinue
 		cmp   esi, MOVE_TYPE_PROM

@@ -106,7 +106,7 @@ virtual at rsp
   .doFullDepthSearch	   rb 1
   .cutNode		   rb 1  ; -1 for true
   .ttHit		   rb 1
-			   rb 1
+  .moveCountPruning	   rb 1
 			   rb 1
 			   rb 1
 			   rb 1
@@ -328,8 +328,8 @@ match =1, DEBUG \{
 
     if .RootNode eq 0
 	; Step 4a. Tablebase probe
-;               test   r15d, r15d
-;                jns   .CheckTablebase
+	       test   r15d, r15d
+		jns   .CheckTablebase
 .CheckTablebaseReturn:
     end if
 
@@ -837,11 +837,34 @@ lock inc qword[profile.moveUnpack]
 		mov   byte[.givesCheck], al
 
 
+		mov   edx, dword[.depth]
+	      movzx   ecx, byte[.improving]
+		mov   r8d, dword[.moveCount]
+	       imul   ecx, 16*4
+		mov   ecx, dword[FutilityMoveCounts+rcx+4*rdx]
+		sub   ecx, r8d
+		sub   r8d, 1
+	; r8d = moveCount - 1
+		sub   ecx, 1
+		sub   edx, 16*ONE_PLY
+		and   edx, ecx
+		sar   edx, 31
+		mov   byte[.moveCountPruning], dl
+
+SD_String db 'mcp='
+SD_Bool8 rdx
+SD_String db '|'
+
+
+
       ; Step 12. Extend checks
 		mov   ecx, dword[.move]
-		mov   al, byte[.givesCheck]
-	       test   al, al
+	       test   eax, eax
 		 jz   .12dont_extend
+	       test   r8d, r8d
+		 jz   .12extend_oneply
+	       test   edx, edx
+		jnz   .12dont_extend
 	    SeeSign   .12extend_oneply
 	       test   eax, eax
 		 js   .12dont_extend
@@ -928,14 +951,9 @@ lock inc qword[profile.moveUnpack]
 		mov   edx, dword[.depth]
 
 	; Move count based pruning
-		cmp   edx, 16*ONE_PLY
-		jge   .13DontSkip1
-		mov   ecx, dword[.moveCount]
-	      movzx   eax, byte[.improving]
-	       imul   eax, 16*4
-		cmp   ecx, dword[FutilityMoveCounts+rax+4*rdx]
-		jge   .MovePickLoop
-       .13DontSkip1:
+		mov   al, byte[.moveCountPruning]
+	       test   al, al
+		jnz   .MovePickLoop
 
 	; History based pruning
 		mov   r8, qword[.cmh]
@@ -1342,9 +1360,8 @@ SD_String db '|'
 		mov   eax, dword[rcx]
 	       test   eax, eax
 		jnz   .CopyRootPv
-
-.FoundRootMoveDone:
 		mov   dword[rdx+RootMove.pvSize], esi
+.FoundRootMoveDone:
 		mov   dword[rdx+RootMove.score], r10d
     end if
 
@@ -1354,26 +1371,6 @@ SD_String db '|'
 		cmp   edi, dword[.bestValue]
 		jle   .18NoNewBestValue
 		mov   dword[.bestValue], edi
-
-
-
-;push rsi rdi rax rcx rdx r8 r9 r13 r14 r15
-;mov r15, rdi
-;lea rdi, [VerboseOutput]
-;mov rax,'bestValu'
-;stosq
-;mov ax, 'e='
-;stosw
-;movsxd rax, r15d
-;call PrintSignedInteger
-;mov al, '|'
-;stosb
-;lea rcx, [VerboseOutput]
-;call _WriteOut
-;pop r15 r14 r13 r9 r8 rdx rcx rax rdi rsi
-
-
-
 
 		cmp   edi, dword[.alpha]
 		jle   .18NoNewAlpha
@@ -1446,8 +1443,6 @@ SD_String db '|'
 		mov   dword[.quietCount], eax
 .18Done:
 
-
-
 		jmp   .MovePickLoop
 
 
@@ -1459,23 +1454,6 @@ SD_String db '|'
 	; Step 20. Check for mate and stalemate
 		mov   edi, dword[.bestValue]
 
-
-;push rsi rdi rax rcx rdx r8 r9 r13 r14 r15
-;mov r15, rdi
-;lea rdi, [VerboseOutput]
-;mov al, 'i'
-;stosb
-;mov rax,'bestValu'
-;stosq
-;mov ax, 'e='
-;stosw
-;movsxd rax, r15d
-;call PrintSignedInteger
-;mov al, '|'
-;stosb
-;lea rcx, [VerboseOutput]
-;call _WriteOut
-;pop r15 r14 r13 r9 r8 rdx rcx rax rdi rsi
 
 		mov   edx, dword[.bestMove]
 		mov   ecx, edx
@@ -1521,18 +1499,20 @@ SD_String db '|'
 	       test   eax, 0x07FFF
 		 jz   .20TTStore
 
+		mov   r10d, dword[.depth]
+		mov   eax, r10d
+	       imul   r10d, r10d
+		lea   r10d, [r10+2*rax-2]
+
 		mov   eax, dword[.prevSq]
 	      movzx   r8d, byte[rbp+Pos.board+rax]
 		shl   r8d, 6
 		add   r8d, eax
 		shl   r8d, 2
 
-		mov   r10d, dword[.depth]
-	       imul   r10d, r10d
-		add   r10d, dword[.depth]
-		sub   r10d, 1
-
 	       imul   r11d, r10d, 32
+		cmp   r10d, 324
+		jae   .20TTStore
 
 		mov   r9, qword[rbx-2*sizeof.State+State.counterMoves]
 	       test   r9, r9
@@ -1553,25 +1533,8 @@ SD_String db '|'
 	apply_bonus   r9, r11d, r10d, 936
 	@@:
 
-
-
-
 .20TTStore:
 
-;push rsi rdi rax rcx rdx r8 r9 r13 r14 r15
-;mov r15, rdi
-;lea rdi, [VerboseOutput]
-;mov rax,'bestValu'
-;stosq
-;mov ax, 'e='
-;stosw
-;movsxd rax, r15d
-;call PrintSignedInteger
-;mov al, '|'
-;stosb
-;lea rcx, [VerboseOutput]
-;call _WriteOut
-;pop r15 r14 r13 r9 r8 rdx rcx rax rdi rsi
 
 	; edi = bestValue
 		mov   r9, qword[.posKey]
@@ -1739,17 +1702,25 @@ end if
 	       test   edx, edx
 		 jz   .CheckTablebaseReturn
 
-	      movzx   ecx, byte[Tablebase_UseRule50]
+	      movsx   ecx, byte[Tablebase_UseRule50]
 		lea   edx, [2*rax]
-	       imul   edx, ecx
+		and   edx, ecx
+		mov   edi, edx
 
-		mov   r8d, VALUE_MATE - MAX_PLY
-		cmp   eax, ecx
-	      cmovg   edx, r8d
-		neg   ecx
 		mov   r8d, -VALUE_MATE + MAX_PLY
+		mov   r9d, dword[rbx+State.ply]
+		add   r9d, r8d
 		cmp   eax, ecx
 	      cmovl   edx, r8d
+	      cmovl   edi, r9d
+		neg   ecx
+		mov   r8d, VALUE_MATE - MAX_PLY
+		neg   r9d
+		cmp   eax, ecx
+	      cmovg   edx, r8d
+	      cmovg   edi, r9d
+	; edi = value
+	; edx = value_to_tt(value, ss->ply)
 
 		inc   qword[Tablebase_Hits]
 
@@ -1757,14 +1728,13 @@ end if
 		lea   ecx, [rdi+VALUE_MATE_IN_MAX_PLY]
 		mov   r8, qword[.tte]
 		shr   r9, 48
-		mov   edi, edx
 		mov   eax, MAX_PLY - 1
 		mov   esi, dword[.depth]
 		add   esi, 6
 		cmp   esi, eax
 	      cmovg   esi, eax
 		xor   eax, eax
-     HashTable_Save   r8, r9w, edx, BOUND_EXACT, sil, eax, 0
+     HashTable_Save   r8, r9w, edx, BOUND_EXACT, sil, eax, VALUE_NONE
 		mov   eax, edi
 		jmp   .Return
     end if

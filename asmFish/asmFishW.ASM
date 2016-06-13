@@ -2,24 +2,25 @@
 OS_IS_WINDOWS	 fix 1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; compile options 0 or 1
-CPU_HAS_POPCNT	 equ 0	;  popcnt                       very nice function
-CPU_HAS_AVX1	 equ 0	;  256 bit floating point       probably only used for memory copy if used at all
-CPU_HAS_AVX2	 equ 0	;  256 bit integer + fmadd      probably not used
-CPU_HAS_BMI1	 equ 0	;  andn                         why not use it if we can
-CPU_HAS_BMI2	 equ 0	;  pext + pdep                  nice for move generation, but not much faster than magics
-DEBUG		 equ 0	;  turns on the asserts    detecting bugs: should be no functional change
-VERBOSE 	 equ 0	;  LOTS of print           find bugs:  0=off, 2=search debug, 3=eval debug
+CPU_HAS_POPCNT	 equ 1	;  popcnt                       very nice function
+CPU_HAS_AVX1	 equ 1	;  256 bit floating point       probably only used for memory copy if used at all
+CPU_HAS_AVX2	 equ 1	;  256 bit integer + fmadd      probably not used
+CPU_HAS_BMI1	 equ 1	;  andn                         why not use it if we can
+CPU_HAS_BMI2	 equ 1	;  pext + pdep                  nice for move generation, but not much faster than magics
+DEBUG		 equ 0	;  turns on the asserts    detecting critical bugs: should be no functional change
+VERBOSE 	 equ 0	;  LOTS of print           find subtle bugs:  0=off, 2=search debug, 3=eval debug
 PROFILE 	 equ 0	;  counts in the code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-; this file is included in asmFishW_popcnt.asm, asmFishW_avx1.asm, ...
-; for faster assembling of different versions
-
 format PE64 console
 entry Start
 
-include 'win64a.inc'
+
+
+
+include 'myWin64a.asm'
+
 include 'Def.asm'
 include 'BasicMacros.asm'
 include 'Structs.asm'
@@ -111,7 +112,8 @@ match =0, CPU_HAS_POPCNT {
 
 
 
-
+align 8
+prng rq 1
 
 
 
@@ -146,10 +148,10 @@ szGreetingEnd:
 		db 'option name ClearHash type button',10
 		db 'option name Ponder type check default false',10
 		db 'option name MultiPV type spin default 1 min 1 max 500',10
-		db 'option name Weakness type spin default 0 min 0 max 1000',10
+		db 'option name Weakness type spin default 0 min 0 max 200',10
 		db 'option name MoveOverhead type spin default 30 min 0 max 5000',10
 		db 'option name MinThinkTime type spin default 20 min 0 max 5000',10
-		db 'option name SlowMover type spin default 89 min 10 max 1000',10
+		db 'option name SlowMover type spin default 80 min 10 max 1000',10
 		db 'option name UCI_Chess960 type check default false',10
 		db 'option name SyzygyPath type string default <empty>',10
 		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',10
@@ -286,6 +288,7 @@ IsPawnMasks:	  rb 16
  castling_knights    rq 4
  castling_kingpawns  rq 4
  castling_movgen     rd 4
+ castling_end rb 0
 
 ;;;;;;;;;;;;;;;;;;;; data for search ;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -343,8 +346,8 @@ Tablebase_Cardinality rd 1
 Tablebase_MaxCardinality rd 1
 Tablebase_ProbeDepth  rd 1
 Tablebase_Score  rd 1
-Tablebase_RootInTB  rb 1
-Tablebase_UseRule50 rb 1    ; boole 0 or 1
+Tablebase_RootInTB  rb 1    ; boole 0 or -1
+Tablebase_UseRule50 rb 1    ; boole 0 or -1
 
 
 
@@ -427,7 +430,8 @@ include 'OsWindows.asm'
 include 'Tablebase.asm'
 include 'TablebaseCore.asm'
 
-Interrupt : int3
+include 'Weakness.asm'
+
 
 Start:
 	       push   rbp
@@ -455,9 +459,6 @@ match =1, VERBOSE {
 	       call   Position_Init
 	       call   BitTable_Init
 	       call   Search_Init
-
-
-
 	       call   Evaluate_Init
 	       call   Pawn_Init
 	       call   Endgame_Init
