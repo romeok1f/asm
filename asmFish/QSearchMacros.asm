@@ -12,16 +12,11 @@ macro QSearch NT, InCheck {
 
 match =_PV_NODE, NT \{
  .PvNode equ 1
-VerboseDisplay db 'qsearch pv '
  \}
 
 match =_NONPV_NODE, NT \{
  .PvNode equ 0
-VerboseDisplay db 'qsearch nonpv '
 \}
-
-VerboseDisplayInt r8
-
 
 
 virtual at rsp
@@ -387,16 +382,6 @@ pop r15 r14 r13 r9 r8 rdx rcx
 
 		mov   edx, dword[PieceValue_EG+4*r15]
 		add   edx, r12d
-
-VerboseDisplay db 'futilityValue = '
-VerboseDisplayInt rdx
-VerboseDisplay db 'futilityBase = '
-VerboseDisplayInt r12
-VerboseDisplay db 'alpha = '
-VerboseDisplayInt qword[.alpha]
-
-
-
 		cmp   edx, dword[.alpha]
 		jle   .ContinueFromFutilityValue
 		cmp   r12d, dword[.alpha]

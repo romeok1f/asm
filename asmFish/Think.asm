@@ -18,7 +18,7 @@ end virtual
 
 		lea   rbp, [rcx+Thread.rootPos]
 		mov   rbx, qword[rbp+Pos.state]
-VerboseDisplay	 <db 'Thread_Think',10>
+GD_String <db 'Thread_Think',10>
 
 		mov   dword[.easyMove], 0
 		mov   dword[.alpha], -VALUE_INFINITE
@@ -121,9 +121,6 @@ VerboseDisplay	 <db 'Thread_Think',10>
 	       test   al, al
 		jnz   .multipv_done
 
-VerboseDisplay	db 'Thread.PVIdx: '
-VerboseDisplayInt r14
-
 	; Reset aspiration window starting size
 	       imul   r8d, r14d, sizeof.RootMove
 		mov   edx, 18
@@ -147,13 +144,6 @@ VerboseDisplayInt r14
 
 	; Start with a small aspiration window and, in the case of a fail high/low, re-search with a bigger window until we're not failing high/low anymore.
 .search_loop:
-
-VerboseDisplay	db 'alpha:  '
-VerboseDisplayInt qword[.alpha]
-VerboseDisplay	db 'beta:   '
-VerboseDisplayInt qword[.beta]
-
-
 		mov   ecx, dword[.alpha]
 		mov   edx, dword[.beta]
 		mov   r8d, r15d
@@ -161,31 +151,25 @@ VerboseDisplayInt qword[.beta]
 	       call   Search_Root ; rootPos is in rbp, ss is in rbx
 		mov   r12d, eax
 		mov   dword[.bestValue], eax
-
-
-VerboseDisplay <db 'Search_Root returned '>
-VerboseDisplayInt rax
-
-
 	       imul   ecx, r14d, sizeof.RootMove
 		add   rcx, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
 		mov   rdx, qword[rbp+Pos.rootMovesVec+RootMovesVec.ender]
 	       call   RootMovesVec_StableSort
-
-match =1, VERBOSE {
-		lea   rdi, [Output]
-	       call   RootMovesVec_Print
-		lea   rcx, [Output]
-	       call   _WriteOut
-}
-	; Write PV back to the transposition table in case the relevant entries have been overwritten during the search.
-		mov   esi, r14d
-	.insert_next:
-	       imul   ecx, esi, sizeof.RootMove
-		add   rcx, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
-	       call   RootMove_InsertPVInTT
-		sub   esi, 1
-		jns   .insert_next
+;match =1, VERBOSE {
+;                lea   rdi, [Output]
+;               call   RootMovesVec_Print
+;                lea   rcx, [Output]
+;               call   _WriteOut
+;}
+;
+;        ; Write PV back to the transposition table in case the relevant entries have been overwritten during the search.
+;                mov   esi, r14d
+;        .insert_next:
+;               imul   ecx, esi, sizeof.RootMove
+;                add   rcx, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
+;               call   RootMove_InsertPVInTT
+;                sub   esi, 1
+;                jns   .insert_next
 
 	; If search has been stopped, break immediately. Sorting and writing PV back to TT is safe because RootMoves is still valid, although it refers to the previous iteration.
 		mov   al, byte[signals.stop]
@@ -401,8 +385,7 @@ match =0, VERBOSE {
 
 .done:
 
-     VerboseDisplay   <db 'Thread_Think returning',10>
-
+GD_String <db 'Thread_Think returning',10>
 
 		add   rsp, .localsize
 		pop   r15 r14 r13 rdi rsi rbx rbp
@@ -427,7 +410,7 @@ MainThread_Think:
 		lea   rbp, [rcx+Thread.rootPos]
 		mov   rbx, qword[rbp+Pos.state]
 
-     VerboseDisplay   <db 'MainThread_Think',10>
+GD_String <db 'MainThread_Think',10>
 		mov   ecx, dword[rbp+Pos.sideToMove]
 		mov   edx, dword[rbp+Pos.gamePly]
 	       call   TimeMng_Init
@@ -547,7 +530,7 @@ MainThread_Think:
 		mov   rcx, rsi
 	       call   qword[options.displayMoveFxn]
 
-      VerboseDisplay  <db 'MainThread_Think returning',10>
+GD_String <db 'MainThread_Think returning',10>
 		pop   r15 rdi rsi rbx rbp
 		ret
 

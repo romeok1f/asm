@@ -174,19 +174,12 @@ match =Queen, Pt \{
 		mov   qword[.ei.attackedBy+8*(8*Us+Pt)], r13
 	; r13d also holds the score
 
-VerboseDisplayScore r13
-
-
 		mov   r15, qword[rbp+Pos.typeBB+8*Pt]
 		and   r15, qword[rbp+Pos.typeBB+8*Us]
 		 jz   ..AllDone
 ..NextPiece:
 		bsf   r14, r15
 	       blsr   r15, r15, rcx
-
-
-VerboseDisplay db 'new piece'
-VerboseDisplayInt r14
 
 	; Find attacked squares, including x-ray attacks for bishops and rooks
     if Pt eq Knight
@@ -246,31 +239,17 @@ VerboseDisplayInt r14
 	       andn   r12, rax, r12
     end if
 
-VerboseDisplay db 'b='
-VerboseDisplayBigInt r12
-
 		mov   rax, qword[.ei.mobilityArea+8*Us]
-VerboseDisplay db 'ma='
-VerboseDisplayBigInt rax
-
 		and   rax, r12
 	     popcnt   r11, rax, rcx
 		mov   eax, dword[MobilityBonus+4*r11]
 		add   dword[.ei.mobility+4*Us], eax
-
-VerboseDisplay db 'mob='
-VerboseDisplayInt r11
 
 
 if (Pt in <Knight, Bishop>)
 	; Bonus for outpost squares
 
 		mov   rdi, qword[.ei.pi]
-
-VerboseDisplay db 'pas='
-VerboseDisplayBigInt qword[rdi+PawnEntry.pawnAttacksSpan+8*Them]
-
-
 		mov   rax, OutpostRanks
 		mov   rdi, qword[.ei.pi]
 		mov   rcx, qword[rdi+PawnEntry.pawnAttacksSpan+8*Them]
@@ -290,8 +269,6 @@ VerboseDisplayBigInt qword[rdi+PawnEntry.pawnAttacksSpan+8*Them]
 		and   rcx, rax
 		and   rcx, r12
 
-VerboseDisplayBigInt rcx
-
 	       test   rcx, rcx
 		 jz   ..OutpostDone
 		and   rcx, qword[.ei.attackedBy+8*(8*Us+Pawn)]
@@ -300,9 +277,6 @@ VerboseDisplayBigInt rcx
 		and   eax, ReachableOutpost1-ReachableOutpost0
 		lea   r13d, [r13+rax+ReachableOutpost0]
 ..OutpostDone:
-
-VerboseDisplayScore r13
-
 
 	; Bonus when behind a pawn
     if Us eq White
@@ -320,9 +294,6 @@ VerboseDisplayScore r13
 		add   r13d, eax
 ..NoBehindPawnBonus:
 
-VerboseDisplayScore r13
-
-
 	; Penalty for pawns on the same color square as the bishop
     if Pt eq Bishop
 		mov   rdi, qword[.ei.pi]
@@ -335,10 +306,6 @@ VerboseDisplayScore r13
 		sub   r13d, eax
 
     end if
-
-VerboseDisplayScore r13
-
-
 
 else if Pt eq Rook
 
@@ -361,10 +328,6 @@ else if Pt eq Rook
 		add   r13d, eax
 ..NoEnemyPawnBonus:
 
-
-VerboseDisplayScore r13
-
-
 		mov   ecx, r14d
 		and   ecx, 7
 		mov   rdi, qword[.ei.pi]
@@ -378,9 +341,6 @@ VerboseDisplayScore r13
 		lea   r13d, [r13+rax+RookOnFile0]
 		jmp   ..NoTrappedByKing
 ..NoOpenFileBonus:
-
-VerboseDisplay <db 'inside mob <= 3',10>
-
 
 		mov   ecx, r14d
 		and   ecx, 7
@@ -432,10 +392,6 @@ VerboseDisplay <db 'inside mob <= 3',10>
 	       imul   r11d, eax
 		add   r13d, r11d
 ..NoTrappedByKing:
-
-VerboseDisplayScore r13
-
-
 
 else if Pt eq Queen
 		mov   r8, r14
@@ -510,11 +466,6 @@ call _WriteOut
 pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 \}
 
-match =1, VERBOSE \{
-		mov   dword[trace.Knight+4*(3*(Pt-Knight)+Us)], r13d
-
-\}
-
 
 restore Them
 restore OutpostRanks
@@ -564,8 +515,6 @@ match =Black, Us
 	SafeCheck  equ	((20 shl 16) + (20))
 	OtherCheck equ	((10 shl 16) + (10))
 
-
-VerboseDisplay <db 'new king',10,0>
 		mov   rdi, qword[.ei.pi]
 		mov   ecx, dword[.ei.ksq+4*Us]
 	      movzx   eax, byte[rbx+State.castlingRights]
@@ -594,15 +543,6 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 	       test   r11d, r11d
 		 jz   ..AllDone
 
-VerboseDisplay <db 'have king attackers',10,0>
-VerboseDisplay db 'kingAttackersCount[Them]='
-VerboseDisplayInt qword[.ei.kingAttackersCount+4*Them]
-VerboseDisplay db 'kingAttackersWeight[Them]='
-VerboseDisplayInt qword[.ei.kingAttackersWeight+4*Them]
-VerboseDisplay db 'kingAdjacentZoneAttacksCount[Them]='
-VerboseDisplayInt qword[.ei.kingAdjacentZoneAttacksCount+4*Them]
-
-
 		mov   r8, qword[.ei.attackedBy+8*(8*Us+Pawn)]
 		 or   r8, qword[.ei.attackedBy+8*(8*Us+Knight)]
 		 or   r8, qword[.ei.attackedBy+8*(8*Us+Bishop)]
@@ -619,12 +559,6 @@ VerboseDisplayInt qword[.ei.kingAdjacentZoneAttacksCount+4*Them]
 		and   r9, qword[.ei.kingRing+8*Us]
 		and   r9, qword[.ei.attackedBy+8*(8*Them+0)]
 	; r9=b
-
-VerboseDisplay db 'undefended='
-VerboseDisplayBigInt r8
-VerboseDisplay db 'b='
-VerboseDisplayBigInt r9
-
 		mov   eax, 72
 		mov   edi, dword[.ei.kingAttackersCount+4*Them]
 	       imul   edi, dword[.ei.kingAttackersWeight+4*Them]
@@ -656,10 +590,6 @@ VerboseDisplayBigInt r9
 		sub   edi, eax
 	; edi = attackUnits
 
-VerboseDisplay <db 'au='>
-VerboseDisplayInt rdi
-
-
 		mov   r9, qword[rbp+Pos.typeBB+8*Them]
 		not   r9
 		and   r9, qword[.ei.attackedBy+8*(8*Them+Queen)]
@@ -676,13 +606,8 @@ VerboseDisplayInt rdi
 		add   edi, eax
 ..NoQueenContactCheck:
 
-
-VerboseDisplay <db 'au='>
-VerboseDisplayInt rdi
-
 	; lower 32 bits of rsi are for additional attackunits, which is always positive
 		shl   rsi, 32
-
 
 		mov   r8, qword[.ei.attackedBy+8*(8*Us+0)]
 		 or   r8, qword[rbp+Pos.typeBB+8*Them]
@@ -714,11 +639,6 @@ VerboseDisplayInt rdi
 		and   rax, rcx
 		add   rsi, rax
 
-VerboseDisplay <db 'au='>
-VerboseDisplayInt rsi
-VerboseDisplayScoreHi rsi
-
-
 		and   r10, qword[.ei.attackedBy+8*(8*Them+Rook)]
 		mov   rcx, ((-SafeCheck) shl 32) + RookCheck
 		mov   rax, r8
@@ -735,10 +655,6 @@ VerboseDisplayScoreHi rsi
 		sbb   rax, rax
 		and   rcx, rax
 		add   rsi, rcx
-VerboseDisplay <db 'au='>
-VerboseDisplayInt rsi
-VerboseDisplayScoreHi rsi
-
 
 		and   r11, qword[.ei.attackedBy+8*(8*Them+Bishop)]
 		mov   rcx, ((-SafeCheck) shl 32) + BishopCheck
@@ -756,9 +672,6 @@ VerboseDisplayScoreHi rsi
 		sbb   rax, rax
 		and   rcx, rax
 		add   rsi, rcx
-VerboseDisplay <db 'au='>
-VerboseDisplayInt rsi
-VerboseDisplayScoreHi rsi
 
 		mov   edx, dword[.ei.ksq+4*Us]
 		mov   r12, qword[KnightAttacks+8*rdx]
@@ -778,14 +691,9 @@ VerboseDisplayScoreHi rsi
 		sbb   rax, rax
 		and   rcx, rax
 		add   rsi, rcx
-VerboseDisplay <db 'au='>
-VerboseDisplayInt rsi
-VerboseDisplayScoreHi rsi
-
 
 		add   edi, esi
 		shr   rsi, 32
-
 
 		xor   eax, eax
 		cmp   edi, eax
@@ -795,11 +703,6 @@ VerboseDisplayScoreHi rsi
 	      cmovg   edi, eax
 
 		sub   esi, dword[KingDanger+4*rdi]
-
-
-VerboseDisplayScore rsi
-
-
 		jmp   ..AllDone
 
 ..DoKingSafety:
@@ -816,11 +719,6 @@ VerboseDisplayScore rsi
 
 	       call   ..ShelterStorm
 		mov   esi, eax
-
-VerboseDisplay <db 'bonus='>
-VerboseDisplayInt rsi
-
-
 		mov   ecx, SQ_G1 + Us*(SQ_G8-SQ_G1)
 	       test   r12d, 1 shl (2*Us+0)
 		 jz   ..NoKingSide
@@ -828,9 +726,6 @@ VerboseDisplayInt rsi
 		cmp   esi, eax
 	      cmovl   esi, eax
 ..NoKingSide:
-VerboseDisplay <db 'bonus='>
-VerboseDisplayInt rsi
-
 		mov   ecx, SQ_C1 + Us*(SQ_C8-SQ_C1)
 	       test   r12d, 1 shl (2*Us+1)
 		 jz   ..NoQueenSide
@@ -838,11 +733,6 @@ VerboseDisplayInt rsi
 		cmp   esi, eax
 	      cmovl   esi, eax
 ..NoQueenSide:
-
-VerboseDisplay <db 'bonus='>
-VerboseDisplayInt rsi
-
-
 		shl   esi, 16
 	; esi = score
 		mov   ecx, dword[.ei.ksq+4*Us]
@@ -921,9 +811,6 @@ match=1,DEBUG\{ and   rdx, qword[rcx+8*7] \}
 rept 3 i \{
 \local ..AddStormDanger
 
-VerboseDisplay <db 'file='>
-VerboseDisplayInt rdi
-
 		mov   r13d, edi
 		xor   r13d, 7
 		cmp   r13d, edi
@@ -946,9 +833,6 @@ VerboseDisplayInt rdi
 		xor   r11d, 7
 	end if
 	; r11d = rkUs
-VerboseDisplay <db 'rkUs='>
-VerboseDisplayInt r11
-
 
 		mov   r8, qword[FileBB+8*rdi]
 		and   r8, r10
@@ -966,16 +850,7 @@ VerboseDisplayInt r11
 	end if
 	; r12d = rkThem
 
-VerboseDisplay <db 'rkThem='>
-VerboseDisplayInt r12
-
-
-
 		sub   eax, dword[ShelterWeakness+r13+4*r11]
-
-VerboseDisplay <db '  sw='>
-VerboseDisplayInt qword[ShelterWeakness+r13+4*r11]
-
 
 		add   r11d, 1
 	; r11d = rkUs+1
@@ -998,12 +873,6 @@ VerboseDisplayInt qword[ShelterWeakness+r13+4*r11]
 		lea   rsi, [StormDanger_Unblocked+r13]
 	..AddStormDanger:
 		sub   eax, dword[rsi+4*r12]
-
-
-VerboseDisplay <db '  sd='>
-VerboseDisplayInt qword[rsi+4*r12]
-
-
 \}
 
 		pop   r15 r14 r13 r12 rdi rsi
@@ -1074,9 +943,6 @@ match =Black, Us
 	Hanging 		equ ((48 shl 16) + ( 27))
 	ThreatByPawnPush	equ ((38 shl 16) + ( 22))
 
-
-VerboseDisplay <db 'new threats',10,0>
-
 		mov   rax, qword[.ei.attackedBy+8*(8*Us+0)]
 		 or   rax, qword[.ei.attackedBy+8*(8*Them+0)]
 		not   rax
@@ -1089,9 +955,6 @@ VerboseDisplay <db 'new threats',10,0>
 		neg   rax
 		sbb   esi, esi
 		and   esi, LooseEnemies
-VerboseDisplayScore rsi
-
-
 
 		mov   r8, qword[rbp+Pos.typeBB+8*Them]
 		mov   r9, qword[rbp+Pos.typeBB+8*Pawn]
@@ -1121,8 +984,6 @@ VerboseDisplayScore rsi
 		and   eax, ThreatByHangingPawn
 		add   esi, eax
 
-VerboseDisplay <db 'before loop '>
-VerboseDisplayScore rsi
 	       test   r9, r9
 		 jz   ..SafeThreatsDone
 ..SafeThreatsLoop:
@@ -1130,14 +991,9 @@ VerboseDisplayScore rsi
 	      movzx   eax, byte[rbp+Pos.board+rax]
 		add   esi, dword[ThreatBySafePawn+4*rax]
 
-VerboseDisplay <db 'inside loop '>
-VerboseDisplayScore rsi
-
 	       blsr   r9, r9, rcx
 		jnz   ..SafeThreatsLoop
 ..SafeThreatsDone:
-
-VerboseDisplayScore rsi
 
 		mov   r8, qword[rbp+Pos.typeBB+8*Them]
 		mov   r9, qword[rbp+Pos.typeBB+8*Pawn]
@@ -1165,8 +1021,6 @@ VerboseDisplayScore rsi
 		jnz   ..ThreatMinorLoop
 ..ThreatMinorDone:
 
-VerboseDisplayScore rsi
-
 		mov   r10, qword[rbp+Pos.typeBB+8*Them]
 		and   r10, qword[rbp+Pos.typeBB+8*Queen]
 		 or   r10, r9
@@ -1180,17 +1034,12 @@ VerboseDisplayScore rsi
 		jnz   ..ThreatRookLoop
 ..ThreatRookDone:
 
-VerboseDisplayScore rsi
-
 		mov   rax, qword[.ei.attackedBy+8*(8*Them+0)]
 		not   rax
 		and   rax, r9
 	     popcnt   rax, rax, rcx
 	       imul   eax, Hanging
 		add   esi, eax
-
-VerboseDisplayScore rsi
-
 
 		mov   r11, qword[.ei.attackedBy+8*(8*Us+King)]
 		and   r11, r9
@@ -1206,11 +1055,6 @@ VerboseDisplayScore rsi
 		add   esi, eax
 
 ..WeakDone:
-
-
-VerboseDisplayScore rsi
-
-
 		mov   rax, not TRank7BB
 		and   rax, qword[rbp+Pos.typeBB+8*Us]
 		and   rax, qword[rbp+Pos.typeBB+8*Pawn]
@@ -1248,9 +1092,6 @@ VerboseDisplayScore rsi
 	     popcnt   rax, rax, rdx
 	       imul   eax, ThreatByPawnPush
 		add   esi, eax
-
-VerboseDisplayScore rsi
-
 
 	if Us eq White
 		add   dword[.ei.score], esi
@@ -1311,11 +1152,6 @@ match =Black, Us
 		bsf   rcx, r15
 	       blsr   r15, r15, rax
 
-
-VerboseDisplay <db ' passed pawn on '>
-VerboseDisplayInt rcx
-
-
 		mov   r12d,  ecx
 		shr   r12d, 3
 	if Us eq Black
@@ -1371,9 +1207,6 @@ ED_String db 10
 		sub   eax, edx
 	       imul   eax, r13d
 		add   esi, eax
-VerboseDisplay <db 'total incr: '>
-VerboseDisplayInt rax
-
 
 		mov   r8, qword[rbp+Pos.typeBB+8*Us]
 		mov   r9, qword[rbp+Pos.typeBB+8*Them]
@@ -1505,9 +1338,6 @@ match =Black, Us
 		and   rax, rcx
 	; rax = safe
 
-VerboseDisplay <db 'safe='>
-VerboseDisplayBigInt rax
-
 		mov   rdx, qword[rbp+Pos.typeBB+8*Us]
 		and   rdx, qword[rbp+Pos.typeBB+8*Pawn]
 		mov   rcx, rdx
@@ -1538,14 +1368,6 @@ VerboseDisplayBigInt rax
 		mov   rsi, qword[rbp+Pos.typeBB+8*Knight]
 		 or   rsi, qword[rbp+Pos.typeBB+8*Bishop]
 	     popcnt   rsi, rsi, rdx
-
-VerboseDisplay <db 'bonus='>
-VerboseDisplayInt rax
-VerboseDisplay <db 'weight='>
-VerboseDisplayInt rsi
-
-
-
 	       imul   esi, esi
 		add   esi, esi
 

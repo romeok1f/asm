@@ -204,51 +204,51 @@ RootMovesVec_StableSort:
 		ret
 
 
-RootMove_InsertPVInTT:
-	; in: rbp Pos
-	;     rbx State
-	;     rcx RootMove struct
-	       push   rbx rsi rdi r12 r13 r14 r15
-		mov   r15d, dword[rcx+RootMove.pvSize]
-		lea   r14, [rcx+RootMove.pv]
-		lea   r15, [r14+4*r15]
-		mov   rsi, r14
-.InsertPvDoLoop:
-		cmp   rsi, r15
-		jae   .InsertPvUndoLoop
-	       call   SetCheckInfo
-		mov   ecx, dword[rsi]
-	       call   Move_GivesCheck
-		mov   edx, eax
-		mov   ecx, dword[rsi]
-	       call   Move_Do__RootMove_InsertPVInTT
-		add   rsi, 4
-		jmp   .InsertPvDoLoop
-
-.InsertPvUndoLoop:
-		sub   rsi, 4
-		cmp   rsi, r14
-		 jb   .InsertPvDone
-		mov   ecx, dword[rsi]
-	       call   Move_Undo
-		mov   rcx, qword[rbx+State.key]
-		mov   r13, rcx
-	       call   MainHash_Probe
-		mov   rdi, rax
-		mov   eax, dword[rsi]
-		shr   ecx, 16
-	       test   edx, edx
-		 jz   .SaveMove
-		cmp   eax, ecx
-		 je   .InsertPvUndoLoop
-.SaveMove:
-		shr   r13, 48
-		mov   edx, VALUE_NONE
-     HashTable_Save   rdi, r13w, edx, BOUND_NONE, DEPTH_NONE, eax, VALUE_NONE
-		jmp   .InsertPvUndoLoop
-.InsertPvDone:
-		pop   r15 r14 r13 r12 rdi rsi rbx
-		ret
+;RootMove_InsertPVInTT:
+;        ; in: rbp Pos
+;        ;     rbx State
+;        ;     rcx RootMove struct
+;               push   rbx rsi rdi r12 r13 r14 r15
+;                mov   r15d, dword[rcx+RootMove.pvSize]
+;                lea   r14, [rcx+RootMove.pv]
+;                lea   r15, [r14+4*r15]
+;                mov   rsi, r14
+;.InsertPvDoLoop:
+;                cmp   rsi, r15
+;                jae   .InsertPvUndoLoop
+;               call   SetCheckInfo
+;                mov   ecx, dword[rsi]
+;               call   Move_GivesCheck
+;                mov   edx, eax
+;                mov   ecx, dword[rsi]
+;               call   Move_Do__RootMove_InsertPVInTT
+;                add   rsi, 4
+;                jmp   .InsertPvDoLoop
+;
+;.InsertPvUndoLoop:
+;                sub   rsi, 4
+;                cmp   rsi, r14
+;                 jb   .InsertPvDone
+;                mov   ecx, dword[rsi]
+;               call   Move_Undo
+;                mov   rcx, qword[rbx+State.key]
+;                mov   r13, rcx
+;               call   MainHash_Probe
+;                mov   rdi, rax
+;                mov   eax, dword[rsi]
+;                shr   ecx, 16
+;               test   edx, edx
+;                 jz   .SaveMove
+;                cmp   eax, ecx
+;                 je   .InsertPvUndoLoop
+;.SaveMove:
+;                shr   r13, 48
+;                mov   edx, VALUE_NONE
+;     HashTable_Save   rdi, r13w, edx, BOUND_NONE, DEPTH_NONE, eax, VALUE_NONE
+;                jmp   .InsertPvUndoLoop
+;.InsertPvDone:
+;                pop   r15 r14 r13 r12 rdi rsi rbx
+;                ret
 
 
 

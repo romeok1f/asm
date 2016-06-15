@@ -177,36 +177,6 @@ GenNext_Quiets:
 		mov   qword[rsi+Pick.endMoves], rdi
 		mov   r15, rdi
 	ScoreQuiets   r12, rdi
-
-match =1, VERBOSE {
-lea rdi, [VerboseOutput]
-szcall PrintString, 'after score '
-mov  r12, r14
-.1a:
-cmp r12, r15
-jae .2a
-mov al, '('
-stosb
-mov ecx, dword[r12+ExtMove.move]
-xor  edx, edx
-call PrintUciMove
-mov ax, ', '
-stosw
-movsxd rax, dword[r12+ExtMove.score]
-call PrintSignedInteger
-mov  ax, ') '
-stosw
-add  r12, 8
-jmp  .1a
-.2a:
-mov al, 10
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-}
-
-
-
 		mov   r12, r14
 		mov   r13, r15
 		mov   eax, dword[rsi+Pick.depth]
@@ -216,35 +186,6 @@ call _WriteOut
 	 Partition1   r12, r13
 		mov   r13, r12
 	; r13 = good quiet
-
-match =1, VERBOSE {
-lea rdi, [VerboseOutput]
-szcall PrintString, 'after partition '
-mov  r12, r14
-.1b:
-cmp r12, r15
-jae .2b
-mov al, '('
-stosb
-mov ecx, dword[r12+ExtMove.move]
-xor  edx, edx
-call PrintUciMove
-mov ax, ', '
-stosw
-movsxd rax, dword[r12+ExtMove.score]
-call PrintSignedInteger
-mov  ax, ') '
-stosw
-add  r12, 8
-jmp  .1b
-.2b:
-mov al, 10
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-}
-
-
 
 .JustSort:
       InsertionSort   r14, r13, r11, r12
@@ -337,33 +278,6 @@ GenNext_AllEvasions:
 		 je   MovePick_AllEvasions_Only1
 		mov   r12, r14
       ScoreEvasions   r12, r15
-
-match =1, VERBOSE {
-lea rdi, [VerboseOutput]
-szcall PrintString, 'evasions '
-mov  r12, r14
-.1c:
-cmp r12, r15
-jae .2c
-mov al, '('
-stosb
-mov ecx, dword[r12+ExtMove.move]
-xor  edx, edx
-call PrintUciMove
-mov ax, ', '
-stosw
-movsxd rax, dword[r12+ExtMove.score]
-call PrintSignedInteger
-mov  ax, ') '
-stosw
-add  r12, 8
-jmp  .1c
-.2c:
-mov al, 10
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-}
 
 MovePick_AllEvasions:
 		cmp   r14, r15

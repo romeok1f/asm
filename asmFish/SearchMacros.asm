@@ -48,24 +48,19 @@ match =_ROOT_NODE, NT
 \{
  .PvNode equ 1
  .RootNode equ 1
-VerboseDisplay db 'search root '
 \}
 
 match =_PV_NODE, NT
 \{
  .PvNode equ 1
  .RootNode equ 0
-VerboseDisplay db 'search pv '
 \}
 
 match =_NONPV_NODE, NT
 \{
  .PvNode equ 0
  .RootNode equ 0
-VerboseDisplay db 'search nonpv '
 \}
-
-VerboseDisplayInt r8
 
 
 virtual at rsp
@@ -707,8 +702,6 @@ lock inc qword[profile.moveUnpack]
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .moves_loop:	    ; this is actually not the head of the loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-VerboseDisplay <db 'entering moves_loop',10>
 
 		mov   eax, dword[rbx-1*sizeof.State+State.currentMove]
 		and   eax, 63

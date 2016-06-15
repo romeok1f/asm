@@ -120,6 +120,14 @@ macro vmovaps a,b {
 	     movaps   a, b
  \}
 }
+macro vmovups a,b {
+ match =1, CPU_HAS_AVX1 \{
+	    vmovups   a, b
+ \}
+ match =0, CPU_HAS_AVX1 \{
+	     movups   a, b
+ \}
+}
 macro vmovapd a,b {
  match =1, CPU_HAS_AVX1 \{
 	    vmovapd   a, b

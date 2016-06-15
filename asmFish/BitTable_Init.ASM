@@ -255,14 +255,6 @@ KPKEndgameTableOffset	rcx, tn, to, wk, bk
 
 .End:
 
-;    KPKEndgameTableOffset res,TN,WP,WK,BK
-
-;     KPKEndgameTableOffset rax, 0, SQ_G4, SQ_D4, SQ_D7
-;                movzx   eax, byte[rax]
-
-VerboseDisplayInt rax
-
-
 		pop   rcx
 	       call   _VirtualFree
 		pop   r15 r14 r13 r12 rdi rsi rbx

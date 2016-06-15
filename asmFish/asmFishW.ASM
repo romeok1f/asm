@@ -2,22 +2,19 @@
 OS_IS_WINDOWS	 fix 1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; compile options 0 or 1
-CPU_HAS_POPCNT	 equ 0	;  popcnt                       very nice function
-CPU_HAS_AVX1	 equ 0	;  256 bit floating point       probably only used for memory copy if used at all
-CPU_HAS_AVX2	 equ 0	;  256 bit integer + fmadd      probably not used
-CPU_HAS_BMI1	 equ 0	;  andn                         why not use it if we can
-CPU_HAS_BMI2	 equ 0	;  pext + pdep                  nice for move generation, but not much faster than magics
+CPU_HAS_POPCNT	 equ 1	;  popcnt                       very nice function
+CPU_HAS_AVX1	 equ 1	;  256 bit floating point       probably only used for memory copy if used at all
+CPU_HAS_AVX2	 equ 1	;  256 bit integer + fmadd      probably not used
+CPU_HAS_BMI1	 equ 1	;  andn                         why not use it if we can
+CPU_HAS_BMI2	 equ 1	;  pext + pdep                  nice for move generation, but not much faster than magics
 DEBUG		 equ 0	;  turns on the asserts    detecting critical bugs: should be no functional change
-VERBOSE 	 equ 0	;  LOTS of print           find subtle bugs:  0=off, 2=search debug, 3=eval debug
+VERBOSE 	 equ 0	;  LOTS of print           find subtle bugs:  0=off, 1=general debug, 2=search debug, 3=eval debug
 PROFILE 	 equ 0	;  counts in the code
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 format PE64 console
 entry Start
-
-
-
 
 include 'myWin64a.asm'
 
@@ -40,6 +37,14 @@ align 16
  .ender rb 0
 }
 
+
+match =1, VERBOSE {
+align 16
+  VerboseOutput rq 1024
+  VerboseTime1 rq 2
+  VerboseTime2 rq 2
+  Verbr15 rq 1
+}
 match =2, VERBOSE {
 align 16
   VerboseOutput rq 1024
@@ -446,7 +451,7 @@ Start:
 	       call   _VirtualAlloc
 		mov   qword[InputBuffer], rax
 
-VerboseDisplay <db ' ******** Verbosity ON !! **********',10,0>
+GD_String <db ' ********** General Verbosity ON !! **********',10,0>
 match =1, VERBOSE {
 	       call   _GetTime
 		mov   qword[VerboseTime1+8*0], rdx
@@ -473,7 +478,7 @@ match =1, VERBOSE {
 	; command line could contain settings for threads and hash
 	       call   ParseCommandLine
 
-	; write engine name
+	; display how much time was taken for init
 match =1, VERBOSE {
 		lea   rdi, [VerboseOutput]
 		mov   rax, 'response'
@@ -493,9 +498,10 @@ match =1, VERBOSE {
 		mov   eax, ' us' + (10 shl 24)
 	      stosd
 		lea   rcx, [VerboseOutput]
-	       call   _WriteOut 		; display how much time was taken for init
+	       call   _WriteOut
 }
 
+	; write engine name
 match =0, VERBOSE {
 		lea   rdi, [szGreetingEnd]
 		lea   rcx, [szGreeting]

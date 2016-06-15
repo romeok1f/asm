@@ -140,7 +140,7 @@ Thread_IdleLoop:
 	      cmove   rbp, rdx
 		mov   rsi, qword[rbx+Thread.sleepCond]
 		mov   rdi, qword[rbx+Thread.sleepCond2]
-     VerboseDisplay   <db 'Thread_IdleLoop enter',10>
+GD_String <db 'Thread_IdleLoop enter',10>
 		mov   al, byte[rbx+Thread.exit]
 	       test   al, al
 		jnz   .exit
@@ -172,7 +172,7 @@ Thread_IdleLoop:
 	       test   al, al
 		 jz   .loop
 .exit:
-     VerboseDisplay   <db 'Thread_IdleLoop exit',10>
+GD_String <db 'Thread_IdleLoop exit',10>
 		xor   ecx, ecx
 	       call   _ExitThread
 

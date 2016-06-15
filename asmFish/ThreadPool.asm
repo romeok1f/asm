@@ -81,8 +81,8 @@ end virtual
 
 	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
-
 		mov   rsi, rcx
+		mov   r15, rbp
 
 		lea   rcx, [mainThread]
 	       call   Thread_WaitForSearchFinished
@@ -121,10 +121,9 @@ end virtual
 		jmp   .push_moves
     .push_moves_done:
 
-	; the main thread now has the position
+	; the main thread should get the position for tb move filtering
 		lea   rbp, [rbx+Thread.rootPos]
 		mov   rbx, qword[rbp+Pos.state]
-
 	; Skip TB probing when no TB found
 		xor   eax, eax
 		mov   dl, byte[options.syzygy50MoveRule]
@@ -149,21 +148,36 @@ end virtual
 		 jz   .check_tb
 .check_tb_ret:
 
-	; copy mainThread position to workers
+	; copy original position to workers
+		mov   rbp, r15
 		lea   rbx, [mainThread]
 .next_thread:
 		sub   rbx, sizeof.Thread
 		cmp   rbx, qword[threadPool.stackPointer]
 		 jb   .thread_copy_done
+
 		lea   rcx, [rbx+Thread.rootPos]
 	       call   Position_CopyToSearch
 		xor   eax, eax
 		mov   dword[rbx+Thread.rootDepth], eax
 		mov   qword[rbx+Thread.nodes], rax
+
+	; copy the filtered moves of main thread to worker thread
 		mov   rdi, qword[rbx+Thread.rootPos.rootMovesVec.table]
-		lea   rsi, qword[rbp+Thread.rootPos.rootMovesVec.table]
-		mov   ecx, sizeof.RootMovesVec/4
-	  rep movsd
+		mov   rsi, qword[mainThread.rootPos.rootMovesVec.table]
+.copy_moves_loop:
+		cmp   rsi, qword[mainThread.rootPos.rootMovesVec.ender]
+		jae   .copy_moves_done
+	    vmovups   xmm0, dqword[rsi+0]    ; this should be sufficient to copy
+	    vmovups   xmm1, dqword[rsi+16]   ; up to and including first move of pv
+	    vmovups   dqword[rdi+0], xmm0    ;
+	    vmovups   dqword[rdi+16], xmm1   ;
+		add   rdi, sizeof.RootMove
+		add   rsi, sizeof.RootMove
+		jmp   .copy_moves_loop
+.copy_moves_done:
+		mov   qword[rbx+Thread.rootPos.rootMovesVec.ender], rdi
+
 		jmp   .next_thread
 .thread_copy_done:
 

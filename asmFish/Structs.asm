@@ -138,7 +138,6 @@ ends
 ; position structures
 ;;;;;;;;;;;;;;;;;;
 
-
 struct Pos
  typeBB      rq 8
  board	     rb 64

@@ -72,14 +72,7 @@ match =Black, Us
 		 jz   ..AllDone
 ..NextPiece:
 
-
-
-
 		bsf   rcx, r15
-
-VerboseDisplay db 'new pawn '
-VerboseDisplayInt rcx
-
 	       blsr   r15, r15, rax
 		mov   edx, ecx
 		and   edx, 7
@@ -205,10 +198,6 @@ VerboseDisplayInt rcx
 		and   edx, Doubled
 		sub   esi, edx
 	; doubled is taken care of
-
-
-
-VerboseDisplayScore rsi
 
 	       test   r15 ,r15
 		jnz   ..NextPiece
