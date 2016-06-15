@@ -410,9 +410,15 @@ VerboseDisplayInt qword[.alpha]
 
 	; do not search moves with negative see value
 	if InCheck eq 0
-	     Assert   ne, esi, MOVE_TYPE_PROM+0, 'knight promotion encountered in qsearch<InCheck=false>'
-	     Assert   ne, esi, MOVE_TYPE_PROM+1, 'bishop promotion encountered in qsearch<InCheck=false>'
-	     Assert   ne, esi, MOVE_TYPE_PROM+2, 'rook promotion encountered in qsearch<InCheck=false>'
+	   ;  Assert   ne, esi, MOVE_TYPE_PROM+0, 'knight promotion encountered in qsearch<InCheck=false>'
+	   ;  Assert   ne, esi, MOVE_TYPE_PROM+1, 'bishop promotion encountered in qsearch<InCheck=false>'
+	   ;  Assert   ne, esi, MOVE_TYPE_PROM+2, 'rook promotion encountered in qsearch<InCheck=false>'
+		cmp   esi, MOVE_TYPE_PROM+0
+		 je   .DontContinue
+		cmp   esi, MOVE_TYPE_PROM+1
+		 je   .DontContinue
+		cmp   esi, MOVE_TYPE_PROM+2
+		 je   .DontContinue
 		cmp   esi, MOVE_TYPE_PROM+3
 		 je   .DontContinue
 	else

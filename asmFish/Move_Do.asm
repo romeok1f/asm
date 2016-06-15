@@ -173,12 +173,15 @@ match=2, VERBOSE {
 push rax rcx rsi rdi
 mov esi, ecx
 lea rdi, [VerboseOutput]
+mov rax, 'domove'
+stosq
+sub rdi,2
 movsxd rax, dword[rbp+Pos.gamePly]
 call PrintSignedInteger
-mov rax, 'domove:'
-stosq
-sub rdi,1
+mov al, ':'
+stosb
 mov ecx, esi
+xor edx, edx
 call PrintUciMove
 mov al, '|'
 stosb

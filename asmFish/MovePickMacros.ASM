@@ -6,9 +6,18 @@ macro apply_bonus address, bonus32, absbonus, denominator {
 		mov   ecx, denominator
 	       idiv   ecx
 		mov   ecx, bonus32
+
+SD_String db 'v'
+SD_Int rcx
+
 		sub   ecx, eax
 		add   ecx, dword[address]
 		mov   dword[address], ecx
+
+SD_String db 'u'
+SD_Int rcx
+SD_String db "|"
+
 }
 
 

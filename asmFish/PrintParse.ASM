@@ -23,16 +23,15 @@ PrintScore_Uci:
 		mov   eax, 'cp '
 	      stosd
 		sub   rdi, 1
-	       test   ecx, ecx
-		jns   @f
-		mov   al, '-'
-		neg   ecx
-	      stosb
-	@@:	mov   eax, ecx
-		mov   rdx, (100*(1 shl 32))/PawnValueEg
-		mul   rdx
-		shr   rax, 32
-	       call   PrintUnsignedInteger
+
+		mov   eax, ecx
+		mov   ecx, 100
+	       imul   eax, ecx
+		cdq
+		mov   ecx, PawnValueEg
+	       idiv   ecx
+	     movsxd   rax, eax
+	       call   PrintSignedInteger
 		ret
 .pMate:
 		mov   rax, 'mate '

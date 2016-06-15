@@ -189,6 +189,7 @@ match =1, DEBUG \{
 		xor   eax, eax
 		mov   dword[.moveCount], eax
 		mov   dword[.quietCount], eax
+		mov   dword[rbx+State.moveCount], eax
 		mov   dword[.bestValue], -VALUE_INFINITE
 		mov   r12d, dword[rbx-1*sizeof.State+State.ply]
 		add   r12d, 1
@@ -787,8 +788,15 @@ VerboseDisplay <db 'entering moves_loop',10>
 		mov   dword[.move], eax
 	       test   eax, eax
 		 jz   .MovePickDone
+
+SD_String db 'mp='
+SD_Move rax
+SD_String db '|'
+
+
 		cmp   eax, dword[.excludedMove]
 		 je   .MovePickLoop
+
 
 		; at the root search only moves in the move list
 	if .RootNode eq 1
@@ -807,6 +815,11 @@ VerboseDisplay <db 'entering moves_loop',10>
 		add   eax, 1
 		mov   dword[rbx+State.moveCount], eax
 		mov   dword[.moveCount], eax
+
+SD_String db 'mc='
+SD_Int rax
+SD_String db '|'
+
 
 		xor   eax, eax
 	if .PvNode eq 1
@@ -1604,7 +1617,10 @@ pop r15 r14 r13 r9 r8 rdx rcx rax rdi rsi
 
 
 .IllegalMove:
-		sub   dword[.moveCount], 1
+		mov   eax, dword[.moveCount]
+		sub   eax, 1
+		mov   dword[rbx+State.moveCount], eax
+		mov   dword[.moveCount], eax
 		jmp   .MovePickLoop
 
 

@@ -310,11 +310,11 @@ psq equ r11d
 
 		shl   wksq, 6
 		mov   ecx, psq
-		and   ecx, 0111b
-     ;           shl   ecx, 6
+		and   ecx, 7
+		shl   ecx, 6
 	      movzx   edx, byte[SquareDistance+bksq_+psq_+DELTA_S]
 	      movzx   eax, byte[SquareDistance+wksq_+psq_+DELTA_S]
-     ;         movzx   ecx, byte[SquareDistance+rcx+psq_]
+	      movzx   ecx, byte[SquareDistance+rcx+psq_]
 		sub   eax, edx
 		sub   eax, ecx
 		lea   eax, [8*rax-200]
@@ -723,7 +723,7 @@ qs equ r15d
 		add   eax, ecx
 		cmp   eax, RANK_6
 		 ja   .3
-		mov   eax, bksq
+		mov   eax, brsq
 		shr   eax, 3
 		cmp   eax, RANK_1
 		 je   .ReturnDraw
@@ -888,8 +888,8 @@ SD_Int rax
 		 jb   .9
 		mov   eax, bksq
 		and   eax, 7
-		mov   eax, wpsq
-		and   eax, 7
+		mov   edx, wpsq
+		and   edx, 7
 		cmp   eax, edx
 		jne   @f
 		mov   eax, 10
@@ -904,7 +904,7 @@ SD_Int rax
 		and   edx, 7
 		sub   eax, edx
 		add   eax, 1
-	       test   eax, -2
+	       test   eax, not 2
 		jnz   .9
 	       imul   eax, wksq, 64
 	      movzx   eax, byte[SquareDistance+rax+bksq_]

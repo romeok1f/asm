@@ -75,6 +75,20 @@ local ..message, ..over
  \}
 }
 
+macro SD_Move x {
+ match =2, VERBOSE \{
+	push  x
+	push  rdi rax rcx rdx r8 r9 r10 r11
+	lea  rdi, [VerboseOutput]
+	mov ecx, dword[rsp+8*8]
+	xor edx, edx
+	call PrintUciMove
+	lea  rcx, [VerboseOutput]
+	call _WriteOut
+	pop r11 r10 r9 r8 rdx rcx rax rdi
+	add  rsp, 8
+ \}
+}
 
 
 macro SD_Int x {

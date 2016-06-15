@@ -456,35 +456,10 @@ MainThread_Think:
 		mov   dword[time.maximumTime], eax
 .no_weakness:
 
-	; Skip TB probing when no TB found
-		xor   eax, eax
-		mov   dl, byte[options.syzygy50MoveRule]
-		mov   qword[Tablebase_Hits], rax
-		mov   byte[Tablebase_RootInTB], al
-		mov   byte[Tablebase_UseRule50], dl
-		mov   eax, dword[options.syzygyProbeLimit]
-		mov   ecx, dword[options.syzygyProbeDepth]
-		xor   edx, edx
-		cmp   eax, dword[Tablebase_MaxCardinality]
-	      cmovg   eax, dword[Tablebase_MaxCardinality]
-	      cmovg   ecx, edx
-		mov   dword[Tablebase_Cardinality], eax
-		mov   dword[Tablebase_ProbeDepth], ecx
-
 	; check for mate
 		mov   r8, qword[rbp+Pos.rootMovesVec+RootMovesVec.ender]
 		cmp   r8, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
 		 je   .mate
-
-	; check tb
-		mov   rcx, qword[rbp+Pos.typeBB+8*White]
-		 or   rcx, qword[rbp+Pos.typeBB+8*Black]
-	     popcnt   rcx, rcx, rdx
-		sub   eax, ecx
-		sar   eax, 31
-		 or   al, byte[rbx+State.castlingRights]
-		 jz   .check_tb
-.check_tb_ret:
 
 	; start workers
 		lea   rsi, [rbp-Thread.rootPos]
@@ -575,38 +550,6 @@ MainThread_Think:
       VerboseDisplay  <db 'MainThread_Think returning',10>
 		pop   r15 rdi rsi rbx rbp
 		ret
-
-
-
-
-.check_tb:
-	       call   Tablebase_RootProbe
-		mov   byte[Tablebase_RootInTB], al
-		xor   edx, edx
-	       test   eax, eax
-		jnz   .root_in
-	       call   Tablebase_RootProbeWDL
-		mov   byte[Tablebase_RootInTB], al
-		xor   edx, edx
-		cmp   edx, dword[Tablebase_Score]
-	      cmovg   edx, dword[Tablebase_Cardinality]
-	.root_in:
-		lea   rcx, [rbp+Pos.rootMovesVec]
-		mov   dword[Tablebase_Cardinality], edx
-	       call   RootMovesVec_Size
-		mov   dword[Tablebase_Hits], eax
-		mov   dl, byte[Tablebase_UseRule50]
-		mov   eax, dword[Tablebase_Score]
-	       test   dl, dl
-		jnz   .check_tb_ret
-		mov   ecx, VALUE_MATE - MAX_PLY - 1
-		cmp   eax, 0
-	      cmovg   eax, ecx
-		neg   ecx
-		cmp   eax, 0
-	      cmovl   eax, ecx
-		mov   dword[Tablebase_Score], eax
-		jmp   .check_tb_ret
 
 .pick_weak_move:
 	       call   Weakness_PickMove

@@ -13,12 +13,22 @@ MovePick_Init_Search:
 
 		mov   rdi, qword[rbp+Pos.counterMoves]
 		mov   eax, dword[rbx-1*sizeof.State+State.currentMove]
+SD_String db 'mppm:'
+SD_Move rax
+SD_String db '|'
+
+
 		and   eax, 63
 	      movzx   edx, byte[rbp+Pos.board+rax]
 		shl   edx, 6
 		add   edx, eax
 		mov   eax, dword[rdi+4*rdx]
 		mov   dword[rsi+Pick.countermove], eax
+
+SD_String db 'cm:'
+SD_Move rax
+SD_String db '|'
+
 
 		lea   r15, [rsi+Pick.moves]
 		lea   rax, [r15+8*(MAX_MOVES-1)]
@@ -112,9 +122,15 @@ GenNext_Killers:
 		cmp   edx, ecx
 	      cmove   r15, r13
 
+SD_String db 'kil012:'
+SD_Move qword[rsi+Pick.killers+0*sizeof.ExtMove]
+SD_Move qword[rsi+Pick.killers+1*sizeof.ExtMove]
+SD_Move qword[rsi+Pick.killers+2*sizeof.ExtMove]
+SD_String db '|'
+
+
 MovePick_Killers:
 		mov   edi, dword[r14]
-		; upper 16 bits of edi should be zero if r14<r15
 		mov   eax, edi
 		mov   ecx, edi
 		and   eax, 63
@@ -135,6 +151,9 @@ MovePick_Killers:
 		 jz   MovePick_Killers
 		mov   eax, edi
 		lea   rdx, [MovePick_Killers]
+SD_String db 'kil:'
+SD_Move rax
+SD_String db '|'
 		ret
 .special:
 		cmp   edi, MOVE_TYPE_EPCAP shl 12
@@ -144,6 +163,9 @@ MovePick_Killers:
 		 jz   MovePick_Killers
 		mov   eax, edi
 		lea   rdx, [MovePick_Killers]
+SD_String db 'kil:'
+SD_Move rax
+SD_String db '|'
 		ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -227,9 +249,9 @@ call _WriteOut
 .JustSort:
       InsertionSort   r14, r13, r11, r12
 
-match =1, VERBOSE {
+match =2, VERBOSE {
 lea rdi, [VerboseOutput]
-szcall PrintString, 'after sort '
+szcall PrintString, 'quiets:'
 mov  r12, r14
 .1c:
 cmp r12, r15
@@ -239,12 +261,12 @@ stosb
 mov ecx, dword[r12+ExtMove.move]
 xor  edx, edx
 call PrintUciMove
-mov ax, ', '
-stosw
+mov al, ','
+stosb
 movsxd rax, dword[r12+ExtMove.score]
 call PrintSignedInteger
-mov  ax, ') '
-stosw
+mov  al, ')'
+stosb
 add  r12, 8
 jmp  .1c
 .2c:

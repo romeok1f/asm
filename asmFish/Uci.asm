@@ -119,6 +119,9 @@ UciChoose:
 	    stdcall   CmpString, 'isready'
 	       test   eax, eax
 		jnz   UciIsReady
+	    stdcall   CmpString, 'ponderhit'
+	       test   eax, eax
+		jnz   UciPonderHit
 	    stdcall   CmpString, 'ucinewgame'
 	       test   eax, eax
 		jnz   UciNewGame
@@ -215,6 +218,15 @@ UciIsReady:
 	      stosq
 		jmp   UciWriteOut
 
+
+
+
+UciPonderHit:
+		mov   al, byte[signals.stopOnPonderhit]
+	       test   al, al
+		jnz   UciStop
+		mov   byte[limits.ponder], al
+		jmp   UciGetInput
 ;;;;;;;;
 ; stop
 ;;;;;;;;
@@ -849,7 +861,16 @@ UciBench:
 		mov   qword[options.displayMoveFxn], rdx
 	       call   Search_Clear
 
+		sub   rsp, 8*4
+	       call   qword[__imp_GetCurrentProcess]
+		mov   rcx, rax
+		mov   edx, REALTIME_PRIORITY_CLASS
+	       call   qword[__imp_SetPriorityClass]
+		add   rsp, 8*4
+
 		xor   r13d, r13d
+		mov   qword[UciLoop.time], r13
+		mov   qword[UciLoop.nodes], r13
 .nextpos:
 		mov   rsi, [.bench_fen_tab+8*r13]
 	       call   Position_ParseFEN
@@ -877,7 +898,7 @@ UciBench:
 		lea   rdi, [Output]
 		mov   rax, 'nodes:  '
 	      stosq
-		mov   rax, qword[UciLoop.nodes]
+		mov   rax, r15
 	       call   PrintUnsignedInteger
 		mov   eax, '    '
 	      stosd
@@ -900,6 +921,12 @@ UciBench:
 		cmp   r13d, 30
 		 jb   .nextpos
 
+		sub   rsp, 8*4
+	       call   qword[__imp_GetCurrentProcess]
+		mov   rcx, rax
+		mov   edx, NORMAL_PRIORITY_CLASS
+	       call   qword[__imp_SetPriorityClass]
+		add   rsp, 8*4
 
 		lea   rdi, [Output]
 		mov   rax, 'total no'

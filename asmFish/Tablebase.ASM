@@ -40,9 +40,6 @@ end virtual
 		mov   r15d, edx
 		mov   r13, r8
 
-
-
-
 		lea   rdi, [.stack]
 	       test   rax, rax
 		jnz   .InCheck
@@ -1139,7 +1136,7 @@ end virtual
 		mov   qword[rbp+Pos.rootMovesVec+RootMovesVec.ender], rdi
 		 or   eax, -1
 .Return:
-		sub   rsp, .localsize
+		add   rsp, .localsize
 
 match =2, VERBOSE {
 test eax, eax

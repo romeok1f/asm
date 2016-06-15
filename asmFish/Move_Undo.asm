@@ -15,13 +15,14 @@ match=2, VERBOSE {
 push rax rcx rsi rdi
 mov esi, ecx
 lea rdi, [VerboseOutput]
-movsxd rax, dword[rbp+Pos.gamePly]
-call PrintSignedInteger
 mov rax, 'undomove'
 stosq
+movsxd rax, dword[rbp+Pos.gamePly]
+call PrintSignedInteger
 mov al, ':'
 stosb
 mov ecx, esi
+xor edx, edx
 call PrintUciMove
 mov al, '|'
 stosb

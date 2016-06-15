@@ -1777,6 +1777,7 @@ WinMain:
 	ret						
 
 _ZN13TablebaseCore4initEPKc:
+
 	push	r15					
 	push	r14					
 	push	r13					
@@ -1938,8 +1939,12 @@ _ZN13TablebaseCore4initEPKc:
 	inc	r8d					
 	cmp	eax, 5					
 	jne	?_186					
-	mov	byte [ _ZL11initialized], 1		
-?_195:	cmp	byte [rbx], 0				
+	mov	byte [ _ZL11initialized], 1
+
+
+?_195:
+
+	cmp	byte [rbx], 0
 	je	?_233					
 	lea	rdx, [ ?_345]			
 	mov	rcx, rbx				

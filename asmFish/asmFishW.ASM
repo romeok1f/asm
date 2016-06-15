@@ -2,11 +2,11 @@
 OS_IS_WINDOWS	 fix 1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; compile options 0 or 1
-CPU_HAS_POPCNT	 equ 1	;  popcnt                       very nice function
-CPU_HAS_AVX1	 equ 1	;  256 bit floating point       probably only used for memory copy if used at all
-CPU_HAS_AVX2	 equ 1	;  256 bit integer + fmadd      probably not used
-CPU_HAS_BMI1	 equ 1	;  andn                         why not use it if we can
-CPU_HAS_BMI2	 equ 1	;  pext + pdep                  nice for move generation, but not much faster than magics
+CPU_HAS_POPCNT	 equ 0	;  popcnt                       very nice function
+CPU_HAS_AVX1	 equ 0	;  256 bit floating point       probably only used for memory copy if used at all
+CPU_HAS_AVX2	 equ 0	;  256 bit integer + fmadd      probably not used
+CPU_HAS_BMI1	 equ 0	;  andn                         why not use it if we can
+CPU_HAS_BMI2	 equ 0	;  pext + pdep                  nice for move generation, but not much faster than magics
 DEBUG		 equ 0	;  turns on the asserts    detecting critical bugs: should be no functional change
 VERBOSE 	 equ 0	;  LOTS of print           find subtle bugs:  0=off, 2=search debug, 3=eval debug
 PROFILE 	 equ 0	;  counts in the code
@@ -495,10 +495,12 @@ match =1, VERBOSE {
 		lea   rcx, [VerboseOutput]
 	       call   _WriteOut 		; display how much time was taken for init
 }
+
+match =0, VERBOSE {
 		lea   rdi, [szGreetingEnd]
 		lea   rcx, [szGreeting]
 	       call   _WriteOut
-
+}
 
 match =0, VERBOSE {
 .read:
@@ -600,6 +602,7 @@ import kernel,\
 	__imp_ReadFile,'ReadFile',\
 	__imp_ReleaseMutex,'ReleaseMutex',\
 	__imp_SetEvent,'SetEvent',\
+	__imp_SetPriorityClass,'SetPriorityClass',\
 	__imp_SetThreadAffinityMask,'SetThreadAffinityMask',\
 	__imp_Sleep,'Sleep',\
 	__imp_UnmapViewOfFile, 'UnmapViewOfFile',\

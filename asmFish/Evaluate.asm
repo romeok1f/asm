@@ -341,6 +341,7 @@ VerboseDisplayScore r13
 
 
 else if Pt eq Rook
+
     if Us eq White
 		cmp   r14d, SQ_A5
 		 jb   ..NoEnemyPawnBonus
@@ -1909,8 +1910,6 @@ ED_Score rsi
 		adc   r13d, r13d
 	      movzx   ecx, byte[r15+MaterialEntry.scalingFunction+r13]
 	      movzx   eax, byte[r15+MaterialEntry.factor+r13]
-ED_String db ' ei.me->scale_factor(pos, strongSide): '
-ED_Int rax
 	      movzx   edx, byte[r15+MaterialEntry.gamePhase]
 	      movsx   r12d, si
 		add   esi, 0x08000
@@ -1918,6 +1917,8 @@ ED_Int rax
 	       test   ecx, ecx
 		jnz   .HaveScaleFunction
 .HaveScaleFunctionReturn:
+ED_String db ' ei.me->scale_factor(pos, strongSide): '
+ED_Int rax
 		lea   ecx, [rax-48]
 		mov   r10, qword[rbp+Pos.typeBB+8*Bishop]
 		mov   r8, qword[rbp+Pos.typeBB+8*White]
