@@ -1,8 +1,0 @@
-gcc -O3 -m64 -march=native "C:\Users\Dan\Dropbox\asm\src\data.c" "C:\Users\Dan\Dropbox\asm\src\sungorus.c" -o "C:\Users\Dan\Dropbox\asm\src\sungorus.exe"
-
-gcc -O3 -m64 -march=native "C:\Users\Dan\Dropbox\asm\src\sungorus.cpp" -o "C:\Users\Dan\Dropbox\asm\src\sungorus.exe"
-
-
-gcc -O3 -m64 -march=core-avx2 -c "C:\Users\Dan\Dropbox\asm\src\main.c" -o "C:\Users\Dan\Dropbox\asm\src\main.o"
-
-"C:\Users\pc\Downloads\objconv\objconv.exe" -fyasm "C:\Users\pc\Dropbox\asm\src\main.o" "C:\Users\pc\Dropbox\asm\src\main.asm"
