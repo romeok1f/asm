@@ -31,6 +31,7 @@ end virtual
 		mov   qword[XboardLoop.th1.rootPos.stateTable], rax
 		mov   qword[XboardLoop.th1.rootPos.stateEnd], rax
 		lea   rsi, [szStartFEN]
+		xor   ecx, ecx			; chess950 = false
 	       call   Position_ParseFEN
 
 		jmp   .Observing
@@ -128,6 +129,7 @@ end virtual
 		mov   dword[.comp_side], 2
 		lea   rbp, [XboardLoop.th1.rootPos]
 		lea   rsi, [szStartFEN]
+		xor   ecx, ecx			; chess950 = false
 	       call   Position_ParseFEN
 		jmp   .Observing
 .Go:

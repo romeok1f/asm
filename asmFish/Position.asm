@@ -1,98 +1,3 @@
-Position_Test:
-	; in: rbp Pos
-	; out: eax = 0 if passed all test
-	;      eax = move if failed some test
-
-
-		       push   rbx rsi rdi r12 r13 r14 r15
-
-virtual at rsp
-.seed rq 1
-.movelist rb MAX_MOVES*sizeof.ExtMove
-.lend rb 0
-end virtual
-.localsize = .lend-rsp
-			sub   rsp, .localsize
-
-		; use all pieces as seed
-			mov   rax, qword[rbp+Pos.typeBB+8*White]
-			 or   rax, qword[rbp+Pos.typeBB+8*Black]
-			mov   qword[.seed], rax
-
-			mov   rbx, qword[rbp+Pos.state]
-		       call   SetCheckInfo
-
-			lea   rdi, [.movelist]
-			mov   rsi, rdi
-		       call   Gen_Legal
-			xor   eax, eax
-			mov   dword[rdi], eax
-			jmp   .MoveTest
-	.MoveLoop:
-		      movzx   ecx, word[rsi]
-		       call   Move_IsPseudoLegal
-		       test   rax, rax
-			 jz   .LegalFail1
-		      movzx   ecx, word[rsi]
-		       call   Move_IsLegal
-		       test   rax, rax
-			 jz   .LegalFail2
-			add   rsi, sizeof.ExtMove
-	.MoveTest:
-		      movzx   ecx, word[rsi]
-		       test   ecx, ecx
-			jnz   .MoveLoop
-
-			mov   r15d, 100000
-.RandomLoop:
-			lea   rcx, [.seed]
-		       call   Math_Rand_i
-			and   eax, 0x07FFF
-			mov   esi, eax
-			 jz   .RandomLoop
-			lea   rcx, [.movelist]
-			jmp   .WhileTest
-	.WhileLoop:	cmp   eax, esi
-			 je   .RandomLoop
-			add   rcx, sizeof.ExtMove
-	.WhileTest:	mov   eax, dword[rcx]
-		       test   eax, eax
-			jnz   .WhileLoop
-
-		      ; esi is now a 'move' that is not in list of legal moves
-
-			mov   ecx, esi
-		       call   Move_IsPseudoLegal
-		       test   rax, rax
-			jnz   .RandomFail1
-
-.RandomFail1Ret:
-			sub   r15d, 1
-			jns   .RandomLoop
-
-			xor   eax, eax
-.Return:
-			add   rsp, .localsize
-			pop   r15 r14 r13 r12 rdi rsi rbx
-			ret
-
-.LegalFail1:
-.LegalFail2:
-		      movzx   eax, word[rsi]
-			jmp   .Return
-.RandomFail1:
-			mov   ecx, esi
-		       call   Move_IsLegal
-		       test   rax, rax
-			 jz   .RandomFail1Ret
-.RandomFail2:
-			mov   eax, esi
-			jmp  .Return
-
-
-
-
-
 Position_SetState:
 	; in:  rbp  address of Pos
 	; set information in state struct
@@ -696,7 +601,7 @@ end virtual
 
 
 
-
+match =1, DEBUG {
 Position_PrintSmall:
 	; in: rbp address of Pos
 	; io: rdi string
@@ -732,7 +637,7 @@ Position_PrintSmall:
 
 		pop   r15 r14 r13 rsi rbx
 		ret
-
+}
 
 
 ;;;;;;;;;;;;;;;
@@ -747,18 +652,17 @@ Position_ParseFEN:
 	;      eax = -1 failure
 
 	       push   rbp rbx rdi r12 r13 r14 r15
-
+		mov   r12d, ecx
 
 		mov   rbx, qword[rbp+Pos.stateTable]
 	       test   rbx, rbx
 		 jz   .alloc
 .alloc_ret:
-		mov   edx, ecx
 		xor   eax, eax
 		mov   ecx, Pos._copy_size/8
 		mov   rdi, rbp
 	  rep stosq
-		mov   dword[rbp+Pos.chess960], edx
+		mov   dword[rbp+Pos.chess960], r12d
 
 		xor   eax, eax
 		mov   ecx, sizeof.State/8

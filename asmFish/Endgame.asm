@@ -19,19 +19,6 @@ match =1, DEBUG {
 		pop   rcx rdx
 }
 
-
-match =1, VERBOSE {
-	       push   rcx rcx
-	       push   rdi
-		lea   rdi, [VerboseOutput]
-	     szcall   PrintString, 'EndgameEval_KXK'
-	       call   Position_PrintSmall
-		lea   rcx, [VerboseOutput]
-	       call   _WriteOut
-		pop   rdi
-		pop   rcx rcx
-}
-
 	; r15 = strong pieces
 		mov   rdi, qword[rbp+Pos.typeBB+8*King]
 		mov   r14, qword[rbp+Pos.typeBB+8*rcx]

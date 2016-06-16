@@ -139,33 +139,18 @@ UciChoose:
 	       test   eax, eax
 		jnz   UciPerft
 
-	    stdcall   CmpString, 'pick'
-	       test   eax, eax
-		jnz   UciPick
 	    stdcall   CmpString, 'show'
 	       test   eax, eax
 		jnz   UciShow
 	    stdcall   CmpString, 'undo'
 	       test   eax, eax
 		jnz   UciUndo
-	    stdcall   CmpString, 'verify'
-	       test   eax, eax
-		jnz   UciVerify
-	    stdcall   CmpString, 'isok'
-	       test   eax, eax
-		jnz   UciIsOk
-	    stdcall   CmpString, 'perftp'
-	       test   eax, eax
-		jnz   UciPerftP
 	    stdcall   CmpString, 'moves'
 	       test   eax, eax
 		jnz   UciMoves
 	    stdcall   CmpString, 'donull'
 	       test   eax, eax
 		jnz   UciDoNull
-	    stdcall   CmpString, 'test'
-	       test   eax, eax
-		jnz   UciTest
 	    stdcall   CmpString, 'eval'
 	       test   eax, eax
 		jnz   UciEval
@@ -647,20 +632,6 @@ UciDoNull:
 	       call   SetCheckInfo
 		jmp   UciShow
 
-UciPick:
-	     ;  call   TestPick
-		jmp   UciGetInput
-
-
-
-UciPerftP:
-	     ;           xor   eax, eax
-	     ;    ;       mov   qword[rbp+Pos.nodes], rax
-	     ;          call   SkipSpaces
-	     ;          call   ParseInteger
-	     ;           mov   ecx, eax
-	     ;          call   PerftPick_Root
-			jmp   UciGetInput
 
 
 
@@ -692,26 +663,6 @@ UciShow:
 	       call   Position_Print
 		jmp   UciWriteOut
 
-
-
-UciVerify:
-	       call   Position_VerifyState
-		lea   rcx, [szOK]
-		lea   rdx, [szError]
-		lea   rdi, [Output]
-	       test   eax, eax
-	      cmovz   rcx, rdx
-	       call   PrintString
-		jmp   UciWriteOut
-
-UciIsOk:
-		mov   rbx, qword[rbp+Pos.state]
-	       call   Position_IsLegal
-		lea   rdi, [Output]
-		mov   rcx, rdx
-	       call   PrintString
-		jmp   UciWriteOut
-
 UciUndo:
 		mov   rbx, qword[rbp+Pos.state]
 	       call   SkipSpaces
@@ -733,47 +684,6 @@ UciUndo:
 UciMoves:
 	       call   UciParseMoves
 		jmp   UciShow
-
-
-UciTest:
-	;        lea   rdi, [Output]
-	;        mov   rcx, qword[DistanceRingBB+8*(8*SQ_E1+0)]
-	;       call   PrintBitboard
-	;        mov   al, 10
-	;      stosb
-	;        mov   rcx, qword[DistanceRingBB+8*(8*SQ_E1+1)]
-	;       call   PrintBitboard
-	;        mov   al, 10
-	;      stosb
-	;        jmp   UciWriteOut
-
-
-
-		mov   rdi, [InputBuffer]
-	     szcall   PrintString, 'position startpos moves c2c4 e7e5 b1c3 f8b4 c3d5 a7a5 e2e3 g8f6 g1f3 e5e4 f3d4 c7c6 d5b4 a5b4 b2b3 e8g8 c1b2 d7d6 h2h3 f8e8 g2g4 b8a6 h1g1 a6c5 d1c2 f6d7 d4f5 d7e5 f1e2 c8f5 g4f5 d8f6 f2f4 e4f3 e2f1 e5d3 f1d3 f6b2 e1f2 b2f6 f2f3 e8e5 e3e4 a8e8 g1g4 e5e4 d3e4 f6a1 d2d3 a1e5 c2e2 d6d5 c4d5 c6d5 e2e3 d5e4 d3e4 e8d8 f3g2 d8d3 e3f4 e5b2 g2h1 d3d1 g4g1 d1g1 h1g1 b2b1 g1h2 b1a2 h2g1 a2b1 g1h2 b1c2 h2g1 c2d1 g1h2 d1e2 h2g1 h7h6 e4e5 c5e4 e5e6 f7e6 f5e6 e4g5 f4b8 g8h7 h3h4 g5f3 g1h1'
-;             szcall   PrintString, 'position startpos moves e2e4 d7d6 d2d4 g8f6 b1c3 g7g6 f2f4 f8g7 e4e5 f6d7 g1f3 e8g8 h2h4 h7h5 e5e6 f7e6 f3g5 f8f6 g2g4 h5g4 d1g4 d7f8 h4h5 e6e5 g4h4 g6h5 f1c4 e7e6 d4e5 d6e5 f4e5 f6h6 c1d2 b8c6 e1c1 d8e7 c3e4 c6e5 c4b3 c8d7 d1g1 e5g4 h4e1 d7c6 d2b4 e7e8 b4c3 e8g6 c3g7 g6g7 c1b1 c6d5 g5f3 f8g6 b3d5 e6d5 e4g3 g7f7 g3h5 f7f3 g1g4 h6h5 g4g6 g8h8'
-		mov   eax, 10
-	      stosd
-		mov   rsi, [InputBuffer]
-		jmp   UciChoose
-
-	 ;      call   Position_Test
-	 ;       lea   rdi,[Output]
-	 ;      test   eax, eax
-	 ;       jnz   .Failed
-	 ;       lea   rcx, [szOK]
-	 ;      call   PrintString
-	 ;       jmp   UciWriteOut
-.Failed:
-		mov   ecx, eax
-	       call   PrintUciMoveLong
-	     szcall   PrintString, ' failed'
-		mov   al, 10
-	      stosb
-		jmp   UciWriteOut
-
-
-
 
 
 
@@ -853,6 +763,13 @@ UciProfile:
 }
 
 UciBench:
+	       call   SkipSpaces
+	       call   ParseInteger
+		mov   r12d, 20		; default depth
+		lea   ecx, [rax-1]
+		cmp   ecx, MAX_PLY-20
+	      cmovb   r12d, eax
+
 		xor   eax, eax
 		mov   qword[UciLoop.nodes], rax
 		lea   rcx, [DisplayInfo_None]
@@ -877,7 +794,7 @@ UciBench:
 		lea   rcx, [UciLoop.limits]
 	       call   Limits_Init
 		lea   rcx, [UciLoop.limits]
-		mov   dword[rcx+Limits.depth], 18
+		mov   dword[rcx+Limits.depth], r12d
 	       call   Limits_Set
 		lea   rcx, [UciLoop.limits]
 

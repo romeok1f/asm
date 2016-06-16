@@ -1,17 +1,5 @@
 ; this is the source for windows  see asmFish.asm for unix
-OS_IS_WINDOWS	 fix 1
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; compile options 0 or 1
-CPU_HAS_POPCNT	 equ 1	;  popcnt                       very nice function
-CPU_HAS_AVX1	 equ 1	;  256 bit floating point       probably only used for memory copy if used at all
-CPU_HAS_AVX2	 equ 1	;  256 bit integer + fmadd      probably not used
-CPU_HAS_BMI1	 equ 1	;  andn                         why not use it if we can
-CPU_HAS_BMI2	 equ 1	;  pext + pdep                  nice for move generation, but not much faster than magics
-DEBUG		 equ 0	;  turns on the asserts    detecting critical bugs: should be no functional change
-VERBOSE 	 equ 0	;  LOTS of print           find subtle bugs:  0=off, 1=general debug, 2=search debug, 3=eval debug
-PROFILE 	 equ 0	;  counts in the code
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+; this is included in asmFishW_popcnt.asm asmFishW_base.asm and asmFishW_bmi2.asm
 
 format PE64 console
 entry Start
@@ -23,50 +11,33 @@ include 'BasicMacros.asm'
 include 'Structs.asm'
 include 'Debug.asm'
 
-
-
 section '.data' data readable writeable
 
 match =1, PROFILE {
-align 16
- profile:
- .moveDo     dq 0
- .moveUnpack dq 0
- .moveStore  dq 0
- .moveRetrieve dq 0
- .ender rb 0
+  align 16
+  profile:
+   .moveDo     dq 0
+   .moveUnpack dq 0
+   .moveStore  dq 0
+   .moveRetrieve dq 0
+   .ender rb 0
 }
 
 
-match =1, VERBOSE {
-align 16
+if VERBOSE > 0
+  align 16
   VerboseOutput rq 1024
   VerboseTime1 rq 2
   VerboseTime2 rq 2
   Verbr15 rq 1
-}
-match =2, VERBOSE {
-align 16
-  VerboseOutput rq 1024
-  VerboseTime1 rq 2
-  VerboseTime2 rq 2
-  Verbr15 rq 1
-}
-match =3, VERBOSE {
-align 16
-  VerboseOutput rq 1024
-  VerboseTime1 rq 2
-  VerboseTime2 rq 2
-  Verbr15 rq 1
-}
+end if
 
 
-match =1, DEBUG {
-align 16
+if DEBUG > 0
+  align 16
   DebugOutput  rq 1024
   DebugBalance rd 1
-}
-
+end if
 
 align 16
 RazorMargin dd 483, 570, 603, 554
