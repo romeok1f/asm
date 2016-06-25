@@ -5,6 +5,12 @@ Move_IsPseudoLegal:
 	;     ecx move
 	; out: rax = 0 if move is not pseudo legal
 	;      rax !=0 if move is pseudo legal      could be anything nonzero
+	;
+	;  we need to make sure the move is legal for the special types
+	;    promotion
+	;    castling
+	;    epcapture
+	;  so we also require checkinfo to be set
 
 	       push   rsi rdi r12 r13 r14 r15
 
@@ -54,27 +60,29 @@ lock inc qword[profile.moveUnpack]
 		sbb   r12, r12
 
 	; make sure that our piece is on from square
+		and   r11d, 7
 		 bt   r14, r8
 		jnc   .ReturnFalse
 
-		cmp   ecx, MOVE_TYPE_CASTLE
+		cmp   ecx, _MOVE_TYPE_PROM
 		jae   .Special
 
 	; make sure that we don't capture our own piece
+		mov   eax, dword[.JmpTable+4*r11]
 		 bt   r14, r9
 		 jc   .ReturnFalse
 
-		and   r11d, 7
-		jmp   qword[.JmpTable+8*r11]
+		jmp   rax
+align 8
 .JmpTable:
-		dq Move_IsPseudoLegal.NoPiece
-		dq Move_IsPseudoLegal.NoPiece
-		dq Move_IsPseudoLegal.Pawn
-		dq Move_IsPseudoLegal.Knight
-		dq Move_IsPseudoLegal.Bishop
-		dq Move_IsPseudoLegal.Rook
-		dq Move_IsPseudoLegal.Queen
-		dq Move_IsPseudoLegal.King
+		dd .NoPiece
+		dd .NoPiece
+		dd .Pawn
+		dd .Knight
+		dd .Bishop
+		dd .Rook
+		dd .Queen
+		dd .King
 
 
 	      align   8
@@ -150,17 +158,12 @@ lock inc qword[profile.moveUnpack]
 .Pawn:
 		mov   r11d, esi
 		shl   r11d, 6+3
-
 		mov   rdx, 0x00FFFFFFFFFFFF00
-		xor   eax,eax
-
-		cmp   ecx, MOVE_TYPE_DPAWN
+		mov   eax, r8d
+		xor   eax, r9d
+		cmp   eax, 16
 		 je   .DoublePawn
-		cmp   ecx, MOVE_TYPE_PROM+4
-		jae   .ReturnFalse
-		cmp   ecx, MOVE_TYPE_PROM
-		jae   .Promotion
-
+		xor   eax, eax
 		xor   esi, 1
 		lea   ecx, [2*rsi-1]
 		lea   ecx, [r8+8*rcx]
@@ -178,40 +181,9 @@ lock inc qword[profile.moveUnpack]
 		pop   r15 r14 r13 r12 rdi rsi
 		ret
 
-	      align   8
- .Promotion:
-		lea   ecx, [rsi-1]
-		xor   esi, 1
-		and   ecx, 56
-		mov   edx, 0x0FF
-		shl   rdx, cl
-
-		xor   eax,eax
-
-		lea   ecx, [2*rsi-1]
-		lea   ecx, [r8+8*rcx]
-		bts   rax, rcx
-	       andn   rax, r15, rax
-		mov   rcx, [rbp+Pos.typeBB+8*rsi]
-		and   rcx, qword[PawnAttacks+r11+8*r8]
-		 or   rax, rcx
-		and   rax, rdx
-
-		and   rax, rdi
-	       test   rax, r12
-		jnz   .Checkers
-
-		pop   r15 r14 r13 r12 rdi rsi
-		ret
-
 
 	      align   8
  .DoublePawn:
-	; made sure that to is two ranks from from
-		mov   eax, r8d
-		xor   eax, r9d
-		cmp   eax, 16
-		jne   .DPawnReturnFalse
 	; make sure that two squares are clear
 		lea   eax, [r8+r9]
 		shr   eax, 1
@@ -231,7 +203,7 @@ lock inc qword[profile.moveUnpack]
 		pop   r15 r14 r13 r12 rdi rsi
 		ret
     .DPawnReturnFalse:
-		xor   eax,eax
+		xor   eax, eax
 		pop   r15 r14 r13 r12 rdi rsi
 		ret
 
@@ -289,16 +261,91 @@ lock inc qword[profile.moveUnpack]
 
 	      align   8
 .Special:
-		cmp   ecx, MOVE_TYPE_CASTLE
+		cmp   ecx, _MOVE_TYPE_CASTLE
 		 je   .Castle
-		cmp   ecx, MOVE_TYPE_EPCAP
+		jae   .EpCapture
+.Promotion:
+
+		cmp   r11d, Pawn
 		jne   .ReturnFalse
+		 bt   r14, r9
+		 jc   .ReturnFalse
+
+		mov   r11d, esi
+		shl   r11d, 6+3
+
+		lea   ecx, [rsi-1]
+		xor   esi, 1
+		and   ecx, 56
+		mov   edx, 0x0FF
+		shl   rdx, cl
+
+		xor   eax, eax
+
+		lea   ecx, [2*rsi-1]
+		lea   ecx, [r8+8*rcx]
+		bts   rax, rcx
+	       andn   rax, r15, rax
+		mov   rcx, [rbp+Pos.typeBB+8*rsi]
+		and   rcx, qword[PawnAttacks+r11+8*r8]
+		 or   rax, rcx
+		and   rax, rdx
+
+		xor   esi, 1
+
+		and   rax, rdi
+		 jz   .ReturnFalse
+	       test   rax, r12
+		jnz   .PromotionCheckers
+
+	; we are not in check so make sure pawn is not pinned
+
+.PromotionCheckPinned:
+		 or   eax, -1
+		mov   rcx, qword[rbx+State.pinned]
+		 bt   rcx, r8
+		jnc   @f
+
+		shl   r8d, 6+3
+		mov   rax, qword[rbp+Pos.typeBB+8*King]
+		and   rax, qword[rbp+Pos.typeBB+8*rsi]
+		and   rax, qword[LineBB+r8+8*r9]
+@@:
+		pop   r15 r14 r13 r12 rdi rsi
+		ret
+
+
+.PromotionCheckers:
+	; if moving P|R|B|Q and in check, filter some moves out
+		mov   rcx, qword [rbp+Pos.typeBB+8*King]
+		bsf   rax, r13
+		shl   eax, 6+3
+		and   rcx, r14
+		bsf   rcx, rcx
+		mov   rax, qword[BetweenBB+rax+8*rcx]
+		 or   rax, r13
+
+	; if more than one checker, must move king
+		lea   rcx, [r13-1]
+	       test   rcx, r13
+		jnz   .ReturnFalse
+
+	; move must be a blocking evasion or a capture of the checking piece
+	       test   rax, rdi
+		 jz   .ReturnFalse
+		jmp   .PromotionCheckPinned
+
+
+
 
 .EpCapture:
 
 	; make sure destination is empty
 		 bt   r15, r9
 		 jc   .ReturnFalse
+
+		cmp   ecx, _MOVE_TYPE_EPCAP
+		jne   .ReturnFalse
 
 	; make sure that it is our pawn moving
 		mov   eax, r11d
@@ -307,7 +354,7 @@ lock inc qword[profile.moveUnpack]
 		jne   .ReturnFalse
 
 	; make sure to is epsquare
-		cmp   r9l, byte[rbx+State.epSquare]
+		cmp   r9l, byte[rbx+State._epSquare]
 		jne   .ReturnFalse
 
 	; make sure from->to is a pawn attack
@@ -337,7 +384,6 @@ lock inc qword[profile.moveUnpack]
 
 	; r14 = their pieces
 		mov   r14, qword[rbp+Pos.typeBB+8*rsi]
-
 
 	; check for rook attacks
 	RookAttacks   rax, rdi, r15, rdx
@@ -393,7 +439,7 @@ lock inc qword[profile.moveUnpack]
 
 
   .CastleCheck_WhiteOO:
-	      movzx   eax, byte[rbx+State.castlingRights]
+	      movzx   eax, byte[rbx+State._castlingRights]
 		mov   rcx, qword[castling_path+8*0]
 		and   rcx, r15
 		and   eax, 1 shl 0
@@ -405,7 +451,7 @@ lock inc qword[profile.moveUnpack]
 		ret
 
   .CastleCheck_BlackOO:
-	      movzx   eax, byte[rbx+State.castlingRights]
+	      movzx   eax, byte[rbx+State._castlingRights]
 		mov   rcx, qword[castling_path+8*2]
 		and   rcx, r15
 		and   eax, 1 shl 2
@@ -418,7 +464,7 @@ lock inc qword[profile.moveUnpack]
 
 
   .CastleCheck_WhiteOOO:
-	      movzx   eax, byte[rbx+State.castlingRights]
+	      movzx   eax, byte[rbx+State._castlingRights]
 		mov   rcx, qword[castling_path+8*1]
 		and   rcx, r15
 		and   eax, 1 shl 1
@@ -430,7 +476,7 @@ lock inc qword[profile.moveUnpack]
 		ret
 
   .CastleCheck_BlackOOO:
-	      movzx   eax, byte[rbx+State.castlingRights]
+	      movzx   eax, byte[rbx+State._castlingRights]
 		mov   rcx, qword[castling_path+8*3]
 		and   rcx, r15
 		and   eax, 1 shl 3

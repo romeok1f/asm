@@ -40,16 +40,11 @@ Thread_Create:
 
 	; init some thread data
 		xor   eax, eax
+		mov   edx, dword[threadPool.size]
 		mov   byte[rbx+Thread.exit], al
 		mov   byte[rbx+Thread.resetCalls], al
 		mov   dword[rbx+Thread.callsCnt], eax
-		lea   rax, [mainThread]
-		sub   rax, rbx
-		xor   edx, edx
-		mov   ecx, sizeof.Thread
-		div   ecx
-		mov   dword[rbx+Thread.idx], eax
-	     Assert   e, edx, 0, 'bad div in Thread_Create'
+		mov   dword[rbx+Thread.idx], edx
 
 	; start the thread and wait for it to enter the idle loop
 		lea   rcx, [rbx+Thread.mutex]
@@ -135,7 +130,7 @@ Thread_IdleLoop:
 		mov   rbx, rcx
 		lea   rbp, [Thread_Think]
 		lea   rdx, [MainThread_Think]
-		lea   rax, [mainThread]
+		mov   rax, qword[threadPool.table+8*0]
 		cmp   rcx, rax
 	      cmove   rbp, rdx
 		mov   rsi, qword[rbx+Thread.sleepCond]

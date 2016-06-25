@@ -1,10 +1,13 @@
 
 ThreadPool_Create:
 	       push   rdi rsi rbx
-		lea   rbx, [threadPool]
-		lea   rcx, [mainThread]
-		mov   qword[rbx+ThreadPool.stackPointer], rcx
+		mov   dword[threadPool.size], 0
+		mov   ecx, sizeof.Thread
+	       call   _VirtualAlloc
+		mov   qword[threadPool.table+8*0], rax
+		mov   rcx, rax
 	       call   Thread_Create
+		mov   dword[threadPool.size], 1
 		mov   rcx, rbx
 	       call   ThreadPool_ReadOptions
 		pop   rbx rsi rdi
@@ -13,56 +16,65 @@ ThreadPool_Create:
 
 ThreadPool_Destroy:
 	       push   rsi rdi rbx
-		lea   rbx, [threadPool]
-		mov   rdi, qword[rbx+ThreadPool.stackPointer]
-		lea   rsi, [mainThread]
-.delete:	mov   rcx, rdi
-		add   rdi, sizeof.Thread
+		mov   edi, dword[threadPool.size]
+		sub   edi, 1
+.delete:
+		mov   rcx, qword[threadPool.table+8*rdi]
 	       call   Thread_Delete
-		cmp   rdi, rsi
-		jbe   .delete
+		mov   rcx, qword[threadPool.table+8*rdi]
+	       call   _VirtualFree
+		xor   eax, eax
+		mov   qword[threadPool.table+8*rdi], rax
+		sub   edi, 1
+		jns   .delete
+
+		mov   dword[threadPool.size], 0
 		pop   rbx rdi rsi
 		ret
 
 
 ThreadPool_ReadOptions:
 	       push   rbx rsi rdi
-		lea   rbx, [threadPool]
-		mov   rdi, qword[rbx+ThreadPool.stackPointer]
 		mov   esi, dword[options.threads]
-		sub   esi, 1
-	       imul   esi, sizeof.Thread
-		neg   rsi
-		lea   rsi, [rsi+mainThread]
+		mov   edi, dword[threadPool.size]
 .CheckCreate:
 		cmp   rdi, rsi
-		 ja   .Create
+		 jb   .Create
 .CheckDelete:
 		cmp   rdi, rsi
-		 jb   .Delete
-		mov   qword[rbx+ThreadPool.stackPointer], rdi
+		 ja   .Delete
 		pop   rdi rsi rbx
 		ret
 .Create:
-		sub   rdi, sizeof.Thread
-		mov   rcx, rdi
+		mov   ecx, sizeof.Thread
+	       call   _VirtualAlloc
+		mov   qword[threadPool.table+8*rdi], rax
+		mov   rcx, rax
 	       call   Thread_Create
+		add   edi, 1
+		mov   dword[threadPool.size], edi
 		jmp   .CheckCreate
 .Delete:
-		mov   rcx, rdi
-		add   rdi, sizeof.Thread
+		sub   edi, 1
+		mov   rcx, qword[threadPool.table+8*rdi]
 	       call   Thread_Delete
+		mov   rcx, qword[threadPool.table+8*rdi]
+	       call   _VirtualFree
+		xor   eax, eax
+		mov   qword[threadPool.table+8*rdi], rax
+		mov   dword[threadPool.size], edi
 		jmp   .CheckDelete
 
 
 ThreadPool_NodesSearched:
-		lea   rcx, [mainThread]
+		xor   ecx, ecx
 		xor   eax, eax
 	.next_thread:
-		add   rax, qword[rcx+Thread.nodes]
-		sub   rcx, sizeof.Thread
-		cmp   rcx, qword[threadPool.stackPointer]
-		jae   .next_thread
+		mov   rdx, qword[threadPool.table+8*rcx]
+		add   rax, qword[rdx+Thread.nodes]
+		add   ecx, 1
+		cmp   ecx, dword[threadPool.size]
+		 jb   .next_thread
 		ret
 
 
@@ -84,9 +96,9 @@ end virtual
 		mov   rsi, rcx
 		mov   r15, rbp
 
-		lea   rcx, [mainThread]
+		mov   rcx, qword[threadPool.table+8*0]
 	       call   Thread_WaitForSearchFinished
-	     Assert   e, byte[mainThread.searching], 0, 'assertion byte[mainThread.searching]==0 failed in ThreadPool_StartThinking'
+;             Assert   e, byte[mainThread.searching], 0, 'assertion byte[mainThread.searching]==0 failed in ThreadPool_StartThinking'
 
 		xor   eax, eax
 		mov   byte[signals.stop], al
@@ -101,7 +113,7 @@ end virtual
 		lea   rdi, [.moveList]
 	       call   Gen_Legal
 
-		lea   rbx, [mainThread]
+		mov   rbx, qword[threadPool.table+8*0]
 		lea   rcx, [rbx+Thread.rootPos]
 	       call   Position_CopyToSearch
 		xor   eax, eax
@@ -144,17 +156,25 @@ end virtual
 	     popcnt   rcx, rcx, rdx
 		sub   eax, ecx
 		sar   eax, 31
-		 or   al, byte[rbx+State.castlingRights]
+		 or   al, byte[rbx+State._castlingRights]
 		 jz   .check_tb
 .check_tb_ret:
 
+	; filtering moves may have incremented nodes count
+		mov   qword[rbx+Thread.nodes], rax
+
+
 	; copy original position to workers
+		xor   eax, eax
 		mov   rbp, r15
-		lea   rbx, [mainThread]
+		mov   rsi, qword[threadPool.table+8*0]
+		mov   qword[rsi+Thread.nodes], rax  ;filtering moves may have incremented mainThread.nodes
+		xor   edi, edi
 .next_thread:
-		sub   rbx, sizeof.Thread
-		cmp   rbx, qword[threadPool.stackPointer]
-		 jb   .thread_copy_done
+		add   edi,1
+		cmp   edi, dword[threadPool.size]
+		jae   .thread_copy_done
+		mov   rbx, qword[threadPool.table+8*rdi]
 
 		lea   rcx, [rbx+Thread.rootPos]
 	       call   Position_CopyToSearch
@@ -163,25 +183,25 @@ end virtual
 		mov   qword[rbx+Thread.nodes], rax
 
 	; copy the filtered moves of main thread to worker thread
-		mov   rdi, qword[rbx+Thread.rootPos.rootMovesVec.table]
-		mov   rsi, qword[mainThread.rootPos.rootMovesVec.table]
+		mov   rax, qword[rbx+Thread.rootPos.rootMovesVec.table]
+		mov   rdx, qword[rsi+Thread.rootPos.rootMovesVec.table]
 .copy_moves_loop:
-		cmp   rsi, qword[mainThread.rootPos.rootMovesVec.ender]
+		cmp   rdx, qword[rsi+Thread.rootPos.rootMovesVec.ender]
 		jae   .copy_moves_done
-	    vmovups   xmm0, dqword[rsi+0]    ; this should be sufficient to copy
-	    vmovups   xmm1, dqword[rsi+16]   ; up to and including first move of pv
-	    vmovups   dqword[rdi+0], xmm0    ;
-	    vmovups   dqword[rdi+16], xmm1   ;
-		add   rdi, sizeof.RootMove
-		add   rsi, sizeof.RootMove
+	    vmovups   xmm0, dqword[rdx+0]    ; this should be sufficient to copy
+	    vmovups   xmm1, dqword[rdx+16]   ; up to and including first move of pv
+	    vmovups   dqword[rax+0], xmm0    ;
+	    vmovups   dqword[rax+16], xmm1   ;
+		add   rax, sizeof.RootMove
+		add   rdx, sizeof.RootMove
 		jmp   .copy_moves_loop
 .copy_moves_done:
-		mov   qword[rbx+Thread.rootPos.rootMovesVec.ender], rdi
+		mov   qword[rbx+Thread.rootPos.rootMovesVec.ender], rax
 
 		jmp   .next_thread
 .thread_copy_done:
 
-		lea   rcx, [mainThread]
+		mov   rcx, qword[threadPool.table+8*0]
 	       call   Thread_StartSearching
 
 		add   rsp, .localsize

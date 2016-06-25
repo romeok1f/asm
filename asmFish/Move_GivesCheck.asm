@@ -16,26 +16,24 @@ Move_GivesCheck:
 		and   r9d, 63	; r9d = to
 
 	      movzx   r10d, byte[rbp+Pos.board+r8]     ; r10 = FROM PIECE
-	     ; movzx   r11d, byte [rbp+Pos.board+r9]     ; r11 = TO PIECE
 	      movzx   edi, byte[rbx+State.ksq]
+		mov   r11, qword[rbx+State.dcCandidates]
 
 		 or   eax, -1
 
-		xor   edx, edx
-		bts   rdx, r9
 		and   r10d, 7
-	       test   rdx, qword[rbx+State.checkSq+8*r10]
-		jnz   .Ret
 
-		xor   edx, edx
-		bts   rdx, r8
-	       test   rdx, qword[rbx+State.dcCandidates]
-		jnz   .DiscoveredCheck
+		mov   rdx, qword[rbx+State.checkSq+8*r10]
+		 bt   rdx, r9
+		 jc   .Ret	; 8.95%
+
+		 bt   r11, r8
+		 jc   .DiscoveredCheck	; 0.18%
 .DiscoveredCheckRet:
 		shr   ecx, 12
 		xor   eax, eax
-		cmp   ecx, MOVE_TYPE_PROM
-		jae   .Special
+		cmp   ecx, _MOVE_TYPE_PROM
+		jae   .Special	; 0.82%
 .Ret:
 		pop   rdi rsi
 		ret
@@ -48,19 +46,18 @@ Move_GivesCheck:
 		bts   rdx, r9
 
 		mov   eax, dword[.JmpTable+4*rcx]
-		lea   rax, [rax+Move_GivesCheck]
 		jmp   rax
 
 
 	      align   8
-.JmpTable:   dd .Error-Move_GivesCheck
-	     dd .Error-Move_GivesCheck
-	     dd .PromKnight-Move_GivesCheck
-	     dd .PromBishop-Move_GivesCheck
-	     dd .PromRook-Move_GivesCheck
-	     dd .PromQueen-Move_GivesCheck
-	     dd .Castling-Move_GivesCheck
-	     dd .EpCapture-Move_GivesCheck
+.JmpTable:   dd 0
+	     dd .PromKnight
+	     dd .PromBishop
+	     dd .PromRook
+	     dd .PromQueen
+	     dd .Castling
+	     dd .EpCapture
+	     dd 0
 
 
 	      align   8
@@ -145,6 +142,3 @@ Move_GivesCheck:
 		 or   eax, -1
 		pop   rdi rsi
 		ret
-
-.Error:
-	       int3

@@ -1,37 +1,4 @@
 
-
-macro DisplayCurrMove {
-			lea   rdi, [Output]
-			mov   rax, 'info cur'
-		      stosq
-			mov   rax, 'rmove '
-		      stosq
-			sub   rdi, 2
-			mov   ecx, [.move]
-		       call   PrintUciMove
-			mov   rax, ' nodes '
-		      stosq
-			sub   rdi, 1
-			mov   rax, qword [rbp+Pos.nodes]
-		       call   PrintUnsignedInteger
-			mov   rax, ' alpha '
-		      stosq
-			sub   rdi, 1
-		     movsxd   rax, dword [.alpha]
-		       call   PrintSignedInteger
-			mov   rax, ' beta '
-		      stosq
-			sub   rdi, 2
-		     movsxd   rax, dword [.beta]
-		       call   PrintSignedInteger
-			mov   al, 10
-		      stosb
-		       call   _WriteOut_Output
-
-}
-
-
-
 macro search NT {
 	; in:
 	;  rbp: address of Pos struct in thread struct
@@ -93,7 +60,7 @@ virtual at rsp
   .extension	  rd 1
   .moved_piece	  rd 1
   .success	  rd 1	 ; for tb
-		  rd 1
+  .movedPieceOFF  rd 1
   .givesCheck		   rb 1  ; 144
   .singularExtensionNode   rb 1
   .improving		   rb 1
@@ -164,6 +131,10 @@ stosd
 sub rdi, 1
 movsxd rax, r13d
 call PrintSignedInteger
+match =1, OS_IS_WINDOWS \\{
+ mov al, 13
+ stosb
+\\}
 mov al, 10
 stosb
 lea rcx, [VerboseOutput]
@@ -201,20 +172,19 @@ match =1, DEBUG \{
 		mov   dword[rbp-Thread.rootPos+Thread.callsCnt], eax
 		cmp   eax, 4096
 		jbe   .dontchecktime
-		lea   rax, [mainThread]
-		mov   rcx, [threadPool.stackPointer]
-	@@:	mov   byte[rax+Thread.resetCalls], -1
-		sub   rax, sizeof.Thread
-		cmp   rax, rcx
-		jae   @b
+		mov   ecx, dword[threadPool.size]
+	@@:	sub   ecx, 1
+		mov   rax, qword[threadPool.table+8*rcx]
+		mov   byte[rax+Thread.resetCalls], -1
+		jnz   @b
 	       call   CheckTime
 	.dontchecktime:
 
 
     if .RootNode eq 0
 	; Step 2. check for aborted search and immediate draws
-	      movzx   eax, byte[rbx+State.rule50]
-	      movzx   r8d, byte[rbx+State.pliesFromNull]
+	      movzx   eax, word[rbx+State._rule50]
+	      movzx   r8d, word[rbx+State._pliesFromNull]
 		mov   r9, qword[rbx+State.key]
 		cmp   r12d, MAX_PLY
 		jae   .AbortSearch_PlyBigger
@@ -267,8 +237,9 @@ match =1, DEBUG \{
 	     popcnt   rax, rax, rdx
 		mov   r15d, dword[Tablebase_Cardinality]
 		sub   r15d, eax
-		mov   eax, dword[rbx+State.rule50]
-		and   eax, 0x00FF00FF
+	      movzx   eax, word[rbx+State._rule50]
+	      movzx   ecx, byte[rbx+State._castlingRights]
+		 or   eax, ecx
 		neg   eax
 		 or   r15d, eax
 	; if r15d <0, don't do tb probe
@@ -545,10 +516,13 @@ match =1, DEBUG \{
 	     Assert   ne, dword[rbx-1*sizeof.State+State.currentMove], 0	, 'assertion dword[rbx-1*sizeof.State+State.currentMove] != MOVE_NONE failed in Search.Step9'
 	     Assert   ne, dword[rbx-1*sizeof.State+State.currentMove], MOVE_NULL, 'assertion dword[rbx-1*sizeof.State+State.currentMove] != MOVE_NULL failed in Search.Step9'
 
+
+	       call   SetCheckInfo
+
 	; initialize movepick
 	     Assert   e, qword[rbx+State.checkersBB], 0, 'assertion qword[rbx+State.checkersBB] == 0 failed in Search.Step9'
 		lea   rsi, [.movepick]
-	      movzx   eax, byte[rbx+State.capturedPiece]
+	      movzx   eax, byte[rbx+State._capturedPiece]
 		mov   eax, dword[PieceValue_MG+4*rax]
 		mov   dword[rsi+Pick.threshold], eax
 		lea   r11, [rsi+Pick.moves]
@@ -567,9 +541,9 @@ match =1, DEBUG \{
 		xor   edi, edi
 	       test   ecx, ecx
 		 jz   .9NoTTMove
-		cmp   eax, MOVE_TYPE_CASTLE
+		cmp   eax, _MOVE_TYPE_CASTLE
 		 je   .9NoTTMove
-		cmp   eax, MOVE_TYPE_EPCAP
+		cmp   eax, _MOVE_TYPE_EPCAP
 		 je   @f
 	       test   edx, edx
 		 jz   .9NoTTMove
@@ -587,7 +561,6 @@ match =1, DEBUG \{
 		mov   dword[rsi+Pick.ttMove], edi
 	; movepick struct is now initialized
 
-	       call   SetCheckInfo
 
 		mov   edi, dword[.beta]
 		add   edi, 200
@@ -598,7 +571,9 @@ match =1, DEBUG \{
 
 .9moveloop:
 		lea   rsi, [.movepick]
+	       push   rdi
 	GetNextMove
+		pop   rdi
 		mov   dword[.move], eax
 	       test   eax, eax
 		 jz   .9moveloop_done
@@ -668,7 +643,7 @@ lock inc qword[profile.moveUnpack]
 		sub   r8d, 2*ONE_PLY
 		mov   ecx, dword[.alpha]
 		mov   edx, dword[.beta]
-		 or   r9d, -1
+		mov   r9l, byte[.cutNode]
 		mov   byte[rbx+State.skipEarlyPruning], -1
 	       call   Search_Pv
 	else
@@ -684,7 +659,7 @@ lock inc qword[profile.moveUnpack]
 		sub   r8d, eax
 		mov   ecx, dword[.alpha]
 		mov   edx, dword[.beta]
-		 or   r9d, -1
+		mov   r9l, byte[.cutNode]
 		mov   byte[rbx+State.skipEarlyPruning], -1
 	       call   Search_NonPv
 	end if
@@ -714,12 +689,13 @@ lock inc qword[profile.moveUnpack]
 		mov   qword[.fmh], rcx
 		mov   qword[.fmh2], rdx
 
+	       call   SetCheckInfo
+
 		lea   rsi, [.movepick]
 		mov   ecx, dword[.ttMove]
 		mov   edx, dword[.depth]
 	       call   MovePick_Init_Search
 
-	       call   SetCheckInfo
 
 		mov   eax, dword[.bestValue]
 		mov   dword[.value], eax
@@ -859,7 +835,7 @@ lock inc qword[profile.moveUnpack]
 
 SD_String db 'mcp='
 SD_Bool8 rdx
-SD_String db '|'
+SD_NewLine
 
 
 
@@ -867,8 +843,6 @@ SD_String db '|'
 		mov   ecx, dword[.move]
 	       test   eax, eax
 		 jz   .12dont_extend
-	       test   r8d, r8d
-		 jz   .12extend_oneply
 	       test   edx, edx
 		jnz   .12dont_extend
 	    SeeSign   .12extend_oneply
@@ -961,7 +935,7 @@ lock inc qword[profile.moveUnpack]
 	       test   al, al
 		jnz   .MovePickLoop
 
-	; History based pruning
+	; Countermoves based pruning
 		mov   r8, qword[.cmh]
 		mov   r9, qword[.fmh]
 		mov   r10, qword[.fmh2]
@@ -1093,12 +1067,9 @@ lock inc qword[profile.moveUnpack]
 		mov   dword[.r], eax
 		mov   edi, eax
 
-
-
-SD_String db '_r='
+SD_String db 'r='
 SD_Int rdi
 SD_String db '|'
-
 
 		mov   r12d, dword[.move]
 		shr   r12d, 6
@@ -1117,7 +1088,7 @@ SD_String db '|'
 	end if
 .15testA:
 		mov   ecx, dword[.move]
-		cmp   ecx, MOVE_TYPE_PROM shl 12
+		cmp   ecx, _MOVE_TYPE_PROM shl 12
 		jae   .15skipA
 		mov   eax, r15d
 		and   eax, 7
@@ -1135,29 +1106,41 @@ SD_String db '|'
 		sub   edi, 2*ONE_PLY
 .15skipA:
 
-SD_String db '_r='
+SD_String db 'r='
 SD_Int rdi
 SD_String db '|'
 
-	       imul   ecx, r15d, 64
+	       imul   ecx, dword[.moved_piece], 64
 		add   ecx, r13d
 		mov   r8, qword[rbp+Pos.history]
 		mov   r9, qword[.cmh]
 		mov   r10, qword[.fmh]
 		mov   r11, qword[.fmh2]
 		mov   eax, dword[r8+4*rcx]
+
+SD_String db 'v='
+SD_Int qword[r8+4*rcx]
+
 	       test   r9, r9
 		 jz   @f
 		add   eax, dword[r9+4*rcx]
+
+SD_String db 'v='
+SD_Int qword[r9+4*rcx]
+
 	@@:    test   r10, r10
 		 jz   @f
 		add   eax, dword[r10+4*rcx]
+SD_String db 'v='
+SD_Int qword[r10+4*rcx]
 	@@:    test   r11, r11
 		 jz   @f
 		add   eax, dword[r11+4*rcx]
+SD_String db 'v='
+SD_Int qword[r11+4*rcx]
 	@@:
 
-SD_String db '_val='
+SD_String db 'val='
 SD_Int rax
 SD_String db '|'
 
@@ -1383,7 +1366,7 @@ SD_String db '|'
 		mov   dword[.bestMove], ecx
 
     if .PvNode eq 1
-		cmp   rbp, mainThread.rootPos
+		cmp   dword[rbp-Thread.rootPos+Thread.idx], 0
 		jne   .18skipeasy
 		mov   rcx, qword[rbx+State.key]
 	       call   EasyMoveMng_Get
@@ -1484,8 +1467,8 @@ SD_String db '|'
 		jmp   .20TTStore
 .20Mate:
 		mov   rax, qword[rbx+State.checkersBB]
-		mov   ecx, dword[rbp+Pos.sideToMove]
 		mov   edx, dword[.excludedMove]
+		mov   ecx, dword[rbp+Pos.sideToMove]
 		mov   edi, dword[rbx+State.ply]
 		sub   edi, VALUE_MATE
 	       test   rax, rax
@@ -1498,12 +1481,14 @@ SD_String db '|'
 		mov   eax, dword[.depth]
 		cmp   eax, 3*ONE_PLY
 		 jl   .20TTStore
-	      movzx   eax, byte[rbx+State.capturedPiece]
+	      movzx   eax, byte[rbx+State._capturedPiece]
 		 or   rax, qword[rbx+State.checkersBB]
 		jnz   .20TTStore
 		mov   eax, dword[rbx-1*sizeof.State+State.currentMove]
-	       test   eax, 0x07FFF
+	       test   eax, eax
 		 jz   .20TTStore
+		cmp   eax, MOVE_NULL
+		 je   .20TTStore
 
 		mov   r10d, dword[.depth]
 		mov   eax, r10d
@@ -1595,6 +1580,10 @@ mov rax, 'return: '
 stosq
 movsxd rax, r15d
 call PrintSignedInteger
+match =1, OS_IS_WINDOWS \\{
+ mov al, 13
+ stosb
+\\}
 mov al, 10
 stosb
 lea rcx, [VerboseOutput]
@@ -1621,10 +1610,11 @@ pop r15 r14 r13 r9 r8 rdx rcx rax rdi rsi
 if .RootNode eq 0
 	      align  8
 .AbortSearch_PlyBigger:
+		mov   rcx, qword[rbx+State.checkersBB]
 		mov   eax, dword[rbp+Pos.sideToMove]
 		mov   eax, dword[DrawValue+4*rax]
-		cmp   qword [rbx+State.checkersBB], 0
-		 je   .Return
+	       test   rcx, rcx
+		 jz   .Return
 	       call   Evaluate
 		jmp   .Return
 

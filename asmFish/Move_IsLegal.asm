@@ -36,18 +36,14 @@ match =1, PROFILE {
 lock inc qword[profile.moveUnpack]
 }
 
-
 	; pseudo legal castling moves are always legal
-		cmp   edx, MOVE_TYPE_CASTLE
-		 je   .Legal
-
 	; ep captures require special attention
-		cmp   edx, MOVE_TYPE_EPCAP
-		 je   .EpCapture
+		cmp   edx, _MOVE_TYPE_CASTLE
+		jae   .Special
 
 	; if we are moving king, have to check destination square
-		cmp   ecx, r14d
-		 je   .KingMove
+		 bt   r11, rcx
+		 jc   .KingMove
 
 	; if piece is not pinned, then move is legal
 		 bt   r15, rcx
@@ -56,6 +52,7 @@ lock inc qword[profile.moveUnpack]
 		pop   r15 r14 r13
 		ret
 
+	      align   8
 .CheckPinned:
 	; if something is pinned, its movement should be aligned with our king
 		and   r11, qword[LineBB+8*rax]
@@ -121,6 +118,11 @@ lock inc qword[profile.moveUnpack]
 
 
 	      align   8
+.Special:
+	; pseudo legal castling moves are always legal
+		cmp   edx, _MOVE_TYPE_CASTLE
+		 je   .Legal
+
 .EpCapture:
 	; for ep captures, just make the move and test if our king is attacked
 		xor   r13d, 1

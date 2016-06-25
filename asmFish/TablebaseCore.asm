@@ -2271,12 +2271,30 @@ _ZN13TablebaseCore4initEPKc:
 	jnz	?_230					
 	inc	rbx					
 	cmp	rbx, 5					
-	jnz	?_229					
-	mov	edx, dword [ _ZL10TBnum_pawn]	
-	lea	rcx, [ ?_346]			
-	add	edx, dword [ _ZL11TBnum_piece]	
-	call	printf					
-	nop						
+	jnz	?_229
+
+	lea	rdi, [Output]
+	mov	rax, 'info str'
+	stosq
+	mov	rax, 'ing Foun'
+	stosq
+	mov	eax, 'd '
+	stosw
+	mov	eax, dword[_ZL10TBnum_pawn]
+	add	eax, dword[_ZL11TBnum_piece]
+	call	PrintUnsignedInteger
+	mov	rax, ' tableba'
+	stosq
+	mov	eax, 'ses.'
+	stosd
+match =1, OS_IS_WINDOWS {
+	mov	al, 13
+	stosb
+}
+	mov	al, 10
+	stosb
+	call	_WriteOut_Output
+
 ?_233:	add	rsp, 72 				
 	pop	rbx					
 	pop	rsi					

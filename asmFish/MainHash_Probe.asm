@@ -9,6 +9,10 @@ MainHash_Probe:
 	;            edx == 0  if not found
 	;       rcx  entry (8 bytes)
 
+SD_String db 'tt probe key='
+SD_UInt64 rcx
+SD_String db '|'
+
 		mov   rax, qword[mainHash.mask]
 		and   rax, rcx
 		shl   rax, 5
@@ -89,12 +93,6 @@ mov r15, rax
 movzx  r14d, dx
 lea rdi, [VerboseOutput]
 szcall PrintString, 'tt hit key='
-
-;cmp r14d, 42069
-;jne @f
-;int3
-;@@:
-
 mov rax, r14
 call PrintUnsignedInteger
 szcall PrintString, ' move='

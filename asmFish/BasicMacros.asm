@@ -1,4 +1,16 @@
 
+; convert 64 bit register reg to its 32 bit version
+;  for >= r8, r8d is the 32 bit version
+
+raxd equ eax
+rbxd equ ebx
+rcxd equ ecx
+rdxd equ edx
+rbpd equ ebp
+rsid equ esi
+rdid equ edi
+
+
 ; macro for string functions
 ;  the string m is put in the code
 ;  and the function fxn is called on it
@@ -51,6 +63,18 @@ local ..Lower, ..Done
 		mov   x, min
 	..Done:
 }
+
+; convert from uppercase to lowercase
+macro ToLower x {
+local ..Lower
+		sub   x, 'A'
+		cmp   x, 'Z'-'A' + 1
+		jae   ..Lower
+		add   x, ('a'-'A')
+	..Lower:
+		add   x, 'A'
+}
+
 
 
 ; use this macro if you are too lazy to touch beforehand the required amount of stack
@@ -287,16 +311,7 @@ local .start,.skip,.done
 
 
 
-; convert 64 bit register reg to its 32 bit version
-;  for >= r8, r8d is the 32 bit version
 
-raxd equ eax
-rbxd equ ebx
-rcxd equ ecx
-rdxd equ edx
-rbpd equ ebp
-rsid equ esi
-rdid equ edi
 
 
 

@@ -45,7 +45,7 @@ match =1, PROFILE {
 lock inc qword[profile.moveUnpack]
 }
 
-	      movzx   r11d, byte[rbx+State.capturedPiece]      ; r11 = TO PIECE
+	      movzx   r11d, byte[rbx+State._capturedPiece]	; r11 = TO PIECE
 	      movzx   r10d, byte[rbp+Pos.board+r9]	       ; r10 = FROM PIECE
 
 		xor   edx, edx
@@ -54,16 +54,17 @@ lock inc qword[profile.moveUnpack]
 
 		mov   eax, r10d
 		and   eax, 7
+
+		sub   rbx, sizeof.State
+		mov   qword[rbp+Pos.state], rbx
+		mov   dword[rbp+Pos.sideToMove], esi
 		mov   byte[rbp+Pos.board+r8], r10l
 		mov   byte[rbp+Pos.board+r9], r11l
 		xor   qword[rbp+Pos.typeBB+8*rax], rdx
 		xor   qword[rbp+Pos.typeBB+8*rsi], rdx
 
-		sub   rbx, sizeof.State
-		mov   qword[rbp+Pos.state], rbx
-		mov   dword[rbp+Pos.sideToMove], esi
 
-		cmp   ecx, MOVE_TYPE_PROM
+		cmp   ecx, _MOVE_TYPE_PROM
 		jae   .Special
 		and   r11d, 7
 		jnz   .Captured
@@ -91,14 +92,14 @@ match =1, DEBUG {
 	      align   8
 .Special:
 		xor   edx, edx
-		cmp   ecx, MOVE_TYPE_CASTLE
+		cmp   ecx, _MOVE_TYPE_CASTLE
 		 je   .Castle
 		jae   .EpCapture
 
 .Prom:
 	; change promoted piece back to pawn on r8d
 		lea   eax, [8*rsi+Pawn]
-		lea   ecx, [rcx-MOVE_TYPE_PROM+Knight]
+		lea   ecx, [rcx-_MOVE_TYPE_PROM+Knight]
 		bts   rdx, r8
 		 or   qword[rbp+Pos.typeBB+8*Pawn], rdx
 		xor   qword[rbp+Pos.typeBB+8*rcx], rdx
@@ -142,36 +143,42 @@ match =1, DEBUG {
 	      align   8
 .Castle:
 	; r8 = kfrom
-	; r9 = kto
-	; ecx = rfrom
+	; r9 = rfrom
+	; ecx = kto
 	; edx = rto
 	; r10 = ourking
 	; r11 = our rook
-		mov   eax, r9d
-		and   eax, 7
-		mov   edx, esi
-		cmp   eax, 4
-		adc   edx, edx
-	      movzx   ecx, byte[castling_rfrom+rdx]
-	      movzx   edx, byte[castling_rto+rdx]
-		lea   r11d, [r10-King+Rook]
+		bts   rdx, r8
+		bts   rdx, r9
+		xor   qword[rbp+Pos.typeBB+8*rax], rdx
+		xor   qword[rbp+Pos.typeBB+8*rsi], rdx
 
-		mov   byte[rbp+Pos.board+r9], 0
+
+		lea   r10d, [8*rsi+King]
+		lea   r11d, [8*rsi+Rook]
+		mov   edx, r8d
+		and   edx, 56
+		cmp   r9d, r8d
+		sbb   eax, eax
+		lea   ecx, [rdx+4*rax+FILE_G]
+		lea   edx, [rdx+2*rax+FILE_F]
+
+		mov   byte[rbp+Pos.board+rcx], 0
 		mov   byte[rbp+Pos.board+rdx], 0
 		mov   byte[rbp+Pos.board+r8], r10l
-		mov   byte[rbp+Pos.board+rcx], r11l
+		mov   byte[rbp+Pos.board+r9], r11l
 
 		mov   rax, qword[rbp+Pos.typeBB+8*rsi]
 		mov   r10, qword[rbp+Pos.typeBB+8*King]
 		mov   r11, qword[rbp+Pos.typeBB+8*Rook]
-		btr   rax, r9
+		btr   rax, rcx
 		btr   rax, rdx
 		bts   rax, r8
-		bts   rax, rcx
-		btr   r10, r9
+		bts   rax, r9
+		btr   r10, rcx
 		bts   r10, r8
 		btr   r11, rdx
-		bts   r11, rcx
+		bts   r11, r9
 		mov   qword[rbp+Pos.typeBB+8*rsi], rax
 		mov   qword[rbp+Pos.typeBB+8*King], r10
 		mov   qword[rbp+Pos.typeBB+8*Rook], r11
@@ -203,7 +210,7 @@ Move_Undo_Check:
 		mov   ecx, dword[rbp+Pos.debugMove]
 		xor   edx, edx
 	       call   PrintUciMoveLong
-		mov   al, 10
+		mov   eax, 10
 	      stosd
 		lea   rdi, [DebugOutput]
 	       call   _ErrorBox

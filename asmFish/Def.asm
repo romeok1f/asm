@@ -30,15 +30,14 @@ MATERIAL_HASH_ENTRY_COUNT equ 8192
 
 
 ; move types
- MOVE_TYPE_NORMAL equ 0
- MOVE_TYPE_DPAWN  equ 1
- MOVE_TYPE_PROM   equ 2
- MOVE_TYPE_CASTLE equ 6
- MOVE_TYPE_EPCAP  equ 7
+ _MOVE_TYPE_NORMAL equ 0
+ _MOVE_TYPE_PROM   equ 1
+ _MOVE_TYPE_CASTLE equ 5
+ _MOVE_TYPE_EPCAP  equ 6
 
 ; special moves
- MOVE_NONE	  equ 0        ; must be zero
- MOVE_NULL	  equ 0x08000  ; last 15 bits must be zero
+ MOVE_NONE    equ 0
+ MOVE_NULL    equ 65
 
 ; piece types. these need to be fixed for conditional preprocessing in movegen
  White	 fix 0

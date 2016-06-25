@@ -47,8 +47,8 @@ See:
 		 or   r14, qword[rbp+Pos.typeBB+8*Black]
 		btr   r14, r8
 
-		cmp   ecx, MOVE_TYPE_EPCAP
-		 je   .EpCapture
+		cmp   ecx, _MOVE_TYPE_CASTLE
+		jae   .Special
 .EpCaptureRet:
 
 	; king
@@ -188,6 +188,9 @@ See:
 
 
 	      align   8
+.Special:
+		cmp   ecx, _MOVE_TYPE_CASTLE
+		 je   .Castle
 .EpCapture:
 		lea   eax, [r9+2*r13-8]
 		btr   r14 ,rax
@@ -195,7 +198,12 @@ See:
 		jmp   .EpCaptureRet
 
 
-
+.Castle:
+		pop   rax
+		xor   eax, eax
+		pop   rbx
+		pop   r15 r14 r13 r12 rdi rsi rcx
+		ret
 
 
 

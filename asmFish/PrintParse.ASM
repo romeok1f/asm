@@ -66,69 +66,6 @@ PrintScore_Uci:
 	      stosq
 		ret
 
-.bad:			mov   eax, 'bad '
-	      stosd
-	     movsxd   rax, ecx
-		jmp   PrintSignedInteger
-
-
-PrintScore_Xboard:
-		cmp   ecx, +VALUE_NONE
-		 je   .pNone
-		 jg   .bad
-		cmp   ecx, -VALUE_NONE
-		 je   .nNone
-		 jl   .bad
-		cmp   ecx, +VALUE_INFINITE
-		 je   .pInf
-		cmp   ecx, -VALUE_INFINITE
-		 je   .nInf
-		cmp   ecx, +VALUE_MATE-MAX_PLY
-		jge   .pMate
-		cmp   ecx, -VALUE_MATE+MAX_PLY
-		jle   .nMate
-
-	       test   ecx, ecx
-		jns   @f
-		mov   al, '-'
-		neg   ecx
-	      stosb
-	@@:	mov   eax, ecx
-		mov   rdx, (100*(1 shl 32))/PawnValueEg
-		mul   rdx
-		shr   rax, 32
-	       call   PrintUnsignedInteger
-		ret
-.pMate:
-		mov   eax, VALUE_MATE+1
-		sub   eax, ecx
-		shr   eax, 1
-		add   eax, 100000
-	       call   PrintUnsignedInteger
-		ret
-.nMate:
-		mov   eax, VALUE_MATE
-		add   eax, ecx
-		shr   eax, 1
-		add   eax, 100000
-		neg   rax
-	       call   PrintSignedInteger
-		ret
-.nNone:
-		mov   al,'-'
-	      stosb
-.pNone:
-		mov   eax, 'NONE'
-	      stosd
-		ret
-.nInf:
-		mov   al,'-'
-	      stosb
-.pInf:
-		mov   rax, 'INFINITE'
-	      stosq
-		ret
-
 .bad:
 		mov   eax, 'bad '
 	      stosd
@@ -140,11 +77,12 @@ PrintScore_Xboard:
 
 
 
+
 ;;;;;;;;;;;;;;;;;;;;;;; strings ;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 PrintString:
-	      movzx   eax, byte [rcx]
+	      movzx   eax, byte[rcx]
 		lea   rcx, [rcx+1]
 		cmp   al, 0
 		 je   .Done
@@ -158,7 +96,7 @@ CmpString:
 	;    then advance rsi to end of match and return non zero,
 	;    else return zero and do nothing
 	       push   rsi
-.Next:	      movzx   eax, byte [rcx]
+.Next:	      movzx   eax, byte[rcx]
 		lea   rcx, [rcx+1]
 	       test   al, al
 		 jz   .Found
@@ -177,14 +115,15 @@ CmpStringCaseless:
 	; if beginning of string at rsi matches null terminated string at rcx
 	;    then advance rsi to end of match and return non zero,
 	;    else return zero and do nothing
+	;  string at rcx is expected to already be lower case
 	       push   rsi
 .Next:	      movzx   eax, byte[rsi]
 	      movzx   edx, byte[rcx]
-	      movzx   eax, byte[ToLowerCase+rax]
+	    ToLower   eax
 		lea   rcx, [rcx+1]
 	       test   edx, edx
 		 jz   .Found
-		cmp   al, byte[ToLowerCase+rdx]
+		cmp   eax, edx
 		lea   rsi, [rsi+1]
 		 je   .Next
 .NoMatch:	pop   rsi
@@ -202,7 +141,6 @@ SkipSpaces:	cmp   byte[rsi], ' '
 		ret
 
 
-
 	; write at most ecx characters of string at rsi to rdi
 	@@:	add   rsi, 1
 	      stosb
@@ -215,12 +153,10 @@ ParseToEndLine:
 	@@:	ret
 
 
-
-
 	; write at most ecx characters of string at rsi to rdi
 	@@:	add   rsi, 1
 	      stosb
-_ParseToken:  movzx   eax, byte[rsi]
+ParseToken:   movzx   eax, byte[rsi]
 		sub   ecx, 1
 		 js   @f
 		 bt   [TokenCharacters], eax
@@ -228,10 +164,9 @@ _ParseToken:  movzx   eax, byte[rsi]
 	@@:	ret
 
 
-
 	; skip at most ecx characters of string at rsi
 	@@:	add   rsi,1
-_SkipToken:   movzx   eax, byte[rsi]
+SkipToken:    movzx   eax, byte[rsi]
 		sub   ecx, 1
 		 js   @f
 		 bt   [TokenCharacters], eax
@@ -256,49 +191,52 @@ _PrintUciMove:
 	;      edx  is chess960
 	; out: rax  move string
 	;      edx  byte length of move string  4 or 5 for promotions
-		mov   r8d, edx
+		mov   r8d, ecx
+		shr   r8d, 6
+		and   r8d, 63	; r8d = from
+		mov   r9d, ecx
+		and   r9d, 63	; r9d = to
 		mov   eax, 'NONE'
 	       test   ecx, ecx
 		 jz   .Return
 		mov   eax, 'NULL'
 		cmp   ecx, MOVE_NULL
 		 jz   .Return
-		xor   eax, eax
-		mov   edx, ecx
-		and   edx, 7
-		add   edx, 'a'
-		shl   edx, 16
+
+	; castling requires special attention
+		cmp   r9d, r8d
+		sbb   eax, eax
+		mov   r10d, r9d
+		and   r10d, 56
+		lea   r10d, [r10+4*rax+FILE_G]
+		shr   ecx, 12
+		lea   eax, [ecx-_MOVE_TYPE_CASTLE]
 		 or   eax, edx
-		mov   edx, ecx
-		shr   edx, 3
-		and   edx, 7
-		add   edx, '1'
-		shl   edx, 24
-		 or   eax, edx
-		mov   edx, ecx
-		shr   edx, 6
-		and   edx, 7
-		add   edx, 'a'
-		 or   eax, edx
-		mov   edx, ecx
-		shr   edx, 6+3
-		and   edx, 7
-		add   edx, '1'
-		shl   edx, 8
-		 or   eax, edx
-		mov   edx, ecx
-		shr   edx, 12
-		cmp   edx, MOVE_TYPE_CASTLE
-		 je   .Castle
-		cmp   edx, MOVE_TYPE_PROM+4
-		jae   .Return
-		sub   edx, MOVE_TYPE_PROM
-		jae   .Promotion
+	      cmovz   r9d, r10d
+
+		mov   edx, r9d
+		and   r9d, 7
+		and   edx, 56
+		shl   edx, 5
+		lea   eax, [rdx+r9+'a1']
+
+		shl   eax, 16
+
+		mov   edx, r8d
+		and   r8d, 7
+		and   edx, 56
+		shl   edx, 5
+		add   edx, r8d
+		lea   eax, [rax+rdx+'a1']
+
+		sub   ecx, _MOVE_TYPE_PROM
+		cmp   ecx, 4
+		 jb   .Promotion
 .Return:
 		mov   edx, 4
 		ret
 .Promotion:
-		lea   ecx, [8*rdx]
+		shl   ecx, 3
 		mov   edx, 'nbrq'
 		shr   edx, cl
 		and   edx, 0x0FF
@@ -306,25 +244,9 @@ _PrintUciMove:
 		 or   rax, rdx
 		mov   edx, 5
 		ret
-.Castle:
-	       test   r8d, r8d
-		jnz   .Castle960    ; in chess960 castling moves are encoded differently
-		mov   edx, 4
-		ret
-.Castle960:
-		and   ecx, 63	; ecx = to
-		xor   edx, edx
-		cmp   ecx, 4
-		adc   edx, edx
-	      movzx   edx, byte[castling_rfrom+rdx]
-		add   edx, 'a'
-		and   eax, 0xFF00FFFF
-		shl   edx, 16
-		 or   eax, edx
-		mov   edx, 4
-		ret
 
 
+if DEBUG > 0
 PrintUciMoveLong:
 	; in: ecx move
 	; io: rdi string for move, the move type (upper 4 bits) are displayed after
@@ -339,7 +261,6 @@ PrintUciMoveLong:
 		jmp   PrintString
 .normal:
  db '.NORML',0,0
- db '.DPAWN',0,0
  db '.PROM N',0
  db '.PROM B',0
  db '.PROM R',0
@@ -348,6 +269,8 @@ PrintUciMoveLong:
  db '.EPCAP',0,0
 .error:
  db '.?????',0,0
+ db '.?????',0,0
+end if
 
 
 
@@ -374,7 +297,7 @@ end virtual
 
 		mov   ebx, dword[rsi]
 	      movzx   eax, byte[rsi+4]
-	      movzx   eax, byte[ToLowerCase+rax]
+	    ToLower   eax
 		mov   edx, ' '
 		sub   edx, eax
 		adc   rsi, 4
@@ -411,26 +334,27 @@ end virtual
 
 ;;;;;;;;;;;; bitboard ;;;;;;;;;;;;;;;;;;;
 
-PrintBitboard:	 ; in: rcx bitboard
-		 ; io: rdi string
-		xor   edx, edx
-       .NextBit:
-		xor   edx, 0111000b  ; don't print upside down
-		 bt   rcx, rdx
-		sbb   eax, eax
-		xor   edx, 0111000b  ;
-		add   edx, 1
-		and   eax, 'X'-'.'
-		add   eax, '. ' + (10 shl 16)
-	      stosd
-		mov   eax, edx
-		and   eax, 7
-		neg   eax
-		sbb   rdi, 1
-		cmp   edx, 64
-		 jb   .NextBit
-		ret
+;PrintBitboard:   ; in: rcx bitboard
+;                 ; io: rdi string
+;                xor   edx, edx
+;       .NextBit:
+;                xor   edx, 0111000b  ; don't print upside down
+;                 bt   rcx, rdx
+;                sbb   eax, eax
+;                xor   edx, 0111000b  ;
+;                add   edx, 1
+;                and   eax, 'X'-'.'
+;                add   eax, '. ' + (10 shl 16)
+;              stosd
+;                mov   eax, edx
+;                and   eax, 7
+;                neg   eax
+;                sbb   rdi, 1
+;                cmp   edx, 64
+;                 jb   .NextBit
+;                ret
 
+if VERBOSE > 0
 PrintBitboardCompact:
 	       push   rsi
 		mov   rsi, rcx
@@ -444,6 +368,7 @@ PrintBitboardCompact:
 		jmp   @b
 	@@:	pop   rsi
 		ret
+end if
 
 ;;;;;;;;;;;;; square ;;;;;;;;;;;;;;;;
 
@@ -582,7 +507,7 @@ PrintUnsignedInteger:
 
 
 
-
+if VERBOSE > 0
 PrintAddress:
 	      bswap   rcx
 	      vmovq   xmm0, rcx
@@ -602,4 +527,4 @@ align 16
   .Mask1 dq 0f0f0f0f0f0f0f0fh, 0f0f0f0f0f0f0f0fh
   .Comp1 dq 0909090909090909h, 0909090909090909h
   .Num1  dq 0707070707070707h, 0707070707070707h
-
+end if

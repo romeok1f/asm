@@ -1,11 +1,9 @@
-
-
 macro PosIsDrawCheck50 isdraw_target, t {
 local ..CheckKeys, ..CheckPrev, ..NoDraw
 
 	; should preserve rcx, rdx
 
-		mov   rax, qword[rbp+State.checkersBB]
+		mov   rax, qword[rbx+State.checkersBB]
 	       test   rax, rax
 		 jz   isdraw_target
 	       push   rcx rdx rsi rdi
@@ -17,8 +15,8 @@ local ..CheckKeys, ..CheckPrev, ..NoDraw
 		pop   rdi rsi rdx rcx
 		 je   isdraw_target
 
-	      movzx   eax, byte[rbx+State.rule50]
-	      movzx   t#d, byte[rbx+State.pliesFromNull]
+	      movzx   eax, word[rbx+State._rule50]
+	      movzx   t#d, word[rbx+State._pliesFromNull]
 		cmp   eax, t#d
 	      cmova   eax, t#d
 		mov   t, qword[rbx+State.key]
@@ -31,6 +29,4 @@ local ..CheckKeys, ..CheckPrev, ..NoDraw
 		add   rax, 2*sizeof.State
 		jnz   ..CheckPrev
 ..NoDraw:
-
-
 }

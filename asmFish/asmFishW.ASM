@@ -16,6 +16,7 @@ section '.data' data readable writeable
 match =1, PROFILE {
   align 16
   profile:
+   .cjmpcounts rq 2*60
    .moveDo     dq 0
    .moveUnpack dq 0
    .moveStore  dq 0
@@ -41,8 +42,8 @@ end if
 
 align 16
 RazorMargin dd 483, 570, 603, 554
-CaptureOrPromotion_or  db  0,0,-1,-1,-1,-1,0,-1
-CaptureOrPromotion_and db -1,0,-1,-1,-1,-1,0,-1
+CaptureOrPromotion_or  db  0,-1,-1,-1,-1,0,-1,0
+CaptureOrPromotion_and db -1,-1,-1,-1,-1,0,-1,0
 
 align 16
 constd:
@@ -101,11 +102,13 @@ wdl_to_Value5:
   dd VALUE_DRAW + 2
   dd VALUE_MATE - MAX_PLY - 1
 
-align 4
- XBoardMove dd 0
+WDLtoDTZ db -1,-101,0,101,1
+
+rsquare_lookup:  db SQ_F1, SQ_D1, SQ_F8, SQ_D8
+ksquare_lookup:  db SQ_G1, SQ_C1, SQ_G8, SQ_C8
 
 
- szUCIresponse	db 'id name '
+szUciResponse:	db 'id name '
 szGreeting:
 		db 'asmFish '
 		create_build_time DAY, MONTH, YEAR
@@ -119,11 +122,10 @@ match =1, CPU_HAS_BMI2 {    db ' BMI2'	    }
 szGreetingEnd:
 		db 'id author TypingALot',10
 		db 'option name Contempt type spin default 0 min -100 max 100',10
-		db 'option name Threads type spin default 1 min 1 max 128',10
+		db 'option name Threads type spin default 1 min 1 max 64',10
 		db 'option name Hash type spin default 16 min 1 max 1048576',10
 		db 'option name ClearHash type button',10
-		db 'option name Ponder type check default false',10
-		db 'option name MultiPV type spin default 1 min 1 max 500',10
+		db 'option name MultiPV type spin default 1 min 1 max 224',10
 		db 'option name Weakness type spin default 0 min 0 max 200',10
 		db 'option name MoveOverhead type spin default 30 min 0 max 5000',10
 		db 'option name MinThinkTime type spin default 20 min 0 max 5000',10
@@ -133,28 +135,91 @@ szGreetingEnd:
 		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',10
 		db 'option name Syzygy50MoveRule type check default true',10
 		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',10
-		db 'uciok',10,0
- szCPUError	db 'Error: processor does not support',0
+		db 'uciok',10
+szUciResponseEnd:
+
+szCPUError	db 'Error: processor does not support',0
    .POPCNT	db ' POPCNT',0
    .AVX1	db ' AVX1',0
    .AVX2	db ' AVX2',0
    .BMI1	db ' BMI1',0
    .BMI2	db ' BMI2',0
- szReadyOK	db 'readyok',10,0
- szOK		db 'ok',10,0
- szError	db 'error',10,0
- szStartFEN	db 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',0
- PieceToChar	db '.?PNBRQK??pnbrqk'
- ToLowerCase:	  ; use assembler to make table for case conversion   not the best way to do this
-		db   0
-repeat 127
-	if (% >= 'A') & ( % <='Z')
-		db   % +('a'-'A')
-	else
-		db   %
-	end if
-end repeat
+szReadyOK	db 'readyok',10,0
+szOK		db 'ok',10,0
+szError 	db 'error',10,0
+szStartFEN	db 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',0
 
+sz_wtime		db 'wtime',0
+sz_btime		db 'btime',0
+sz_winc 		db 'winc',0
+sz_binc 		db 'binc',0
+sz_infinite		db 'infinite',0
+sz_movestogo		db 'movestogo',0
+sz_nodes		db 'nodes',0
+sz_movetime		db 'movetime',0
+sz_depth		db 'depth',0
+sz_mate 		db 'mate',0
+sz_name 		db 'name',0
+sz_hash 		db 'hash',0
+sz_value		db 'value',0
+sz_ponder		db 'ponder',0
+sz_threads		db 'threads',0
+sz_contempt		db 'contempt',0
+sz_clearhash		db 'clearhash',0
+sz_multipv		db 'multipv',0
+sz_weakness		db 'weakness',0
+sz_moveoverhead 	db 'moveoverhead',0
+sz_minthinktime 	db 'minthinktime',0
+sz_slowmover		db 'slowmover',0
+sz_uci_chess960 	db 'uci_chess960',0
+sz_syzygypath		db 'syzygypath',0
+sz_syzygyprobedepth	db 'syzygyprobedepth',0
+sz_syzygy50moverule	db 'syzygy50moverule',0
+sz_syzygyprobelimit	db 'syzygyprobelimit',0
+
+
+BenchFens: ;fens must be separated by one or more space char
+.bench_fen00 db "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",' '
+.bench_fen01 db "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 10",' '
+.bench_fen02 db "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 11",' '
+.bench_fen03 db "4rrk1/pp1n3p/3q2pQ/2p1pb2/2PP4/2P3N1/P2B2PP/4RRK1 b - - 7 19",' '
+.bench_fen04 db "rq3rk1/ppp2ppp/1bnpb3/3N2B1/3NP3/7P/PPPQ1PP1/2KR3R w - - 7 14",' '
+.bench_fen05 db "r1bq1r1k/1pp1n1pp/1p1p4/4p2Q/4Pp2/1BNP4/PPP2PPP/3R1RK1 w - - 2 14",' '
+.bench_fen06 db "r3r1k1/2p2ppp/p1p1bn2/8/1q2P3/2NPQN2/PPP3PP/R4RK1 b - - 2 15",' '
+.bench_fen07 db "r1bbk1nr/pp3p1p/2n5/1N4p1/2Np1B2/8/PPP2PPP/2KR1B1R w kq - 0 13",' '
+.bench_fen08 db "r1bq1rk1/ppp1nppp/4n3/3p3Q/3P4/1BP1B3/PP1N2PP/R4RK1 w - - 1 16",' '
+.bench_fen09 db "4r1k1/r1q2ppp/ppp2n2/4P3/5Rb1/1N1BQ3/PPP3PP/R5K1 w - - 1 17",' '
+.bench_fen10 db "2rqkb1r/ppp2p2/2npb1p1/1N1Nn2p/2P1PP2/8/PP2B1PP/R1BQK2R b KQ - 0 11",' '
+.bench_fen11 db "r1bq1r1k/b1p1npp1/p2p3p/1p6/3PP3/1B2NN2/PP3PPP/R2Q1RK1 w - - 1 16",' '
+.bench_fen12 db "3r1rk1/p5pp/bpp1pp2/8/q1PP1P2/b3P3/P2NQRPP/1R2B1K1 b - - 6 22",' '
+.bench_fen13 db "r1q2rk1/2p1bppp/2Pp4/p6b/Q1PNp3/4B3/PP1R1PPP/2K4R w - - 2 18",' '
+.bench_fen14 db "4k2r/1pb2ppp/1p2p3/1R1p4/3P4/2r1PN2/P4PPP/1R4K1 b - - 3 22",' '
+.bench_fen15 db "3q2k1/pb3p1p/4pbp1/2r5/PpN2N2/1P2P2P/5PP1/Q2R2K1 b - - 4 26",' '
+.bench_fen16 db "6k1/6p1/6Pp/ppp5/3pn2P/1P3K2/1PP2P2/3N4 b - - 0 1",' '
+.bench_fen17 db "3b4/5kp1/1p1p1p1p/pP1PpP1P/P1P1P3/3KN3/8/8 w - - 0 1",' '
+.bench_fen18 db "2K5/p7/7P/5pR1/8/5k2/r7/8 w - - 0 1",' '
+.bench_fen19 db "8/6pk/1p6/8/PP3p1p/5P2/4KP1q/3Q4 w - - 0 1",' '
+.bench_fen20 db "7k/3p2pp/4q3/8/4Q3/5Kp1/P6b/8 w - - 0 1",' '
+.bench_fen21 db "8/2p5/8/2kPKp1p/2p4P/2P5/3P4/8 w - - 0 1",' '
+.bench_fen22 db "8/1p3pp1/7p/5P1P/2k3P1/8/2K2P2/8 w - - 0 1",' '
+.bench_fen23 db "8/pp2r1k1/2p1p3/3pP2p/1P1P1P1P/P5KR/8/8 w - - 0 1",' '
+.bench_fen24 db "8/3p4/p1bk3p/Pp6/1Kp1PpPp/2P2P1P/2P5/5B2 b - - 0 1",' '
+.bench_fen25 db "5k2/7R/4P2p/5K2/p1r2P1p/8/8/8 b - - 0 1",' '
+.bench_fen26 db "6k1/6p1/P6p/r1N5/5p2/7P/1b3PP1/4R1K1 w - - 0 1",' '
+.bench_fen27 db "1r3k2/4q3/2Pp3b/3Bp3/2Q2p2/1p1P2P1/1P2KP2/3N4 w - - 0 1",' '
+.bench_fen28 db "6k1/4pp1p/3p2p1/P1pPb3/R7/1r2P1PP/3B1P2/6K1 w - - 0 1",' '
+.bench_fen29 db "8/3p3B/5p2/5P2/p7/PP5b/k7/6K1 w - - 0 1",' '
+  ; 5-man positions
+.bench_fen30 db "8/8/8/8/5kp1/P7/8/1K1N4 w - - 0 1",' '     ; Kc2 - mate
+.bench_fen31 db "8/8/8/5N2/8/p7/8/2NK3k w - - 0 1",' '	    ; Na2 - mate
+.bench_fen32 db "8/3k4/8/8/8/4B3/4KB2/2B5 w - - 0 1",' '    ; draw
+  ; 6-man positions
+.bench_fen33 db "8/8/1P6/5pr1/8/4R3/7k/2K5 w - - 0 1",' '   ; Re5 - mate
+.bench_fen34 db "8/2p4P/8/kr6/6R1/8/8/1K6 w - - 0 1",' '    ; Ka2 - mate
+.bench_fen35 db "8/8/3P3k/8/1p6/8/1P6/1K3n2 b - - 0 1",' '  ; Nd2 - draw
+  ; 7-man positions
+.bench_fen36 db "8/R7/2q5/8/6k1/8/1P5p/K6R w - - 0 124"  ; Draw
+BenchFensEnd: db 0
 
 
 align 8
@@ -172,16 +237,15 @@ match =1, OS_IS_WINDOWS {
 
 
 
+PieceToChar	db '.?PNBRQK??pnbrqk'
 
 
 
 section '.rdata' data readable writeable
 
 align 16
- workThreads	rb sizeof.Thread*(MAX_THREADS-1)
- mainThread	Thread
- mainHash	MainHash
  threadPool	ThreadPool
+ mainHash	MainHash
  options	Options
  time		Time
  signals	Signals
@@ -271,10 +335,6 @@ IsPawnMasks:	  rb 16
 align 64
 Reductions	   rd 2*2*64*64
 FutilityMoveCounts rd 16*2
-
-;ReductionsORG         rd 2*2*64*64
-;FutilityMoveCountsORG rd 16*2
-
 DrawValue	   rd 2
 
 
@@ -313,7 +373,6 @@ PushToEdges   rb 64
 PushToCorners rb 64
 PushClose     rb 8
 PushAway      rb 8
-;KRPPKRPScaleFactors rb 8
 
 ;;;;;;;;;;;;;;;;;;;;; data for tablebase ;;;;;;;;;;;;;;
 align 16
@@ -346,42 +405,73 @@ include 'SearchMacros.asm'
 include 'QSearchMacros.asm'
 include 'MainHashMacros.asm'
 include 'PosIsDrawMacro.asm'
-
-
-
 include 'Pawn.asm'
 
-include 'Endgame.asm'
 
-include 'CheckTime.asm'
-include 'Move_DoNull.asm'
+
+include 'TablebaseCore.asm'
+include 'Tablebase.asm'
+include 'Endgame.asm'
 include 'Evaluate.asm'
+
 include 'MainHash_Probe.asm'
-include 'QSearch.asm'
-include 'Search.asm'
+
+include 'Move_IsPseudoLegal.asm'
+include 'SetCheckInfo.asm'
+include 'Move_GivesCheck.asm'
+
+
 include 'UpdateStats.asm'
 
-include 'AttackersTo.asm'
-include 'SetCheckInfo.asm'
-include 'SetPinned.asm'
-include 'Move_Do.asm'
-include 'Move_GivesCheck.asm'
-include 'Move_Undo.asm'
-include 'Gen_NonEvasions.asm'
-include 'Gen_Legal.asm'
-include 'Gen_Evasions.asm'
-
-include 'Castling.asm'
-include 'PerftGen.asm'
-
+include 'Gen_Captures.asm'
 include 'Gen_Quiets.asm'
 include 'Gen_QuietChecks.asm'
-include 'Gen_Captures.asm'
+include 'Gen_Evasions.asm'
+include 'MovePick.asm'
 
 include 'Move_IsLegal.asm'
-include 'Move_IsPseudoLegal.asm'
-include 'MovePick.asm'
+include 'Move_Do.asm'
+include 'Move_Undo.asm'
+include 'AttackersTo.asm'
+
+	      align   16
+QSearch_NonPv_NoCheck:
+	    QSearch   _NONPV_NODE, 0
+	      align   16
+QSearch_NonPv_InCheck:
+	    QSearch   _NONPV_NODE, 1
+	      align   16
+QSearch_Pv_InCheck:
+	    QSearch   _PV_NODE, 1
+	      align   16
+QSearch_Pv_NoCheck:
+	    QSearch   _PV_NODE, 0
+	      align   16
+Search_NonPv:
+	    search   _NONPV_NODE
+
+
 include 'See.asm'
+include 'Move_DoNull.asm'
+include 'CheckTime.asm'
+
+
+include 'Castling.asm'
+
+	     align   16
+Search_Pv:
+	    search   _PV_NODE
+	     align   16
+Search_Root:
+	    search   _ROOT_NODE
+
+
+include 'Gen_NonEvasions.asm'
+include 'Gen_Legal.asm'
+include 'Perft.asm'
+include 'SetPinned.asm'
+
+
 include 'EasyMoveMng.asm'
 include 'Think.asm'
 include 'TimeMng.asm'
@@ -403,9 +493,6 @@ include 'Math.asm'
 
 include 'OsWindows.asm'
 
-include 'Tablebase.asm'
-include 'TablebaseCore.asm'
-
 include 'Weakness.asm'
 
 
@@ -424,9 +511,10 @@ Start:
 
 GD_String <db ' ********** General Verbosity ON !! **********',10,0>
 match =1, VERBOSE {
-	       call   _GetTime
-		mov   qword[VerboseTime1+8*0], rdx
-		mov   qword[VerboseTime1+8*1], rax  }
+call _GetTime
+mov qword[VerboseTime1+8*0], rdx
+mov qword[VerboseTime1+8*1], rax
+}
 
 	; init the engine
 	       call   Options_Init
@@ -443,33 +531,33 @@ match =1, VERBOSE {
 		mov   ecx, dword[options.hash]
 	       call   MainHash_Allocate
 	       call   ThreadPool_Create
-		lea   rcx, [options.syzygyPath]
+		lea   rcx, [?_345]     ; this is the <empty> string
 	       call   TableBase_Init
 
-	; command line could contain settings for threads and hash
-	       call   ParseCommandLine
+;        ; command line could contain settings for threads and hash
+;               call   ParseCommandLine                      ; not done yet
 
 	; display how much time was taken for init
 match =1, VERBOSE {
-		lea   rdi, [VerboseOutput]
-		mov   rax, 'response'
-	      stosq
-		mov   rax, ' time:  '
-	      stosq
-	       call   _GetTime
-		sub   rdx, qword[VerboseTime1+8*0]
-		sbb   rax, qword[VerboseTime1+8*1]
-		mov   r8, rdx
-		mov   ecx, 1000
-		mul   rcx
-	       xchg   rax, r8
-		mul   rcx
-		lea   rax, [r8+rdx]
-	       call   PrintUnsignedInteger
-		mov   eax, ' us' + (10 shl 24)
-	      stosd
-		lea   rcx, [VerboseOutput]
-	       call   _WriteOut
+lea rdi, [VerboseOutput]
+mov rax, 'response'
+stosq
+mov rax, ' time:  '
+stosq
+call _GetTime
+sub rdx, qword[VerboseTime1+8*0]
+sbb rax, qword[VerboseTime1+8*1]
+mov r8, rdx
+mov ecx, 1000
+mul rcx
+xchg rax, r8
+mul rcx
+lea rax, [r8+rdx]
+call PrintUnsignedInteger
+mov eax, ' us' + (10 shl 24)
+stosd
+lea rcx, [VerboseOutput]
+call _WriteOut
 }
 
 	; write engine name
@@ -479,44 +567,11 @@ match =0, VERBOSE {
 	       call   _WriteOut
 }
 
-match =0, VERBOSE {
-.read:
-	       call   _ReadIn
-		cmp   byte[rsi], ' '
-		 jb   .read
-	    stdcall   CmpStringCaseless, 'xboard'
-	       test   eax, eax
-		jnz   .xboard
-	    stdcall   CmpStringCaseless, 'uci'
-	       test   eax, eax
-		jnz   .uci
-	    stdcall   CmpStringCaseless, 'quit'
-	       test   eax, eax
-		jnz   .quit
-		lea   rdi, [Output]
-	    stdcall   PrintString, 'error: unknown command '
-		mov   ecx, 64
-	       call   _ParseToken
-		mov   al, 10
-	      stosb
-	       call   _WriteOut_Output
-		jmp   .read
-.xboard:
-	       call   XboardLoop
-	       test   eax, eax
-		 jz   .quit
-.uci:
-}
+	; enter the main loop
 	       call   UciLoop
-match =0, VERBOSE {
-	       test   eax, eax
-		jnz   .xboard
-.quit:
-}
+
 	; clean up threads, hash, and tablebases
-		lea   rcx, [options.syzygyPath]
-		mov   rax, '<empty>'
-		mov   qword[rcx], rax
+		lea   rcx, [?_345]
 	       call   TableBase_Init  ; don't know of another way to clean up tabebases
 	       call   ThreadPool_Destroy
 	       call   MainHash_Free
@@ -531,8 +586,7 @@ match =0, VERBOSE {
 	     Assert   e, dword[DebugBalance], 0, 'assertion dword[DebugBalance]==0 failed'
 	       call   _ExitProcess
 
-include 'Xboard.asm'
-include 'ParseCommandLine.asm'
+;include 'ParseCommandLine.asm'
 include 'Search_Init.asm'
 include 'Position_Init.asm'
 include 'MoveGen_Init.asm'

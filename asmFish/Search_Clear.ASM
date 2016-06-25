@@ -10,9 +10,11 @@ Search_Clear:
 		xor   eax, eax
 	  rep stosd
 
-		lea   rbx, [mainThread]
 		mov   edx, VALUE_INFINITE
+		xor   esi, esi
 .nexthread:
+		mov   rbx, qword[threadPool.table+8*rsi]
+
 		mov   rdi, qword[rbx+Thread.rootPos+Pos.history]
 		mov   ecx, 4*16*64
 		xor   eax, eax
@@ -27,9 +29,9 @@ Search_Clear:
 	;  +VALUE_INFINITE causes us to think alot on the first move
 		mov   dword[rbx+Thread.previousScore], edx
 
-		sub   rbx, sizeof.Thread
-		cmp   rbx, qword[threadPool.stackPointer]
-		jae   .nexthread
+		add   esi, 1
+		cmp   esi, dword[threadPool.size]
+		 jb   .nexthread
 
 		pop   rdi rsi rbx
 		ret

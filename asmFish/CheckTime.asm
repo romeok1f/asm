@@ -14,13 +14,13 @@ CheckTime:
 		 je   @f
 		sub   rax, 10
 		cmp   eax, dword[limits.movetime]
-		 ja   .stop
+		jae   .stop
 	@@:
 		cmp   byte[limits.nodes], 0
 		 je   @f
 	       call   ThreadPool_NodesSearched
 		cmp   rax, qword[limits.nodes]
-		 ja   .stop
+		jae   .stop
 	@@:
 .return:
 		ret

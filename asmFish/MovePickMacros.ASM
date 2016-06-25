@@ -29,11 +29,11 @@ macro GetNextMove {
 		mov   rdx, qword[rsi+Pick.stage]
 		mov   r14, qword[rsi+Pick.cur]
 		mov   r15, qword[rsi+Pick.endMoves]
-	       push   rdi r12 r13
+	       ;push   rdi r12 r13
 	       call   rdx
 		mov   qword[rsi+Pick.cur], r14
 		mov   qword[rsi+Pick.endMoves], r15
-		pop   r13 r12 rdi
+		;pop   r13 r12 rdi
 		mov   qword[rsi+Pick.stage], rdx
 }
 
@@ -46,15 +46,11 @@ local ..Outer, ..Inner, ..InnerDone, ..OuterDone
 ..Outer:
 		mov   rax, qword[p]
 		mov   edx, dword[p+ExtMove.score]
-	   ;     cmp   dword[p+ExtMove.score], 0x80000000
-	   ;      je   Interrupt
 		mov   q, p
 
 		cmp   q, begin
 		jbe   ..InnerDone
 		mov   rcx, qword[q-sizeof.ExtMove+ExtMove.move]
-	   ;     cmp   dword[q-sizeof.ExtMove+ExtMove.score], 0x80000000
-	   ;      je   Interrupt
 		cmp   edx, dword[q-sizeof.ExtMove+ExtMove.score]
 		jle   ..InnerDone
 ..Inner:
@@ -64,8 +60,6 @@ local ..Outer, ..Inner, ..InnerDone, ..OuterDone
 		cmp   q, begin
 		jbe   ..InnerDone
 		mov   rcx, qword[q-sizeof.ExtMove+ExtMove.move]
-	   ;     cmp   dword[q-sizeof.ExtMove+ExtMove.score], 0x80000000
-	   ;      je   Interrupt
 		cmp   edx, dword[q-sizeof.ExtMove+ExtMove.score]
 		 jg   ..Inner
 ..InnerDone:
@@ -267,7 +261,7 @@ local ..Loop, ..Done
 		mov   r9, [rbx-1*sizeof.State+State.counterMoves]
 		mov   r10, [rbx-2*sizeof.State+State.counterMoves]
 		mov   r11, [rbx-4*sizeof.State+State.counterMoves]
-		lea   rax, [CounterMoveHistory]
+		lea   rax, [CounterMoveHistory+(64*16)*(64*8)]
 	       test   r9, r9
 	      cmovz   r9, rax
 	       test   r10, r10
@@ -327,7 +321,7 @@ match = 1, DEBUG \{
 
 
 macro ScoreEvasions start, ender {
-local ..ok, ..WhileLoop, ..normal, ..special, ..Done, ..Positive, ..Capture, ..Negative
+local ..WhileLoop, ..Normal, ..Special, ..Done, ..Positive, ..Capture, ..Negative
 
 		mov   rdi, qword[rbp+Pos.history]
 		cmp   start, ender
@@ -347,11 +341,11 @@ local ..ok, ..WhileLoop, ..normal, ..special, ..Done, ..Positive, ..Capture, ..N
 	      movzx   r11d, byte [rbp+Pos.board+rcx]	 ; r11 = to piece
 	      movzx   edx, byte [rbp+Pos.board+r8]	 ; edx = from piece
 		lea   rcx, [rdi+4*rcx]
-		cmp   r10d, MOVE_TYPE_CASTLE shl 12
-		jae   ..special
+		cmp   r10d, _MOVE_TYPE_CASTLE shl 12
+		jae   ..Special
 	       test   r11d, r11d
 		jnz   ..Capture
-..normal:
+..Normal:
 		shl   edx, 6+2
 		mov   eax, dword[rdx+rcx]
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
@@ -360,20 +354,18 @@ local ..ok, ..WhileLoop, ..normal, ..special, ..Done, ..Positive, ..Capture, ..N
 		jmp   ..Done
 ..Capture:
 		mov   eax, dword[PieceValue_MG+4*r11]
-..captureEP:
 		and   edx, 7
 		sub   eax, edx
-		add   eax, HistoryStats_Max
+		add   eax, HistoryStats_Max-1	; match piece types of master
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
 		cmp   start, ender
 		 jb   ..WhileLoop
 		jmp   ..Done
 
-..special:
-		cmp   r10d, MOVE_TYPE_EPCAP shl 12
-		 jb   ..normal ; castling
-		mov   eax, PawnValueMg
-		jmp   ..captureEP
+..Special:
+		cmp   r10d, _MOVE_TYPE_EPCAP shl 12
+		 jb   ..Normal ; castling
+		jmp   ..Capture
 
 ..Negative:
 		sub   eax, HistoryStats_Max

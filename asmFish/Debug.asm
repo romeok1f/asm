@@ -35,20 +35,30 @@ local ..skip, ..errorbox, ..message
  \}
 }
 
-macro Profile cc, var {
+macro Profile cc, index {
+local ..TakingJump
 ; do a profile on the conditional jmp j#cc
-;  increment  qword[var+0] if the jump is not taken
-;  incrememnt qword[var+8] if the jump is taken
+;  increment  qword[...+0] if the jump is not taken
+;  incrememnt qword[...+8] if the jump is taken
+; use like this:
+;    call foo
+;    test eax, eax
+;    Profile nz, 0
+;    jnz EaxNotZero
+;     ...
+;  counts: rq 2
+;
+; var shouldn't be on the stack
 
 match =1, PROFILE \{
 	       push   rax rcx
-		lea   rcx, [var+8]
+		lea   rcx, [profile.cjmpcounts+16*(index)+8]
 	       j#cc   ..TakingJump
-		lea   rcx, [var+0]
+		lea   rcx, [profile.cjmpcounts+16*(index)+0]
 ..TakingJump:
-		mov   rax, qword [rcx]
+		mov   rax, qword[rcx]
 		lea   rax, [rax+1]
-		mov   qword [rcx], rax
+		mov   qword[rcx], rax
 		pop   rcx rax
 
  \}
@@ -90,6 +100,31 @@ macro GD_Int x {
 }
 
 
+
+
+macro SD_NewLine m {
+; lets not clobber any registers here
+local ..message, ..over
+ match =2, VERBOSE \{
+	       push   rdi rax rcx rdx r8 r9 r10 r11
+		lea   rcx, [..message]
+		jmp   ..over
+   ..message:
+	    m
+  match =1, OS_IS_WINDOWS \\{
+	    db 13
+  \\}
+	    db 10
+	    db 0
+   ..over:
+		lea   rdi, [VerboseOutput]
+	       call   PrintString
+		lea   rcx, [VerboseOutput]
+		lea  rcx, [VerboseOutput]
+	       call _WriteOut
+		pop   r11 r10 r9 r8 rdx rcx rax rdi
+ \}
+}
 
 macro SD_String m {
 ; lets not clobber any registers here
@@ -236,5 +271,30 @@ macro ED_Score x {
 	call _WriteOut
 	pop r11 r10 r9 r8 rdx rcx rax rdi
 	add rsp, 8
+ \}
+}
+
+
+
+macro ED_NewLine m {
+local ..message, ..over
+ match =3, VERBOSE \{
+	       push   rdi rax rcx rdx r8 r9 r10 r11
+		lea   rcx, [..message]
+		jmp   ..over
+   ..message:
+	    m
+  match =1, OS_IS_WINDOWS \\{
+	    db 13
+  \\}
+	    db 10
+	    db 0
+   ..over:
+		lea   rdi, [VerboseOutput]
+	       call   PrintString
+		lea   rcx, [VerboseOutput]
+		lea  rcx, [VerboseOutput]
+	       call _WriteOut
+		pop   r11 r10 r9 r8 rdx rcx rax rdi
  \}
 }

@@ -65,9 +65,9 @@ SD_String db '|'
 MovePick_MainSearch:
 		cmp   r14, r15
 		 je   GenNext_GoodCaptures
-		mov   r14, r15
+		;mov   r14, r15
 		mov   eax, dword[rsi+Pick.ttMove]
-		lea   rdx, [MovePick_MainSearch]
+		lea   rdx, [GenNext_GoodCaptures]
 		ret
 
 
@@ -142,7 +142,7 @@ MovePick_Killers:
 		 jz   MovePick_Killers
 		cmp   edi, dword[rsi+Pick.ttMove]
 		 je   MovePick_Killers
-		cmp   edi, MOVE_TYPE_CASTLE shl 12
+		cmp   edi, _MOVE_TYPE_CASTLE shl 12
 		jae   .special
 	       test   eax, eax
 		jnz   MovePick_Killers
@@ -156,7 +156,7 @@ SD_Move rax
 SD_String db '|'
 		ret
 .special:
-		cmp   edi, MOVE_TYPE_EPCAP shl 12
+		cmp   edi, _MOVE_TYPE_EPCAP shl 12
 		jae   MovePick_Killers
 	       call   Move_IsPseudoLegal
 	       test   rax, rax
@@ -211,6 +211,10 @@ stosb
 add  r12, 8
 jmp  .1c
 .2c:
+match =1, OS_IS_WINDOWS \{
+ mov al, 13
+ stosb
+\}
 mov al, 10
 stosb
 lea rcx, [VerboseOutput]

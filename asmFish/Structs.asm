@@ -32,9 +32,9 @@ struct EvalInfo
  ksq  rd 2
  me   rq 1
  pi   rq 1
- mobility rd 2
- score	  rd 1
-	  rd 1
+ score	   rd 1
+	   rd 1
+ _mobility rd 2  ; not used anymore
 ends
 
 struct EndgameMapEntry
@@ -145,8 +145,8 @@ struct Pos
 	     rd 1
  gamePly     rd 1
  chess960    rd 1
- _copy_size rb 0
 
+ _copy_size rb 0
 match =1, DEBUG {
  debugPointer	rq 1
  debugMove	rd 1
@@ -154,7 +154,7 @@ match =1, DEBUG {
 }
 
  state		rq 1 ; the current state struct
- stateTable	rq 1 ; the beginning of the state of State structs
+ stateTable	rq 1 ; the beginning of the vector of State structs
  stateEnd	rq 1 ; the end of
  history	rq 1		 ; these structs hold addresses
  counterMoves	rq 1		 ; of tables used by the search
@@ -176,12 +176,11 @@ struct State
  materialKey	rq 1
  psq		rw 2
  npMaterial	rw 2
- rule50 	rb 1  ; these should be together
- pliesFromNull	rb 1  ;
- castlingRights rb 1
- epSquare	rb 1
- move		rw 1  ; currently only used for undo cmd in global pos structure
- capturedPiece	rb 1
+ _rule50	 rw 1  ; these should be together
+ _pliesFromNull  rw 1  ;
+ _epSquare	 rb 1
+ _castlingRights rb 1
+ _capturedPiece  rb 1
 ; CheckInfo struct
  ksq		rb 1
  checkersBB	rq 1   ; this is actually not part of checkinfo
@@ -232,22 +231,20 @@ ends
 struct Options
  displayInfoFxn rq 1	  ; function for printing pv
  displayMoveFxn rq 1
- hash		rd 1
- multiPV	rd 1
+ hash	       rd 1
+ multiPV       rd 1
  threads       rd 1
  weakness      rd 1
- chess960      rd 1
- contempt      rd 1
+ chess960	rd 1
  minThinkTime	rd 1
  slowMover	rd 1
  moveOverhead	rd 1
- ponder 	rb 1
-		rb 3
+ contempt	  rd 1
+ ponder 	  rb 1
  syzygy50MoveRule rb 1	    ; bool 0 or -1
-		  rb 7
+		  rb 2
  syzygyProbeDepth rd 1
  syzygyProbeLimit rd 1
- syzygyPath	rb 64
 ends
 
 
@@ -306,8 +303,9 @@ ends
 
 
 struct ThreadPool
- stackPointer	rq 1 ; address of last worker Thread stuct
-		rq 1
+ size  rd 1
+       rd 1
+ table rq MAX_THREADS
 ends
 
 

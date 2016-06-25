@@ -107,6 +107,10 @@ stosd
 sub rdi, 1
 movsxd rax, r13d
 call PrintSignedInteger
+match =1, OS_IS_WINDOWS \\{
+ mov al, 13
+ stosb
+\\}
 mov al, 10
 stosb
 lea rcx, [VerboseOutput]
@@ -118,9 +122,6 @@ pop r15 r14 r13 r9 r8 rdx rcx
 		mov   dword[.alpha], ecx
 		mov   dword[.beta], edx
 		mov   dword[.depth], r8d
-
-
-
 
 		mov   edx, dword[rbx-1*sizeof.State+State.ply]
 		add   edx, 1
@@ -137,8 +138,8 @@ pop r15 r14 r13 r9 r8 rdx rcx
 		mov   dword[rbx+State.ply], edx
 
 	; check for instant draw or max ply
-	      movzx   eax, byte[rbx+State.rule50]
-	      movzx   r8d, byte[rbx+State.pliesFromNull]
+	      movzx   eax, word[rbx+State._rule50]
+	      movzx   r8d, word[rbx+State._pliesFromNull]
 		mov   r9, qword[rbx+State.key]
 		cmp   edx, MAX_PLY
 		jae   .AbortSearch_PlyBigger
@@ -269,11 +270,13 @@ pop r15 r14 r13 r9 r8 rdx rcx
 
     end if ; InCheck eq 1
 
+
+
+
+	       call   SetCheckInfo
+
 	; initialize move picker
 	;   Pick.endQuiets, Pick.endBadCaptures are not used in q search
-
-
-
 
 	      ; endBadCaptures should not be used in qsearch
 		lea   rsi, [.movepick]
@@ -281,6 +284,7 @@ pop r15 r14 r13 r9 r8 rdx rcx
 	      ;  lea   rax, [r15+sizeof.ExtMove*(MAX_MOVES-1)]
 		mov   qword[rsi+Pick.cur], r15
 	      ;  mov   qword[rsi+Pick.endBadCaptures], rax
+		mov   ecx, dword[.ttMove]
 
 	if InCheck eq 1
 	     Assert   ne, qword[rbx+State.checkersBB], 0, 'assertion qword[rbx+State.checkers]!=0 failed in QSearch'
@@ -289,7 +293,6 @@ pop r15 r14 r13 r9 r8 rdx rcx
 	     Assert   e, qword[rbx+State.checkersBB], 0, 'assertion qword[rbx+State.checkers]==0 failed in QSearch'
 		mov   eax, dword[rbx-1*sizeof.State+State.currentMove]
 		and   eax, 63
-		mov   ecx, dword[.ttMove]
 		lea   rdx, [MovePick_QSearchWithChecks]
 		cmp   dword [.depth], DEPTH_QS_NO_CHECKS
 		 jg   .MovePickInitGo
@@ -319,8 +322,6 @@ pop r15 r14 r13 r9 r8 rdx rcx
 		mov   dword[rsi+Pick.ttMove], edi
 		mov   qword[rsi+Pick.endMoves], r15
 
-	       call   SetCheckInfo
-
 
 
 .MovePickLoop:
@@ -330,6 +331,11 @@ pop r15 r14 r13 r9 r8 rdx rcx
 		mov   dword[.move], eax
 	       test   eax, eax
 		 jz   .MovePickDone
+
+SD_String db 'Qmp='
+SD_Move rax
+SD_String db '|'
+
 
 	; check for check and get address of search function
 		mov   ecx, eax
@@ -395,28 +401,16 @@ pop r15 r14 r13 r9 r8 rdx rcx
 
 	; do not search moves with negative see value
 	if InCheck eq 0
-	   ;  Assert   ne, esi, MOVE_TYPE_PROM+0, 'knight promotion encountered in qsearch<InCheck=false>'
-	   ;  Assert   ne, esi, MOVE_TYPE_PROM+1, 'bishop promotion encountered in qsearch<InCheck=false>'
-	   ;  Assert   ne, esi, MOVE_TYPE_PROM+2, 'rook promotion encountered in qsearch<InCheck=false>'
-		cmp   esi, MOVE_TYPE_PROM+0
-		 je   .DontContinue
-		cmp   esi, MOVE_TYPE_PROM+1
-		 je   .DontContinue
-		cmp   esi, MOVE_TYPE_PROM+2
-		 je   .DontContinue
-		cmp   esi, MOVE_TYPE_PROM+3
-		 je   .DontContinue
+		lea   eax, [rsi-_MOVE_TYPE_PROM]
+		cmp   eax, 4
+		 jb   .DontContinue
 	else
 		mov   eax, dword[rbp+Pos.sideToMove]
 		cmp   edi, VALUE_MATED_IN_MAX_PLY
 		jle   .DontContinue
 
-	     Assert   ne, esi, MOVE_TYPE_CASTLE, 'castling encountered in qsearch<InCheck=true>'
-	     ;   cmp   esi, MOVE_TYPE_CASTLE
-	     ;    je   .DontContinue
-	       ; cmp   esi, MOVE_TYPE_EPCAP
-	       ;  je   .DontContinue
-		cmp   esi, MOVE_TYPE_PROM
+	     Assert   ne, esi, _MOVE_TYPE_CASTLE, 'castling encountered in qsearch<InCheck=true>'
+		cmp   esi, _MOVE_TYPE_PROM
 		jae   .DontContinue	   ; catch MOVE_TYPE_EPCAP
 	       test   r15d, r15d
 		jnz   .DontContinue
@@ -479,7 +473,7 @@ lock inc qword[profile.moveUnpack]
 	; check for new best move
 		cmp   edi, dword[.bestValue]
 		jle   .MovePickLoop
-		mov   dword [.bestValue], edi
+		mov   dword[.bestValue], edi
 		cmp   edi, dword[.alpha]
 		jle   .MovePickLoop
 
@@ -550,11 +544,11 @@ lock inc qword[profile.moveUnpack]
 	end if
 
 	if .PvNode eq 1
-		mov   esi, dword [.oldAlpha]
+		mov   esi, dword[.oldAlpha]
 		sub   esi, edi
 		sar   esi, 31
 	end if
-		mov   r8, qword [.tte]
+		mov   r8, qword[.tte]
 		shr   r9, 48
 		mov   edx, edi
 		cmp   ecx, 2*VALUE_MATE_IN_MAX_PLY
@@ -563,10 +557,10 @@ lock inc qword[profile.moveUnpack]
 
 
 	if .PvNode eq 0
-		mov   eax, dword [.bestMove]
+		mov   eax, dword[.bestMove]
      HashTable_Save   r8, r9w, edx, BOUND_UPPER, byte[.ttDepth], eax, word[rbx+State.staticEval]
 	else
-		mov   eax, dword [.bestMove]
+		mov   eax, dword[.bestMove]
 		and   esi, BOUND_EXACT-BOUND_UPPER
 		add   esi, BOUND_UPPER
      HashTable_Save   r8, r9w, edx, sil, byte[.ttDepth], eax, word[rbx+State.staticEval]
@@ -658,6 +652,11 @@ stosb
 szcall PrintString, '> return: '
 movsxd rax, r15d
 call PrintSignedInteger
+match =1, OS_IS_WINDOWS \\{
+ mov al, 13
+ stosb
+\\}
+
 mov al, 10
 stosb
 lea rcx, [VerboseOutput]
@@ -704,18 +703,15 @@ pop r15 r14 r13 rax
 
 		      align   8
 .AbortSearch_PlyBigger:
-		mov   rcx, qword[rbx+State.checkersBB]
-		mov   eax, dword[rbp+Pos.sideToMove]
-		mov   eax, dword[DrawValue+4*rax]
-	       test   rcx, rcx
-		 jz   .ReturnA
+		xor   eax, eax
+		cmp   rax, qword[rbx+State.checkersBB]
+		jne   .ReturnA
 	       call   Evaluate
 		jmp   .ReturnA
 
 		      align   8
 .AbortSearch_PlySmaller:
-		mov   eax, dword[rbp+Pos.sideToMove]
-		mov   eax, dword[DrawValue+4*rax]
+		xor   eax, eax
 		jmp   .ReturnA
 
 	if .PvNode eq 0
@@ -788,37 +784,3 @@ pop r15 r14 r13 rax
 
 
 }
-
-
-
-;if SEARCH_DEBUG eq 1
-;cmp byte[QSearchTesting],0
-;je @f
-;lea rdi,[Output]
-;mov ecx,dword[.depth]
-;neg ecx
-;mov eax,'    '
-;rep stosd
-;mov ecx, dword[.move]
-;call PrintUciMove
-;mov rax,' nodes: '
-;stosq
-;mov rax, qword[rbp+Pos.nodes]
-;call PrintUnsignedInteger
-;mov al,10
-;stosb
-;call _WriteOut_Output
-;@@:
-;end if
-
-
-;if SEARCH_DEBUG eq 1
-;cmp byte[QSearchTesting],0
-;je @f
-;lea rdi,[Output]
-;szcall PrintString,'starting pick'
-;mov al,10
-;stosb
-;call _WriteOut_Output
-;@@:
-;end if

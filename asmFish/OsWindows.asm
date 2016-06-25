@@ -338,6 +338,34 @@ _ReadIn:
 
 
 
+;;;;;;;;;;;;;;;;;;
+; priority class ;
+;;;;;;;;;;;;;;;;;;
+
+_SetRealtimePriority:
+	       push   rbx
+		mov   ebx, REALTIME_PRIORITY_CLASS
+	@@:
+		sub   rsp, 8*4
+	       call   qword[__imp_GetCurrentProcess]
+		mov   rcx, rax
+		mov   edx, ebx
+	       call   qword[__imp_SetPriorityClass]
+		add   rsp, 8*4
+		pop   rbx
+		ret
+
+_SetNormalPriority:
+	       push   rbx
+		mov   ebx, NORMAL_PRIORITY_CLASS
+		jmp   @b
+
+
+;;;;;;;;
+; misc ;
+;;;;;;;;
+
+
 _ErrorBox:
 	; rdi points to null terminated string to write to message box
 	; this may be called from a leaf with no stack allignment

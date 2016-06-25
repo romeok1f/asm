@@ -15,8 +15,6 @@ Options_Init:
 		mov   dword[rdx+Options.slowMover], 80
 		mov   byte[rdx+Options.chess960], 0
 		mov   dword[rdx+Options.weakness], 0
-		mov   rax, '<empty>'
-		mov   qword[rdx+Options.syzygyPath], rax
 		mov   dword[rdx+Options.syzygyProbeDepth], 1
 		mov   byte[rdx+Options.syzygy50MoveRule], -1
 		mov   dword[rdx+Options.syzygyProbeLimit], 6
@@ -45,12 +43,18 @@ end virtual
 		mov   qword[options.displayInfoFxn], rcx
 		mov   qword[options.displayMoveFxn], rdx
 
+		xor   eax, eax
+		mov   qword[UciLoop.th1.rootPos.stateTable], rax
+
 		lea   rcx, [UciLoop.states]
 		lea   rdx, [rcx+2*sizeof.State]
 		mov   qword[UciLoop.th2.rootPos.state], rcx
 		mov   qword[UciLoop.th2.rootPos.stateTable], rcx
 		mov   qword[UciLoop.th2.rootPos.stateEnd], rdx
 
+UciNewGame:
+		mov   rcx, qword[UciLoop.th1.rootPos.stateTable]
+	       call   _VirtualFree
 		xor   eax, eax
 		lea   rbp, [UciLoop.th1.rootPos]
 		mov   qword[UciLoop.th1.rootPos.state], rax
@@ -59,18 +63,9 @@ end virtual
 		lea   rsi, [szStartFEN]
 		xor   ecx, ecx
 	       call   Position_ParseFEN
-
-match =2, VERBOSE {
+	       call   Search_Clear
 		jmp   UciGetInput
-}
-match =3, VERBOSE {
-		jmp   UciGetInput
-}
 
-UciUci:
-		lea   rdi, [Output]
-		lea   rcx, [szUCIresponse]
-	       call   PrintString
 UciWriteOut:
 	       call   _WriteOut_Output
 UciGetInput:
@@ -138,7 +133,11 @@ UciChoose:
 	    stdcall   CmpString, 'perft'
 	       test   eax, eax
 		jnz   UciPerft
+	    stdcall   CmpString, 'bench'
+	       test   eax, eax
+		jnz   UciBench
 
+if VERBOSE > 0
 	    stdcall   CmpString, 'show'
 	       test   eax, eax
 		jnz   UciShow
@@ -154,21 +153,19 @@ UciChoose:
 	    stdcall   CmpString, 'eval'
 	       test   eax, eax
 		jnz   UciEval
-	    stdcall   CmpString, 'bench'
-	       test   eax, eax
-		jnz   UciBench
+end if
 
-match =1, PROFILE {
+if PROFILE > 0
 	    stdcall   CmpString, 'profile'
 	       test   eax, eax
 		jnz   UciProfile
-}
+end if
 
 UciUnknown:
 		lea   rdi, [Output]
 	    stdcall   PrintString, 'error: unknown command '
 		mov   ecx, 64
-	       call   _ParseToken
+	       call   ParseToken
 		mov   al, 10
 	      stosb
 		jmp   UciWriteOut
@@ -177,10 +174,10 @@ UciUnknown:
 
 
 UciQuit:
-		lea   rcx, [mainThread]
 		mov   byte[signals.stop], -1
+		mov   rcx, qword[threadPool.table+8*0]
 	       call   Thread_StartSearching_TRUE
-		lea   rcx, [mainThread]
+		mov   rcx, qword[threadPool.table+8*0]
 	       call   Thread_WaitForSearchFinished
 		mov   rcx, qword[UciLoop.th1.rootPos.stateTable]
 	       call   _VirtualFree
@@ -189,9 +186,17 @@ UciQuit:
 		pop   r15 r14 r13 r12 r11 rbx rdi rsi rbp
 		ret
 
-UciNewGame:
-	       call   Search_Clear
+;;;;;;;;
+; uci
+;;;;;;;;
+
+
+UciUci:
+		lea   rcx, [szUciResponse]
+		lea   rdi, [szUciResponseEnd]
+	       call   _WriteOut
 		jmp   UciGetInput
+
 
 ;;;;;;;;;;;;
 ; isready
@@ -203,8 +208,9 @@ UciIsReady:
 	      stosq
 		jmp   UciWriteOut
 
-
-
+;;;;;;;;;;;;;
+; ponderhit
+;;;;;;;;;;;;;
 
 UciPonderHit:
 		mov   al, byte[signals.stopOnPonderhit]
@@ -218,7 +224,7 @@ UciPonderHit:
 
 UciStop:
 		mov   byte[signals.stop], -1
-		lea   rcx, [mainThread]
+		mov   rcx, qword[threadPool.table+8*0]
 	       call   Thread_StartSearching_TRUE
 		jmp   UciGetInput
 
@@ -233,59 +239,74 @@ UciGo:
 	       call   SkipSpaces
 		cmp   byte[rsi], ' '
 		 jb   .ReadLoopDone
+
 		lea   rdi, [UciLoop.limits.time+4*White]
-	     szcall   CmpString, 'wtime'
+		lea   rcx, [sz_wtime]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_dword
+
 		lea   rdi, [UciLoop.limits.time+4*Black]
-	     szcall   CmpString, 'btime'
+		lea   rcx, [sz_btime]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_dword
+
 		lea   rdi, [UciLoop.limits.incr+4*White]
-	     szcall   CmpString, 'winc'
+		lea   rcx, [sz_winc]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_dword
+
 		lea   rdi, [UciLoop.limits.incr+4*Black]
-	     szcall   CmpString, 'binc'
+		lea   rcx, [sz_binc]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_dword
 
 		lea   rdi, [UciLoop.limits.infinite]
-	     szcall   CmpString, 'infinite'
+		lea   rcx, [sz_infinite]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_true
 
 		lea   rdi, [UciLoop.limits.movestogo]
-	     szcall   CmpString, 'movestogo'
+		lea   rcx, [sz_movestogo]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_dword
 
 		lea   rdi, [UciLoop.limits.nodes]
-	     szcall   CmpString, 'nodes'
+		lea   rcx, [sz_nodes]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_qword
 
 		lea   rdi, [UciLoop.limits.movetime]
-	     szcall   CmpString, 'movetime'
+		lea   rcx, [sz_movetime]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_dword
 
 		lea   rdi, [UciLoop.limits.depth]
-	     szcall   CmpString, 'depth'
+		lea   rcx, [sz_depth]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_dword
 
 		lea   rdi, [UciLoop.limits.mate]
-	     szcall   CmpString, 'mate'
+		lea   rcx, [sz_mate]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_dword
 
 		lea   rdi, [UciLoop.limits.ponder]
-	     szcall   CmpString, 'ponder'
+		lea   rcx, [sz_ponder]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_true
 		mov   ecx, 64
-	       call   _SkipToken
+	       call   SkipToken
 		jmp   .ReadLoop
 .ReadLoopDone:
 		lea   rcx, [UciLoop.limits]
@@ -306,8 +327,6 @@ UciGo:
 .parse_true:
 		mov   byte[rdi], -1
 		jmp   .ReadLoop
-
-
 
 
 
@@ -360,7 +379,7 @@ UciPosition:
 		lea   rdi, [Output]
 	     szcall   PrintString, 'error: illegal move '
 		mov   ecx, 6
-	       call   _ParseToken
+	       call   ParseToken
 		mov   al, 10
 	      stosb
 		lea   rbp, [UciLoop.th1.rootPos]
@@ -404,9 +423,9 @@ UciParseMoves:
 	       call   Position_SetExtraCapacity
 		mov   rbx, qword[rbp+Pos.state]
 		mov   ecx, edi
-		mov   word[rbx+State.move+sizeof.State], cx
+		mov   dword[rbx+sizeof.State+State.currentMove], edi
 	       call   Move_GivesCheck
-	      movzx   ecx, word[rbx+State.move+sizeof.State]
+		mov   ecx, edi
 		mov   edx, eax
 	       call   Move_Do__UciParseMoves
 	; when VERBOSE=0, domove/undomove don't update gamPly
@@ -430,71 +449,98 @@ match =0, VERBOSE {
 UciSetOption:
 .Read:
 	       call   SkipSpaces
-		cmp   byte[rsi], ' '
-		 jb   .Error
-
-	     szcall   CmpString, 'name'
+		lea   rcx, [sz_name]
+	       call   CmpString
 	       test   eax, eax
 		 jz   .Error
 	       call   SkipSpaces
 
-	     szcall   CmpStringCaseless, 'Contempt'
-		lea   rbx, [.Contempt]
-	       test   eax, eax
-		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'Threads'
+		lea   rcx, [sz_threads]
+	       call   CmpStringCaseless
 		lea   rbx, [.Threads]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'Hash'
+
+		lea   rcx, [sz_hash]
+	       call   CmpStringCaseless
 		lea   rbx, [.Hash]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'ClearHash'
+
+		lea   rcx, [sz_clearhash]
+	       call   CmpStringCaseless
 		lea   rbx, [.ClearHash]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'Ponder'
+
+		lea   rcx, [sz_ponder]
+	       call   CmpStringCaseless
 		lea   rbx, [.Ponder]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'MultiPv'
+
+		lea   rcx, [sz_contempt]
+	       call   CmpStringCaseless
+		lea   rbx, [.Contempt]
+	       test   eax, eax
+		jnz   .CheckValue
+
+		lea   rcx, [sz_multipv]
+	       call   CmpStringCaseless
 		lea   rbx, [.MultiPv]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'Weakness'
+
+		lea   rcx, [sz_weakness]
+	       call   CmpStringCaseless
 		lea   rbx, [.Weakness]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'MoveOverhead'
+
+		lea   rcx, [sz_moveoverhead]
+	       call   CmpStringCaseless
 		lea   rbx, [.MoveOverhead]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'MinThinkTime'
+
+		lea   rcx, [sz_minthinktime]
+	       call   CmpStringCaseless
 		lea   rbx, [.MinThinkTime]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'SlowMover'
+
+		lea   rcx, [sz_slowmover]
+	       call   CmpStringCaseless
 		lea   rbx, [.SlowMover]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'UCI_Chess960'
+
+		lea   rcx, [sz_uci_chess960]
+	       call   CmpStringCaseless
 		lea   rbx, [.Chess960]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'SyzygyPath'
+
+		lea   rcx, [sz_syzygypath]
+	       call   CmpStringCaseless
 		lea   rbx, [.SyzygyPath]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'SyzygyProbeDepth'
+
+		lea   rcx, [sz_syzygyprobedepth]
+	       call   CmpStringCaseless
 		lea   rbx, [.SyzygyProbeDepth]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'Syzygy50MoveRule'
+
+		lea   rcx, [sz_syzygy50moverule]
+	       call   CmpStringCaseless
 		lea   rbx, [.Syzygy50MoveRule]
 	       test   eax, eax
 		jnz   .CheckValue
-	     szcall   CmpStringCaseless, 'SyzygyProbeLimit'
+
+		lea   rcx, [sz_syzygyprobelimit]
+	       call   CmpStringCaseless
 		lea   rbx, [.SyzygyProbeLimit]
 	       test   eax, eax
 		jnz   .CheckValue
@@ -508,7 +554,8 @@ UciSetOption:
 		jmp   UciGetInput
 .CheckValue:
 	       call   SkipSpaces
-	     szcall   CmpString, 'value'
+		lea   rcx, [sz_value]
+	       call   CmpString
 	       test   eax, eax
 		 jz   .Error
 	       call   SkipSpaces
@@ -583,33 +630,273 @@ UciSetOption:
 		mov   dword[options.syzygyProbeLimit], eax
 		jmp   UciGetInput
 .SyzygyPath:
-		lea   rdi, [options.syzygyPath]
-		mov   ecx, 62
-	       call   ParseToEndLine
-		xor   eax, eax
-	       test   ecx, ecx
-		 js   .SyzygyPath_TooLong
-	      stosb
-		lea   rcx, [options.syzygyPath]
+	; find terminator and replace it with zero
+		mov   rcx, rsi
+	@@:	add   rsi, 1
+		cmp   byte[rsi], ' '
+		jae   @b
+		mov   byte[rsi], 0
 	       call   TableBase_Init
 		jmp   UciGetInput
-.SyzygyPath_TooLong:
-		lea   rdi, [Output]
-	     szcall   PrintString, 'error: path is too long'
-		mov   al, 10
-	      stosb
-	       call   _WriteOut_Output
-		jmp   UciGetInput
+
 
 ;;;;;;;;;;;;
 ; *extras*
 ;;;;;;;;;;;;
 
+UciPerft:
+	       call   SkipSpaces
+	       call   ParseInteger
+	       test   eax, eax
+		 jz   .bad_depth
+		cmp   eax, 9
+		 ja   .bad_depth
+		mov   esi, eax
+		mov   ecx, eax
+	       call   Position_SetExtraCapacity
+	       call   _SetRealtimePriority
+		mov   ecx, esi
+	       call   Perft_Root
+	       call   _SetNormalPriority
+		jmp   UciGetInput
+.bad_depth:
+		lea   rdi, [Output]
+	     szcall   PrintString, 'error: bad depth '
+		mov   ecx, 8
+	       call   ParseToken
+		mov   al, 10
+	      stosb
+		jmp   UciWriteOut
 
 
+
+UciBench:
+		mov   r12d, 20	 ; depth
+		mov   r13d, 1	 ; threads
+		mov   r14d, 128  ; hash
+
+.parse_loop:
+	       call   SkipSpaces
+		cmp   byte[rsi], ' '
+		 jb   .parse_done
+
+		lea   rcx, [sz_threads]
+	       call   CmpString
+	       test   eax, eax
+		jnz   .parse_threads
+
+		lea   rcx, [sz_depth]
+	       call   CmpString
+	       test   eax, eax
+		jnz   .parse_depth
+
+		lea   rcx, [sz_hash]
+	       call   CmpString
+	       test   eax, eax
+		 jz   .parse_done
+.parse_hash:
+	       call   SkipSpaces
+	       call   ParseInteger
+      ClampUnsigned   eax, 1, 1 shl MAX_HASH_LOG2MB
+		mov   r14d, eax
+		jmp   .parse_loop
+.parse_threads:
+	       call   SkipSpaces
+	       call   ParseInteger
+      ClampUnsigned   eax, 1, MAX_THREADS
+		mov   r13d, eax
+		jmp   .parse_loop
+.parse_depth:
+	       call   SkipSpaces
+	       call   ParseInteger
+      ClampUnsigned   eax, 1, 40
+		mov   r12d, eax
+		jmp   .parse_loop
+
+.parse_done:
+		mov   ecx, r14d
+		mov   dword[options.hash], r14d
+	       call   MainHash_Allocate
+		mov   dword[options.threads], r13d
+	       call   ThreadPool_ReadOptions
+
+		xor   eax, eax
+		mov   qword[UciLoop.nodes], rax
+		lea   rcx, [DisplayInfo_None]
+		lea   rdx, [DisplayMove_None]
+		mov   qword[options.displayInfoFxn], rcx
+		mov   qword[options.displayMoveFxn], rdx
+	       call   Search_Clear
+
+	       call   _SetRealtimePriority
+
+		xor   r13d, r13d
+		mov   qword[UciLoop.time], r13
+		mov   qword[UciLoop.nodes], r13
+		lea   rsi, [BenchFens]
+.nextpos:
+	       call   SkipSpaces
+	       call   Position_ParseFEN
+		lea   rcx, [UciLoop.limits]
+	       call   Limits_Init
+		lea   rcx, [UciLoop.limits]
+		mov   dword[rcx+Limits.depth], r12d
+	       call   Limits_Set
+		lea   rcx, [UciLoop.limits]
+
+	       call   _GetTime
+		mov   r14, rax
+		lea   rcx, [UciLoop.limits]
+	       call   ThreadPool_StartThinking
+		mov   rcx, qword[threadPool.table+8*0]
+	       call   Thread_WaitForSearchFinished
+	       call   _GetTime
+		sub   r14, rax
+		neg   r14
+	       call   ThreadPool_NodesSearched
+		add   qword[UciLoop.time], r14
+		add   qword[UciLoop.nodes], rax
+		mov   r15, rax
+
+		lea   rdi, [Output]
+		mov   rax, 'nodes:  '
+	      stosq
+		mov   rax, r15
+	       call   PrintUnsignedInteger
+
+		lea   ecx, [rdi-Output-8]
+		and   ecx, 15
+		xor   ecx, 15
+		add   ecx, 8
+		mov   al, ' '
+	  rep stosb
+
+		mov   rcx, r14
+		cmp   r14, 1
+		adc   rcx, 0
+		mov   rax, r15
+		xor   edx, edx
+		div   rcx
+	       call   PrintUnsignedInteger
+		mov   al, ' '
+	      stosb
+		mov   eax, 'knps'
+	      stosd
+		mov   al, 10
+	      stosb
+
+	       call   _WriteOut_Output
+
+		cmp   rsi, BenchFensEnd
+		 jb   .nextpos
+
+	       call   _SetNormalPriority
+
+		lea   rdi, [Output]
+		mov   rax, 'total no'
+	      stosq
+		mov   rax, 'des:    '
+	      stosq
+		mov   rax, qword[UciLoop.nodes]
+	       call   PrintUnsignedInteger
+		mov   eax, '    '
+	      stosd
+		mov   rcx, qword[UciLoop.time]
+		cmp   rcx, 1
+		adc   rcx, 0
+		mov   rax, qword[UciLoop.nodes]
+		xor   edx, edx
+		div   rcx
+	       call   PrintUnsignedInteger
+		mov   al, ' '
+	      stosb
+		mov   eax, 'knps'
+	      stosd
+		mov   al, 10
+	      stosb
+	       call   _WriteOut_Output
+
+		lea   rcx, [DisplayInfo_Uci]
+		lea   rdx, [DisplayMove_Uci]
+		mov   qword[options.displayInfoFxn], rcx
+		mov   qword[options.displayMoveFxn], rdx
+
+
+if PROFILE > 0
+		lea   rdi, [Output]
+
+		lea   r15, [profile.cjmpcounts]
+
+.CountLoop:
+		mov   rax, qword[r15+8*0]
+		 or   rax, qword[r15+8*1]
+		 jz   .CountDone
+
+		lea   rax, [r15-profile.cjmpcounts]
+		shr   eax, 4
+	       call   PrintUnsignedInteger
+		mov   al, ':'
+	      stosb
+		mov   al, 10
+	      stosb
+
+	     szcall   PrintString, '  jmp not taken: '
+		mov   rax, qword[r15+8*0]
+	       call   PrintUnsignedInteger
+		mov   al, 10
+	      stosb
+
+	     szcall   PrintString, '  jmp taken:     '
+		mov   rax, qword[r15+8*1]
+	       call   PrintUnsignedInteger
+		mov   al, 10
+	      stosb
+
+	     szcall   PrintString, '  jmp percent:   '
+	  vcvtsi2sd   xmm0, xmm0, qword[r15+8*0]
+	  vcvtsi2sd   xmm1, xmm1, qword[r15+8*1]
+	     vaddsd   xmm0, xmm0, xmm1
+	     vdivsd   xmm1, xmm1, xmm0
+		mov   eax, 10000
+	  vcvtsi2sd   xmm2, xmm2, eax
+	     vmulsd   xmm1, xmm1, xmm2
+	  vcvtsd2si   eax, xmm1
+		xor   edx, edx
+		mov   ecx, 100
+		div   ecx
+		mov   r12d, edx
+	       call   PrintUnsignedInteger
+		mov   al, '.'
+	      stosb
+		mov   eax, r12d
+		xor   edx, edx
+		mov   ecx, 10
+		div   ecx
+		add   al, '0'
+	      stosb
+		lea   eax, [rdx+'0']
+	      stosb
+		mov   al, '%'
+	      stosb
+		mov   al, 10
+	      stosb
+
+		add   r15, 16
+		jmp   .CountLoop
+
+.CountDone:
+
+		jmp   UciWriteOut
+end if
+
+		jmp   UciGetInput
+
+
+
+
+if VERBOSE > 0
 
 UciDoNull:
-
 		mov   rbx, qword[rbp+Pos.state]
 		mov   rax, qword[rbx+State.checkersBB]
 	       test   rax, rax
@@ -626,36 +913,12 @@ UciDoNull:
 		add   ecx, eax
 	       call   Position_SetExtraCapacity
 		mov   rbx, qword[rbp+Pos.state]
-		mov   word[rbx+State.move+sizeof.State], MOVE_NULL
+		mov   dword[rbx+sizeof.State+State.currentMove], MOVE_NULL
 	       call   Move_DoNull
 		mov   qword[rbp+Pos.state], rbx
 	       call   SetCheckInfo
 		jmp   UciShow
 
-
-
-
-UciPerft:
-	       call   SkipSpaces
-	       call   ParseInteger
-	       test   eax, eax
-		 jz   .bad_depth
-		cmp   eax, 9
-		 ja   .bad_depth
-		mov   esi, eax
-		mov   ecx, eax
-	       call   Position_SetExtraCapacity
-		mov   ecx, esi
-	       call   PerftGen_Root
-		jmp   UciGetInput
-.bad_depth:
-		lea   rdi, [Output]
-	     szcall   PrintString, 'error: bad depth '
-		mov   ecx, 8
-	       call   _ParseToken
-		mov   al, 10
-	      stosb
-		jmp   UciWriteOut
 
 UciShow:
 		lea   rdi, [Output]
@@ -667,14 +930,13 @@ UciUndo:
 		mov   rbx, qword[rbp+Pos.state]
 	       call   SkipSpaces
 	       call   ParseInteger
+		sub   eax, 1
+		adc   eax, 0
 		mov   r15d, eax
-		cmp   r15d, 1
-		adc   r15d, 0
-		sub   r15d, 1
 .Undo:
 		cmp   rbx, qword[rbp+Pos.stateTable]
 		jbe   UciShow
-	      movzx   ecx, word[rbx+State.move]
+		mov   ecx, dword[rbx+State.currentMove]
 	       call   Move_Undo
 		sub   r15d, 1
 		jns   .Undo
@@ -684,7 +946,6 @@ UciUndo:
 UciMoves:
 	       call   UciParseMoves
 		jmp   UciShow
-
 
 
 
@@ -723,7 +984,7 @@ UciEval:
 	      stosb
 		jmp   UciWriteOut
 
-
+end if
 
 
 match =1, PROFILE {
@@ -761,200 +1022,3 @@ UciProfile:
 		jmp   UciWriteOut
 
 }
-
-UciBench:
-	       call   SkipSpaces
-	       call   ParseInteger
-		mov   r12d, 20		; default depth
-		lea   ecx, [rax-1]
-		cmp   ecx, MAX_PLY-20
-	      cmovb   r12d, eax
-
-		xor   eax, eax
-		mov   qword[UciLoop.nodes], rax
-		lea   rcx, [DisplayInfo_None]
-		lea   rdx, [DisplayMove_None]
-		mov   qword[options.displayInfoFxn], rcx
-		mov   qword[options.displayMoveFxn], rdx
-	       call   Search_Clear
-
-		sub   rsp, 8*4
-	       call   qword[__imp_GetCurrentProcess]
-		mov   rcx, rax
-		mov   edx, REALTIME_PRIORITY_CLASS
-	       call   qword[__imp_SetPriorityClass]
-		add   rsp, 8*4
-
-		xor   r13d, r13d
-		mov   qword[UciLoop.time], r13
-		mov   qword[UciLoop.nodes], r13
-.nextpos:
-		mov   rsi, [.bench_fen_tab+8*r13]
-	       call   Position_ParseFEN
-		lea   rcx, [UciLoop.limits]
-	       call   Limits_Init
-		lea   rcx, [UciLoop.limits]
-		mov   dword[rcx+Limits.depth], r12d
-	       call   Limits_Set
-		lea   rcx, [UciLoop.limits]
-
-	       call   _GetTime
-		mov   r14, rax
-		lea   rcx, [UciLoop.limits]
-	       call   ThreadPool_StartThinking
-		lea   rcx, [mainThread]
-	       call   Thread_WaitForSearchFinished
-	       call   _GetTime
-		sub   r14, rax
-		neg   r14
-	       call   ThreadPool_NodesSearched
-		add   qword[UciLoop.time], r14
-		add   qword[UciLoop.nodes], rax
-		mov   r15, rax
-
-		lea   rdi, [Output]
-		mov   rax, 'nodes:  '
-	      stosq
-		mov   rax, r15
-	       call   PrintUnsignedInteger
-		mov   eax, '    '
-	      stosd
-		mov   rcx, r14
-		cmp   r14, 1
-		adc   rcx, 0
-		mov   rax, r15
-		xor   edx, edx
-		div   rcx
-	       call   PrintUnsignedInteger
-		mov   al, ' '
-	      stosb
-		mov   eax, 'knps'
-	      stosd
-		mov   al, 10
-	      stosb
-	       call   _WriteOut_Output
-
-		add   r13d, 1
-		cmp   r13d, 30
-		 jb   .nextpos
-
-		sub   rsp, 8*4
-	       call   qword[__imp_GetCurrentProcess]
-		mov   rcx, rax
-		mov   edx, NORMAL_PRIORITY_CLASS
-	       call   qword[__imp_SetPriorityClass]
-		add   rsp, 8*4
-
-		lea   rdi, [Output]
-		mov   rax, 'total no'
-	      stosq
-		mov   rax, 'des:    '
-	      stosq
-		mov   rax, qword[UciLoop.nodes]
-	       call   PrintUnsignedInteger
-		mov   eax, '    '
-	      stosd
-		mov   rcx, qword[UciLoop.time]
-		cmp   rcx, 1
-		adc   rcx, 0
-		mov   rax, qword[UciLoop.nodes]
-		xor   edx, edx
-		div   rcx
-	       call   PrintUnsignedInteger
-		mov   al, ' '
-	      stosb
-		mov   eax, 'knps'
-	      stosd
-		mov   al, 10
-	      stosb
-	       call   _WriteOut_Output
-
-		lea   rcx, [DisplayInfo_Uci]
-		lea   rdx, [DisplayMove_Uci]
-		mov   qword[options.displayInfoFxn], rcx
-		mov   qword[options.displayMoveFxn], rdx
-		jmp   UciGetInput
-
-align 8
-.bench_fen_tab:
-dq .bench_fen00
-dq .bench_fen01
-dq .bench_fen02
-dq .bench_fen03
-dq .bench_fen04
-dq .bench_fen05
-dq .bench_fen06
-dq .bench_fen07
-dq .bench_fen08
-dq .bench_fen09
-dq .bench_fen10
-dq .bench_fen11
-dq .bench_fen12
-dq .bench_fen13
-dq .bench_fen14
-dq .bench_fen15
-dq .bench_fen16
-dq .bench_fen17
-dq .bench_fen18
-dq .bench_fen19
-dq .bench_fen20
-dq .bench_fen21
-dq .bench_fen22
-dq .bench_fen23
-dq .bench_fen24
-dq .bench_fen25
-dq .bench_fen26
-dq .bench_fen27
-dq .bench_fen28
-dq .bench_fen29
-dq .bench_fen30
-dq .bench_fen31
-dq .bench_fen32
-dq .bench_fen33
-dq .bench_fen34
-dq .bench_fen35
-dq .bench_fen36
-
-
-
-.bench_fen00 db "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",0
-.bench_fen01 db "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 10",0
-.bench_fen02 db "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 11",0
-.bench_fen03 db "4rrk1/pp1n3p/3q2pQ/2p1pb2/2PP4/2P3N1/P2B2PP/4RRK1 b - - 7 19",0
-.bench_fen04 db "rq3rk1/ppp2ppp/1bnpb3/3N2B1/3NP3/7P/PPPQ1PP1/2KR3R w - - 7 14",0
-.bench_fen05 db "r1bq1r1k/1pp1n1pp/1p1p4/4p2Q/4Pp2/1BNP4/PPP2PPP/3R1RK1 w - - 2 14",0
-.bench_fen06 db "r3r1k1/2p2ppp/p1p1bn2/8/1q2P3/2NPQN2/PPP3PP/R4RK1 b - - 2 15",0
-.bench_fen07 db "r1bbk1nr/pp3p1p/2n5/1N4p1/2Np1B2/8/PPP2PPP/2KR1B1R w kq - 0 13",0
-.bench_fen08 db "r1bq1rk1/ppp1nppp/4n3/3p3Q/3P4/1BP1B3/PP1N2PP/R4RK1 w - - 1 16",0
-.bench_fen09 db "4r1k1/r1q2ppp/ppp2n2/4P3/5Rb1/1N1BQ3/PPP3PP/R5K1 w - - 1 17",0
-.bench_fen10 db "2rqkb1r/ppp2p2/2npb1p1/1N1Nn2p/2P1PP2/8/PP2B1PP/R1BQK2R b KQ - 0 11",0
-.bench_fen11 db "r1bq1r1k/b1p1npp1/p2p3p/1p6/3PP3/1B2NN2/PP3PPP/R2Q1RK1 w - - 1 16",0
-.bench_fen12 db "3r1rk1/p5pp/bpp1pp2/8/q1PP1P2/b3P3/P2NQRPP/1R2B1K1 b - - 6 22",0
-.bench_fen13 db "r1q2rk1/2p1bppp/2Pp4/p6b/Q1PNp3/4B3/PP1R1PPP/2K4R w - - 2 18",0
-.bench_fen14 db "4k2r/1pb2ppp/1p2p3/1R1p4/3P4/2r1PN2/P4PPP/1R4K1 b - - 3 22",0
-.bench_fen15 db "3q2k1/pb3p1p/4pbp1/2r5/PpN2N2/1P2P2P/5PP1/Q2R2K1 b - - 4 26",0
-.bench_fen16 db "6k1/6p1/6Pp/ppp5/3pn2P/1P3K2/1PP2P2/3N4 b - - 0 1",0
-.bench_fen17 db "3b4/5kp1/1p1p1p1p/pP1PpP1P/P1P1P3/3KN3/8/8 w - - 0 1",0
-.bench_fen18 db "2K5/p7/7P/5pR1/8/5k2/r7/8 w - - 0 1",0
-.bench_fen19 db "8/6pk/1p6/8/PP3p1p/5P2/4KP1q/3Q4 w - - 0 1",0
-.bench_fen20 db "7k/3p2pp/4q3/8/4Q3/5Kp1/P6b/8 w - - 0 1",0
-.bench_fen21 db "8/2p5/8/2kPKp1p/2p4P/2P5/3P4/8 w - - 0 1",0
-.bench_fen22 db "8/1p3pp1/7p/5P1P/2k3P1/8/2K2P2/8 w - - 0 1",0
-.bench_fen23 db "8/pp2r1k1/2p1p3/3pP2p/1P1P1P1P/P5KR/8/8 w - - 0 1",0
-.bench_fen24 db "8/3p4/p1bk3p/Pp6/1Kp1PpPp/2P2P1P/2P5/5B2 b - - 0 1",0
-.bench_fen25 db "5k2/7R/4P2p/5K2/p1r2P1p/8/8/8 b - - 0 1",0
-.bench_fen26 db "6k1/6p1/P6p/r1N5/5p2/7P/1b3PP1/4R1K1 w - - 0 1",0
-.bench_fen27 db "1r3k2/4q3/2Pp3b/3Bp3/2Q2p2/1p1P2P1/1P2KP2/3N4 w - - 0 1",0
-.bench_fen28 db "6k1/4pp1p/3p2p1/P1pPb3/R7/1r2P1PP/3B1P2/6K1 w - - 0 1",0
-.bench_fen29 db "8/3p3B/5p2/5P2/p7/PP5b/k7/6K1 w - - 0 1",0
-  ; 5-man positions
-.bench_fen30 db "8/8/8/8/5kp1/P7/8/1K1N4 w - - 0 1",0	  ; Kc2 - mate
-.bench_fen31 db "8/8/8/5N2/8/p7/8/2NK3k w - - 0 1",0	  ; Na2 - mate
-.bench_fen32 db "8/3k4/8/8/8/4B3/4KB2/2B5 w - - 0 1",0	  ; draw
-  ; 6-man positions
-.bench_fen33 db "8/8/1P6/5pr1/8/4R3/7k/2K5 w - - 0 1",0   ; Re5 - mate
-.bench_fen34 db "8/2p4P/8/kr6/6R1/8/8/1K6 w - - 0 1",0	  ; Ka2 - mate
-.bench_fen35 db "8/8/3P3k/8/1p6/8/1P6/1K3n2 b - - 0 1",0  ; Nd2 - draw
-  ; 7-man positions
-.bench_fen36 db "8/R7/2q5/8/6k1/8/1P5p/K6R w - - 0 124",0  ; Draw
-

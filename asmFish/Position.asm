@@ -8,8 +8,8 @@ Position_SetState:
 
 		mov   rax, qword[Zobrist_side]
 		mov   r15d, dword[rbp+Pos.sideToMove]
-	      movzx   ecx, byte[rbx+State.epSquare]
-	      movzx   edx, byte[rbx+State.castlingRights]
+	      movzx   ecx, byte[rbx+State._epSquare]
+	      movzx   edx, byte[rbx+State._castlingRights]
 		neg   r15
 		and   r15, qword[Zobrist_side]
 		xor   r15, qword[Zobrist_Castling+8*rdx]
@@ -69,7 +69,7 @@ Position_SetState:
 		ret
 
 
-
+if DEBUG > 0
 Position_VerifyState:
 	; in:  rbp  address of Pos
 	; out: eax =  0 if incrementally updated information is correct
@@ -81,8 +81,8 @@ Position_VerifyState:
 
 		mov   rax, qword[Zobrist_side]
 		mov   r15d, dword[rbp+Pos.sideToMove]
-	      movzx   ecx, byte[rbx+State.epSquare]
-	      movzx   edx, byte[rbx+State.castlingRights]
+	      movzx   ecx, byte[rbx+State._epSquare]
+	      movzx   edx, byte[rbx+State._castlingRights]
 		neg   r15
 		and   r15, qword[Zobrist_side]
 		xor   r15, qword[Zobrist_Castling+8*rdx]
@@ -151,6 +151,7 @@ Position_VerifyState:
 		add   rsp, 64
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
+end if
 
 
 
@@ -163,14 +164,12 @@ Position_IsLegal:
 
 	       push   rbx rdi
 
-		lea   rdi,[.szErrorDisjoint]
 		mov   rax, qword[rbp+Pos.typeBB+8*White]
 		and   rax, qword[rbp+Pos.typeBB+8*Black]
 		jnz   .Failed
 
 
 .VerifyKings:
-		lea   rdi,[.szErrorKings]
 		mov   rax, qword [rbp+Pos.typeBB+8*White]
 		and   rax, qword [rbp+Pos.typeBB+8*King]
 	     popcnt   rax, rax, r8
@@ -184,13 +183,11 @@ Position_IsLegal:
 
 
 .VerifyPawns:
-		lea   rdi,[.szErrorPawns]
 		mov   rax, 0xFF000000000000FF
 	       test   rax, qword [rbp+Pos.typeBB+8*Pawn]
 		jnz   .Failed
 
 .VerifyPieces:
-		lea   rdi,[.szErrorPieces]
 		mov   rcx, qword [rbp+Pos.typeBB+8*White]
 		mov   r9, rcx
 		and   rcx, qword [rbp+Pos.typeBB+8*King]
@@ -225,11 +222,6 @@ irps p, Pawn Knight Bishop Rook Queen {
 		jne   .Failed
 
 
-
-
-
-
-		lea   rdi, [.szErrorBoardMatch]
 		xor   edx, edx
 .VerifyBoard:
 	      movzx   eax, byte[rbp+Pos.board+rdx]
@@ -265,10 +257,8 @@ irps p, Pawn Knight Bishop Rook Queen {
 		cmp   edx, 64
 		 jb   .VerifyBoard
 
-
 .VerifyEp:
-		lea   rdi, [.szErrorEpSquare]
-	      movzx   ecx, byte [rbx+State.epSquare]
+	      movzx   ecx, byte [rbx+State._epSquare]
 		cmp   ecx, 64
 		jae   .VerifyEpDone
 		mov   rax, Rank3BB+Rank6BB
@@ -304,7 +294,6 @@ irps p, Pawn Knight Bishop Rook Queen {
 
 .VerifyKingCapture:
 	; make sure we can't capture their king
-		lea   rdi, [.szErrorKingCapture]
 	      movzx   ecx, byte [rbp+Pos.sideToMove]
 		xor   ecx, 1
 		mov   rdx, qword [rbp+Pos.typeBB+8*King]
@@ -314,52 +303,39 @@ irps p, Pawn Knight Bishop Rook Queen {
 	       test   rax, rax
 		jnz   .Failed
 
+if DEBUG > 0
 	; make sure the state matches
-	;       lea   rdi, [.szErrorState]
-	;       call   Position_VerifyState
-	;       test   eax, eax
-	;        jz   .Failed
+	       call   Position_VerifyState
+	       test   eax, eax
+		jz   .Failed
+end if
 
-.Done:
-		lea   rdx, [.szOK]
 		xor   eax, eax
 		pop   rdi rbx
 		ret
 .Failed:
-		mov   rdx, rdi
 		 or   eax, -1
 		pop   rdi rbx
 		ret
 
- .szOK	  db 'ok',10,0
- .szErrorDisjoint      db 'not disjoint',10,0
- .szErrorKings	       db 'king count',10,0
- .szErrorPawns	       db 'pawns on 1st or 8th',10,0
- .szErrorCastling      db 'castling',10,0
- .szErrorBoardMatch    db 'bitboards do not match',10,0
- .szErrorEpSquare      db 'ep square',10,0
- .szErrorPieces        db 'pieces',10,0
- .szErrorPieces2       db 'pieces2',10,0
- .szErrorKingCapture   db 'king capture',10,0
- .szErrorState	       db 'state',10,0
+; .szOK    db 'ok',10,0
+; .szErrorDisjoint      db 'not disjoint',10,0
+; .szErrorKings         db 'king count',10,0
+; .szErrorPawns         db 'pawns on 1st or 8th',10,0
+; .szErrorCastling      db 'castling',10,0
+; .szErrorBoardMatch    db 'bitboards do not match',10,0
+; .szErrorEpSquare      db 'ep square',10,0
+; .szErrorPieces        db 'pieces',10,0
+; .szErrorPieces2       db 'pieces2',10,0
+; .szErrorKingCapture   db 'king capture',10,0
+; .szErrorState         db 'state',10,0
 
 
 
 
 ;;;;;;;;;;;;;; fen ;;;;;;;;;;;;;;;;;;
 
-
-WriteOutPosition:
-       push  rdi
-	lea  rdi, [Output]
-       call  Position_Print
-	mov  al, 10
-      stosb
-       call   _WriteOut_Output
-	pop  rdi
-	ret
-
-
+if VERBOSE> 0
 Position_Print:  ; in: rbp address of Pos
 		 ; io: rdi string
 
@@ -377,11 +353,11 @@ end virtual
 
 		xor   ecx, ecx
 	@@:	xor   ecx, 0111000b
-	      movzx   eax, byte [rbp+Pos.board+rcx]
+	      movzx   eax, byte[rbp+Pos.board+rcx]
 		mov   edx, '  ' + (10 shl 16)
-		mov   dl, byte [PieceToChar+rax]
+		mov   dl, byte[PieceToChar+rax]
 		mov   eax, '* ' + (10 shl 16)
-		cmp   cl, byte [rbx+State.epSquare]
+		cmp   cl, byte[rbx+State._epSquare]
 	     cmovne   eax, edx
 	      stosd
 		xor   ecx, 0111000b
@@ -392,7 +368,6 @@ end virtual
 		add   ecx, 1
 		cmp   ecx, 64
 		 jb   @b
-
 
 	     szcall   PrintString, 'white:     '
 		mov   rcx, qword[rbp+Pos.typeBB+8*0]
@@ -466,12 +441,13 @@ end virtual
 	      stosw
 
 	     szcall   PrintString, 'castlingRights: '
-	      movzx   ecx, byte[rbx+State.castlingRights]
+	      movzx   ecx, byte[rbx+State._castlingRights]
 		mov   byte[rdi], '-'
 		cmp   ecx, 1
 		adc   rdi, 0
 		mov   eax, 'KQkq'
 		mov   edx, dword[castling_rfrom]
+		and   edx, 0x07070707
 		add   edx, 'AAaa'
 		cmp   byte[rbp+Pos.chess960], 0
 	     cmovne   eax, edx
@@ -485,26 +461,26 @@ end virtual
 	      stosb
 
 	     szcall   PrintString, 'epSquare:       '
-	      movzx   ecx, byte [rbx+State.epSquare]
+	      movzx   ecx, byte[rbx+State._epSquare]
 	       call   PrintSquare
 		mov   al, 10
 	      stosb
 
 	     szcall   PrintString, 'rule50:         '
-	      movzx   rax, byte [rbx+State.rule50]
+	      movzx   rax, word[rbx+State._rule50]
 	       call   PrintUnsignedInteger
 		mov   al, 10
 	      stosb
 
 	     szcall   PrintString, 'pliesFromNull:  '
-	      movzx   rax, byte [rbx+State.pliesFromNull]
+	      movzx   rax, word[rbx+State._pliesFromNull]
 	       call   PrintUnsignedInteger
 		mov   al, 10
 	      stosb
 
 	     szcall   PrintString, 'capturedPiece:  '
-	      movzx   eax, byte [rbx+State.capturedPiece]
-		mov   al, byte [PieceToChar+rax]
+	      movzx   eax, byte[rbx+State._capturedPiece]
+		mov   al, byte[PieceToChar+rax]
 	      stosb
 		mov   al, 10
 	      stosb
@@ -516,13 +492,13 @@ end virtual
 	      stosb
 
 	     szcall   PrintString, 'pawnKey:        '
-		mov   rcx, qword [rbx+State.pawnKey]
+		mov   rcx, qword[rbx+State.pawnKey]
 	       call   PrintAddress
 		mov   al, 10
 	      stosb
 
 	     szcall   PrintString, 'materialKey:    '
-		mov   rcx, qword [rbx+State.materialKey]
+		mov   rcx, qword[rbx+State.materialKey]
 	       call   PrintAddress
 		mov   al, 10
 	      stosb
@@ -592,16 +568,19 @@ end virtual
 	      stosq
 		jmp   .MoveList
 .MoveListDone:
+
 		mov   al, 10
 	      stosb
 
 		add   rsp, .localsize
 		pop   r15 r14 r13 rsi rbx
 		ret
+end if
 
 
 
-match =1, DEBUG {
+
+if DEBUG > 0
 Position_PrintSmall:
 	; in: rbp address of Pos
 	; io: rdi string
@@ -619,11 +598,11 @@ Position_PrintSmall:
 
 		xor   ecx, ecx
 	@@:	xor   ecx, 0111000b
-	      movzx   eax, byte [rbp+Pos.board+rcx]
+	      movzx   eax, byte[rbp+Pos.board+rcx]
 		mov   edx, '  ' + (10 shl 16)
-		mov   dl, byte [PieceToChar+rax]
+		mov   dl, byte[PieceToChar+rax]
 		mov   eax, '* ' + (10 shl 16)
-		cmp   cl, byte [rbx+State.epSquare]
+		cmp   cl, byte[rbx+State._epSquare]
 	     cmovne   eax, edx
 	      stosd
 		xor   ecx, 0111000b
@@ -637,7 +616,7 @@ Position_PrintSmall:
 
 		pop   r15 r14 r13 rsi rbx
 		ret
-}
+end if
 
 
 ;;;;;;;;;;;;;;;
@@ -763,26 +742,30 @@ Position_ParseFEN:
 	      lodsb
 		cmp   al, '-'
 		 je   .EpSquare
-     @@:
-		xor   edx, edx
-	      movzx   ecx, byte[ToLowerCase+rax]
-		cmp   eax, ecx
-		adc   edx, edx
-		xor   edx, 1	 ; edx = color
+.NextCastlingChar:
+		mov   edx, 1
+		mov   ecx, eax
+		sub   eax, 'A'
+		cmp   eax, 'Z'-'A' + 1
+		jae   .Lower
+		add   ecx, ('a'-'A')
+		sub   edx, 1
+	.Lower:
 	       call   SetCastlingRights
 	       test   eax, eax
 		jnz   .Failed
 		xor   eax, eax
 	      lodsb
 		cmp   al, ' '
-		jne   @b
+		jne   .NextCastlingChar
 
 .EpSquare:
 	       call   SkipSpaces
 	       call   ParseSquare
-		mov   byte[rbx+State.epSquare], al
+		mov   byte[rbx+State._epSquare], al
 		cmp   eax, 64
-		jae   .FiftyMoves
+		 je   .FiftyMoves
+		 ja   .Failed
 
 		mov   rdx, qword[rbp+Pos.typeBB+8*Pawn]
 		mov   ecx, dword[rbp+Pos.sideToMove]
@@ -790,20 +773,20 @@ Position_ParseFEN:
 		xor   ecx, 1
 		shl   ecx, 6+3
 	       test   rdx, qword[PawnAttacks+rcx+8*rax]
-		jnz   .FiftyMoves
-		mov   byte[rbx+State.epSquare], 64
+		jnz   .FiftyMoves			  ; or .Failed
+		mov   byte[rbx+State._epSquare], 64
 
 .FiftyMoves:
 	       call   SkipSpaces
 	       call   ParseInteger
-		mov   byte[rbx+State.rule50], al
+		mov   word[rbx+State._rule50], ax
 
 .MoveNumber:
 	       call   SkipSpaces
 	       call   ParseInteger
 		sub   eax, 1
 		adc   eax, 0
-		shl   eax, 1
+		add   eax, eax
 		add   eax, dword[rbp+Pos.sideToMove]
 		mov   dword[rbp+Pos.gamePly], eax
 
@@ -820,8 +803,6 @@ Position_ParseFEN:
 .Failed:
 		 or   eax, -1
 		jmp   .done
-
-
 
 .alloc:
 		mov   ecx, 64*sizeof.State
@@ -882,13 +863,13 @@ SetCastlingRights:
 
 	; r8 = rook to
 	; r9 = king to
-	      movzx   r8d, byte[.rsquare_lookup+r15]
-	      movzx   r9d, byte[.ksquare_lookup+r15]
+	      movzx   r8d, byte[rsquare_lookup+r15]
+	      movzx   r9d, byte[ksquare_lookup+r15]
 
 	; set castling rights
-	      movzx   eax, byte[rbx+State.castlingRights]
+	      movzx   eax, byte[rbx+State._castlingRights]
 		bts   eax, r15d
-		mov   byte[rbx+State.castlingRights], al
+		mov   byte[rbx+State._castlingRights], al
 
 	; set masks
 	      movzx   eax, byte[castling_rightsMask+rsi]
@@ -931,7 +912,6 @@ SetCastlingRights:
 		jmp   .king_loop
 .king_loop_done:
 
-
 		mov   r12, rsi
 		mov   r13, r8
 		cmp   r12, r13
@@ -953,11 +933,11 @@ SetCastlingRights:
 		mov   qword[castling_path+8*r15], rax
 
 	; set castling move
-		mov   eax, MOVE_TYPE_CASTLE
+		mov   eax, _MOVE_TYPE_CASTLE
 		shl   eax, 6
 		add   eax, edi
 		shl   eax, 6
-		add   eax, r9d
+		add   eax, esi
 		mov   dword[castling_movgen+4*r15], eax
 
 		xor   eax, eax
@@ -969,16 +949,13 @@ SetCastlingRights:
 		jmp   .done
 
 
-.find_rook_sq:		cmp   esi, 64
+.find_rook_sq:
+		cmp   esi, 64
 		jae   .failed
 		cmp   r8l, byte[rbp+Pos.board+rsi]
 		 je   .have_rook_sq
 		add   esi, r9d
 		jmp   .find_rook_sq
-
-
-.rsquare_lookup:  db SQ_F1, SQ_D1, SQ_F8, SQ_D8
-.ksquare_lookup:  db SQ_G1, SQ_C1, SQ_G8, SQ_C8
 
 
 
@@ -1042,7 +1019,7 @@ Position_PrintFen:
 	      stosw
 
 	; castling
-	      movzx   ecx, byte[rbx+State.castlingRights]
+	      movzx   ecx, byte[rbx+State._castlingRights]
 		mov   byte[rdi], '-'
 		cmp   ecx, 1
 		adc   rdi, 0
@@ -1061,13 +1038,13 @@ Position_PrintFen:
 	; ep
 		mov   eax, ' '
 	      stosb
-	      movzx   rcx, byte[rbx+State.epSquare]
+	      movzx   rcx, byte[rbx+State._epSquare]
 	       call   PrintSquare
 
 	; 50 moves
 		mov   eax, ' '
 	      stosb
-	      movzx   eax, byte[rbx+State.rule50]
+	      movzx   eax, word[rbx+State._rule50]
 	       call   PrintUnsignedInteger
 
 	; ply
@@ -1131,12 +1108,6 @@ Position_CopyTo:
 		cmp   rcx, r14
 		 jb   .realloc
 
-	; also, if rcx/2 > max(2*r14,64), realloc to save space
-		cmp   rcx, 64*sizeof.State
-		jbe   .copy_states
-		shr   rcx, 1
-		cmp   rcx, r14
-		 ja   .realloc
 .copy_states:
 	; copy State elements
 		mov   rcx, r14
@@ -1191,21 +1162,29 @@ Position_CopyToSearch:
 	; if rcx < MAX_PLY+102, we need to realloc
 		mov   rcx, qword[r13+Pos.stateEnd]
 		sub   rcx, r9
-		cmp   rcx, sizeof.State*(102+MAX_PLY)
+		cmp   rcx, sizeof.State*(100+MAX_PLY+2)
 		 jb   .realloc
 .copy_states:
 	; r9 = address of its state table
 	; r8 = address of our state table
 		mov   r8, qword[rbp+Pos.stateTable]
 
-		mov   r10, [rbp+Pos.state]
+		mov   r10, qword[rbp+Pos.state]
 		lea   r11, [r9+100*sizeof.State]
 		mov   qword[r13+Pos.state], r11
+		mov   edx, 100
 .loop:
 		mov   rsi, r10
 		mov   rdi, r11
 		mov   ecx, sizeof.State/8
 	  rep movsq
+	; make sure that pliesFromNull never references a state past the beginning
+	;  we don't want to fall of the cliff when checking 50 move rule
+	      movzx   eax, word[r11+State._pliesFromNull]
+		cmp   eax, edx
+	      cmova   eax, edx
+		mov   word[r11+State._pliesFromNull], ax
+
 		sub   r10, sizeof.State
 		sub   r11, sizeof.State
 		cmp   r11, r9
@@ -1220,11 +1199,11 @@ Position_CopyToSearch:
 		mov   rcx, r9
 	       call   _VirtualFree
 .alloc:
-		mov   ecx, sizeof.State*(102+MAX_PLY)
+		mov   ecx, sizeof.State*(100+MAX_PLY+2)
 	       call   _VirtualAlloc
 		mov   r9, rax
 		mov   qword[r13+Pos.stateTable], rax
-		lea   rax, [rax+sizeof.State*(102+MAX_PLY)]
+		lea   rax, [rax+sizeof.State*(100+MAX_PLY+2)]
 		mov   qword[r13+Pos.stateEnd], rax
 		jmp   .copy_states
 

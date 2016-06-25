@@ -127,14 +127,14 @@ local .Outer,.OuterDone,.Inner,.InnerDone
 		bsf   rdx, rsi
  if (Type in <CAPTURES, EVASIONS, NON_EVASIONS>)
 	       imul   eax, edx, 65
-		add   eax, 64*64*(MOVE_TYPE_PROM+3) - 64*Delta
+		add   eax, 64*64*(_MOVE_TYPE_PROM+3) - 64*Delta
 		mov   dword[rdi], eax
 		lea   rdi, [rdi+sizeof.ExtMove]
  end if
 
  if (Type in <QUIETS, EVASIONS, NON_EVASIONS>)
 	       imul   eax, edx, 65
-		add   eax, 64*64*(MOVE_TYPE_PROM+2) - 64*Delta
+		add   eax, 64*64*(_MOVE_TYPE_PROM+2) - 64*Delta
 		mov   dword[rdi+0*sizeof.ExtMove], eax
 		sub   eax, 64*64*(1)
 		mov   dword[rdi+1*sizeof.ExtMove], eax
@@ -148,7 +148,7 @@ local .Outer,.OuterDone,.Inner,.InnerDone
 	       imul   eax, edx, 65
 	       test   rcx, qword[KnightAttacks+8*rdx]
 		 jz   .InnerDone
-		add   eax, 64*64*(MOVE_TYPE_PROM+0) - 64*Delta
+		add   eax, 64*64*(_MOVE_TYPE_PROM+0) - 64*Delta
 		mov   dword[rdi], eax
 		lea   rdi, [rdi+sizeof.ExtMove]
 
@@ -364,7 +364,7 @@ end if
     .DoublePush:
 		bsf   rax, .b2
 	       imul   eax, (1 shl 6) + (1 shl 0)
-		add   eax, (MOVE_TYPE_DPAWN shl 12) - ((Up+Up) shl 6)
+		sub   eax, ((Up+Up) shl 6)
 		mov   dword[rdi], eax
 		lea   rdi, [rdi+sizeof.ExtMove]
 	       blsr   .b2, .b2, rcx
@@ -422,7 +422,7 @@ end if
 		jnz   .CaptureLeft
     .CaptureLeftDone:
 
-	      movzx   edx, byte [rbx+State.epSquare]
+	      movzx   edx, byte[rbx+State._epSquare]
 		lea   eax, [rdx-Up]
 		cmp   edx, 64
 		jae   .EpDone
@@ -434,7 +434,7 @@ end if
 	end if
 
   attacks_from_pawn   Them, .b1, rdx
-		 or   edx, MOVE_TYPE_EPCAP shl 12
+		 or   edx, _MOVE_TYPE_EPCAP shl 12
 		and   .b1, .pawnsNotOn7
 		jnz   .CaptureEp
     .CaptureEpDone:
@@ -592,7 +592,7 @@ else
  end if
 
 .CastlingOODone:
-	      movzx   eax, byte[rbx+State.castlingRights]
+	      movzx   eax, byte[rbx+State._castlingRights]
 		mov   rcx, qword[castling_path+8*(2*Us+1)]
 		and   eax, 2 shl (2*Us)
 		xor   eax, 2 shl (2*Us)
@@ -673,7 +673,7 @@ generate_pawn_moves   Us, Type
 
 if Type in <CAPTURES, EVASIONS>
 else
-	      movzx   r9d, byte[rbx+State.castlingRights]
+	      movzx   r9d, byte[rbx+State._castlingRights]
 
 		mov   r10, qword[castling_path+8*(2*Us+0)]
 		mov   r11, qword[castling_path+8*(2*Us+1)]

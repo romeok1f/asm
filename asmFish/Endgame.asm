@@ -837,7 +837,7 @@ SD_Int rax
 		cmp   eax, edx
 		jge   .8
 	       imul   eax, bksq, 64
-	      movzx   eax, byte[SquareDistance+rax+wksq_]
+	      movzx   eax, byte[SquareDistance+rax+wrsq_]
 		add   eax, ecx
 		cmp   eax, 3
 		jge   @f
@@ -1533,11 +1533,14 @@ weakKingSq equ r10d
 pawnSq_     equ r8
 bishopSq_   equ r9
 weakKingSq_ equ r10
+	       push   rsi
+		mov   esi, ecx
+		shl   esi, 6+3
 		mov   r8, qword[rbp+Pos.typeBB+8*rcx]
+		mov   r11, r8
 		xor   ecx, 1
 		and   r8, qword[rbp+Pos.typeBB+8*Pawn]
 		mov   r9, qword[rbp+Pos.typeBB+8*rcx]
-		mov   r11, r8
 		 or   r11, r9
 		mov   r10, qword[rbp+Pos.typeBB+8*King]
 		and   r10, r9
@@ -1545,18 +1548,20 @@ weakKingSq_ equ r10
 		bsf   r8, r8
 		bsf   r9, r9
 		bsf   r10, r10
-		xor   ecx, 1
-		shl   ecx, 6+3
       BishopAttacks   rax, bishopSq_, r11, rdx
-	       test   rax, qword[ForwardBB+rcx+8*pawnSq_]
+	       test   rax, qword[ForwardBB+rsi+8*pawnSq_]
 		jnz   @f
 		mov   eax, SCALE_FACTOR_NONE
+SD_String db 'KNPKB scale: '
+SD_Int rax
+		pop   rsi
 		ret
 @@:
 	       imul   eax, weakKingSq, 64
 	      movzx   eax, byte[SquareDistance+rax+pawnSq_]
 SD_String db 'KNPKB scale: '
 SD_Int rax
+		pop   rsi
 		ret
 restore pawnSq
 restore bishopSq
