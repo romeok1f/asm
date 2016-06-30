@@ -19,7 +19,7 @@ Any help with this issue would be appreciated.
   - attempt to make asmFish functionally identical to c++ masterFish without piecelists
     - castling is now encoded as kingXrook
     - double pawn moves now do not have a special encoding, which affects IsPseudoLegal function
-    - if piece lists were always sorted from low to high in the master, then we have the functionally of asmFish
+    - if piece lists were always sorted from low to high in master, then we have asmFish
     - there are three other places with VERY minor functional changes, only affecting evaluation
   - syzygy path now has no length limit
   - fix crash when thinking about a position that is mate
