@@ -15,6 +15,17 @@ Simply stating that asmFish crashed in your gui is useless information by itself
 asmFish is known to have problems in the fritz15 gui, while it plays much better in the fritz11 gui.
 Any help with this issue would be appreciated.
 
+2016-07-02:
+  - add numa awareness
+    - each numa node gets its own cmh table
+    - see function ThreadIdxToNode in Thread.asm for thread to node allocation
+    - code should also work on older windows systems with out the numa functions
+    - this code is currently untested on numa systems
+  - fixed bug in wdl tablebase filtering
+  - added debug compile 
+  - added hard exits when a critical OS function fails
+  - created threads get 0.5 MB of commited stack space to combat a strange bug in XP
+
 2016-06-25:
   - attempt to make asmFish functionally identical to c++ masterFish without piecelists
     - castling is now encoded as kingXrook
