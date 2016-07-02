@@ -75,6 +75,19 @@ local ..Lower
 		add   x, 'A'
 }
 
+macro print description,number
+{ 
+   display description 
+   value=number 
+   pos=100000
+   repeat 6
+      digit=value/pos 
+      value=value-(digit*pos) 
+      pos=pos/10 
+      display ('0'+digit) 
+   end repeat 
+   display $d,$a 
+}
 
 
 ; use this macro if you are too lazy to touch beforehand the required amount of stack
@@ -84,6 +97,8 @@ local ..Lower
 ;  so touch the pages up to it
 STACK_PAGE_SIZE = 4096
 macro _chkstk_ms stackptr, size {
+;        print 'local size = ', size
+
 	repeat (size+8) / STACK_PAGE_SIZE
 		cmp   al, byte[stackptr - % * STACK_PAGE_SIZE]
 	end repeat
@@ -363,8 +378,8 @@ common
 macro create_build_time day, month, year {
 common
   num_to_db year, 4
-  db '.'
+  db '-'
   num_to_db month, 2
-  db '.'
+  db '-'
   num_to_db day, 2
 }

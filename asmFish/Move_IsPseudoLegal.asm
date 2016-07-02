@@ -421,18 +421,18 @@ align 8
 	       test   esi, esi
 		jnz   .CastleBlack
 .CastleWhite:
-		cmp   eax, dword[castling_movgen+4*0]
+		cmp   eax, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*0]
 		 je   .CastleCheck_WhiteOO
-		cmp   eax, dword[castling_movgen+4*1]
+		cmp   eax, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*1]
 		 je   .CastleCheck_WhiteOOO
 .CastleReturnFalse:
 		xor   eax, eax
 		pop   r15 r14 r13 r12 rdi rsi
 		ret
 .CastleBlack:
-		cmp   eax, dword[castling_movgen+4*2]
+		cmp   eax, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*2]
 		 je   .CastleCheck_BlackOO
-		cmp   eax, dword[castling_movgen+4*3]
+		cmp   eax, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*3]
 		 je   .CastleCheck_BlackOOO
 		jmp   .CastleReturnFalse
 
@@ -440,7 +440,7 @@ align 8
 
   .CastleCheck_WhiteOO:
 	      movzx   eax, byte[rbx+State._castlingRights]
-		mov   rcx, qword[castling_path+8*0]
+		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*0]
 		and   rcx, r15
 		and   eax, 1 shl 0
 		xor   eax, 1 shl 0
@@ -452,7 +452,7 @@ align 8
 
   .CastleCheck_BlackOO:
 	      movzx   eax, byte[rbx+State._castlingRights]
-		mov   rcx, qword[castling_path+8*2]
+		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*2]
 		and   rcx, r15
 		and   eax, 1 shl 2
 		xor   eax, 1 shl 2
@@ -465,7 +465,7 @@ align 8
 
   .CastleCheck_WhiteOOO:
 	      movzx   eax, byte[rbx+State._castlingRights]
-		mov   rcx, qword[castling_path+8*1]
+		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*1]
 		and   rcx, r15
 		and   eax, 1 shl 1
 		xor   eax, 1 shl 1
@@ -477,7 +477,7 @@ align 8
 
   .CastleCheck_BlackOOO:
 	      movzx   eax, byte[rbx+State._castlingRights]
-		mov   rcx, qword[castling_path+8*3]
+		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*3]
 		and   rcx, r15
 		and   eax, 1 shl 3
 		xor   eax, 1 shl 3

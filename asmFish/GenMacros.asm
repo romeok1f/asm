@@ -64,15 +64,15 @@ local ..ksq_loop
 		mov   rax, qword[rbp+Pos.typeBB+8*Pawn]
 		 or   rax, qword[rbp+Pos.typeBB+8*King]
 		and   rax, r13
-	       test   rax, qword[castling_kingpawns+8*(Rights)]
+	       test   rax, qword[rbp-Thread.rootPos+Thread.castling_kingpawns+8*(Rights)]
 		jnz   JmpFalse
 
 		mov   rdx, qword[rbp+Pos.typeBB+8*Knight]
 		and   rdx, r13
-	       test   rdx, qword[castling_knights+8*(Rights)]
+	       test   rdx, qword[rbp-Thread.rootPos+Thread.castling_knights+8*(Rights)]
 		jnz   JmpFalse
 
-	      movzx   r11d, byte[castling_ksqpath+8*(Rights)]
+	      movzx   r11d, byte[rbp-Thread.rootPos+Thread.castling_ksqpath+8*(Rights)]
 		mov   r10, qword[rbp+Pos.typeBB+8*Rook]
 		 or   r10, qword[rbp+Pos.typeBB+8*Queen]
 		and   r10, r13
@@ -80,7 +80,7 @@ local ..ksq_loop
 		 or   r9, qword[rbp+Pos.typeBB+8*Queen]
 		and   r9, r13
 
-	      movzx   eax, byte[castling_rfrom+Rights]
+	      movzx   eax, byte[rbp-Thread.rootPos+Thread.castling_rfrom+Rights]
 		mov   rdx, r14
 		btr   rdx, rax
 
@@ -91,7 +91,7 @@ local ..ksq_loop
 	       test   r11d, r11d
 		 jz   JmpTrue
 ..ksq_loop:
-	      movzx   edx, byte[castling_ksqpath+8*(Rights)+r11]
+	      movzx   edx, byte[rbp-Thread.rootPos+Thread.castling_ksqpath+8*(Rights)+r11]
 	RookAttacks   rax, rdx, r14, r8
 	       test   rax, r10
 		jnz   JmpFalse
@@ -567,7 +567,7 @@ else
 
 	CastlingJmp   (2*Us+0), .CastlingOOGood, .CastlingOODone
 .CastlingOOGood:
-		mov   eax, dword[castling_movgen+4*(2*Us+0)]
+		mov   eax, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*(2*Us+0)]
 		mov   dword[rdi], eax
 		lea   rdi, [rdi+sizeof.ExtMove]
 
@@ -579,13 +579,13 @@ else
   end if
 
   if Type eq QUIET_CHECKS
-		mov   ecx, dword[castling_movgen+4*(2*Us+0)]
+		mov   ecx, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*(2*Us+0)]
 		mov   dword[rdi], ecx
 	       test   eax, eax
 		jnz   .CheckOOQuiteCheck
   else
 		and   eax, sizeof.ExtMove
-		mov   ecx, dword[castling_movgen+4*(2*Us+0)]
+		mov   ecx, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*(2*Us+0)]
 		mov   dword[rdi], ecx
 		add   rdi, rax
   end if
@@ -593,7 +593,7 @@ else
 
 .CastlingOODone:
 	      movzx   eax, byte[rbx+State._castlingRights]
-		mov   rcx, qword[castling_path+8*(2*Us+1)]
+		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*(2*Us+1)]
 		and   eax, 2 shl (2*Us)
 		xor   eax, 2 shl (2*Us)
 		and   rcx, r14
@@ -608,7 +608,7 @@ else
  if Type eq NON_EVASIONS
 		CastlingJmp   (2*Us+1), .CastlingOOOGood, .CastlingDone
 .CastlingOOOGood:
-		mov   eax, dword[castling_movgen+4*(2*Us+1)]
+		mov   eax, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*(2*Us+1)]
 		mov   dword[rdi], eax
 		lea   rdi, [rdi+sizeof.ExtMove]
 		jmp   .CastlingDone
@@ -619,14 +619,14 @@ else
 	       call   CastleOOOLegal_Black
   end if
   if Type eq QUIET_CHECKS
-		mov   ecx, dword[castling_movgen+4*(2*Us+1)]
+		mov   ecx, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*(2*Us+1)]
 	       test   eax, eax
 		mov   dword[rdi], ecx
 		jnz   .CheckOOOQuiteCheck
 		jmp   .CastlingDone
   else
 		and   eax, sizeof.ExtMove
-		mov   ecx, dword[castling_movgen+4*(2*Us+1)]
+		mov   ecx, dword[rbp-Thread.rootPos+Thread.castling_movgen+4*(2*Us+1)]
 		mov   dword[rdi], ecx
 		add   rdi, rax
 		jmp   .CastlingDone
@@ -675,8 +675,8 @@ if Type in <CAPTURES, EVASIONS>
 else
 	      movzx   r9d, byte[rbx+State._castlingRights]
 
-		mov   r10, qword[castling_path+8*(2*Us+0)]
-		mov   r11, qword[castling_path+8*(2*Us+1)]
+		mov   r10, qword[rbp-Thread.rootPos+Thread.castling_path+8*(2*Us+0)]
+		mov   r11, qword[rbp-Thread.rootPos+Thread.castling_path+8*(2*Us+1)]
 		and   r10, r14
 		and   r11, r14
 end if

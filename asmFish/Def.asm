@@ -1,7 +1,8 @@
 
 ; some bounds
 MAX_MOVES equ 224    ; this should be >= the # pseudo legal moves for any position
-MAX_THREADS equ 64
+MAX_THREADS equ 256
+MAX_NUMANODES equ 32
 MAX_HASH_LOG2MB equ 16
 PAWN_HASH_ENTRY_COUNT equ 16384
 MATERIAL_HASH_ENTRY_COUNT equ 8192
@@ -37,7 +38,9 @@ MATERIAL_HASH_ENTRY_COUNT equ 8192
 
 ; special moves
  MOVE_NONE    equ 0
- MOVE_NULL    equ 65
+ MOVE_NULL    equ 65 + 0x0FFFFF000
+
+
 
 ; piece types. these need to be fixed for conditional preprocessing in movegen
  White	 fix 0

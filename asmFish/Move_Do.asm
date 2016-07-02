@@ -226,8 +226,8 @@ lock inc qword[profile.moveUnpack]
 
 	; castling rights
 	      movzx   edx, byte[rbx+State._castlingRights]
-	      movzx   eax, byte[castling_rightsMask+r8]
-		 or   al, byte[castling_rightsMask+r9]
+	      movzx   eax, byte[rbp-Thread.rootPos+Thread.castling_rightsMask+r8]
+		 or   al, byte[rbp-Thread.rootPos+Thread.castling_rightsMask+r9]
 		and   al, dl
 		jnz   .Rights
 .RightsRet:	mov   byte [rbx+sizeof.State+State._castlingRights], dl
@@ -511,9 +511,9 @@ je Move_Do_capking
 
 match =1, DEBUG {
 mov eax, dword[rbp+Pos.debugMove]
-cmp eax, dword[castling_movgen+8*rsi+0]
+cmp eax, dword[rbp-Thread.rootPos+Thread.castling_movgen+8*rsi+0]
 je @f
-cmp eax, dword[castling_movgen+8*rsi+4]
+cmp eax, dword[rbp-Thread.rootPos+Thread.castling_movgen+8*rsi+4]
 jne Move_Do_badcas
 @@:
 }

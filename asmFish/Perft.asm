@@ -5,9 +5,10 @@ Perft_Root:
 virtual at rsp
  .time	   dq ?
  .movelist rb sizeof.ExtMove*MAX_MOVES
- .lend	   db ?
+ .lend	   rb 0
 end virtual
-.localsize = .lend-rsp
+.localsize = ((.lend-rsp+15) and (-16))
+
 	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
 
@@ -100,7 +101,9 @@ virtual at rsp
 .movelist  rb sizeof.ExtMove*MAX_MOVES
 .lend	   rb 0
 end virtual
-.localsize = .lend-rsp
+.localsize = ((.lend-rsp+15) and (-16))
+
+	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
 
 		lea   r15d, [rcx-1]

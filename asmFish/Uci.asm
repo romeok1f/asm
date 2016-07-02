@@ -9,12 +9,11 @@ Options_Init:
 		mov   dword[rdx+Options.hash], 16
 		mov   byte[rdx+Options.ponder], 0
 		mov   dword[rdx+Options.multiPV], 1
-		mov   dword[rdx+Options.weakness], 0
+;                mov   dword[rdx+Options.weakness], 0
 		mov   dword[rdx+Options.moveOverhead], 30
 		mov   dword[rdx+Options.minThinkTime], 20
 		mov   dword[rdx+Options.slowMover], 80
 		mov   byte[rdx+Options.chess960], 0
-		mov   dword[rdx+Options.weakness], 0
 		mov   dword[rdx+Options.syzygyProbeDepth], 1
 		mov   byte[rdx+Options.syzygy50MoveRule], -1
 		mov   dword[rdx+Options.syzygyProbeLimit], 6
@@ -36,6 +35,7 @@ end virtual
 .localsize = ((.localend-rsp+15) and (-16))
 
 	       push   rbp rsi rdi rbx r11 r12 r13 r14 r15
+	 _chkstk_ms   rsp, UciLoop.localsize
 		sub   rsp, UciLoop.localsize
 
 		lea   rcx, [DisplayInfo_Uci]
@@ -91,6 +91,8 @@ stosd
 call _WriteOut_Output
 }
 	       call   _ReadIn
+	       test   eax, eax
+		jnz   UciQuit
 
 match =1, VERBOSE {
 call _GetTime
@@ -175,9 +177,9 @@ UciUnknown:
 
 UciQuit:
 		mov   byte[signals.stop], -1
-		mov   rcx, qword[threadPool.table+8*0]
+		mov   rcx, qword[threadPool.threadTable+8*0]
 	       call   Thread_StartSearching_TRUE
-		mov   rcx, qword[threadPool.table+8*0]
+		mov   rcx, qword[threadPool.threadTable+8*0]
 	       call   Thread_WaitForSearchFinished
 		mov   rcx, qword[UciLoop.th1.rootPos.stateTable]
 	       call   _VirtualFree
@@ -224,7 +226,7 @@ UciPonderHit:
 
 UciStop:
 		mov   byte[signals.stop], -1
-		mov   rcx, qword[threadPool.table+8*0]
+		mov   rcx, qword[threadPool.threadTable+8*0]
 	       call   Thread_StartSearching_TRUE
 		jmp   UciGetInput
 
@@ -451,6 +453,7 @@ UciSetOption:
 	       call   SkipSpaces
 		lea   rcx, [sz_name]
 	       call   CmpString
+		lea   rcx, [.sz_error_name]
 	       test   eax, eax
 		 jz   .Error
 	       call   SkipSpaces
@@ -491,11 +494,11 @@ UciSetOption:
 	       test   eax, eax
 		jnz   .CheckValue
 
-		lea   rcx, [sz_weakness]
-	       call   CmpStringCaseless
-		lea   rbx, [.Weakness]
-	       test   eax, eax
-		jnz   .CheckValue
+;                lea   rcx, [sz_weakness]
+;               call   CmpStringCaseless
+;                lea   rbx, [.Weakness]
+;               test   eax, eax
+;                jnz   .CheckValue
 
 		lea   rcx, [sz_moveoverhead]
 	       call   CmpStringCaseless
@@ -545,9 +548,10 @@ UciSetOption:
 	       test   eax, eax
 		jnz   .CheckValue
 
+		lea   rcx, [.sz_error_value]
 .Error:
 		lea   rdi, [Output]
-	     szcall   PrintString, 'error: setoption has no value'
+	       call   PrintString
 		mov   al, 10
 	      stosb
 	       call   _WriteOut_Output
@@ -579,11 +583,11 @@ UciSetOption:
       ClampUnsigned   eax, 1, MAX_MOVES
 		mov   dword[options.multiPV], eax
 		jmp   UciGetInput
-.Weakness:
-	       call   ParseInteger
-      ClampUnsigned   eax, 0, 200
-		mov   dword[options.weakness], eax
-		jmp   UciGetInput
+;.Weakness:
+;               call   ParseInteger
+;      ClampUnsigned   eax, 0, 200
+;                mov   dword[options.weakness], eax
+;                jmp   UciGetInput
 .Chess960:
 	       call   ParseBoole
 		mov   byte[options.chess960], al
@@ -638,6 +642,12 @@ UciSetOption:
 		mov   byte[rsi], 0
 	       call   TableBase_Init
 		jmp   UciGetInput
+
+.sz_error_value:
+db 'error: setoption has no value',0
+.sz_error_name:
+db 'error: setoption has no name',0
+
 
 
 ;;;;;;;;;;;;
@@ -748,7 +758,7 @@ UciBench:
 		mov   r14, rax
 		lea   rcx, [UciLoop.limits]
 	       call   ThreadPool_StartThinking
-		mov   rcx, qword[threadPool.table+8*0]
+		mov   rcx, qword[threadPool.threadTable+8*0]
 	       call   Thread_WaitForSearchFinished
 	       call   _GetTime
 		sub   r14, rax

@@ -56,11 +56,9 @@ virtual at rsp
   .eval 	  rd 1
   .nullValue	  rd 1
   .futilityValue  rd 1
-  .prevSq	  rd 1
   .extension	  rd 1
-  .moved_piece	  rd 1
   .success	  rd 1	 ; for tb
-  .movedPieceOFF  rd 1
+  .moved_piece_to_sq rd 1
   .givesCheck		   rb 1  ; 144
   .singularExtensionNode   rb 1
   .improving		   rb 1
@@ -170,11 +168,11 @@ match =1, DEBUG \{
 		mov   eax, dword[rbp-Thread.rootPos+Thread.callsCnt]
 		add   eax, 1
 		mov   dword[rbp-Thread.rootPos+Thread.callsCnt], eax
-		cmp   eax, 4096
-		jbe   .dontchecktime
+		cmp   eax, 4096+1
+		 jb   .dontchecktime
 		mov   ecx, dword[threadPool.size]
 	@@:	sub   ecx, 1
-		mov   rax, qword[threadPool.table+8*rcx]
+		mov   rax, qword[threadPool.threadTable+8*rcx]
 		mov   byte[rax+Thread.resetCalls], -1
 		jnz   @b
 	       call   CheckTime
@@ -598,7 +596,7 @@ lock inc qword[profile.moveUnpack]
 		add   eax, ecx
 	     Assert   b, eax, 64*16, 'oops2'
 	       imul   eax, 4*16*64
-		lea   rax, [CounterMoveHistory+rax]
+		add   rax, qword[rbp+Pos.counterMoveHistory]
 		mov   qword[rbx+State.counterMoves], rax
 
 		mov   ecx, dword[.move]
@@ -678,10 +676,7 @@ lock inc qword[profile.moveUnpack]
 .moves_loop:	    ; this is actually not the head of the loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-		mov   eax, dword[rbx-1*sizeof.State+State.currentMove]
-		and   eax, 63
-		mov   dword[.prevSq], eax
-	; not sure if these need to stored on the fxn stack as well
+	; not sure if these need to be stored on the fxn stack as well
 		mov   rax, qword[rbx-1*sizeof.State+State.counterMoves]
 		mov   rcx, qword[rbx-2*sizeof.State+State.counterMoves]
 		mov   rdx, qword[rbx-4*sizeof.State+State.counterMoves]
@@ -806,9 +801,12 @@ lock inc qword[profile.moveUnpack]
 \}
 
 	      movzx   edx, byte[rbp+Pos.board+rdx]
-		mov   dword[.moved_piece], edx
 		mov   eax, ecx
 		and   eax, 63
+		shl   edx, 6
+		add   edx, eax
+		mov   dword[.moved_piece_to_sq], edx
+	; moved_piece_to_sq = index of [moved_piece][to_sq(move)]
 		shr   ecx, 12
 	      movzx   eax, byte[rbp+Pos.board+rax]
 		 or   al, byte[CaptureOrPromotion_or+rcx]
@@ -821,12 +819,9 @@ lock inc qword[profile.moveUnpack]
 
 		mov   edx, dword[.depth]
 	      movzx   ecx, byte[.improving]
-		mov   r8d, dword[.moveCount]
 	       imul   ecx, 16*4
 		mov   ecx, dword[FutilityMoveCounts+rcx+4*rdx]
-		sub   ecx, r8d
-		sub   r8d, 1
-	; r8d = moveCount - 1
+		sub   ecx, dword[.moveCount]
 		sub   ecx, 1
 		sub   edx, 16*ONE_PLY
 		and   edx, ecx
@@ -1023,19 +1018,13 @@ lock inc qword[profile.moveUnpack]
     end if
 
 		mov   ecx, dword[.move]
+		mov   eax, dword[.moved_piece_to_sq]
+		shl   eax, 2+4+6
+		add   rax, qword[rbp+Pos.counterMoveHistory]
 		mov   dword[rbx+State.currentMove], ecx
-		and   ecx, 63
-		mov   eax, dword[.moved_piece]
-		shl   eax, 6
-		add   eax, ecx
-	     Assert   b, eax, 64*16, 'oops2'
-	       imul   eax, 4*16*64
-		lea   rax, [CounterMoveHistory+rax]
 		mov   qword[rbx+State.counterMoves], rax
 
-
 	; Step 14. Make the move
-		mov   ecx, dword[.move]
 	      movsx   edx, byte[.givesCheck]
 	       call   Move_Do__Search
 
@@ -1079,13 +1068,10 @@ SD_String db '|'
 	      movzx   r14d, byte[rbp+Pos.board+r12]	; r14d = from piece   should be 0
 	      movzx   r15d, byte[rbp+Pos.board+r13]	; r15d = to piece
 
-
-	if .PvNode eq 0
 		cmp   byte[.cutNode], 0
 		 jz   .15testA
 		add   edi, 2*ONE_PLY
 		jmp   .15skipA
-	end if
 .15testA:
 		mov   ecx, dword[.move]
 		cmp   ecx, _MOVE_TYPE_PROM shl 12
@@ -1110,8 +1096,7 @@ SD_String db 'r='
 SD_Int rdi
 SD_String db '|'
 
-	       imul   ecx, dword[.moved_piece], 64
-		add   ecx, r13d
+		mov   ecx, dword[.moved_piece_to_sq]
 		mov   r8, qword[rbp+Pos.history]
 		mov   r9, qword[.cmh]
 		mov   r10, qword[.fmh]
@@ -1478,24 +1463,21 @@ SD_String db '|'
 		jmp   .20TTStore
 .20CheckBonus:
 	; we already checked that bestMove = 0
-		mov   eax, dword[.depth]
-		cmp   eax, 3*ONE_PLY
-		 jl   .20TTStore
-	      movzx   eax, byte[rbx+State._capturedPiece]
-		 or   rax, qword[rbx+State.checkersBB]
-		jnz   .20TTStore
 		mov   eax, dword[rbx-1*sizeof.State+State.currentMove]
-	       test   eax, eax
-		 jz   .20TTStore
-		cmp   eax, MOVE_NULL
-		 je   .20TTStore
+		lea   ecx, [eax-1]
+		mov   edx, dword[.depth]
+		sub   edx, 3*ONE_PLY
+		 or   edx, ecx
+		 js   .20TTStore
+		cmp   byte[rbx+State._capturedPiece], 0
+		jne   .20TTStore
 
 		mov   r10d, dword[.depth]
-		mov   eax, r10d
+		mov   edx, r10d
 	       imul   r10d, r10d
-		lea   r10d, [r10+2*rax-2]
+		lea   r10d, [r10+2*rdx-2]
 
-		mov   eax, dword[.prevSq]
+		and   eax, 63
 	      movzx   r8d, byte[rbp+Pos.board+rax]
 		shl   r8d, 6
 		add   r8d, eax
@@ -1685,7 +1667,6 @@ end if
 
 	      align 8
 .CheckTablebase:
-	; r14 =  TB::Cardinality - piecesCnt
 		mov   ecx, dword[.depth]
 		mov   rax, qword[rbp+Pos.typeBB+8*White]
 		 or   rax, qword[rbp+Pos.typeBB+8*Black]

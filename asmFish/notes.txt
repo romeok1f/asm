@@ -1,3 +1,36 @@
+Log window:
+Process created. ProcessId=00000428h ThreadId=00000430h BaseOfImage=0000000000400000-0000000000958000h ThreadLocalBase=000007FFFFFDD000h ThreadStartAddress=0000000000953C98h
+Software breakpoint No. 00000000h was set. ProcesId=00000428h Address=0000000000953C98h flag=temporary (will be removed after its trigger)
+Loaded dll. ProcessId=00000428h ThreadId=00000430h BaseOfDll=0000000077EC0000-0000000077FFC000h EntryPoint=0000000000000000h DllName=ntdll.dll
+Loaded dll. ProcessId=00000428h ThreadId=00000430h BaseOfDll=0000000077D40000-0000000077EB6000h EntryPoint=0000000077D6B140h DllName=KERNEL32.dll
+Loaded dll. ProcessId=00000428h ThreadId=00000430h BaseOfDll=000007FF7FC00000-000007FF7FC86000h EntryPoint=000007FF7FC103B0h DllName=msvcrt.dll
+Temporary software breakpoint No. 00000000h triggered.
+Software breakpoint No. 00000000h was removed from address=0000000000953C98h of the process PID=00000428h flag=temporary
+Thread created. ProcessId=00000428h ThreadId=0000051Ch ThreadLocalBase=000007FFFFFDB000h ThreadStartAddress=0000000077D6B890h
+Exception. ProcessId=00000428h ThreadId=0000051Ch Address=000000000094A562h ExceptionCode=C00000FDh=EXCEPTION_STACK_OVERFLOW first_chance
+
+Code 1st window:
+000000000094A562	    894C2444		mov [rsp+44],ecx ; [0000000000343C54]=00000000
+
+GPR window:
+rax	       0000000000000000
+rbx	       0000000000365120
+rcx	       0000000000000087
+rdx	       0000000000000088
+rsp	       0000000000343C10
+rbp	       00000000001A0070
+rsi	       000000000094A550
+rdi	       00000000FFFFFE23
+ r8	       00000000FFFFFFFD
+ r9	       0000000000001000
+r10	       0000000000001000
+r11	       0000000000000000
+r12	       00000000FFFFFEA3
+r13	       00000000FFFFFFFF
+r14	       0000000000001C00
+r15	       0000000000000C00
+
+
 cd C:\Users\pc\Dropbox\asm\masterFish\
 make build ARCH=x86-64-modern COMP=mingw
 

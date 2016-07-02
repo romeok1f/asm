@@ -46,14 +46,21 @@ _EventCreate:
 		xor   r8d, r8d
 		xor   r9d, r9d
 	       call   qword[__imp_CreateEvent]
+	       test   rax, rax
+		 jz   Failed__imp_CreateEvent
 		add   rsp, 8*5
 		ret
+
+
 _EventSignal:
 	; rcx: handle
 		sub   rsp, 8*5
 	       call   qword[__imp_SetEvent]
+	       test   eax, eax
+		 jz   Failed__imp_SetEvent
 		add   rsp, 8*5
 		ret
+
 _EventWait:
 	; rcx: handle
 	; rdx: address of critial section object
@@ -66,11 +73,14 @@ _EventWait:
 		mov   rcx, rbx
 		 or   edx, -1
 	       call   qword[__imp_WaitForSingleObject]
+		cmp   eax, WAIT_FAILED
+		 je   Failed__imp_WaitForSingleObject
 		mov   rcx, rsi
 	       call   qword[__imp_EnterCriticalSection]
 		add   rsp, 8*5
 		pop   rsi rbx
 		ret
+
 _EventDestroy:
 	; rcx: handle
 		sub   rsp, 8*5
@@ -85,7 +95,43 @@ _EventDestroy:
 _ThreadCreate:
 	; rcx: start address
 	; rdx: parameter to pass
-		sub   rsp, 8*7
+	; r8: address of GROUP_AFFINITY structure (ignored if numa functions not avaiable)
+	       push   rbx rsi rdi
+		sub   rsp, 8*6
+		mov   rbx, qword[__imp_SetThreadGroupAffinity]
+		mov   rdi, r8
+	       test   rbx, rbx
+		 jz   .DontSetAffinity
+
+		mov   r8, rcx
+		mov   r9, rdx
+		xor   ecx, ecx
+		mov   edx, 1 shl 19	; 0.5 MB of commited stack space
+		mov   qword[rsp+8*4], CREATE_SUSPENDED
+		mov   qword[rsp+8*5], rcx
+	       call   qword[__imp_CreateThread]
+		mov   rsi, rax
+	       test   rax, rax
+		 jz   Failed__imp_CreateThread_CREATE_SUSPENDED
+
+		mov   rcx, rax
+		mov   rdx, rdi
+		lea   r8, [rsp+8*4]
+	       call   qword[__imp_SetThreadGroupAffinity]
+	       test   eax, eax
+		 jz   Failed__imp_SetThreadGroupAffinity
+
+		mov   rcx, rsi
+	       call   qword[__imp_ResumeThread]
+		cmp   eax, 1
+		jne   Failed__imp_ResumeThread
+	       
+		mov   rax, rsi
+		add   rsp, 8*6
+		pop   rdi rsi rbx
+		ret
+
+.DontSetAffinity:
 		mov   r8, rcx
 		mov   r9, rdx
 		xor   ecx, ecx
@@ -93,8 +139,15 @@ _ThreadCreate:
 		mov   qword[rsp+8*4], rcx
 		mov   qword[rsp+8*5], rcx
 	       call   qword[__imp_CreateThread]
-		add   rsp, 8*7
+	       test   rax, rax
+		 jz   Failed__imp_CreateThread
+		add   rsp, 8*6
+		pop   rdi rsi rbx
 		ret
+
+
+
+
 _ThreadJoin:
 	; rcx: handle
 	       push   rbx
@@ -142,6 +195,8 @@ _SetFrequency:
 		sub   rsp, 8*5
 		lea   rcx, [Frequency]
 	       call   qword[__imp_QueryPerformanceFrequency]
+	       test   eax, eax
+		 jz   Failed__imp_QueryPerformanceFrequency
 		mov   dword[rsp], 64
 		mov   dword[rsp+8], 1000
 	       fild   dword[rsp]
@@ -166,29 +221,55 @@ _Sleep:
 ; memory ;
 ;;;;;;;;;;
 
+
+_VirtualAllocNuma:
+	; rcx is size
+	; edx is numa node
+		mov   rax, qword[__imp_VirtualAllocExNuma]
+	       test   rax, rax
+		 jz   _VirtualAlloc
+		sub   rsp, 8*7
+GD_String db 'alloc'
+GD_Int rdx
+GD_String db ': '
+		mov   qword[rsp+8*5], rdx
+		mov   qword[rsp+8*4], PAGE_READWRITE
+		mov   r9d, MEM_COMMIT
+		mov   r8, rcx
+		xor   edx, edx
+		mov   rcx, qword[hProcess]
+	       call   rax
+	       test   rax, rax
+		 jz   Failed__imp_VirtualAllocExNuma
+if DEBUG > 0
+add dword[DebugBalance], 1
+end if
+GD_Hex rax
+GD_NewLine
+		add   rsp, 8*7
+		ret
+
+
+
 _VirtualAlloc:
 	; rcx is size
 	;  if this fails, we want to exit immediately
 		sub   rsp, 8*5
+GD_String db 'alloc:  '
 		mov   rdx, rcx
 		xor   ecx, ecx
 		mov   r8d, MEM_COMMIT
 		mov   r9d, PAGE_READWRITE
 	       call   qword[__imp_VirtualAlloc]
 	       test   rax, rax
-		 jz   .failed
-match =1, DEBUG {
-		add   dword[DebugBalance], 1
-}
+		 jz   Failed__imp_VirtualAlloc
+if DEBUG > 0
+add dword[DebugBalance], 1
+end if
+GD_Hex rax
+GD_NewLine
 		add   rsp, 8*5
 		ret
-.failed:
-		lea   rdi, [.message]
-	       call   _ErrorBox
-		xor   ecx, ecx
-	       call   _ExitProcess
-
-.message: db '_VirtualAlloc failed', 0
 
 
 _VirtualFree:
@@ -199,14 +280,18 @@ _VirtualFree:
 		mov   r8d, MEM_RELEASE
 	       test   rcx, rcx
 		 jz   .null
+GD_String db 'free:  '
+GD_Hex rcx
+GD_NewLine
 	       call   qword[__imp_VirtualFree]
-	     Assert   ne, rax, 0, '_VirtualFree failed'
-match =1, DEBUG {
-		sub   dword[DebugBalance], 1
-}
- .null: 	add   rsp, 8*5
+	       test   eax, eax
+		 jz   Failed__imp_VirtualFree
+if DEBUG > 0
+sub dword[DebugBalance], 1
+end if
+ .null:
+		add   rsp, 8*5
 		ret
-
 
 
 
@@ -225,6 +310,8 @@ _GetCommandLine:
 _SetStdHandles:
 	; no arguments
 		sub   rsp,8*5
+	       call   qword[__imp_GetCurrentProcess]
+		mov   qword[hProcess], rax
 		mov   ecx, STD_INPUT_HANDLE
 	       call   qword[__imp_GetStdHandle]
 		mov   qword[hStdIn], rax
@@ -297,8 +384,9 @@ _ReadIn:
 		mov   r8d, 4096
 		xor   ecx, ecx
 	       call   qword[__imp_VirtualAlloc]
+	       test   rax, rax
+		 jz   Failed__imp_VirtualAlloc_ReadIn
 		mov   ecx, dword[InputBufferSizeB]
-		mov   r8d, 32768
 		mov   r8d, MEM_RELEASE
 		xor   edx, edx
 		mov   rsi, qword[InputBuffer]
@@ -307,6 +395,8 @@ _ReadIn:
 	  rep movsb
 		mov   rcx, qword[InputBuffer]
 	       call   qword[__imp_VirtualFree]
+	       test   rax, rax
+		 jz   Failed__imp_VirtualFree_ReadIn
 		sub   rbx, qword [InputBuffer]
 		mov   qword[InputBuffer], rbp
 		add   qword[InputBufferSizeB], 4096
@@ -359,6 +449,73 @@ _SetNormalPriority:
 	       push   rbx
 		mov   ebx, NORMAL_PRIORITY_CLASS
 		jmp   @b
+
+
+
+
+
+;;;;;;;;;
+; fails
+;;;;;;;;;
+
+Failed:
+	       call   _ErrorBox
+		xor   ecx, ecx
+	       call   _ExitProcess
+
+Failed__imp_SetEvent:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_SetEvent failed'
+Failed__imp_CreateEvent:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_CreateEvent failed'
+Failed__imp_WaitForSingleObject:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_WaitForSingleObject failed'
+Failed__imp_CreateThread_CREATE_SUSPENDED:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_CreateThread CREATE_SUSPENDED failed'
+Failed__imp_SetThreadGroupAffinity:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_SetThreadGroupAffinity failed'
+Failed__imp_ResumeThread:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_ResumeThread failed'
+Failed__imp_CreateThread:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_CreateThread failed'
+Failed__imp_QueryPerformanceFrequency:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_QueryPerformanceFrequency failed'
+Failed__imp_VirtualAllocExNuma:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_VirtualAllocExNuma failed'
+Failed__imp_VirtualAlloc:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_VirtualAlloc failed'
+Failed__imp_VirtualFree:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_VirtualFree failed'
+Failed__imp_VirtualAlloc_ReadIn:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_VirtualAlloc inside _ReadIn failed'
+Failed__imp_VirtualFree_ReadIn:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_VirtualFree inside _ReadIn failed'
+
 
 
 ;;;;;;;;

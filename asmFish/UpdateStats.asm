@@ -38,10 +38,11 @@ virtual at rsp
   .bonus32   rd 1
   .lend rb 0
 end virtual
-.lsize = (((.lend-rsp+15) and (-16))+8)
+.localsize = (((.lend-rsp+15) and (-16))+8)
 
 	       push   rsi rdi r12 r13 r14 r15
-		sub   rsp, .lsize
+	 _chkstk_ms   rsp, .localsize
+		sub   rsp, .localsize
 
 		mov   dword[.move], ecx
 		mov   dword[.depth], edx
@@ -226,7 +227,7 @@ SD_String db '|'
 	@@:
 
 .done:
-		add   rsp, .lsize
+		add   rsp, .localsize
 		pop   r15 r14 r13 r12 rdi rsi
 		ret
 

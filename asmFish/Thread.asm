@@ -1,9 +1,77 @@
+ThreadIdxToNode:
+; in: ecx index (n) of thread
+; out: rax address of numa noda
+
+; first do n =  n % threadPool.coreCnt
+; then match n to a node using the number of cores in a node as the 'bin width'
+;
+; this is of course just a first attempt at node allocation and could change in the future
+;
+; for example if there are two nodes each with 4 cores,
+;  the threads are assigned as
+;  idx | node
+; -----------
+;   0  |  0
+;   1  |  0
+;   2  |  0
+;   3  |  0
+;   4  |  1
+;   5  |  1
+;   6  |  1
+;   7  |  1
+;   8  |  0
+;   9  |  0
+;  10  |  0
+;  11  |  0
+;  12  |  1
+; ...
+;
+; this ensures that we take advantage of HT
+;  AFTER all cores in every node have been filled with one thread
+
+		mov   eax, ecx
+		xor   edx, edx
+		div   dword[threadPool.coreCnt]
+		lea   rax, [threadPool.nodeTable]
+	       imul   ecx, dword[threadPool.nodeCnt], sizeof.NumaNode
+		add   rcx, rax
+.NextNode:	sub   edx, dword[rax+NumaNode.coreCnt]
+		 js   .Return
+		add   rax, sizeof.NumaNode
+		cmp   rax, rcx
+		 jb   .NextNode
+	     Assert   e, rsp, 0, 'ThreadIdxToNode failed: unreachable code reached'
+.Return:
+		ret
+
 
 Thread_Create:
-	; rcx: address of Thread struct
-	       push   rbx rsi rdi
-		mov   rbx, rcx
+; in: ecx index of thread
 
+	       push   rbx rsi rdi
+		sub   rsp, 8*8
+		mov   esi, ecx
+
+	; get the right node to put this thread
+	       call   ThreadIdxToNode
+		mov   rdi, rax
+
+	; allocate self
+		mov   ecx, sizeof.Thread
+		mov   edx, dword[rdi+NumaNode.NodeNumber]
+	       call   _VirtualAllocNuma
+		mov   qword[threadPool.threadTable+8*rsi], rax
+		mov   rbx, rax
+
+	; init some thread data
+		xor   eax, eax
+		mov   byte[rbx+Thread.exit], al
+		mov   byte[rbx+Thread.resetCalls], al
+		mov   dword[rbx+Thread.callsCnt], eax
+		mov   dword[rbx+Thread.idx], esi
+		mov   qword[rbx+Thread.numaNode], rdi
+
+	; create sync objects
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexCreate
 	       call   _EventCreate
@@ -23,28 +91,27 @@ Thread_Create:
 
 	; allocate history and counterMoves
 		mov   ecx, 4*16*64*2
-	       call   _VirtualAlloc
+		mov   edx, dword[rdi+NumaNode.NodeNumber]
+	       call   _VirtualAllocNuma
 		lea   rdx, [rax+4*16*64]
 		mov   qword[rbx+Thread.rootPos+Pos.history], rax
 		mov   qword[rbx+Thread.rootPos+Pos.counterMoves], rdx
 
 	; allocate pawn hash
 		mov   ecx, PAWN_HASH_ENTRY_COUNT*sizeof.PawnEntry
-	       call   _VirtualAlloc
+		mov   edx, dword[rdi+NumaNode.NodeNumber]
+	       call   _VirtualAllocNuma
 		mov   qword[rbx+Thread.rootPos+Pos.pawnTable], rax
 
 	; allocate material hash
 		mov   ecx, MATERIAL_HASH_ENTRY_COUNT*sizeof.MaterialEntry
-	       call   _VirtualAlloc
+		mov   edx, dword[rdi+NumaNode.NodeNumber]
+	       call   _VirtualAllocNuma
 		mov   qword[rbx+Thread.rootPos+Pos.materialTable], rax
 
-	; init some thread data
-		xor   eax, eax
-		mov   edx, dword[threadPool.size]
-		mov   byte[rbx+Thread.exit], al
-		mov   byte[rbx+Thread.resetCalls], al
-		mov   dword[rbx+Thread.callsCnt], eax
-		mov   dword[rbx+Thread.idx], edx
+	; use chm table from node
+		mov   rax, qword[rdi+NumaNode.cmhTable]
+		mov   qword[rbx+Thread.rootPos.counterMoveHistory], rax
 
 	; start the thread and wait for it to enter the idle loop
 		lea   rcx, [rbx+Thread.mutex]
@@ -52,7 +119,10 @@ Thread_Create:
 		mov   byte[rbx+Thread.searching], -1
 		lea   rcx, [Thread_IdleLoop]
 		mov   rdx, rbx
+		mov   r8, rdi
+		add   r8, NumaNode.GroupMask
 	       call   _ThreadCreate
+		mov   qword[rbx+Thread.handle], rax
 		jmp   .check
     .wait:	mov   rcx, qword[rbx+Thread.sleepCond2]
 		lea   rdx, [rbx+Thread.mutex]
@@ -63,14 +133,17 @@ Thread_Create:
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
 
+		add   rsp, 8*8
 		pop   rdi rsi rbx
 		ret
 
 
 Thread_Delete:
-	; rcx: address of Thread struct
+	; ecx: index of thread
+
 	       push   rsi rdi rbx
-		mov   rbx, rcx
+		mov   esi, ecx
+		mov   rbx, qword[threadPool.threadTable+8*rcx]
 
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
@@ -113,12 +186,20 @@ Thread_Delete:
 		mov   qword[rbx+Thread.rootPos+Pos.stateTable], rax
 		mov   qword[rbx+Thread.rootPos+Pos.stateEnd], rax
 
+	; destroy sync objects
 		mov   rcx, qword[rbx+Thread.sleepCond2]
 	       call   _EventDestroy
 		mov   rcx, qword[rbx+Thread.sleepCond]
 	       call   _EventDestroy
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexDestroy
+
+	; free self
+		mov   rcx, qword[threadPool.threadTable+8*rsi]
+	       call   _VirtualFree
+		xor   eax, eax
+		mov   qword[threadPool.threadTable+8*rsi], rax
+
 
 		pop   rbx rdi rsi
 		ret
@@ -130,8 +211,8 @@ Thread_IdleLoop:
 		mov   rbx, rcx
 		lea   rbp, [Thread_Think]
 		lea   rdx, [MainThread_Think]
-		mov   rax, qword[threadPool.table+8*0]
-		cmp   rcx, rax
+		mov   eax, dword[rbx+Thread.idx]
+	       test   eax, eax
 	      cmove   rbp, rdx
 		mov   rsi, qword[rbx+Thread.sleepCond]
 		mov   rdi, qword[rbx+Thread.sleepCond2]

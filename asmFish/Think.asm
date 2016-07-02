@@ -18,7 +18,7 @@ end virtual
 
 		lea   rbp, [rcx+Thread.rootPos]
 		mov   rbx, qword[rbp+Pos.state]
-GD_String <db 'Thread_Think',10>
+;GD_String <db 'Thread_Think',10>
 
 		mov   dword[.easyMove], 0
 		mov   dword[.alpha], -VALUE_INFINITE
@@ -63,17 +63,19 @@ GD_String <db 'Thread_Think',10>
 	; id loop
 		mov   r15d, dword[rbp-Thread.rootPos+Thread.rootDepth]	 ; this should be set to 0 by ThreadPool_StartThinking
 .id_loop:
-		mov   al, byte[signals.stop]
+		xor   eax, eax
 		mov   ecx, dword[limits.depth]
+		cmp   eax, dword[rbp-Thread.rootPos+Thread.idx]
+	     cmovne   ecx, eax
 		sub   ecx, 1
+		cmp   al, byte[signals.stop]
+		jne   .id_loop_done
 		cmp   r15d, ecx
 		 ja   .id_loop_done
 		add   r15d, 1
 		mov   dword[rbp-Thread.rootPos+Thread.rootDepth], r15d
 		cmp   r15d, MAX_PLY
 		jge   .id_loop_done
-	       test   al, al
-		jnz   .id_loop_done
 
 	; skip depths for helper threads
 		mov   eax, dword[rbp-Thread.rootPos+Thread.idx]
@@ -383,7 +385,7 @@ match =0, VERBOSE {
 
 .done:
 
-GD_String <db 'Thread_Think returning',10>
+;GD_String <db 'Thread_Think returning',10>
 
 		add   rsp, .localsize
 		pop   r15 r14 r13 rdi rsi rbx rbp
@@ -401,7 +403,9 @@ MainThread_Think:
 		lea   rbp, [rcx+Thread.rootPos]
 		mov   rbx, qword[rbp+Pos.state]
 
-GD_String <db 'MainThread_Think',10>
+GD_String db 'MainThread_Think'
+GD_NewLine
+
 		mov   ecx, dword[rbp+Pos.sideToMove]
 		mov   edx, dword[rbp+Pos.gamePly]
 	       call   TimeMng_Init
@@ -415,19 +419,19 @@ GD_String <db 'MainThread_Think',10>
 		mov   dword[DrawValue+4*rax], ecx
 		add   byte[mainHash.date], 4
 
-	; when weakness is not 0, set multipv and change maximumTime
-		mov   ecx, dword[options.weakness]
-	       test   ecx, ecx
-		 jz   .no_weakness
-		shr   ecx, 4
-		add   ecx, 2
-		mov   dword[options.multiPV], ecx
-		lea   eax, [rcx-1]
-		mul   dword[time.optimumTime]
-		add   eax, dword[time.maximumTime]
-		div   ecx
-		mov   dword[time.maximumTime], eax
-.no_weakness:
+;        ; when weakness is not 0, set multipv and change maximumTime
+;                mov   ecx, dword[options.weakness]
+;               test   ecx, ecx
+;                 jz   .no_weakness
+;                shr   ecx, 4
+;                add   ecx, 2
+;                mov   dword[options.multiPV], ecx
+;                lea   eax, [rcx-1]
+;                mul   dword[time.optimumTime]
+;                add   eax, dword[time.maximumTime]
+;                div   ecx
+;                mov   dword[time.maximumTime], eax
+;.no_weakness:
 
 	; check for mate
 		mov   r8, qword[rbp+Pos.rootMovesVec+RootMovesVec.ender]
@@ -440,7 +444,7 @@ GD_String <db 'MainThread_Think',10>
 		add   esi, 1
 		cmp   esi, dword[threadPool.size]
 		jae   .workers_done
-		mov   rcx, qword[threadPool.table+8*rsi]
+		mov   rcx, qword[threadPool.threadTable+8*rsi]
 	       call   Thread_StartSearching
 		jmp   .next_worker
     .workers_done:
@@ -471,7 +475,7 @@ GD_String <db 'MainThread_Think',10>
 		add   esi, 1
 		cmp   esi, dword[threadPool.size]
 		jae   .workers_done2
-		mov   rcx, qword[threadPool.table+8*rsi]
+		mov   rcx, qword[threadPool.threadTable+8*rsi]
 	       call   Thread_WaitForSearchFinished
 		jmp   .next_worker2
 	.workers_done2:
@@ -482,9 +486,9 @@ GD_String <db 'MainThread_Think',10>
 		cmp   r8, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
 		 je   .mate_bestmove
 
-		mov   ecx, dword[options.weakness]
-	       test   ecx, ecx
-		jnz   .pick_weak_move
+;                mov   ecx, dword[options.weakness]
+;               test   ecx, ecx
+;                jnz   .pick_weak_move
 
 	; find best thread  index esi
 		xor   esi, esi
@@ -498,7 +502,7 @@ GD_String <db 'MainThread_Think',10>
 	       test   ecx, ecx
 		 jz   .best_done
 		xor   edi, edi
-		mov   r10, qword[threadPool.table+8*rsi]
+		mov   r10, qword[threadPool.threadTable+8*rsi]
 		mov   r8d, dword[r10+Thread.completedDepth]
 		mov   r9, qword[r10+Thread.rootPos+Pos.rootMovesVec+RootMovesVec.table]
 		mov   r9d, dword[r9+0*sizeof.RootMove+RootMove.score]
@@ -506,7 +510,7 @@ GD_String <db 'MainThread_Think',10>
 		add   edi, 1
 		cmp   edi, dword[threadPool.size]
 		jae   .workers_done3
-		mov   r10, qword[threadPool.table+8*rdi]
+		mov   r10, qword[threadPool.threadTable+8*rdi]
 		mov   eax, dword[r10+Thread.completedDepth]
 		mov   rcx, qword[r10+Thread.rootPos+Pos.rootMovesVec+RootMovesVec.table]
 		mov   ecx, dword[rcx+0*sizeof.RootMove+RootMove.score]
@@ -523,18 +527,21 @@ GD_String <db 'MainThread_Think',10>
 		mov   dword[rbp-Thread.rootPos+Thread.previousScore], r9d
 
 .display_move:
-		mov   rcx, qword[threadPool.table+8*rsi]
+		mov   rcx, qword[threadPool.threadTable+8*rsi]
 	       call   qword[options.displayMoveFxn]
 
 .return:
-GD_String <db 'MainThread_Think returning',10>
+
+GD_String db 'MainThread_Think returning'
+GD_NewLine
+
 		pop   r15 rdi rsi rbx rbp
 		ret
 
-.pick_weak_move:
-	       call   Weakness_PickMove
-		xor   esi, esi
-		jmp   .display_move
+;.pick_weak_move:
+;               call   Weakness_PickMove
+;                xor   esi, esi
+;                jmp   .display_move
 
 
 
@@ -586,13 +593,14 @@ GD_String <db 'MainThread_Think returning',10>
 
 DisplayMove_Uci:
 	; in: rcx address of best thread
+	       push   rsi rdi r15
 virtual at rsp
   .output rb 32
   .lend rb 0
 end virtual
-.lsize = ((.lend-rsp+15) and (-16))
-	       push   rsi rdi r15
-		sub   rsp, .lsize
+.localsize = ((.lend-rsp+15) and (-16))
+	 _chkstk_ms   rsp, .localsize
+		sub   rsp, .localsize
 		mov   rsi, rcx
 
 	; print best move and ponder move
@@ -622,7 +630,7 @@ end virtual
 	      stosb
 	       call   _WriteOut
 .return:
-		add   rsp, .lsize
+		add   rsp, .localsize
 		pop   r15 rdi rsi
 		ret
 
@@ -767,7 +775,7 @@ end virtual
 		lea   eax, [r15+1]
 	       call   PrintUnsignedInteger
 
-match =0, VERBOSE {
+if VERBOSE<2
 		mov   rax, ' time '
 	      stosq
 		sub   rdi, 2
@@ -779,7 +787,7 @@ match =0, VERBOSE {
 		sub   rdi, 3
 		mov   rax, qword[.nps]
 	       call   PrintUnsignedInteger
-}
+end if
 
 	      movsx   r13d, byte[Tablebase_RootInTB]
 		mov   eax, r12d

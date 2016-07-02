@@ -94,6 +94,12 @@ match =Black, Us
 		neg   r11
 		sbb   r11d, r11d
 	; r11d = opposed
+		lea   eax, [rcx+Up]
+		 bt   r13, rax
+		sbb   eax, eax
+		and   eax, Doubled
+		sub   esi, eax
+	; doubled is taken care of
 		mov   rdx, qword[AdjacentFilesBB+8*rdx]
 	; rdx = adjacent_files_bb(f)
 		mov   rax, qword[PawnAttacks+8*(64*Us+rcx)]
@@ -184,10 +190,8 @@ match =Black, Us
 		add   esi, r8d
 	; connected is taken care of
 
-		lea   eax, [rcx+Up]
-		 bt   r13, rax
-		sbb   edx, edx
-
+		mov   rdx, qword[ForwardBB+8*(64*Us+rcx)]
+		and   rdx, r13
 		xor   eax, eax
 		 or   r10, rdx
 	       setz   al
@@ -195,9 +199,6 @@ match =Black, Us
 		 or   qword[rdi+PawnEntry.passedPawns+8*Us], rax
 	; passed pawns is taken care of
 
-		and   edx, Doubled
-		sub   esi, edx
-	; doubled is taken care of
 
 	       test   r15 ,r15
 		jnz   ..NextPiece

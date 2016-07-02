@@ -100,6 +100,48 @@ macro GD_Int x {
 }
 
 
+macro GD_Hex x {
+ match =1, VERBOSE \{
+	push  x
+	push  rdi rax rcx rdx r8 r9 r10 r11
+	lea  rdi, [VerboseOutput]
+	mov rcx, qword[rsp+8*8]
+	call PrintAddress
+	lea  rcx, [VerboseOutput]
+	call _WriteOut
+	pop r11 r10 r9 r8 rdx rcx rax rdi
+	add  rsp, 8
+ \}
+}
+
+
+
+macro GD_NewLine m {
+; lets not clobber any registers here
+local ..message, ..over
+ match =1, VERBOSE \{
+	       push   rdi rax rcx rdx r8 r9 r10 r11
+		lea   rcx, [..message]
+		jmp   ..over
+   ..message:
+	    m
+  match =1, OS_IS_WINDOWS \\{
+	    db 13
+  \\}
+	    db 10
+	    db 0
+   ..over:
+		lea   rdi, [VerboseOutput]
+	       call   PrintString
+		lea   rcx, [VerboseOutput]
+		lea  rcx, [VerboseOutput]
+	       call _WriteOut
+		pop   r11 r10 r9 r8 rdx rcx rax rdi
+ \}
+}
+
+
+
 
 
 macro SD_NewLine m {

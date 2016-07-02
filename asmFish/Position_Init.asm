@@ -1,12 +1,13 @@
 Position_Init:
 
+	       push   rbx rsi rdi r12 r13 r14 r15
 virtual at rsp
   .prng        rq 1
   .lend rb 0
 end virtual
 .localsize = ((.lend-rsp+15) and (-16))
 
-	       push   rbx rsi rdi r12 r13 r14 r15
+	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
 
 		mov   qword[.prng], 1070372

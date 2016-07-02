@@ -339,14 +339,14 @@ if VERBOSE> 0
 Position_Print:  ; in: rbp address of Pos
 		 ; io: rdi string
 
+	       push   rbx rsi r13 r14 r15
 virtual at rsp
   .moveList    rb sizeof.ExtMove*MAX_MOVES
   .lend rb 0
 end virtual
-.localsize = ((.lend-rsp+15) and (-16)) +8
+.localsize = ((.lend-rsp+15) and (-16))
 
-
-	       push   rbx rsi r13 r14 r15
+	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
 
 		mov   rbx, [rbp+Pos.state]
@@ -446,7 +446,7 @@ end virtual
 		cmp   ecx, 1
 		adc   rdi, 0
 		mov   eax, 'KQkq'
-		mov   edx, dword[castling_rfrom]
+		mov   edx, dword[rbp-Thread.rootPos+Thread.castling_rfrom]
 		and   edx, 0x07070707
 		add   edx, 'AAaa'
 		cmp   byte[rbp+Pos.chess960], 0
@@ -649,8 +649,8 @@ Position_ParseFEN:
 	  rep stosq
 
 		xor   eax, eax
-		mov   ecx, castling_end-castling_rightsMask
-		lea   rdi, [castling_rightsMask]
+		mov   ecx, Thread.castling_end-Thread.castling_start
+		lea   rdi, [rbp-Thread.rootPos+Thread.castling_start]
 	  rep stosb
 
 	       call   SkipSpaces
@@ -823,6 +823,8 @@ SetCastlingRights:
 	;     ecx = 'q' for qeenside castling
 	;           'k' for kingside castling
 	;           'a' through 'h' for file of rook
+	;     rbp position
+	;     rbx state
 	; out eax = 0 if success
 	;         = -1 if failed
 
@@ -872,19 +874,19 @@ SetCastlingRights:
 		mov   byte[rbx+State._castlingRights], al
 
 	; set masks
-	      movzx   eax, byte[castling_rightsMask+rsi]
+	      movzx   eax, byte[rbp-Thread.rootPos+Thread.castling_rightsMask+rsi]
 		bts   eax, r15d
-		mov   byte[castling_rightsMask+rsi], al
-	      movzx   eax, byte[castling_rightsMask+rdi]
+		mov   byte[rbp-Thread.rootPos+Thread.castling_rightsMask+rsi], al
+	      movzx   eax, byte[rbp-Thread.rootPos+Thread.castling_rightsMask+rdi]
 		bts   eax, r15d
-		mov   byte[castling_rightsMask+rdi], al
+		mov   byte[rbp-Thread.rootPos+Thread.castling_rightsMask+rdi], al
 
 	; set rook from/to
-		mov   byte[castling_rfrom+r15], sil
-		mov   byte[castling_rto+r15], r8l
+		mov   byte[rbp-Thread.rootPos+Thread.castling_rfrom+r15], sil
+		mov   byte[rbp-Thread.rootPos+Thread.castling_rto+r15], r8l
 
 	; set castling path
-		lea   r11, [castling_ksqpath+8*r15]
+		lea   r11, [rbp-Thread.rootPos+Thread.castling_ksqpath+8*r15]
 		xor   eax, eax
 		mov   byte[r11], al
 		mov   r12, rdi
@@ -899,13 +901,13 @@ SetCastlingRights:
 		 ja   .king_loop_done
 		cmp   r12, rdi
 		 je   .king_loop
-		add   byte[castling_ksqpath+8*r15], 1
+		add   byte[rbp-Thread.rootPos+Thread.castling_ksqpath+8*r15], 1
 		add   r11, 1
 		mov   byte[r11], r12l
 		mov   rcx, qword[KnightAttacks+8*r12]
-		 or   qword[castling_knights+8*r15], rcx
+		 or   qword[rbp-Thread.rootPos+Thread.castling_knights+8*r15], rcx
 		mov   rcx, qword[KingAttacks+8*r12]
-		 or   qword[castling_kingpawns+8*r15], rcx
+		 or   qword[rbp-Thread.rootPos+Thread.castling_kingpawns+8*r15], rcx
 		cmp   r12, rsi
 		 je   .king_loop
 		bts   rax, r12
@@ -930,7 +932,7 @@ SetCastlingRights:
 		jmp   .rook_loop
 .rook_loop_done:
 
-		mov   qword[castling_path+8*r15], rax
+		mov   qword[rbp-Thread.rootPos+Thread.castling_path+8*r15], rax
 
 	; set castling move
 		mov   eax, _MOVE_TYPE_CASTLE
@@ -938,7 +940,7 @@ SetCastlingRights:
 		add   eax, edi
 		shl   eax, 6
 		add   eax, esi
-		mov   dword[castling_movgen+4*r15], eax
+		mov   dword[rbp-Thread.rootPos+Thread.castling_movgen+4*r15], eax
 
 		xor   eax, eax
 .done:
@@ -1024,7 +1026,7 @@ Position_PrintFen:
 		cmp   ecx, 1
 		adc   rdi, 0
 		mov   eax, 'KQkq'
-		mov   edx, dword[castling_rfrom]
+		mov   edx, dword[rbp-Thread.rootPos+Thread.castling_rfrom]
 		add   edx, 'AAaa'
 		cmp   byte[rbp+Pos.chess960], 0
 	     cmovne   eax, edx
@@ -1146,6 +1148,12 @@ Position_CopyToSearch:
 
 	       push   rsi rdi r13
 		mov   r13, rcx
+
+	; copy castling data
+		mov   ecx, Thread.castling_end-Thread.castling_start
+		lea   rsi, [rbp-Thread.rootPos+Thread.castling_start]
+		lea   rdi, [r13-Thread.rootPos+Thread.castling_start]
+	  rep movsb
 
 	; copy basic position info
 		lea   rsi, [rbp]

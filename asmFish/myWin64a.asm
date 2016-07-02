@@ -317,6 +317,7 @@ macro api [name] {}
 
 ;include 'equates/kernel64.inc'
 
+
 ; General constants
 
 NULL  = 0
@@ -972,6 +973,20 @@ CTRL_BREAK_EVENT    = 1
 CTRL_CLOSE_EVENT    = 2
 CTRL_LOGOFF_EVENT   = 5
 CTRL_SHUTDOWN_EVENT = 6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ; USER32.DLL structures and constants

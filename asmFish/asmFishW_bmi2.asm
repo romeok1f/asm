@@ -1,4 +1,5 @@
 OS_IS_WINDOWS	 fix 1
+CPU_VERSION	 fix 'bmi2'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; compile options 0 or 1
 CPU_HAS_POPCNT	 equ 1	;  popcnt                       very nice function

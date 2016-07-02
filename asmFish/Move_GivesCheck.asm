@@ -66,8 +66,8 @@ Move_GivesCheck:
 		and   eax, 7
 		cmp   eax, 4
 		adc   esi, esi
-	      movzx   eax, byte[castling_rfrom+rsi]
-	      movzx   r11d, byte[castling_rto+rsi]
+	      movzx   eax, byte[rbp-Thread.rootPos+Thread.castling_rfrom+rsi]
+	      movzx   r11d, byte[rbp-Thread.rootPos+Thread.castling_rto+rsi]
 		btr   rdx, rax
 		bts   rdx, r11
 		bts   rdx, r9  ; set king again if nec

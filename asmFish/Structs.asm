@@ -156,8 +156,9 @@ match =1, DEBUG {
  state		rq 1 ; the current state struct
  stateTable	rq 1 ; the beginning of the vector of State structs
  stateEnd	rq 1 ; the end of
- history	rq 1		 ; these structs hold addresses
- counterMoves	rq 1		 ; of tables used by the search
+ counterMoveHistory  rq 1	 ; these structs hold addresses
+ history	rq 1		 ; of tables used by the search
+ counterMoves	rq 1		 ;
  materialTable	rq 1		 ;
  pawnTable	rq 1		 ;
  rootMovesVec	RootMovesVec	 ;
@@ -234,7 +235,8 @@ struct Options
  hash	       rd 1
  multiPV       rd 1
  threads       rd 1
- weakness      rd 1
+	       rd 1
+; weakness      rd 1
  chess960	rd 1
  minThinkTime	rd 1
  slowMover	rd 1
@@ -282,6 +284,7 @@ struct Thread
  sleepCond	 rq 1
  sleepCond2	 rq 1
  handle 	 rq 1
+ numaNode	 rq 1
  bestMoveChanges rq 1
  nodes		 rq 1
  idx		 rd 1
@@ -290,22 +293,59 @@ struct Thread
  previousScore	 rd 1
  completedDepth  rd 1
  callsCnt	 rd 1
- searching	 rb 1
- exit		 rb 1
- failedLow	 rb 1
- easyMovePlayed  rb 1
- resetCalls	 rb 1
-		 rb 1
-		 rb 1
-		 rb 1
+ searching	  rb 1
+ exit		  rb 1
+ failedLow	  rb 1
+ easyMovePlayed   rb 1
+ resetCalls	  rb 1
+		  rb 1
+		  rb 1
+		  rb 1
+
+ castling_start rb 0
+ castling_rfrom      rb 4
+ castling_rto	     rb 4
+ castling_path	     rq 4
+ castling_ksqpath    rb 4*8
+ castling_knights    rq 4
+ castling_kingpawns  rq 4
+ castling_movgen     rd 4
+ castling_rightsMask rb 64
+ castling_end rb 0
+
  rootPos	 Pos
 ends
 
 
+;print 'Thread.Pos', Thread.rootPos
+
+struct GROUP_AFFINITY
+  Mask	dq ?
+  Group dw ?
+	dw ?,?,?
+ends
+
+
+struct NumaNode
+ Relationship	rd 1
+ Size		rd 1
+ NodeNumber	rd 1
+		rd 1
+ cmhTable	rq 1  ; fill in some reserved parts of MS struct
+ coreCnt	rd 1  ;
+		rd 1
+ GroupMask	GROUP_AFFINITY
+ends
+
+
+
 struct ThreadPool
- size  rd 1
-       rd 1
- table rq MAX_THREADS
+ size	   rd 1
+ coreCnt   rd 1
+ nodeCnt   rd 1
+	   rd 1
+ threadTable rq MAX_THREADS
+ nodeTable   rb MAX_NUMANODES*sizeof.NumaNode
 ends
 
 
