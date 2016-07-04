@@ -429,8 +429,11 @@ end virtual
 
 	     szcall   PrintString, 'isok:           '
 	       call   Position_IsLegal
-		mov   rcx, rdx
-	       call   PrintString
+	       test   eax, eax
+		mov   eax, 'yes' + (10 shl 24)
+		mov   ecx, 'no ' + (10 shl 24)
+	     cmovnz   eax, ecx
+	      stosd
 
 	     szcall   PrintString, 'sideToMove:     '
 		mov   eax, dword [rbp+Pos.sideToMove]
@@ -888,7 +891,7 @@ SetCastlingRights:
 	; set castling path
 		lea   r11, [rbp-Thread.rootPos+Thread.castling_ksqpath+8*r15]
 		xor   eax, eax
-		mov   byte[r11], al
+		mov   qword[r11], rax
 		mov   r12, rdi
 		mov   r13, r9
 		cmp   r12, r13
@@ -935,7 +938,7 @@ SetCastlingRights:
 		mov   qword[rbp-Thread.rootPos+Thread.castling_path+8*r15], rax
 
 	; set castling move
-		mov   eax, _MOVE_TYPE_CASTLE
+		mov   eax, MOVE_TYPE_CASTLE
 		shl   eax, 6
 		add   eax, edi
 		shl   eax, 6
@@ -1082,6 +1085,12 @@ Position_CopyTo:
 
 	       push   rbx rsi rdi r13 r14
 		mov   r13, rcx
+
+	; copy castling data
+		mov   ecx, Thread.castling_end-Thread.castling_start
+		lea   rsi, [rbp-Thread.rootPos+Thread.castling_start]
+		lea   rdi, [r13-Thread.rootPos+Thread.castling_start]
+	  rep movsb
 
 	; copy basic position info
 		lea   rsi, [rbp]

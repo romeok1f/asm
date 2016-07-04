@@ -240,7 +240,7 @@ lock inc qword[profile.moveUnpack]
 .ResetEpRet:
 	; capture
 		mov   eax, r11d
-		cmp   ecx, _MOVE_TYPE_CASTLE
+		cmp   ecx, MOVE_TYPE_CASTLE
 		 je   .Castling
 		and   eax, 7
 		jnz   .Capture
@@ -279,7 +279,7 @@ lock inc qword[profile.moveUnpack]
 		and   word[rbx+sizeof.State+State._rule50], ax
 
 	; special moves
-		cmp   ecx, _MOVE_TYPE_PROM
+		cmp   ecx, MOVE_TYPE_PROM
 		jae   .Special
 		cmp   r11d, 16
 		 je   .DoublePawn
@@ -434,11 +434,11 @@ je Move_Do_capking
 	      align   8
 .Special:
 		xor   edx, edx
-		cmp   ecx, _MOVE_TYPE_EPCAP
+		cmp   ecx, MOVE_TYPE_EPCAP
 		 je   .EpCapture
 
 .Promotion:
-		lea   ecx, [rcx-_MOVE_TYPE_PROM+8*rsi+Knight]
+		lea   ecx, [rcx-MOVE_TYPE_PROM+8*rsi+Knight]
 	; remove pawn r10 on square r9
 		mov   rdx, qword[rbp+Pos.typeBB+8*Pawn]
 		btr   rdx, r9

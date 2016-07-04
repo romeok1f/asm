@@ -142,7 +142,7 @@ MovePick_Killers:
 		 jz   MovePick_Killers
 		cmp   edi, dword[rsi+Pick.ttMove]
 		 je   MovePick_Killers
-		cmp   edi, _MOVE_TYPE_CASTLE shl 12
+		cmp   edi, MOVE_TYPE_CASTLE shl 12
 		jae   .special
 	       test   eax, eax
 		jnz   MovePick_Killers
@@ -156,7 +156,7 @@ SD_Move rax
 SD_String db '|'
 		ret
 .special:
-		cmp   edi, _MOVE_TYPE_EPCAP shl 12
+		cmp   edi, MOVE_TYPE_EPCAP shl 12
 		jae   MovePick_Killers
 	       call   Move_IsPseudoLegal
 	       test   rax, rax

@@ -19,6 +19,9 @@ match =_NONPV_NODE, NT \{
 \}
 
 
+
+
+
 virtual at rsp
   .tte	     rq 1      ; 0
   .ltte      rq 1      ; 8
@@ -77,6 +80,26 @@ end virtual
 	       push   rbx rsi rdi r12 r13 r14 r15
 	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
+
+match =_PV_NODE, NT
+\{
+match =1, InCheck \\{
+DebugStackUse 'qsearch<PV, in check>'
+\\}
+match =0, InCheck \\{
+DebugStackUse 'qsearch<PV, not in check>'
+\\}
+\}
+match =_NONPV_NODE, NT
+\{
+match =1, InCheck \\{
+DebugStackUse 'qsearch<NON_PV, in check>'
+\\}
+match =0, InCheck \\{
+DebugStackUse 'qsearch<NON_PV, not in check>'
+\\}
+\}
+
 
 match =2, VERBOSE \{
 push rcx rdx r8 r9 r13 r14 r15
@@ -401,7 +424,7 @@ SD_String db '|'
 
 	; do not search moves with negative see value
 	if InCheck eq 0
-		lea   eax, [rsi-_MOVE_TYPE_PROM]
+		lea   eax, [rsi-MOVE_TYPE_PROM]
 		cmp   eax, 4
 		 jb   .DontContinue
 	else
@@ -409,8 +432,8 @@ SD_String db '|'
 		cmp   edi, VALUE_MATED_IN_MAX_PLY
 		jle   .DontContinue
 
-	     Assert   ne, esi, _MOVE_TYPE_CASTLE, 'castling encountered in qsearch<InCheck=true>'
-		cmp   esi, _MOVE_TYPE_PROM
+	     Assert   ne, esi, MOVE_TYPE_CASTLE, 'castling encountered in qsearch<InCheck=true>'
+		cmp   esi, MOVE_TYPE_PROM
 		jae   .DontContinue	   ; catch MOVE_TYPE_EPCAP
 	       test   r15d, r15d
 		jnz   .DontContinue

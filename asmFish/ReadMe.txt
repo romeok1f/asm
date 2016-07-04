@@ -22,7 +22,7 @@
   - show	  displays the current board
   - eval	  displays the output of Evaluate on current position
   - perft d	  usual perft to depth d
-  - bench	  use like this: 'bench depth 20 threads 1 hash 128'. These are the default settings.
+  - bench	  use like this: 'bench depth 15 threads 1 hash 128'. These are the default settings.
 
 4. about the code so far:
 - there are three functional changes from the real stockfish

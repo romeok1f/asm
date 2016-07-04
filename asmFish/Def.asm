@@ -31,10 +31,10 @@ MATERIAL_HASH_ENTRY_COUNT equ 8192
 
 
 ; move types
- _MOVE_TYPE_NORMAL equ 0
- _MOVE_TYPE_PROM   equ 1
- _MOVE_TYPE_CASTLE equ 5
- _MOVE_TYPE_EPCAP  equ 6
+ MOVE_TYPE_NORMAL equ 0
+ MOVE_TYPE_PROM   equ 1
+ MOVE_TYPE_CASTLE equ 5
+ MOVE_TYPE_EPCAP  equ 6
 
 ; special moves
  MOVE_NONE    equ 0

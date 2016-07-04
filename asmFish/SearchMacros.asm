@@ -93,6 +93,20 @@ end virtual
 	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
 
+match =_ROOT_NODE, NT
+\{
+DebugStackUse 'search<ROOT>'
+\}
+match =_PV_NODE, NT
+\{
+DebugStackUse 'search<PV>'
+\}
+match =_NONPV_NODE, NT
+\{
+DebugStackUse 'search<NON_PV>'
+\}
+
+
 match =2, VERBOSE \{
 push rcx rdx r8 r9 r13 r14 r15
 mov r15, rcx
@@ -421,6 +435,12 @@ match =1, DEBUG \{
 	      movzx   ecx, word[rbx+State.npMaterial+2*rcx]
 	       test   ecx, ecx
 		 jz   .8skip
+		sub   edx, 12*ONE_PLY
+		mov   eax, dword[rbx+State.staticEval]
+		sub   eax, dword[.beta]
+		and   edx, eax
+		 js   .8skip
+
 
 		xor   eax, eax
 		mov   dword[rbx+State.currentMove], MOVE_NULL
@@ -539,9 +559,9 @@ match =1, DEBUG \{
 		xor   edi, edi
 	       test   ecx, ecx
 		 jz   .9NoTTMove
-		cmp   eax, _MOVE_TYPE_CASTLE
+		cmp   eax, MOVE_TYPE_CASTLE
 		 je   .9NoTTMove
-		cmp   eax, _MOVE_TYPE_EPCAP
+		cmp   eax, MOVE_TYPE_EPCAP
 		 je   @f
 	       test   edx, edx
 		 jz   .9NoTTMove
@@ -1074,7 +1094,7 @@ SD_String db '|'
 		jmp   .15skipA
 .15testA:
 		mov   ecx, dword[.move]
-		cmp   ecx, _MOVE_TYPE_PROM shl 12
+		cmp   ecx, MOVE_TYPE_PROM shl 12
 		jae   .15skipA
 		mov   eax, r15d
 		and   eax, 7

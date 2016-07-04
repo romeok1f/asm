@@ -60,6 +60,7 @@ macro CastlingJmp Rights, JmpTrue, JmpFalse {
 	;     eax = -1 if castling is legal
 	; assumed to have passed path test and rights test
 
+
 local ..ksq_loop
 		mov   rax, qword[rbp+Pos.typeBB+8*Pawn]
 		 or   rax, qword[rbp+Pos.typeBB+8*King]
@@ -127,14 +128,14 @@ local .Outer,.OuterDone,.Inner,.InnerDone
 		bsf   rdx, rsi
  if (Type in <CAPTURES, EVASIONS, NON_EVASIONS>)
 	       imul   eax, edx, 65
-		add   eax, 64*64*(_MOVE_TYPE_PROM+3) - 64*Delta
+		add   eax, 64*64*(MOVE_TYPE_PROM+3) - 64*Delta
 		mov   dword[rdi], eax
 		lea   rdi, [rdi+sizeof.ExtMove]
  end if
 
  if (Type in <QUIETS, EVASIONS, NON_EVASIONS>)
 	       imul   eax, edx, 65
-		add   eax, 64*64*(_MOVE_TYPE_PROM+2) - 64*Delta
+		add   eax, 64*64*(MOVE_TYPE_PROM+2) - 64*Delta
 		mov   dword[rdi+0*sizeof.ExtMove], eax
 		sub   eax, 64*64*(1)
 		mov   dword[rdi+1*sizeof.ExtMove], eax
@@ -148,7 +149,7 @@ local .Outer,.OuterDone,.Inner,.InnerDone
 	       imul   eax, edx, 65
 	       test   rcx, qword[KnightAttacks+8*rdx]
 		 jz   .InnerDone
-		add   eax, 64*64*(_MOVE_TYPE_PROM+0) - 64*Delta
+		add   eax, 64*64*(MOVE_TYPE_PROM+0) - 64*Delta
 		mov   dword[rdi], eax
 		lea   rdi, [rdi+sizeof.ExtMove]
 
@@ -434,7 +435,7 @@ end if
 	end if
 
   attacks_from_pawn   Them, .b1, rdx
-		 or   edx, _MOVE_TYPE_EPCAP shl 12
+		 or   edx, MOVE_TYPE_EPCAP shl 12
 		and   .b1, .pawnsNotOn7
 		jnz   .CaptureEp
     .CaptureEpDone:
@@ -673,6 +674,7 @@ generate_pawn_moves   Us, Type
 
 if Type in <CAPTURES, EVASIONS>
 else
+
 	      movzx   r9d, byte[rbx+State._castlingRights]
 
 		mov   r10, qword[rbp-Thread.rootPos+Thread.castling_path+8*(2*Us+0)]

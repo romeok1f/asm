@@ -100,15 +100,20 @@ _ThreadCreate:
 		sub   rsp, 8*6
 		mov   rbx, qword[__imp_SetThreadGroupAffinity]
 		mov   rdi, r8
+
+		mov   r8, rcx		; lpStartAddress
+		mov   r9, rdx		; lpParameter
+		xor   ecx, ecx		; lpThreadAttributes
+		mov   edx, 100000	; dwStackSize
+		; at least 1000000 bytes are reserved for the stack by the "stack 1000000" directive in asmFishW.asm
+		; here we commit 100000 bytes which gives space for about 100000/2800 = 35 plies in the search
+		;    each call to search uses about 2800 bytes of stack space
+
 	       test   rbx, rbx
 		 jz   .DontSetAffinity
 
-		mov   r8, rcx
-		mov   r9, rdx
-		xor   ecx, ecx
-		mov   edx, 1 shl 19	; 0.5 MB of commited stack space
-		mov   qword[rsp+8*4], CREATE_SUSPENDED
-		mov   qword[rsp+8*5], rcx
+		mov   qword[rsp+8*4], CREATE_SUSPENDED	; dwCreationFlags
+		mov   qword[rsp+8*5], rcx		; lpThreadId
 	       call   qword[__imp_CreateThread]
 		mov   rsi, rax
 	       test   rax, rax
@@ -117,7 +122,7 @@ _ThreadCreate:
 		mov   rcx, rax
 		mov   rdx, rdi
 		lea   r8, [rsp+8*4]
-	       call   qword[__imp_SetThreadGroupAffinity]
+	       call   rbx
 	       test   eax, eax
 		 jz   Failed__imp_SetThreadGroupAffinity
 
@@ -132,10 +137,6 @@ _ThreadCreate:
 		ret
 
 .DontSetAffinity:
-		mov   r8, rcx
-		mov   r9, rdx
-		xor   ecx, ecx
-		xor   edx, edx
 		mov   qword[rsp+8*4], rcx
 		mov   qword[rsp+8*5], rcx
 	       call   qword[__imp_CreateThread]
@@ -372,13 +373,21 @@ _ReadIn:
 		sub   rsp, 8*9
 		mov   rbx, qword[InputBuffer]
 		lea   r13, [rsp+3CH]
-?_1062: 	mov   rax, rbx
+?_1062:
+
+
+		mov   rax, rbx
 		sub   rax, qword[InputBuffer]
 		mov   rcx, qword[InputBufferSizeB]
 		add   rax, 9
 		cmp   rax, rcx
 		mov   rdx, rcx
 		 jl   ?_1063
+
+
+Display 'reallocating InputBuffer'
+
+
 		add   edx, 4096
 		mov   r9d, 4
 		mov   r8d, 4096
@@ -386,6 +395,13 @@ _ReadIn:
 	       call   qword[__imp_VirtualAlloc]
 	       test   rax, rax
 		 jz   Failed__imp_VirtualAlloc_ReadIn
+if DEBUG > 0
+add dword[DebugBalance], 1
+end if
+GD_String db 'alloc: '
+GD_Hex rax
+GD_NewLine
+
 		mov   ecx, dword[InputBufferSizeB]
 		mov   r8d, MEM_RELEASE
 		xor   edx, edx
@@ -394,20 +410,29 @@ _ReadIn:
 		mov   rbp, rax
 	  rep movsb
 		mov   rcx, qword[InputBuffer]
+
+GD_String db 'free:  '
+GD_Hex rcx
+GD_NewLine
+
 	       call   qword[__imp_VirtualFree]
 	       test   rax, rax
 		 jz   Failed__imp_VirtualFree_ReadIn
+if DEBUG > 0
+sub dword[DebugBalance], 1
+end if
 		sub   rbx, qword [InputBuffer]
 		mov   qword[InputBuffer], rbp
 		add   qword[InputBufferSizeB], 4096
 		add   rbx, rbp
-?_1063: 	mov   rdx, rbx
+?_1063:
+		mov   rdx, rbx
 		mov   r9, r13
 		mov   qword[rsp+20H], 0
 		mov   r8d, 1
 		mov   rcx, qword[hStdIn]
 	       call   qword[__imp_ReadFile]
-		mov   dl, byte [rbx]
+		mov   dl, byte[rbx]
 	       test   eax, eax
 		 jz   ?_1064
 		cmp   dword[rsp+3CH], 0
@@ -424,8 +449,6 @@ _ReadIn:
 		mov   rsi, qword[InputBuffer]
 		pop   rbx rdi rbp r13
 		ret
-
-
 
 
 ;;;;;;;;;;;;;;;;;;

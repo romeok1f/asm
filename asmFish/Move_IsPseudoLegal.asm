@@ -64,7 +64,7 @@ lock inc qword[profile.moveUnpack]
 		 bt   r14, r8
 		jnc   .ReturnFalse
 
-		cmp   ecx, _MOVE_TYPE_PROM
+		cmp   ecx, MOVE_TYPE_PROM
 		jae   .Special
 
 	; make sure that we don't capture our own piece
@@ -261,7 +261,7 @@ align 8
 
 	      align   8
 .Special:
-		cmp   ecx, _MOVE_TYPE_CASTLE
+		cmp   ecx, MOVE_TYPE_CASTLE
 		 je   .Castle
 		jae   .EpCapture
 .Promotion:
@@ -344,7 +344,7 @@ align 8
 		 bt   r15, r9
 		 jc   .ReturnFalse
 
-		cmp   ecx, _MOVE_TYPE_EPCAP
+		cmp   ecx, MOVE_TYPE_EPCAP
 		jne   .ReturnFalse
 
 	; make sure that it is our pawn moving

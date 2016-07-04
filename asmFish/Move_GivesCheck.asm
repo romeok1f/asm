@@ -32,7 +32,7 @@ Move_GivesCheck:
 .DiscoveredCheckRet:
 		shr   ecx, 12
 		xor   eax, eax
-		cmp   ecx, _MOVE_TYPE_PROM
+		cmp   ecx, MOVE_TYPE_PROM
 		jae   .Special	; 0.82%
 .Ret:
 		pop   rdi rsi

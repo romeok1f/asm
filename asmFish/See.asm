@@ -47,7 +47,7 @@ See:
 		 or   r14, qword[rbp+Pos.typeBB+8*Black]
 		btr   r14, r8
 
-		cmp   ecx, _MOVE_TYPE_CASTLE
+		cmp   ecx, MOVE_TYPE_CASTLE
 		jae   .Special
 .EpCaptureRet:
 
@@ -189,7 +189,7 @@ See:
 
 	      align   8
 .Special:
-		cmp   ecx, _MOVE_TYPE_CASTLE
+		cmp   ecx, MOVE_TYPE_CASTLE
 		 je   .Castle
 .EpCapture:
 		lea   eax, [r9+2*r13-8]

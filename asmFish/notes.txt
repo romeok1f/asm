@@ -1,3 +1,27 @@
+
+Exception Code: c0000005
+Exception Offset:     0000000000153e35
+
+
+
+setoption name UCI_Chess960 value true
+position fen qnbrknrb/pppppppp/8/8/8/8/PPPPPPPP/QNBRKNRB w GDgd - 0 1 moves a2a3 a7a6 b2b3 f8e6 c2c3
+show
+
+
+setoption name UCI_Chess960 value true
+position fen qnbrknrb/pppppppp/8/8/8/8/PPPPPPPP/QNBRKNRB w GDgd - 0 1
+
+
+
+setoption name UCI_Chess960 value true
+position fen qnbrknrb/pppppppp/8/8/8/8/PPPPPPPP/QNBRKNRB w GDgd - 0 1 moves
+perft 6
+
+
+
+
+
 Log window:
 Process created. ProcessId=00000428h ThreadId=00000430h BaseOfImage=0000000000400000-0000000000958000h ThreadLocalBase=000007FFFFFDD000h ThreadStartAddress=0000000000953C98h
 Software breakpoint No. 00000000h was set. ProcesId=00000428h Address=0000000000953C98h flag=temporary (will be removed after its trigger)

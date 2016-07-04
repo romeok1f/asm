@@ -2,6 +2,7 @@
 ; this is included in asmFishW_popcnt.asm asmFishW_base.asm and asmFishW_bmi2.asm
 
 format PE64 console
+stack 1000000	; this stack size should be sufficient for MAX_PLY=128 in search
 entry Start
 
 include 'myWin64a.asm'
@@ -114,24 +115,27 @@ szGreeting:
 		create_build_time DAY, MONTH, YEAR
 		db '_'
 		db CPU_VERSION
-		db 10
+		db 13,10
 szGreetingEnd:
-		db 'id author TypingALot',10
-		db 'option name Contempt type spin default 0 min -100 max 100',10
-		db 'option name Threads type spin default 1 min 1 max 256',10
-		db 'option name Hash type spin default 16 min 1 max 1048576',10
-		db 'option name ClearHash type button',10
-		db 'option name MultiPV type spin default 1 min 1 max 224',10
+		db 'id author TypingALot',13,10
+		db 'option name Contempt type spin default 0 min -100 max 100',13,10
+		db 'option name Threads type spin default 1 min 1 max 256',13,10
+		db 'option name Hash type spin default 16 min 1 max 1048576',13,10
+		db 'option name ClearHash type button',13,10
+		db 'option name MultiPV type spin default 1 min 1 max 224',13,10
 ;                db 'option name Weakness type spin default 0 min 0 max 200',10
-		db 'option name MoveOverhead type spin default 30 min 0 max 5000',10
-		db 'option name MinThinkTime type spin default 20 min 0 max 5000',10
-		db 'option name SlowMover type spin default 80 min 10 max 1000',10
-		db 'option name UCI_Chess960 type check default false',10
-		db 'option name SyzygyPath type string default <empty>',10
-		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',10
-		db 'option name Syzygy50MoveRule type check default true',10
-		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',10
-		db 'uciok',10
+		db 'option name MoveOverhead type spin default 30 min 0 max 5000',13,10
+		db 'option name MinThinkTime type spin default 20 min 0 max 5000',13,10
+		db 'option name SlowMover type spin default 80 min 10 max 1000',13,10
+		db 'option name UCI_Chess960 type check default false',13,10
+		db 'option name SyzygyPath type string default <empty>',13,10
+		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',13,10
+		db 'option name Syzygy50MoveRule type check default true',13,10
+		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',13,10
+		db 'uciok'
+sz_NewLine:
+		db 13,10
+sz_NewLineEnd:
 szUciResponseEnd:
 
 szCPUError	db 'Error: processor does not support',0
@@ -140,11 +144,24 @@ szCPUError	db 'Error: processor does not support',0
    .AVX2	db ' AVX2',0
    .BMI1	db ' BMI1',0
    .BMI2	db ' BMI2',0
-szReadyOK	db 'readyok',10,0
-szOK		db 'ok',10,0
-szError 	db 'error',10,0
 szStartFEN	db 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',0
+PieceToChar	db '.?PNBRQK??pnbrqk'
 
+sz_error_value	db 'error: setoption has no value',0
+sz_error_name	db 'error: setoption has no name',0
+
+
+sz_position		db 'position',0
+sz_go			db 'go',0
+sz_stop 		db 'stop',0
+sz_isready		db 'isready',0
+sz_ponderhit		db 'ponderhit',0
+sz_ucinewgame		db 'ucinewgame',0
+sz_uci			db 'uci',0
+sz_setoption		db 'setoption',0
+sz_quit 		db 'quit',0
+sz_perft		db 'perft',0
+sz_bench		db 'bench',0
 sz_wtime		db 'wtime',0
 sz_btime		db 'btime',0
 sz_winc 		db 'winc',0
@@ -172,7 +189,7 @@ sz_syzygypath		db 'syzygypath',0
 sz_syzygyprobedepth	db 'syzygyprobedepth',0
 sz_syzygy50moverule	db 'syzygy50moverule',0
 sz_syzygyprobelimit	db 'syzygyprobelimit',0
-
+sz_Info 		db 'info string processed cmd line command: ',0
 
 BenchFens: ;fens must be separated by one or more space char
 .bench_fen00 db "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",' '
@@ -226,7 +243,6 @@ sz_GetLogicalProcessorInformationEx db 'GetLogicalProcessorInformationEx',0
 align 8
  Frequency   dq ?
  Period      dq ?
-match =1, OS_IS_WINDOWS {
  hProcess    dq ?
  hStdOut     dq ?
  hStdIn      dq ?
@@ -235,14 +251,13 @@ match =1, OS_IS_WINDOWS {
  __imp_VirtualAllocExNuma dq ?
  __imp_SetThreadGroupAffinity dq ?
  __imp_GetLogicalProcessorInformationEx dq ?
-}
+ CmdLineStart	  dq ?
  InputBuffer	  dq ?	   ; input buffer has dynamic allocation
  InputBufferSizeB dq ?
  Output 	  rb 1024  ; output buffer has static allocation
 
 
 
-PieceToChar	db '.?PNBRQK??pnbrqk'
 
 
 
@@ -492,12 +507,6 @@ Start:
 	       call   _SetFrequency
 	       call   _CheckCPU
 
-	; init input buffer
-		mov   ecx, 4096
-		mov   qword[InputBufferSizeB], rcx
-	       call   _VirtualAlloc
-		mov   qword[InputBuffer], rax
-
 GD_String db ' *** General Verbosity ON !! ***'
 GD_NewLine
 GD_NewLine
@@ -526,8 +535,8 @@ mov qword[VerboseTime1+8*1], rax
 		lea   rcx, [?_345]     ; this is the <empty> string
 	       call   TableBase_Init
 
-;        ; command line could contain settings for threads and hash
-;               call   ParseCommandLine                      ; not done yet
+	; command line could contain commands
+	       call   ParseCommandLine
 
 	; display how much time was taken for init
 match =1, VERBOSE {
@@ -578,7 +587,7 @@ match =0, VERBOSE {
 	     Assert   e, dword[DebugBalance], 0, 'assertion dword[DebugBalance]=0 failed'
 	       call   _ExitProcess
 
-;include 'ParseCommandLine.asm'
+include 'ParseCommandLine.asm'
 include 'Search_Init.asm'
 include 'Position_Init.asm'
 include 'MoveGen_Init.asm'

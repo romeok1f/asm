@@ -1,4 +1,29 @@
 
+macro DebugStackUse m {
+local ..message, ..over
+ match =1, DEBUG \{
+	       push   rdi rax rcx rdx r8 r9 r10 r11
+		lea   rdi,[DebugOutput]
+		mov   rax, qword[rbp-Thread.rootPos+Thread.stackBase]
+		sub   rax, rsp
+		cmp   rax, qword[rbp-Thread.rootPos+Thread.stackRecord]
+		jbe   ..over
+		mov   qword[rbp-Thread.rootPos+Thread.stackRecord], rax
+	       call   PrintUnsignedInteger
+		lea   rcx, [..message]
+	       call   PrintString
+		lea   rcx, [DebugOutput]
+	       call   _WriteOut
+		jmp   ..over
+..message:
+		db  ' new stack use record in '
+		db m
+		db 13,10,0
+..over:
+		pop   r11 r10 r9 r8 rdx rcx rax rdi
+ \}
+}
+
 macro DebugDisplay m {
 ; lets not clobber any registers here
 local ..message, ..over
@@ -12,6 +37,19 @@ local ..message, ..over
 	       call   _ErrorBox
 		pop   r11 r10 r9 r8 rdx rcx rax rdi
  \}
+}
+
+macro Display m {
+; lets not clobber any registers here
+local ..message, ..over
+	       push   rdi rax rcx rdx r8 r9 r10 r11
+		jmp   ..over
+   ..message: db m
+	      db 10,0
+   ..over:
+		lea   rdi,[..message]
+	       call   _ErrorBox
+		pop   r11 r10 r9 r8 rdx rcx rax rdi
 }
 
 
@@ -46,9 +84,7 @@ local ..TakingJump
 ;    Profile nz, 0
 ;    jnz EaxNotZero
 ;     ...
-;  counts: rq 2
 ;
-; var shouldn't be on the stack
 
 match =1, PROFILE \{
 	       push   rax rcx

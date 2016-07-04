@@ -64,6 +64,44 @@ UciNewGame:
 		xor   ecx, ecx
 	       call   Position_ParseFEN
 	       call   Search_Clear
+
+		mov   rsi, qword[CmdLineStart]
+	       test   rsi, rsi
+		jnz   UciChoose
+		jmp   UciGetInput
+
+
+
+UciNextCmdFromCmdLine:
+	; skip to next cmd
+	;  if we reach null char, it is time to read from stdin
+
+		lea   rdi, [Output]
+		lea   rcx, [sz_Info]
+	       call   PrintString
+	       call   _WriteOut_Output
+
+		xor   r15, r15
+.Next:
+	      lodsb
+	       test   al, al
+		 jz   .Done
+		cmp   al, ' '
+		jae   .Next
+	       call   SkipSpaces
+		mov   r15, rsi
+.Done:
+		mov   rcx, qword[CmdLineStart]
+		lea   rdi, [rsi-1]
+	       call   _WriteOut
+		lea   rcx, [sz_NewLine]
+		lea   rdi, [sz_NewLineEnd]
+	       call   _WriteOut
+
+		mov   qword[CmdLineStart], r15
+		mov   rsi, r15
+	       test   r15, r15
+		jnz   UciChoose
 		jmp   UciGetInput
 
 UciWriteOut:
@@ -90,6 +128,10 @@ mov eax, ' us' + (10 shl 24)
 stosd
 call _WriteOut_Output
 }
+		mov   rsi, qword[CmdLineStart]
+	       test   rsi, rsi
+		jnz   UciNextCmdFromCmdLine
+
 	       call   _ReadIn
 	       test   eax, eax
 		jnz   UciQuit
@@ -104,68 +146,89 @@ mov qword[VerboseTime1+8*1], rax
 
 UciChoose:
 	       call   SkipSpaces
-	    stdcall   CmpString, 'position'
+
+		lea   rcx, [sz_position]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciPosition
-	    stdcall   CmpString, 'go'
+
+		lea   rcx, [sz_go]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciGo
-	    stdcall   CmpString, 'stop'
+
+		lea   rcx, [sz_stop]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciStop
-	    stdcall   CmpString, 'isready'
+
+		lea   rcx, [sz_isready]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciIsReady
-	    stdcall   CmpString, 'ponderhit'
+
+		lea   rcx, [sz_ponderhit]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciPonderHit
-	    stdcall   CmpString, 'ucinewgame'
+
+		lea   rcx, [sz_ucinewgame]    ; check before uci :)
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciNewGame
-	    stdcall   CmpString, 'uci'
+
+		lea   rcx, [sz_uci]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciUci
-	    stdcall   CmpString, 'setoption'
+
+		lea   rcx, [sz_setoption]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciSetOption
-	    stdcall   CmpString, 'quit'
+
+		lea   rcx, [sz_quit]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciQuit
 
-	    stdcall   CmpString, 'perft'
+		lea   rcx, [sz_perft]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciPerft
-	    stdcall   CmpString, 'bench'
+
+		lea   rcx, [sz_bench]
+	       call   CmpString
 	       test   eax, eax
 		jnz   UciBench
 
 if VERBOSE > 0
-	    stdcall   CmpString, 'show'
+	     szcall   CmpString, 'show'
 	       test   eax, eax
 		jnz   UciShow
-	    stdcall   CmpString, 'undo'
+	     szcall   CmpString, 'undo'
 	       test   eax, eax
 		jnz   UciUndo
-	    stdcall   CmpString, 'moves'
+	     szcall   CmpString, 'moves'
 	       test   eax, eax
 		jnz   UciMoves
-	    stdcall   CmpString, 'donull'
+	     szcall   CmpString, 'donull'
 	       test   eax, eax
 		jnz   UciDoNull
-	    stdcall   CmpString, 'eval'
+	     szcall   CmpString, 'eval'
 	       test   eax, eax
 		jnz   UciEval
 end if
 
 if PROFILE > 0
-	    stdcall   CmpString, 'profile'
+	     szcall   CmpString, 'profile'
 	       test   eax, eax
 		jnz   UciProfile
 end if
 
 UciUnknown:
 		lea   rdi, [Output]
-	    stdcall   PrintString, 'error: unknown command '
+	     szcall   PrintString, 'error: unknown command '
 		mov   ecx, 64
 	       call   ParseToken
 		mov   al, 10
@@ -206,8 +269,10 @@ UciUci:
 
 UciIsReady:
 		lea   rdi, [Output]
-		mov   rax, 'readyok' + (10 shl 56)
+		mov   rax, 'readyok'
 	      stosq
+		sub   rdi, 1
+       PrintNewLine
 		jmp   UciWriteOut
 
 ;;;;;;;;;;;;;
@@ -453,7 +518,7 @@ UciSetOption:
 	       call   SkipSpaces
 		lea   rcx, [sz_name]
 	       call   CmpString
-		lea   rcx, [.sz_error_name]
+		lea   rcx, [sz_error_name]
 	       test   eax, eax
 		 jz   .Error
 	       call   SkipSpaces
@@ -548,7 +613,7 @@ UciSetOption:
 	       test   eax, eax
 		jnz   .CheckValue
 
-		lea   rcx, [.sz_error_value]
+		lea   rcx, [sz_error_value]
 .Error:
 		lea   rdi, [Output]
 	       call   PrintString
@@ -643,11 +708,6 @@ UciSetOption:
 	       call   TableBase_Init
 		jmp   UciGetInput
 
-.sz_error_value:
-db 'error: setoption has no value',0
-.sz_error_name:
-db 'error: setoption has no name',0
-
 
 
 ;;;;;;;;;;;;
@@ -681,7 +741,7 @@ UciPerft:
 
 
 UciBench:
-		mov   r12d, 20	 ; depth
+		mov   r12d, 15	 ; depth
 		mov   r13d, 1	 ; threads
 		mov   r14d, 128  ; hash
 
@@ -724,6 +784,33 @@ UciBench:
 		jmp   .parse_loop
 
 .parse_done:
+
+		lea   rdi, [Output]
+		mov   eax, '*** '
+	      stosd
+		mov   rax, 'starting'
+	      stosq
+		mov   rax, 'bench wi'
+	      stosq
+		mov   rax, 'th hash='
+	      stosq
+		mov   eax, r14d
+	       call   PrintUnsignedInteger
+		mov   rax, ' threads'
+	      stosq
+		mov   al, '='
+	      stosb
+		mov   eax, r13d
+	       call   PrintUnsignedInteger
+		mov   rax, ' depth ='
+	      stosq
+		mov   eax, r12d
+	       call   PrintUnsignedInteger
+		mov   eax, ' ***'
+	      stosd
+       PrintNewLine
+	       call   _WriteOut_Output
+
 		mov   ecx, r14d
 		mov   dword[options.hash], r14d
 	       call   MainHash_Allocate
@@ -745,6 +832,7 @@ UciBench:
 		mov   qword[UciLoop.nodes], r13
 		lea   rsi, [BenchFens]
 .nextpos:
+		add   r13d, 1
 	       call   SkipSpaces
 	       call   Position_ParseFEN
 		lea   rcx, [UciLoop.limits]
@@ -768,12 +856,23 @@ UciBench:
 		add   qword[UciLoop.nodes], rax
 		mov   r15, rax
 
+
 		lea   rdi, [Output]
+		mov   rax, r13
+	       call   PrintUnsignedInteger
+		mov   al, ':'
+	      stosb
+
+		lea   ecx, [rdi-Output]
+		and   ecx, 7
+		xor   ecx, 7
+		mov   al, ' '
+	  rep stosb
+
 		mov   rax, 'nodes:  '
 	      stosq
 		mov   rax, r15
 	       call   PrintUnsignedInteger
-
 		lea   ecx, [rdi-Output-8]
 		and   ecx, 15
 		xor   ecx, 15
@@ -792,8 +891,7 @@ UciBench:
 	      stosb
 		mov   eax, 'knps'
 	      stosd
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	       call   _WriteOut_Output
 
@@ -802,28 +900,50 @@ UciBench:
 
 	       call   _SetNormalPriority
 
+
 		lea   rdi, [Output]
-		mov   rax, 'total no'
+		mov   al, '='
+		mov   ecx, 27
+	  rep stosb
+       PrintNewLine
+
+		mov   rax, 'Total ti'
 	      stosq
-		mov   rax, 'des:    '
+		mov   rax, 'me (ms) '
 	      stosq
+		mov   ax, ': '
+	      stosw
+		mov   rax, qword[UciLoop.time]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+		mov   rax, 'Nodes se'
+	      stosq
+		mov   rax, 'arched  '
+	      stosq
+		mov   ax, ': '
+	      stosw
 		mov   rax, qword[UciLoop.nodes]
 	       call   PrintUnsignedInteger
-		mov   eax, '    '
-	      stosd
+       PrintNewLine
+
+		mov   rax, 'Nodes/se'
+	      stosq
+		mov   rax, 'cond    '
+	      stosq
+		mov   ax, ': '
+	      stosw
+
+		mov   rax, qword[UciLoop.nodes]
+		mov   ecx, 1000
+		mul   rcx
 		mov   rcx, qword[UciLoop.time]
 		cmp   rcx, 1
 		adc   rcx, 0
-		mov   rax, qword[UciLoop.nodes]
-		xor   edx, edx
 		div   rcx
 	       call   PrintUnsignedInteger
-		mov   al, ' '
-	      stosb
-		mov   eax, 'knps'
-	      stosd
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 	       call   _WriteOut_Output
 
 		lea   rcx, [DisplayInfo_Uci]

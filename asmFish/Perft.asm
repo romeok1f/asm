@@ -62,29 +62,51 @@ end virtual
 .MoveLoopDone:
 	       call   _GetTime
 		sub   rax, qword[.time]
-		cmp   rax, 1
-		adc   rax, 0
 		mov   qword[.time], rax
 
 		lea   rdi, [Output]
-		mov   rax, 'total: '
+		mov   al, '='
+		mov   ecx, 27
+	  rep stosb
+       PrintNewLine
+
+		mov   rax, 'Total ti'
 	      stosq
-		sub   rdi, 1
-		mov   rax, r14
-	       call   PrintUnsignedInteger
-		mov   eax,'  ( '
-	      stosd
+		mov   rax, 'me (ms) '
+	      stosq
+		mov   ax, ': '
+	      stosw
 		mov   rax, qword[.time]
 	       call   PrintUnsignedInteger
-		mov   rax,' ms  '
+       PrintNewLine
+
+		mov   rax, 'Nodes se'
 	      stosq
-		sub   rdi, 3
-		mov   eax, 1000
-		mul   r14
-		div   qword[.time]
+		mov   rax, 'arched  '
+	      stosq
+		mov   ax, ': '
+	      stosw
+		mov   rax, r14
 	       call   PrintUnsignedInteger
-		mov   rax,' nps ) ' + (10 shl 56)
+       PrintNewLine
+
+		mov   rax, 'Nodes/se'
 	      stosq
+		mov   rax, 'cond    '
+	      stosq
+		mov   ax, ': '
+	      stosw
+
+		mov   rax, r14
+		mov   ecx, 1000
+		mul   rcx
+		mov   rcx, qword[.time]
+		cmp   rcx, 1
+		adc   rcx, 0
+		div   rcx
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
 	       call   _WriteOut_Output
 .Done:
 		add   rsp, .localsize

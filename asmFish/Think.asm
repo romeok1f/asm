@@ -560,12 +560,7 @@ GD_NewLine
 		and   ecx, VALUE_DRAW+VALUE_MATE
 		sub   ecx, VALUE_MATE
 	       call   PrintScore_Uci
-   match =1, OS_IS_WINDOWS {
-		mov   al, 13
-	      stosb
-   }
-		mov   al, 10
-	      stosb
+       PrintNewLine
 		lea   rcx, [Output]
 	       call   _WriteOut
 		jmp   .search_done
@@ -852,14 +847,7 @@ end if
 		add   r12, 4
 		jmp   .next_move
 	.moves_done:
-
-  match =1, OS_IS_WINDOWS {
-		mov   al, 13
-	      stosb
-  }
-
-		mov   al, 10
-	      stosb
+       PrintNewLine
 		lea   rcx, [.output]
 	       call   _WriteOut
 

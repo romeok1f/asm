@@ -37,7 +37,7 @@ Gen_Legal:
 .FilterNoPinned:
 		and   ecx, 0x0FC0    ; ecx shr 6 = source square
 		add   rsi, sizeof.ExtMove
-		cmp   edx, _MOVE_TYPE_EPCAP shl 12
+		cmp   edx, MOVE_TYPE_EPCAP shl 12
 		jae   .EpCapture
 		cmp   ecx, r14d
 		 je   .KingMove
@@ -60,7 +60,7 @@ Gen_Legal:
 		mov   rcx, qword[PawnAttacks+rcx+8*rax]
 
 	; pseudo legal castling moves are always legal  ep captures have already been caught
-		cmp   edx, _MOVE_TYPE_CASTLE shl 12
+		cmp   edx, MOVE_TYPE_CASTLE shl 12
 		jae   .FilterLegalChoose
 
 		mov   r9, qword[rbp+Pos.typeBB+8*r13]
@@ -125,7 +125,7 @@ Gen_Legal:
 .FilterYesPinned:
 		and   ecx, 0x0FC0    ; ecx shr 6 = source square
 		add   rsi, sizeof.ExtMove
-		cmp   edx, _MOVE_TYPE_EPCAP shl 12
+		cmp   edx, MOVE_TYPE_EPCAP shl 12
 		jae   .EpCapture
 		cmp   ecx, r14d
 		 je   .KingMove

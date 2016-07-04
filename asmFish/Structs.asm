@@ -301,7 +301,10 @@ struct Thread
 		  rb 1
 		  rb 1
 		  rb 1
-
+match =1, DEBUG {
+ stackRecord rq 1
+ stackBase   rq 1
+}
  castling_start rb 0
  castling_rfrom      rb 4
  castling_rto	     rb 4

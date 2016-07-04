@@ -342,7 +342,7 @@ local ..WhileLoop, ..Normal, ..Special, ..Done, ..Positive, ..Capture, ..Negativ
 	      movzx   r11d, byte [rbp+Pos.board+rcx]	 ; r11 = to piece
 	      movzx   edx, byte [rbp+Pos.board+r8]	 ; edx = from piece
 		lea   rcx, [rdi+4*rcx]
-		cmp   r10d, _MOVE_TYPE_CASTLE shl 12
+		cmp   r10d, MOVE_TYPE_CASTLE shl 12
 		jae   ..Special
 	       test   r11d, r11d
 		jnz   ..Capture
@@ -364,7 +364,7 @@ local ..WhileLoop, ..Normal, ..Special, ..Done, ..Positive, ..Capture, ..Negativ
 		jmp   ..Done
 
 ..Special:
-		cmp   r10d, _MOVE_TYPE_EPCAP shl 12
+		cmp   r10d, MOVE_TYPE_EPCAP shl 12
 		 jb   ..Normal ; castling
 		jmp   ..Capture
 

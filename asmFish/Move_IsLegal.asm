@@ -38,7 +38,7 @@ lock inc qword[profile.moveUnpack]
 
 	; pseudo legal castling moves are always legal
 	; ep captures require special attention
-		cmp   edx, _MOVE_TYPE_CASTLE
+		cmp   edx, MOVE_TYPE_CASTLE
 		jae   .Special
 
 	; if we are moving king, have to check destination square
@@ -120,7 +120,7 @@ lock inc qword[profile.moveUnpack]
 	      align   8
 .Special:
 	; pseudo legal castling moves are always legal
-		cmp   edx, _MOVE_TYPE_CASTLE
+		cmp   edx, MOVE_TYPE_CASTLE
 		 je   .Legal
 
 .EpCapture:

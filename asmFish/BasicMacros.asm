@@ -11,20 +11,19 @@ rsid equ esi
 rdid equ edi
 
 
+macro PrintNewLine {
+if OS_IS_WINDOWS
+		mov   al, 13
+	      stosb
+end if
+		mov   al, 10
+	      stosb
+}
+
 ; macro for string functions
 ;  the string m is put in the code
 ;  and the function fxn is called on it
 macro szcall fxn, m {
-local ..message, ..over
-		lea   rcx, [..message]
-		jmp   ..over
-   ..message:  db m
-	      db 0
-   ..over:
-	       call   fxn
-}
-
-macro stdcall fxn, m {
 local ..message, ..over
 		lea   rcx, [..message]
 		jmp   ..over
@@ -268,9 +267,9 @@ macro andn a,b,c {
 
 
 
-; y = BitDeposit(x,m)  slow
+; y = BitDeposit(x,m)  slow: only used in init
 macro _pdep y,x,m,b,t,tm {
-local .start,.skip,.done
+local ..start, ..skip, ..done
  match =1, CPU_HAS_BMI2 \{
 	       pdep  y, x, m
  \}
@@ -279,26 +278,26 @@ local .start,.skip,.done
 		xor  y, y
 		lea  b, [y+1]
 	       test  tm, tm
-		 jz  .done
-	.start: mov  t, tm
+		 jz  ..done
+       ..start: mov  t, tm
 		neg  t
 		and  t, tm
 	       test  x, b
-		 jz  .skip
+		 jz  ..skip
 		 or  y, t
-	.skip:	lea  t, [tm-1]
+       ..skip:	lea  t, [tm-1]
 		add  b, b
 		and  tm, t
-		jnz  .start
-	.done:
+		jnz  ..start
+       ..done:
  \}
 }
 
 
 
-; y = BitExtract(x,m)  slow
+; y = BitExtract(x,m)  slow: only used in init
 macro _pext y,x,m,b,t,tm {
-local .start,.skip,.done
+local ..start, ..skip, ..done
  match =1, CPU_HAS_BMI2 \{
 	       pext  y, x, m
  \}
@@ -307,18 +306,18 @@ local .start,.skip,.done
 		xor  y, y
 		lea  b, [y+1]
 	       test  tm, tm
-		 jz  .done
-	.start: mov  t, tm
+		 jz  ..done
+       ..start: mov  t, tm
 		neg  t
 		and  t, tm
 	       test  t, x
 		lea  t, [tm-1]
-		 jz  .skip
+		 jz  ..skip
 		 or  y, b
-	.skip:	add  b, b
+       ..skip:	add  b, b
 		and  tm, t
-		jnz  .start
-	.done:
+		jnz  ..start
+       ..done:
  \}
 }
 

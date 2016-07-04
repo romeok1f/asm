@@ -210,7 +210,7 @@ _PrintUciMove:
 		and   r10d, 56
 		lea   r10d, [r10+4*rax+FILE_G]
 		shr   ecx, 12
-		lea   eax, [ecx-_MOVE_TYPE_CASTLE]
+		lea   eax, [ecx-MOVE_TYPE_CASTLE]
 		 or   eax, edx
 	      cmovz   r9d, r10d
 
@@ -229,7 +229,7 @@ _PrintUciMove:
 		add   edx, r8d
 		lea   eax, [rax+rdx+'a1']
 
-		sub   ecx, _MOVE_TYPE_PROM
+		sub   ecx, MOVE_TYPE_PROM
 		cmp   ecx, 4
 		 jb   .Promotion
 .Return:

@@ -208,6 +208,10 @@ Thread_Delete:
 Thread_IdleLoop:
 	; rcx: address of Thread struct
 	       push   rbp
+if DEBUG > 0
+mov qword[rcx+Thread.stackBase], rsp
+mov qword[rcx+Thread.stackRecord], 0
+end if
 		mov   rbx, rcx
 		lea   rbp, [Thread_Think]
 		lea   rdx, [MainThread_Think]
