@@ -31,7 +31,7 @@ Any help with this issue would be appreciated.
       - perft 7; quit
       - position startpos moves e2e4; perft 7; quit
     - be aware that commands other than perft and bench do not wait for threads to finish
-  - it seems that movegen/movedo lost a little bit of speed in single-threaded perft from numa awareness code
+  - it seems that movegen/movedo lost a little bit of speed in single-threaded perft from numa awareness
 
 
 2016-07-02:
