@@ -15,13 +15,32 @@ Simply stating that asmFish crashed in your gui is useless information by itself
 asmFish is known to have problems in the fritz15 gui, while it plays much better in the fritz11 gui.
 Any help with this issue would be appreciated.
 
+2016-07-04:
+  - fixed bug in 2016-07-02 where castling data was not copied: pointed out by Lyudmil Antonov
+  - specified 1000000 byte stack reserve size in the exe
+    - previous default of 64K was rounded up to 1M on >=win7 but was only rounded up to 64K on winXP
+    - each recusive call to search requires 2800 bytes, so 64K is only enough for a few plies
+    - threads are created with 100000 byte stack commited size which is enough for ~30 plies
+  - added command line parsing
+    - after the exe on the command line, put uci commands separated by ';' character
+      - this doesn't work well with multiple sygyzy paths; not sure what other character is acceptable
+    - behaviour is not one-shot, so put quit at the end if you want to quit
+    - the following all work in Build Tester 1.4.6.0
+      - bench; quit
+      - bench depth 16 hash 64 threads 2; quit
+      - perft 7; quit
+      - position startpos moves e2e4; perft 7; quit
+    - be aware that commands other than perft and bench do not wait for threads to finish
+  - it seems that movegen/movedo lost a little bit of speed in single-threaded perft from numa awareness code
+
+
 2016-07-02:
   - add numa awareness
     - each numa node gets its own cmh table
     - see function ThreadIdxToNode in Thread.asm for thread to node allocation
     - code should also work on older windows systems with out the numa functions
     - this code is currently untested on numa systems
-  - fixed bug in wdl tablebase filtering
+  - fixed bug in wdl tablebase filtering: pointed out by ma laoshi
   - added debug compile 
   - added hard exits when a critical OS function fails
   - created threads get 0.5 MB of commited stack space to combat a strange bug in XP
