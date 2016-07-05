@@ -33,7 +33,6 @@ Any help with this issue would be appreciated.
     - be aware that commands other than perft and bench do not wait for threads to finish
   - it seems that movegen/movedo lost a little bit of speed in single-threaded perft from numa awareness
 
-
 2016-07-02:
   - add numa awareness
     - each numa node gets its own cmh table
