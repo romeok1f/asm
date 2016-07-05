@@ -374,8 +374,6 @@ _ReadIn:
 		mov   rbx, qword[InputBuffer]
 		lea   r13, [rsp+3CH]
 ?_1062:
-
-
 		mov   rax, rbx
 		sub   rax, qword[InputBuffer]
 		mov   rcx, qword[InputBufferSizeB]
@@ -383,11 +381,6 @@ _ReadIn:
 		cmp   rax, rcx
 		mov   rdx, rcx
 		 jl   ?_1063
-
-
-Display 'reallocating InputBuffer'
-
-
 		add   edx, 4096
 		mov   r9d, 4
 		mov   r8d, 4096
