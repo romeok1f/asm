@@ -354,7 +354,7 @@ align 8
 		jne   .ReturnFalse
 
 	; make sure to is epsquare
-		cmp   r9l, byte[rbx+State._epSquare]
+		cmp   r9l, byte[rbx+State.epSquare]
 		jne   .ReturnFalse
 
 	; make sure from->to is a pawn attack
@@ -439,7 +439,7 @@ align 8
 
 
   .CastleCheck_WhiteOO:
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*0]
 		and   rcx, r15
 		and   eax, 1 shl 0
@@ -451,7 +451,7 @@ align 8
 		ret
 
   .CastleCheck_BlackOO:
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*2]
 		and   rcx, r15
 		and   eax, 1 shl 2
@@ -464,7 +464,7 @@ align 8
 
 
   .CastleCheck_WhiteOOO:
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*1]
 		and   rcx, r15
 		and   eax, 1 shl 1
@@ -476,7 +476,7 @@ align 8
 		ret
 
   .CastleCheck_BlackOOO:
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*3]
 		and   rcx, r15
 		and   eax, 1 shl 3

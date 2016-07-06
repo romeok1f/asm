@@ -195,8 +195,8 @@ match =1, DEBUG \{
 
     if .RootNode eq 0
 	; Step 2. check for aborted search and immediate draws
-	      movzx   eax, word[rbx+State._rule50]
-	      movzx   r8d, word[rbx+State._pliesFromNull]
+	      movzx   eax, word[rbx+State.rule50]
+	      movzx   r8d, word[rbx+State.pliesFromNull]
 		mov   r9, qword[rbx+State.key]
 		cmp   r12d, MAX_PLY
 		jae   .AbortSearch_PlyBigger
@@ -249,8 +249,8 @@ match =1, DEBUG \{
 	     popcnt   rax, rax, rdx
 		mov   r15d, dword[Tablebase_Cardinality]
 		sub   r15d, eax
-	      movzx   eax, word[rbx+State._rule50]
-	      movzx   ecx, byte[rbx+State._castlingRights]
+	      movzx   eax, word[rbx+State.rule50]
+	      movzx   ecx, byte[rbx+State.castlingRights]
 		 or   eax, ecx
 		neg   eax
 		 or   r15d, eax
@@ -337,7 +337,7 @@ match =1, DEBUG \{
 		mov   r9, qword [.posKey]
 		shr   r9, 48
 		mov   edx, VALUE_NONE
-     HashTable_Save   r12, r9w, edx, BOUND_NONE, DEPTH_NONE, 0, r8w
+     HashTable_Save   .ltte, r12, r9w, edx, BOUND_NONE, DEPTH_NONE, 0, r8w
 		jmp   .StaticValueDone
 .StaticValueYesTTHit:
 		cmp   eax, VALUE_NONE
@@ -540,7 +540,7 @@ match =1, DEBUG \{
 	; initialize movepick
 	     Assert   e, qword[rbx+State.checkersBB], 0, 'assertion qword[rbx+State.checkersBB] == 0 failed in Search.Step9'
 		lea   rsi, [.movepick]
-	      movzx   eax, byte[rbx+State._capturedPiece]
+	      movzx   eax, byte[rbx+State.capturedPiece]
 		mov   eax, dword[PieceValue_MG+4*rax]
 		mov   dword[rsi+Pick.threshold], eax
 		lea   r11, [rsi+Pick.moves]
@@ -1489,7 +1489,7 @@ SD_String db '|'
 		sub   edx, 3*ONE_PLY
 		 or   edx, ecx
 		 js   .20TTStore
-		cmp   byte[rbx+State._capturedPiece], 0
+		cmp   byte[rbx+State.capturedPiece], 0
 		jne   .20TTStore
 
 		mov   r10d, dword[.depth]
@@ -1553,7 +1553,7 @@ SD_String db '|'
 		cmp   edi, dword[.beta]
 	     cmovge   esi, ecx
     end if
-     HashTable_Save   r8, r9w, edx, sil, byte[.depth], eax, word[rbx+State.staticEval]
+     HashTable_Save   .ltte, r8, r9w, edx, sil, byte[.depth], eax, word[rbx+State.staticEval]
 		mov   eax, edi
 
 match =2, VERBOSE \{
@@ -1734,7 +1734,7 @@ end if
 		cmp   esi, eax
 	      cmovg   esi, eax
 		xor   eax, eax
-     HashTable_Save   r8, r9w, edx, BOUND_EXACT, sil, eax, VALUE_NONE
+     HashTable_Save   .ltte, r8, r9w, edx, BOUND_EXACT, sil, eax, VALUE_NONE
 		mov   eax, edi
 		jmp   .Return
     end if

@@ -15,8 +15,8 @@ local ..CheckKeys, ..CheckPrev, ..NoDraw
 		pop   rdi rsi rdx rcx
 		 je   isdraw_target
 
-	      movzx   eax, word[rbx+State._rule50]
-	      movzx   t#d, word[rbx+State._pliesFromNull]
+	      movzx   eax, word[rbx+State.rule50]
+	      movzx   t#d, word[rbx+State.pliesFromNull]
 		cmp   eax, t#d
 	      cmova   eax, t#d
 		mov   t, qword[rbx+State.key]

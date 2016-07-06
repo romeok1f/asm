@@ -8,8 +8,8 @@ Position_SetState:
 
 		mov   rax, qword[Zobrist_side]
 		mov   r15d, dword[rbp+Pos.sideToMove]
-	      movzx   ecx, byte[rbx+State._epSquare]
-	      movzx   edx, byte[rbx+State._castlingRights]
+	      movzx   ecx, byte[rbx+State.epSquare]
+	      movzx   edx, byte[rbx+State.castlingRights]
 		neg   r15
 		and   r15, qword[Zobrist_side]
 		xor   r15, qword[Zobrist_Castling+8*rdx]
@@ -81,8 +81,8 @@ Position_VerifyState:
 
 		mov   rax, qword[Zobrist_side]
 		mov   r15d, dword[rbp+Pos.sideToMove]
-	      movzx   ecx, byte[rbx+State._epSquare]
-	      movzx   edx, byte[rbx+State._castlingRights]
+	      movzx   ecx, byte[rbx+State.epSquare]
+	      movzx   edx, byte[rbx+State.castlingRights]
 		neg   r15
 		and   r15, qword[Zobrist_side]
 		xor   r15, qword[Zobrist_Castling+8*rdx]
@@ -258,7 +258,7 @@ irps p, Pawn Knight Bishop Rook Queen {
 		 jb   .VerifyBoard
 
 .VerifyEp:
-	      movzx   ecx, byte [rbx+State._epSquare]
+	      movzx   ecx, byte [rbx+State.epSquare]
 		cmp   ecx, 64
 		jae   .VerifyEpDone
 		mov   rax, Rank3BB+Rank6BB
@@ -357,7 +357,7 @@ end virtual
 		mov   edx, '  ' + (10 shl 16)
 		mov   dl, byte[PieceToChar+rax]
 		mov   eax, '* ' + (10 shl 16)
-		cmp   cl, byte[rbx+State._epSquare]
+		cmp   cl, byte[rbx+State.epSquare]
 	     cmovne   eax, edx
 	      stosd
 		xor   ecx, 0111000b
@@ -444,7 +444,7 @@ end virtual
 	      stosw
 
 	     szcall   PrintString, 'castlingRights: '
-	      movzx   ecx, byte[rbx+State._castlingRights]
+	      movzx   ecx, byte[rbx+State.castlingRights]
 		mov   byte[rdi], '-'
 		cmp   ecx, 1
 		adc   rdi, 0
@@ -464,25 +464,25 @@ end virtual
 	      stosb
 
 	     szcall   PrintString, 'epSquare:       '
-	      movzx   ecx, byte[rbx+State._epSquare]
+	      movzx   ecx, byte[rbx+State.epSquare]
 	       call   PrintSquare
 		mov   al, 10
 	      stosb
 
 	     szcall   PrintString, 'rule50:         '
-	      movzx   rax, word[rbx+State._rule50]
+	      movzx   rax, word[rbx+State.rule50]
 	       call   PrintUnsignedInteger
 		mov   al, 10
 	      stosb
 
 	     szcall   PrintString, 'pliesFromNull:  '
-	      movzx   rax, word[rbx+State._pliesFromNull]
+	      movzx   rax, word[rbx+State.pliesFromNull]
 	       call   PrintUnsignedInteger
 		mov   al, 10
 	      stosb
 
 	     szcall   PrintString, 'capturedPiece:  '
-	      movzx   eax, byte[rbx+State._capturedPiece]
+	      movzx   eax, byte[rbx+State.capturedPiece]
 		mov   al, byte[PieceToChar+rax]
 	      stosb
 		mov   al, 10
@@ -605,7 +605,7 @@ Position_PrintSmall:
 		mov   edx, '  ' + (10 shl 16)
 		mov   dl, byte[PieceToChar+rax]
 		mov   eax, '* ' + (10 shl 16)
-		cmp   cl, byte[rbx+State._epSquare]
+		cmp   cl, byte[rbx+State.epSquare]
 	     cmovne   eax, edx
 	      stosd
 		xor   ecx, 0111000b
@@ -765,7 +765,7 @@ Position_ParseFEN:
 .EpSquare:
 	       call   SkipSpaces
 	       call   ParseSquare
-		mov   byte[rbx+State._epSquare], al
+		mov   byte[rbx+State.epSquare], al
 		cmp   eax, 64
 		 je   .FiftyMoves
 		 ja   .Failed
@@ -777,12 +777,12 @@ Position_ParseFEN:
 		shl   ecx, 6+3
 	       test   rdx, qword[PawnAttacks+rcx+8*rax]
 		jnz   .FiftyMoves			  ; or .Failed
-		mov   byte[rbx+State._epSquare], 64
+		mov   byte[rbx+State.epSquare], 64
 
 .FiftyMoves:
 	       call   SkipSpaces
 	       call   ParseInteger
-		mov   word[rbx+State._rule50], ax
+		mov   word[rbx+State.rule50], ax
 
 .MoveNumber:
 	       call   SkipSpaces
@@ -872,9 +872,9 @@ SetCastlingRights:
 	      movzx   r9d, byte[ksquare_lookup+r15]
 
 	; set castling rights
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 		bts   eax, r15d
-		mov   byte[rbx+State._castlingRights], al
+		mov   byte[rbx+State.castlingRights], al
 
 	; set masks
 	      movzx   eax, byte[rbp-Thread.rootPos+Thread.castling_rightsMask+rsi]
@@ -1024,7 +1024,7 @@ Position_PrintFen:
 	      stosw
 
 	; castling
-	      movzx   ecx, byte[rbx+State._castlingRights]
+	      movzx   ecx, byte[rbx+State.castlingRights]
 		mov   byte[rdi], '-'
 		cmp   ecx, 1
 		adc   rdi, 0
@@ -1043,13 +1043,13 @@ Position_PrintFen:
 	; ep
 		mov   eax, ' '
 	      stosb
-	      movzx   rcx, byte[rbx+State._epSquare]
+	      movzx   rcx, byte[rbx+State.epSquare]
 	       call   PrintSquare
 
 	; 50 moves
 		mov   eax, ' '
 	      stosb
-	      movzx   eax, word[rbx+State._rule50]
+	      movzx   eax, word[rbx+State.rule50]
 	       call   PrintUnsignedInteger
 
 	; ply
@@ -1197,10 +1197,10 @@ Position_CopyToSearch:
 	  rep movsq
 	; make sure that pliesFromNull never references a state past the beginning
 	;  we don't want to fall of the cliff when checking 50 move rule
-	      movzx   eax, word[r11+State._pliesFromNull]
+	      movzx   eax, word[r11+State.pliesFromNull]
 		cmp   eax, edx
 	      cmova   eax, edx
-		mov   word[r11+State._pliesFromNull], ax
+		mov   word[r11+State.pliesFromNull], ax
 
 		sub   r10, sizeof.State
 		sub   r11, sizeof.State

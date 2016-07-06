@@ -45,7 +45,7 @@ match =1, PROFILE {
 lock inc qword[profile.moveUnpack]
 }
 
-	      movzx   r11d, byte[rbx+State._capturedPiece]	; r11 = TO PIECE
+	      movzx   r11d, byte[rbx+State.capturedPiece]      ; r11 = TO PIECE
 	      movzx   r10d, byte[rbp+Pos.board+r9]	       ; r10 = FROM PIECE
 
 		xor   edx, edx

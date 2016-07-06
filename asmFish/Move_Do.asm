@@ -219,24 +219,24 @@ lock inc qword[profile.moveUnpack]
 		add   qword[rbp-Thread.rootPos+Thread.nodes], 1
 
 	; update rule50 and pliesFromNull and capturedPiece
-		mov   eax, dword[rbx+State._rule50]
+		mov   eax, dword[rbx+State.rule50]
 		add   eax, 0x00010001
-		mov   dword[rbx+sizeof.State+State._rule50], eax
-		mov   byte[rbx+sizeof.State+State._capturedPiece], r11l
+		mov   dword[rbx+sizeof.State+State.rule50], eax
+		mov   byte[rbx+sizeof.State+State.capturedPiece], r11l
 
 	; castling rights
-	      movzx   edx, byte[rbx+State._castlingRights]
+	      movzx   edx, byte[rbx+State.castlingRights]
 	      movzx   eax, byte[rbp-Thread.rootPos+Thread.castling_rightsMask+r8]
 		 or   al, byte[rbp-Thread.rootPos+Thread.castling_rightsMask+r9]
 		and   al, dl
 		jnz   .Rights
-.RightsRet:	mov   byte [rbx+sizeof.State+State._castlingRights], dl
+.RightsRet:	mov   byte [rbx+sizeof.State+State.castlingRights], dl
 
 	; ep square
-	      movzx   eax, byte[rbx+State._epSquare]
+	      movzx   eax, byte[rbx+State.epSquare]
 		cmp   eax, 64
 		 jb   .ResetEp
-		mov   byte[rbx+sizeof.State+State._epSquare], al
+		mov   byte[rbx+sizeof.State+State.epSquare], al
 .ResetEpRet:
 	; capture
 		mov   eax, r11d
@@ -276,7 +276,7 @@ lock inc qword[profile.moveUnpack]
 		shr   r10d, 6+3
 
 		not   eax
-		and   word[rbx+sizeof.State+State._rule50], ax
+		and   word[rbx+sizeof.State+State.rule50], ax
 
 	; special moves
 		cmp   ecx, MOVE_TYPE_PROM
@@ -368,7 +368,7 @@ je Move_Do_capking
 	      vmovq   xmm1, qword[Scores_Pieces+r11+8*r9]
 	     vpsubd   xmm0, xmm0, xmm1
 		shr   r11d, 6+3
-		mov   word[rbx+sizeof.State+State._rule50], 0
+		mov   word[rbx+sizeof.State+State.rule50], 0
 		jmp   .CaptureRet
 
 
@@ -401,7 +401,7 @@ je Move_Do_capking
 .ResetEp:
 		and   eax, 7
 		xor   r15, qword[Zobrist_Ep+8*rax]
-		mov   byte[rbx+sizeof.State+State._epSquare], 64
+		mov   byte[rbx+sizeof.State+State.epSquare], 64
 		jmp   .ResetEpRet
 
 
@@ -425,7 +425,7 @@ je Move_Do_capking
 		and   rax, qword[rbp+Pos.typeBB+8*Pawn]
 	       test   rax, qword[rbp+Pos.typeBB+8*rdx]
 		 jz   .SpecialRet
-		mov   byte[rbx+State._epSquare+sizeof.State], r8l
+		mov   byte[rbx+State.epSquare+sizeof.State], r8l
 		and   r8d, 7
 		xor   r15, qword[Zobrist_Ep+8*r8]
 		jmp   .SpecialRet
@@ -494,8 +494,8 @@ je Move_Do_capking
 	      vmovq   xmm1, qword[Scores_Pieces+r10+8*rcx]
 	     vpsubd   xmm0, xmm0, xmm1
 		lea   eax, [8*rsi+Pawn]
-		mov   word[rbx+sizeof.State+State._rule50], 0
-		mov   byte[rbx+sizeof.State+State._capturedPiece], al
+		mov   word[rbx+sizeof.State+State.rule50], 0
+		mov   byte[rbx+sizeof.State+State.capturedPiece], al
 		xor   esi, 1
 		jmp   .SpecialRet
 
@@ -521,7 +521,7 @@ jne Move_Do_badcas
 	       push   rax	    ;   and not used because move type is special
 
 	; fix things caused by kingXrook encoding
-		mov   byte[rbx+sizeof.State+State._capturedPiece], 0
+		mov   byte[rbx+sizeof.State+State.capturedPiece], 0
 
 	; move the pieces
 		mov   edx, r8d

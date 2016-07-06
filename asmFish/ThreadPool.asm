@@ -377,7 +377,7 @@ end virtual
 	     popcnt   rcx, rcx, rdx
 		sub   eax, ecx
 		sar   eax, 31
-		 or   al, byte[rbx+State._castlingRights]
+		 or   al, byte[rbx+State.castlingRights]
 		 jz   .check_tb
 .check_tb_ret:
 

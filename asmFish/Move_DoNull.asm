@@ -15,8 +15,8 @@ jnz	Move_DoNull_posill
 pop	rdi rcx
 }
 
-	      movsx   eax, word[rbx+State._rule50]
-		mov   edx, dword[rbx+State._epSquare]
+	      movsx   eax, word[rbx+State.rule50]
+		mov   edx, dword[rbx+State.epSquare]
 		mov   r8, qword[rbx+State.key]
 		mov   r9, qword[rbx+State.pawnKey]
 		mov   r10, qword[rbx+State.materialKey]
@@ -37,8 +37,8 @@ pop	rdi rcx
 		mov   qword[rbx+State.pawnKey], r9
 		mov   qword[rbx+State.materialKey], r10
 		mov   qword[rbx+State.psq], r11
-		mov   dword[rbx+State._rule50], eax
-		mov   dword[rbx+State._epSquare], edx
+		mov   dword[rbx+State.rule50], eax
+		mov   dword[rbx+State.epSquare], edx
 		mov   qword[rbx+State.checkersBB], rcx
 
 		and   r8, qword[mainHash.mask]

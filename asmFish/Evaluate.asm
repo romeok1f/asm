@@ -377,7 +377,7 @@ else if Pt eq Rook
 		xor   eax, ecx
 	       test   al, byte[rdi+PawnEntry.semiopenFiles+1*Us]
 		jnz   ..NoTrappedByKing
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 		and   eax, 3 shl (2*Us)
 	       setz   al
 		add   eax, 1
@@ -510,7 +510,7 @@ match =Black, Us
 
 		mov   rdi, qword[.ei.pi]
 		mov   ecx, dword[.ei.ksq+4*Us]
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 	      movzx   edx, byte[rdi+PawnEntry.castlingRights]
 		mov   esi, dword[rdi+PawnEntry.kingSafety+4*Us]
 		cmp   cl, byte[rdi+PawnEntry.kingSquares+1*Us]
@@ -702,7 +702,7 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 ..DoKingSafety:
 	; rdi = address of PawnEntry
 		mov   ecx, dword[.ei.ksq+4*Us]
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 	      movzx   edx, byte[rdi+PawnEntry.castlingRights]
 		mov   r12d, eax
 		and   eax, 3 shl (2*Us)

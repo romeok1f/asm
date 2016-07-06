@@ -163,7 +163,7 @@ SD_String db 'probe_wdl()'
 		mov   edx, 2
 	       call   Tablebase_ProbeAB
 		mov   edx, dword[r15]
-		cmp   byte[rbx+State._epSquare], 64
+		cmp   byte[rbx+State.epSquare], 64
 		 jb   .HaveEP
 .Return1:
 SD_String db 'probe_wdl '
@@ -511,7 +511,7 @@ SD_String db 'C|'
 		mov   ecx, dword[rsi+ExtMove.move]
 		mov   edx, eax
 	       call   Move_Do__Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsNonpositive
-	      movzx   eax, word[rbx+State._rule50]
+	      movzx   eax, word[rbx+State.rule50]
 	       test   eax, eax
 		jnz   .Rule50IsNot0
 		mov   eax, -1
@@ -570,7 +570,7 @@ SD_String db 'probe_dtz()'
 		mov   r15, rcx
 	       call   Tablebase_ProbeDTZNoEP
 		mov   edx, dword[r15]
-		cmp   byte[rbx+State._epSquare], 64
+		cmp   byte[rbx+State.epSquare], 64
 		 jb   .HaveEP
 .Return:
 SD_String db 'probe_dtz '
@@ -789,7 +789,7 @@ end virtual
 		jnz   .UndoMove
 
 		lea   rcx, [.success]
-		cmp   word[rbx+State._rule50], 0
+		cmp   word[rbx+State.rule50], 0
 		 je   .Rule50Is0
 .Rule50IsNot0:
 	       call   Tablebase_ProbeDTZ
@@ -820,7 +820,7 @@ end virtual
 		jmp   .RootMoveLoop
 .RootMovesDone:
 
-	      movzx   r14d, word[rbx+State._rule50]
+	      movzx   r14d, word[rbx+State.rule50]
 	; r14d = cnt50
 		xor   edi, edi
 	; esi = wdl
@@ -981,8 +981,8 @@ SD_NewLine
  .WinningLoop:
 		mov   ecx, 4
 	; ecx = i
-	      movzx   edx, word[r8+State._rule50]
-	      movzx   eax, word[r8+State._pliesFromNull]
+	      movzx   edx, word[r8+State.rule50]
+	      movzx   eax, word[r8+State.pliesFromNull]
 		cmp   edx, eax
 	      cmova   edx, eax
 		lea   r9, [r8-2*sizeof.State]

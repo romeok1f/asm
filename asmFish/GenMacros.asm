@@ -423,7 +423,7 @@ end if
 		jnz   .CaptureLeft
     .CaptureLeftDone:
 
-	      movzx   edx, byte[rbx+State._epSquare]
+	      movzx   edx, byte[rbx+State.epSquare]
 		lea   eax, [rdx-Up]
 		cmp   edx, 64
 		jae   .EpDone
@@ -593,7 +593,7 @@ else
  end if
 
 .CastlingOODone:
-	      movzx   eax, byte[rbx+State._castlingRights]
+	      movzx   eax, byte[rbx+State.castlingRights]
 		mov   rcx, qword[rbp-Thread.rootPos+Thread.castling_path+8*(2*Us+1)]
 		and   eax, 2 shl (2*Us)
 		xor   eax, 2 shl (2*Us)
@@ -675,7 +675,7 @@ generate_pawn_moves   Us, Type
 if Type in <CAPTURES, EVASIONS>
 else
 
-	      movzx   r9d, byte[rbx+State._castlingRights]
+	      movzx   r9d, byte[rbx+State.castlingRights]
 
 		mov   r10, qword[rbp-Thread.rootPos+Thread.castling_path+8*(2*Us+0)]
 		mov   r11, qword[rbp-Thread.rootPos+Thread.castling_path+8*(2*Us+1)]

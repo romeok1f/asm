@@ -1,5 +1,5 @@
-macro HashTable_Save entr, key16, value, bounder, depth, move, ev {
-local ..write_move, ..dont_write_move, ..replace, ..dont_replace
+macro HashTable_Save local, entr, key16, value, bounder, depth, move, ev {
+local ..dont_write_move, ..write_everything, ..write_after_move, ..done
 
 
 match =2, VERBOSE \{
@@ -89,6 +89,11 @@ mov r15, qword[Verbr15]
 	    display 13,10
 	    err
 	end if
+
+		mov   rcx, qword[entr]
+		mov   qword[local], rcx
+
+
 		mov   rcx, entr
 		shr   ecx, 3  -  1
 		and   ecx, 3 shl 1
@@ -98,42 +103,60 @@ mov r15, qword[Verbr15]
 		add   rcx, entr
 
 
-
-	       test   eax, eax
-		jnz   ..write_move
 		cmp   key16, word[rcx]
-		 je   ..dont_write_move
-..write_move:
-		mov   word[entr+MainHashEntry.move], ax
+		jne   ..write_everything
+
+if move eq 0
+	if bounder eq BOUND_EXACT
+		jmp   ..write_after_move
+	else
+	end if
+
+
+else
+	       test   eax, eax
+	if bounder eq BOUND_EXACT
+		 jz   ..write_after_move
+	else
+		 jz   ..dont_write_move
+	end if
+		mov   word[local+MainHashEntry.move], ax
+end if
+
 ..dont_write_move:
 
-
-	      movsx   eax, byte[entr+MainHashEntry.depth]
-		sub   eax, 4
-		cmp   key16, word[rcx]
-		jne   ..replace
-		cmp   al, depth
-		 jl   ..replace
+	if bounder eq BOUND_EXACT
+		jmp   ..write_after_move
+	else
 		mov   al, bounder
 		cmp   al, BOUND_EXACT
-		 je   ..replace
-		jmp   ..dont_replace
+		 je   ..write_after_move
+	      movsx   eax, byte[local+MainHashEntry.depth]
+		sub   eax, 4
+		cmp   al, depth
+		 jl   ..write_after_move
+		jmp   ..done
+	end if
 
-..replace:
+..write_everything:
+		mov   word[local+MainHashEntry.move], ax
+		mov   word[rcx], key16
+..write_after_move:
 		mov   al, [mainHash.date]
 		 or   al, bounder
-		mov   byte[entr+MainHashEntry.genBound], al
+		mov   byte[local+MainHashEntry.genBound], al
 		mov   al, depth
-		mov   byte[entr+MainHashEntry.depth], al
+		mov   byte[local+MainHashEntry.depth], al
     if ev eqtype 0
-		mov   word[entr+MainHashEntry.eval], ev
+		mov   word[local+MainHashEntry.eval], ev
     else
 	      movsx   eax, ev
-		mov   word[entr+MainHashEntry.eval], ax
+		mov   word[local+MainHashEntry.eval], ax
     end if
-		mov   word[entr+MainHashEntry.value], dx
-		mov   word[rcx], key16
-..dont_replace:
+		mov   word[local+MainHashEntry.value], dx
+..done:
+		mov   rax, qword[local]
+		mov   qword[entr], rax
 
 
 }

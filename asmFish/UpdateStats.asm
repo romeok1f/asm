@@ -193,7 +193,7 @@ SD_String db '|'
 
 		cmp   eax, 1
 		jne   .done
-		mov   al, byte[rbx+State._capturedPiece]
+		mov   al, byte[rbx+State.capturedPiece]
 	       test   al, al
 		jnz   .done
 

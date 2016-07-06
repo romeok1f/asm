@@ -1,20 +1,4 @@
 ; these are all of the structs used
-;
-; _VirtualAlloc is called only for:
-; (1) MainHash.table
-; (2) the following elements of the Pos struct
-;    Pos.state
-;    Pos.history
-;    Pos.counterMoves
-;    Pos.materialTable
-;    Pos.pawnTable
-;    Pos.rootMovesVec.table
-;   these all are allocated for each of the search threads
-;   the GUI thread only has Pos.state allocated on its two pos1 and pos2 structs
-;     GUI thread has two Pos structs in case the engine is sent an illegal position
-;
-; _VirtualAlloc is always called only from the GUI thread
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ; evaluation structures
@@ -177,11 +161,11 @@ struct State
  materialKey	rq 1
  psq		rw 2
  npMaterial	rw 2
- _rule50	 rw 1  ; these should be together
- _pliesFromNull  rw 1  ;
- _epSquare	 rb 1
- _castlingRights rb 1
- _capturedPiece  rb 1
+ rule50 	rw 1  ; these should be together
+ pliesFromNull	rw 1  ;
+ epSquare	rb 1
+ castlingRights rb 1
+ capturedPiece	rb 1
 ; CheckInfo struct
  ksq		rb 1
  checkersBB	rq 1   ; this is actually not part of checkinfo
