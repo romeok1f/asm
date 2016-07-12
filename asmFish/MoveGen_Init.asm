@@ -409,9 +409,11 @@ match =0, CPU_HAS_BMI2 {
 	       call   _ExitProcess
 
 .Done:
-		cmp   rdi, SlidingAttackMasks+8*107648	 ; this should be the size of the table
+
+		lea   rax, [SlidingAttackMasks+8*107648]
+		cmp   rdi, rax	 ; this should be the size of the table
 		 je   .NoSlidingError
-		lea   rdi,[.BigSizeError]
+		lea   rdi, [.BigSizeError]
 	       call   _ErrorBox
 	       call   _ExitProcess
 	 .BigSizeError: db 'error in calculating slinding attacks',0

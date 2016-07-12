@@ -469,6 +469,7 @@ GD_NewLine
 .dont_wait:
 		mov   byte[signals.stop], -1
 
+
 	; wait for workers
 		xor   esi, esi
 	.next_worker2:
@@ -545,7 +546,6 @@ GD_NewLine
 
 
 
-
 .mate:
 		lea   rdi, [Output]
 		mov   rax, 'info dep'
@@ -574,15 +574,10 @@ GD_NewLine
 		mov   rax, ' NONE'
 	      stosq
 		sub   rdi, 3
-   match =1, OS_IS_WINDOWS {
-		mov   al, 13
-	      stosb
-   }
-		mov   al, 10
-	      stosb
-		lea   rcx, [Output]
-	       call   _WriteOut
+       PrintNewLine
+	       call   _WriteOut_Output
 		jmp   .return
+
 
 
 
@@ -640,7 +635,7 @@ end virtual
 
 ExtractPonderFromTT:
 	; in: rcx address of position
-	       push   rbp rbx rsi rdi r15
+	       push   rbp rbx rsi rdi r13 r14 r15
 virtual at rsp
  .movelist rb sizeof.ExtMove*MAX_MOVES
  .lend	   rb 0
@@ -658,37 +653,34 @@ end virtual
 	       call   Move_GivesCheck
 		mov   ecx, dword[r15+RootMove.pv+4*0]
 		mov   edx, eax
-		add   qword[rbp-Thread.rootPos+Thread.nodes], 1
 	       call   Move_Do__ExtractPonderFromTT
 		mov   rcx, qword[rbx+State.key]
 	       call   MainHash_Probe
 		mov   esi, ecx
 		shr   esi, 16
-		mov   edi, edx
-		mov   ecx, dword[r15+RootMove.pv+4*0]
-	       call   Move_Undo
-		xor   eax, eax
-	       test   edi, edi
+		xor   r14d, r14d
+	       test   edx, edx
 		 jz   .done
 
 		lea   rdi, [.movelist]
 	       call   Gen_Legal
-		lea   rdx, [.movelist]
+		lea   rdx, [.movelist-sizeof.ExtMove]
 	.loop:
-		xor   eax, eax
+		add   rdx, sizeof.ExtMove
 		cmp   rdx, rdi
 		jae   .done
-		add   rdx, sizeof.ExtMove
 		cmp   esi, dword[rdx+ExtMove.move]
 		jne   .loop
 
-		 or   eax, -1
-		mov   ecx, 2
+		 or   r14d, -1
 		mov   dword[r15+RootMove.pv+4*1], esi
-		mov   dword[r15+RootMove.pvSize], ecx
+		mov   dword[r15+RootMove.pvSize], 2
 .done:
+		mov   ecx, dword[r15+RootMove.pv+4*0]
+	       call   Move_Undo
+		mov   eax, r14d
 		add   rsp, .localsize
-		pop   r15 rdi rsi rbx rbp
+		pop   r15 r14 r13 rdi rsi rbx rbp
 		ret
 
 

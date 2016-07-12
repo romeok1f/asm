@@ -405,7 +405,7 @@ _ZL11initialized:					; byte
 	resb	4					; 000344EC
 
 _ZL8TB_mutex:						; qword
-	resq	2					; 000344F0
+	resq	6					; 000344F0
 
 
 

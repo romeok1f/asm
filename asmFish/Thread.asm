@@ -46,7 +46,7 @@ ThreadIdxToNode:
 
 
 Thread_Create:
-; in: ecx index of thread
+	; in: ecx index of thread
 
 	       push   rbx rsi rdi
 		sub   rsp, 8*8
@@ -200,13 +200,12 @@ Thread_Delete:
 		xor   eax, eax
 		mov   qword[threadPool.threadTable+8*rsi], rax
 
-
 		pop   rbx rdi rsi
 		ret
 
 
 Thread_IdleLoop:
-	; rcx: address of Thread struct
+	; in: rcx address of Thread struct
 	       push   rbp
 if DEBUG > 0
 mov qword[rcx+Thread.stackBase], rsp
@@ -232,7 +231,8 @@ GD_String <db 'Thread_IdleLoop enter',10>
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
 		mov   byte[rbx+Thread.searching], 0
-	.check_exit:
+
+    .check_exit:
 		mov   al, byte[rbx+Thread.exit]
 	       test   al, al
 		jnz   .unlock
@@ -244,7 +244,7 @@ GD_String <db 'Thread_IdleLoop enter',10>
 		mov   al, byte[rbx+Thread.searching]
 	       test   al, al
 		 jz   .check_exit
-	.unlock:
+    .unlock:
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
 .check_out:
@@ -266,8 +266,7 @@ Thread_StartSearching:
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
 		mov   byte[rbx+Thread.searching], -1
-.signal:
-		mov   rcx, qword[rbx+Thread.sleepCond]
+.signal:	mov   rcx, qword[rbx+Thread.sleepCond]
 	       call   _EventSignal
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
@@ -287,6 +286,7 @@ Thread_WaitForSearchFinished:
 	; rcx: address of Thread struct
 	       push   rsi rdi rbx
 		mov   rbx, rcx
+		cmp   al, byte[rbx]
 		mov   rsi, qword[rbx+Thread.sleepCond2]
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock

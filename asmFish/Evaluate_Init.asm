@@ -26,71 +26,95 @@ Evaluate_Init:
 	lea	eax, [r8+1H]
 	jnz	._0054
 
-		lea  rsi, [.MobilityBonus_Knight]
-		lea  rdi, [MobilityBonus_Knight]
-		mov  ecx, 9
+
+		lea   rsi, [.MobilityBonus_Knight]
+		lea   rdi, [MobilityBonus_Knight]
+		mov   ecx, 9
 	  rep movsd
-		lea  rsi, [.MobilityBonus_Bishop]
-		lea  rdi, [MobilityBonus_Bishop]
-		mov  ecx, 14
+		lea   rsi, [.MobilityBonus_Bishop]
+		lea   rdi, [MobilityBonus_Bishop]
+		mov   ecx, 14
 	  rep movsd
-		lea  rsi, [.MobilityBonus_Rook]
-		lea  rdi, [MobilityBonus_Rook]
-		mov  ecx, 15
+		lea   rsi, [.MobilityBonus_Rook]
+		lea   rdi, [MobilityBonus_Rook]
+		mov   ecx, 15
 	  rep movsd
-		lea  rsi, [.MobilityBonus_Queen]
-		lea  rdi, [MobilityBonus_Queen]
-		mov  ecx, 28
+		lea   rsi, [.MobilityBonus_Queen]
+		lea   rdi, [MobilityBonus_Queen]
+		mov   ecx, 28
 	  rep movsd
 
-		lea  rsi, [.Lever]
-		lea  rdi, [Lever]
-		mov  ecx, 8
+		lea   rsi, [.Lever]
+		lea   rdi, [Lever]
+		mov   ecx, 8
 	  rep movsd
 
-		lea  rsi, [.ShelterWeakness]
-		lea  rdi, [ShelterWeakness]
-		mov  ecx, 4*8
+		lea   rsi, [.ShelterWeakness]
+		lea   rdi, [ShelterWeakness]
+		mov   ecx, 4*8
 	  rep movsd
-		lea  rsi, [.StormDanger]
-		lea  rdi, [StormDanger]
-		mov  ecx, 4*4*8
-	  rep movsd
-
-
-		lea  rdi, [ThreatBySafePawn]
-		lea  rsi, [.ThreatBySafePawn]
-		mov  ecx, 8
-	  rep movsd
-		lea  rsi, [.ThreatBySafePawn]
-		mov  ecx, 8
-	  rep movsd
-		lea  rdi, [Threat_Minor]
-		lea  rsi, [.Threat_Minor]
-		mov  ecx, 8
-	  rep movsd
-		lea  rsi, [.Threat_Minor]
-		mov  ecx, 8
-	  rep movsd
-		lea  rdi, [Threat_Rook]
-		lea  rsi, [.Threat_Rook]
-		mov  ecx, 8
-	  rep movsd
-		lea  rsi, [.Threat_Rook]
-		mov  ecx, 8
-	  rep movsd
-
-		lea  rsi, [.PassedRank]
-		lea  rdi, [PassedRank]
-		mov  ecx, 8
-	  rep movsd
-		lea  rsi, [.PassedFile]
-		lea  rdi, [PassedFile]
-		mov  ecx, 8
+		lea   rsi, [.StormDanger]
+		lea   rdi, [StormDanger]
+		mov   ecx, 4*4*8
 	  rep movsd
 
 
-		pop  rdi rsi rbx
+		lea   rdi, [ThreatBySafePawn]
+		lea   rsi, [.ThreatBySafePawn]
+		mov   ecx, 8
+	  rep movsd
+		lea   rsi, [.ThreatBySafePawn]
+		mov   ecx, 8
+	  rep movsd
+		lea   rdi, [Threat_Minor]
+		lea   rsi, [.Threat_Minor]
+		mov   ecx, 8
+	  rep movsd
+		lea   rsi, [.Threat_Minor]
+		mov   ecx, 8
+	  rep movsd
+		lea   rdi, [Threat_Rook]
+		lea   rsi, [.Threat_Rook]
+		mov   ecx, 8
+	  rep movsd
+		lea   rsi, [.Threat_Rook]
+		mov   ecx, 8
+	  rep movsd
+
+		lea   rsi, [.PassedRank]
+		lea   rdi, [PassedRank]
+		mov   ecx, 8
+	  rep movsd
+		lea   rsi, [.PassedFile]
+		lea   rdi, [PassedFile]
+		mov   ecx, 8
+	  rep movsd
+
+		lea   rdi, [KingFlank]
+		mov   rax, (Rank4BB or Rank5BB or Rank6BB or Rank7BB or Rank8BB) and (FileABB or FileBBB or FileCBB or FileDBB)
+	      stosq
+	      stosq
+	      stosq
+		mov   rax, (Rank4BB or Rank5BB or Rank6BB or Rank7BB or Rank8BB) and (FileCBB or FileDBB or FileEBB or FileFBB)
+	      stosq
+	      stosq
+		mov   rax, (Rank4BB or Rank5BB or Rank6BB or Rank7BB or Rank8BB) and (FileEBB or FileFBB or FileGBB or FileHBB)
+	      stosq
+	      stosq
+	      stosq
+		mov   rax, (Rank5BB or Rank4BB or Rank3BB or Rank2BB or Rank1BB) and (FileABB or FileBBB or FileCBB or FileDBB)
+	      stosq
+	      stosq
+	      stosq
+		mov   rax, (Rank5BB or Rank4BB or Rank3BB or Rank2BB or Rank1BB) and (FileCBB or FileDBB or FileEBB or FileFBB)
+	      stosq
+	      stosq
+		mov   rax, (Rank5BB or Rank4BB or Rank3BB or Rank2BB or Rank1BB) and (FileEBB or FileFBB or FileGBB or FileHBB)
+	      stosq
+	      stosq
+	      stosq
+
+		pop   rdi rsi rbx
 		ret
 
 

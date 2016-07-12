@@ -358,6 +358,7 @@ StormDanger_NoFriendlyPawn rd 4*8
 StormDanger_Unblocked rd 4*8
 StormDanger_BlockedByPawn rd 4*8
 StormDanger_BlockedByKing rd 4*8
+KingFlank rq 2*8
 ThreatBySafePawn rd 16
 Threat_Minor rd 16
 Threat_Rook rd 16
@@ -573,7 +574,7 @@ match =0, VERBOSE {
 
 	; clean up threads, hash, and tablebases
 		lea   rcx, [?_345]
-	       call   TableBase_Init  ; don't know of another way to clean up tabebases
+	       call   TableBase_Init
 	       call   ThreadPool_Destroy
 	       call   MainHash_Free
 
@@ -604,8 +605,7 @@ include 'Endgame_Init.asm'
 
 section '.idata' import data readable writeable
 
- library kernel,'KERNEL32.DLL',\
-	 msvcrt,'MSVCRT.DLL'
+ library kernel,'KERNEL32.DLL'
 
 import kernel,\
 	__imp_CreateFileA,'CreateFileA',\
@@ -642,22 +642,4 @@ import kernel,\
 	__imp_VirtualFree,'VirtualFree',\
 	__imp_WaitForSingleObject,'WaitForSingleObject',\
 	__imp_WriteFile,'WriteFile'
-
-
-
-
-
-
-; we need this for free and malloc in tablebase code
-; in future, should create custom free and malloc for tablebase code
-import msvcrt,\
-__imp_free,'free',\
-__imp_malloc,'malloc',\
-__imp_printf,'printf',\
-__imp_puts,'puts',\
-__imp_strcat,'strcat',\
-__imp_strcpy,'strcpy',\
-__imp_strcmp,'strcmp',\
-__imp_memset,'memset',\
-__imp_memmove,'memmove'
 

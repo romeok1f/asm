@@ -62,6 +62,14 @@ _Z16pos_material_keyR8Position:
 		 jz   .Empty
 
 	       imul   ecx, eax, 64*8
+       ;       vmovq   xmm1, qword[Scores_Pieces+rcx+8*rsi]
+       ;      vpaddd   xmm0, xmm0, xmm1
+       ;
+       ;         xor   r15, qword[Zobrist_Pieces+rcx+8*rsi]
+       ;         cmp   edx, Pawn
+       ;         jne   @f
+       ;         xor   r14, qword[Zobrist_Pieces+rcx+8*rsi]
+       ;  @@:
 	      movzx   edx, byte [rsp+rax]
 		xor   r13, qword[Zobrist_Pieces+rcx+8*rdx]
 		add   edx, 1
@@ -189,12 +197,9 @@ irps color, White Black {     ; not used;  edx has the color
 		ret
 
 
-
-
-malloc: jmp	_VirtualAlloc
-free:	jmp	_VirtualFree
-exit:	jmp	_ExitProcess
-printf: 	;  don't care about printf's arguments
+exit:	jmp  qword[__imp_ExitProcess]
+malloc: jmp  _VirtualAlloc
+free:	jmp  _VirtualFree
 puts:
 	push	rdi
 	lea	rdi, [Output]
@@ -202,13 +207,12 @@ puts:
 	call	_WriteOut_Output
 	pop	rdi
 	ret
-strcat:
+strcat:  int3
 	mov	al, byte[rcx]
 	inc	rcx
 	test	al, al
 	jne	strcat
-	dec	rcx
-strcpy:
+strcpy:  int3
 	mov	al, byte[rdx]
 	inc	rdx
 	mov	byte[rcx], al
@@ -216,7 +220,6 @@ strcpy:
 	test	al, al
 	jne	strcpy
 	ret
-
 
 
 _ZL12encode_pieceP13TBEntry_piecePhPiS2_:
@@ -847,7 +850,7 @@ _ZL11setup_pairsPhyPyPS_S_i:
 	push	rdi					
 	push	rsi					
 	push	rbx					
-	_chkstk_ms rsp, 4184
+	_chkstk_ms rsp,4184
 	sub	rsp, 4184
 	mov	rax, qword [rsp+10C0H]			
 	mov	rbx, rcx				
@@ -1042,7 +1045,7 @@ _ZL7open_tbPKcS0_:
 	mov	rax, qword [ _ZL5paths] 	
 	mov	rcx, rbx				
 	mov	rdx, qword [rax+rsi*8]			
-	inc	rsi
+	inc	rsi					
 	call	strcpy					
 	lea	rdx, [ ?_338]			
 	mov	rcx, rbx				
@@ -1052,9 +1055,15 @@ _ZL7open_tbPKcS0_:
 	call	strcat					
 	mov	rdx, rbp				
 	mov	rcx, rbx				
-	call	strcat
-	mov	rcx, rbx
-	call	_FileOpen
+	call	strcat					
+	xor	r9d, r9d				
+	mov	edx, 2147483648 			
+	mov	rcx, rbx				
+	mov	qword [rsp+30H], 0			
+	mov	r8d, 1					
+	mov	dword [rsp+28H], 128			
+	mov	dword [rsp+20H], 3			
+	call	near [ __imp_CreateFileA]		
 	cmp	rax, -1 				
 	jz	?_099					
 	jmp	?_101					
@@ -1067,10 +1076,6 @@ _ZL7open_tbPKcS0_:
 	pop	rbp					
 	ret						
 
-
-
-
-
 _ZL8map_filePKcS0_Py:
 	push	rbp					
 	push	rdi					
@@ -1080,29 +1085,42 @@ _ZL8map_filePKcS0_Py:
 	mov	rdi, rcx				
 	mov	rbp, rdx				
 	mov	rbx, r8 				
-	call	_ZL7open_tbPKcS0_			
-	cmp	rax, -1 				
-	mov	rsi, rax				
-	je	?_105
-
+	call	_ZL7open_tbPKcS0_
+	mov	rsi, rax
+	xor	eax, eax
+	cmp	rsi, -1
+	je	._106
+	lea	rdx, [rsp+3CH]				
+	mov	rcx, rax				
+	call	qword[__imp_GetFileSize]
+	xor	edx, edx				
+	mov	r9d, dword [rsp+3CH]			
+	mov	rcx, rsi				
+	mov	qword[rsp+28H], 0
+	mov	r8d, 2					
+	mov	dword[rsp+20H], eax
+	call	qword[__imp_CreateFileMappingA]
+	test	rax, rax				
+	jz	Failed__imp_CreateFileMappingA
+	mov	qword [rbx], rax
+	xor	r9d, r9d				
+	xor	r8d, r8d				
+	mov	edx, 4					
+	mov	qword[rsp+20H], 0
+	mov	rcx, rax				
+	call	qword[__imp_MapViewOfFile]
+	test	rax, rax				
+	mov	rbx, rax				
+	jz	Failed__imp_MapViewOfFile
 	mov	rcx, rsi
-	call	_FileMap
-	mov	qword[rbx], rdx
-	mov	rbx, rax
-
-	mov	rcx, rsi
-	call	_FileClose
-	mov	rax, rbx				
-	jmp	?_106
-
-?_105:	xor	eax, eax				
-?_106:	add	rsp, 72 				
+	call	qword[__imp_CloseHandle]
+	mov	rax, rbx
+._106:	add	rsp, 72
 	pop	rbx					
 	pop	rsi					
 	pop	rdi					
 	pop	rbp					
 	ret
-
 
 
 _Z16decompress_pairsILb1EEhP9PairsDatay:
@@ -1325,7 +1343,7 @@ _ZL7init_tbPc.constprop.4:
 	je	?_149					
 	lea	rdi, [rsp+20H]				
 	mov	rcx, rax				
-	call	_FileClose
+	call	near [ __imp_CloseHandle]		
 	xor	eax, eax				
 ?_123:	mov	dword [rax+rdi], 0			
 	add	rax, 4					
@@ -1559,14 +1577,16 @@ _ZL18calc_factors_piecePiiiPhh:
 _ZL14free_dtz_entryP7TBEntry:
 	push	rsi					
 	push	rbx					
-	sub	rsp, 40
-	mov	rbx, rcx
-
-	mov	rcx, qword[rbx]
-	mov	rdx, qword[rbx+10H]
-	call	_FileUnmap
-
-	xor	esi, esi
+	sub	rsp, 40 				
+	mov	rsi, qword [rcx+10H]			
+	mov	rbx, rcx				
+	mov	rcx, qword [rcx]			
+	test	rcx, rcx				
+	jz	?_156					
+	call	near [ __imp_UnmapViewOfFile]	
+	mov	rcx, rsi				
+	call	near [ __imp_CloseHandle]		
+?_156:	xor	esi, esi				
 	cmp	byte [rbx+1BH], 0			
 	jnz	?_157					
 	mov	rcx, qword [rbx+20H]			
@@ -1690,13 +1710,15 @@ _ZL14free_wdl_entryP7TBEntry:
 	push	rsi					
 	push	rbx					
 	sub	rsp, 40 				
-	mov	rbx, rcx
-
-	mov	rcx, qword [rbx]
-	mov	rdx, qword [rbx+10H]
-	call	_FileUnmap
-
-	xor	esi, esi
+	mov	rsi, qword [rcx+10H]			
+	mov	rbx, rcx				
+	mov	rcx, qword [rcx]			
+	test	rcx, rcx				
+	jz	?_171					
+	call	near [ __imp_UnmapViewOfFile]	
+	mov	rcx, rsi				
+	call	near [ __imp_CloseHandle]		
+?_171:	xor	esi, esi				
 	cmp	byte [rbx+1BH], 0			
 	jnz	?_173					
 	mov	rcx, qword [rbx+20H]			
@@ -1726,6 +1748,9 @@ _ZL14free_wdl_entryP7TBEntry:
 	pop	rsi					
 	ret						
 
+WinMain:
+	xor	eax, eax				
+	ret						
 
 _ZN13TablebaseCore4initEPKc:
 
@@ -1892,14 +1917,16 @@ _ZN13TablebaseCore4initEPKc:
 	jne	?_186					
 	mov	byte [ _ZL11initialized], 1
 
+
 ?_195:
+
+	cmp	byte [rbx], 0
+	je	?_233
 	mov	rax, qword[?_345]
 	cmp	rax, qword[rbx]
 	je	?_233
 	xor	eax, eax				
-	cmp	al, byte [rbx]
-	je	?_233
-	mov	rdi, rbx
+	mov	rdi, rbx				
 	or	rcx, 0FFFFFFFFFFFFFFFFH 		
 	repne scasb					
 	not	rcx					
@@ -1963,13 +1990,14 @@ _ZN13TablebaseCore4initEPKc:
 	inc	rcx					
 	jmp	?_200					
 
-?_204:
-	lea	rcx, [_ZL8TB_mutex]
-	call	_MutexCreate
-
-	lea	rdx, [ _ZL7TB_hash]
+?_204:	xor	edx, edx				
+	xor	ecx, ecx				
+	xor	r8d, r8d				
+	call	near [ __imp_CreateMutexA]		
+	lea	rdx, [ _ZL7TB_hash]			
 	mov	dword [ _ZL10TBnum_pawn], 0		
-	lea	rcx, [ _ZL7TB_pawn]
+	mov	qword [ _ZL8TB_mutex], rax		
+	lea	rcx, [ _ZL7TB_pawn]			
 	mov	dword [ _ZL11TBnum_piece], 0	
 	mov	dword [ _ZN13TablebaseCore14MaxCardinalityE], 0
 ?_205:	xor	eax, eax				
@@ -2295,8 +2323,8 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	cmp	byte [rbx+18H], 0			
 	jne	?_268					
 	or	edx, 0FFFFFFFFH 			
-	lea	rcx, [ _ZL8TB_mutex]
-	call	_MutexLock
+	mov	rcx, qword [ _ZL8TB_mutex]		
+	call	near [ __imp_WaitForSingleObject]	
 	cmp	byte [rbx+18H], 0			
 	jne	?_267					
 	mov	rax, qword [rsp+38H]			
@@ -2314,11 +2342,28 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	test	rax, rax				
 	mov	rbp, rax				
 	mov	qword [rbx], rax			
-	jnz	?_236					
-	lea	rcx, [ ?_347]			
-	mov	rdx, r12				
-	call	printf					
-	jmp	?_239					
+	jnz	?_236
+
+	;lea     rcx, [ ?_347]
+	;mov     rdx, r12
+	;call    printf
+
+	push	rdi rsi
+	lea	rdi, [Output]
+	mov	rax, 'Could no'
+	stosq
+	mov	rax, 't find '
+	stosq
+	sub	rdi, 1
+	mov	rcx, r12
+	call	PrintString
+	mov	rax, '.rtbw'
+	stosq
+	sub	rdi, 3
+	call	_WriteOut_Output
+	pop	rsi rdi
+
+	jmp	?_239
 
 ?_236:	cmp	byte [rax], 113 			
 	jnz	?_237					
@@ -2329,18 +2374,20 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	cmp	byte [rax+3H], 93			
 	jz	?_240					
 ?_237:	lea	rcx, [ ?_348]			
-	call	puts
-
-	mov	rcx, qword [rbx]
-	mov	rdx, qword [rbx+10H]
-	call	_FileUnmap
-
-	mov	qword [rbx], 0
+	call	puts					
+	mov	rcx, qword [rbx]			
+	mov	rdi, qword [rbx+10H]			
+	test	rcx, rcx				
+	jz	?_238					
+	call	near [ __imp_UnmapViewOfFile]	
+	mov	rcx, rdi				
+	call	near [ __imp_CloseHandle]		
+?_238:	mov	qword [rbx], 0				
 ?_239:	mov	qword [rsi], 0				
 	xor	ebx, ebx				
-	mov	dword [r13], 0
-	lea	rcx, [ _ZL8TB_mutex]
-	call	_MutexUnlock
+	mov	rcx, qword [ _ZL8TB_mutex]		
+	mov	dword [r13], 0				
+	call	near [ __imp_ReleaseMutex]
 	jmp	?_281					
 
 ?_240:	mov	al, byte [rax+4H]			
@@ -2650,8 +2697,8 @@ _ZN13TablebaseCore15probe_wdl_tableER8PositionPi:
 	cmp	edx, dword [rsp+30H]			
 	jnz	?_264					
 ?_266:	mov	byte [rbx+18H], 1			
-?_267:	lea	rcx, [_ZL8TB_mutex]
-	call	_MutexUnlock
+?_267:	mov	rcx, qword [ _ZL8TB_mutex]		
+	call	near [ __imp_ReleaseMutex]
 ?_268:	cmp	byte [rbx+1AH], 0			
 	jnz	?_270					
 	mov	rax, qword [rsp+38H]			
@@ -3398,3 +3445,4 @@ SD_Int rax
 SD_String db '|'
 
 	ret						
+

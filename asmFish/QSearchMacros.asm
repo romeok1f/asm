@@ -81,24 +81,24 @@ end virtual
 	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
 
-match =_PV_NODE, NT
-\{
-match =1, InCheck \\{
-DebugStackUse 'qsearch<PV, in check>'
-\\}
-match =0, InCheck \\{
-DebugStackUse 'qsearch<PV, not in check>'
-\\}
-\}
-match =_NONPV_NODE, NT
-\{
-match =1, InCheck \\{
-DebugStackUse 'qsearch<NON_PV, in check>'
-\\}
-match =0, InCheck \\{
-DebugStackUse 'qsearch<NON_PV, not in check>'
-\\}
-\}
+;match =_PV_NODE, NT
+;\{
+;match =1, InCheck \\{
+;DebugStackUse 'qsearch<PV, in check>'
+;\\}
+;match =0, InCheck \\{
+;DebugStackUse 'qsearch<PV, not in check>'
+;\\}
+;\}
+;match =_NONPV_NODE, NT
+;\{
+;match =1, InCheck \\{
+;DebugStackUse 'qsearch<NON_PV, in check>'
+;\\}
+;match =0, InCheck \\{
+;DebugStackUse 'qsearch<NON_PV, not in check>'
+;\\}
+;\}
 
 
 match =2, VERBOSE \{

@@ -93,18 +93,18 @@ end virtual
 	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
 
-match =_ROOT_NODE, NT
-\{
-DebugStackUse 'search<ROOT>'
-\}
-match =_PV_NODE, NT
-\{
-DebugStackUse 'search<PV>'
-\}
-match =_NONPV_NODE, NT
-\{
-DebugStackUse 'search<NON_PV>'
-\}
+;match =_ROOT_NODE, NT
+;\{
+;DebugStackUse 'search<ROOT>'
+;\}
+;match =_PV_NODE, NT
+;\{
+;DebugStackUse 'search<PV>'
+;\}
+;match =_NONPV_NODE, NT
+;\{
+;DebugStackUse 'search<NON_PV>'
+;\}
 
 
 match =2, VERBOSE \{
@@ -200,7 +200,7 @@ match =1, DEBUG \{
 		mov   r9, qword[rbx+State.key]
 		cmp   r12d, MAX_PLY
 		jae   .AbortSearch_PlyBigger
-		cmp   byte [signals.stop], 0
+		cmp   byte[signals.stop], 0
 		jne   .AbortSearch_PlySmaller
 		cmp   eax, 100
 		jae   .CheckDrawBy50
@@ -1124,25 +1124,17 @@ SD_String db '|'
 		mov   eax, dword[r8+4*rcx]
 
 SD_String db 'v='
-SD_Int qword[r8+4*rcx]
+SD_Int rax
 
 	       test   r9, r9
 		 jz   @f
 		add   eax, dword[r9+4*rcx]
-
-SD_String db 'v='
-SD_Int qword[r9+4*rcx]
-
 	@@:    test   r10, r10
 		 jz   @f
 		add   eax, dword[r10+4*rcx]
-SD_String db 'v='
-SD_Int qword[r10+4*rcx]
 	@@:    test   r11, r11
 		 jz   @f
 		add   eax, dword[r11+4*rcx]
-SD_String db 'v='
-SD_Int qword[r11+4*rcx]
 	@@:
 
 SD_String db 'val='

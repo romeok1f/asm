@@ -15,7 +15,7 @@ jnz	Move_DoNull_posill
 pop	rdi rcx
 }
 
-	      movsx   eax, word[rbx+State.rule50]
+	      movzx   eax, word[rbx+State.rule50]
 		mov   edx, dword[rbx+State.epSquare]
 		mov   r8, qword[rbx+State.key]
 		mov   r9, qword[rbx+State.pawnKey]
@@ -58,6 +58,7 @@ pop	rcx
 
 		ret
 
+	      align   8
 .epsq:
 		mov   ecx, edx
 		and   edx, 0xFFFFFF00

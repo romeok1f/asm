@@ -1,27 +1,5 @@
 
 
-macro EvalInit_Targets Us {
-
-local ..PinnedLoop
-
-EvalInit_HavePinners#Us:
-
-		bsf   rcx, rax
-..PinnedLoop:
-		mov   rcx, qword[rdx+8*rcx]
-	       blsr   rax, rax, r9
-		and   rcx, rdi
-	       blsr   r8, rcx, r9
-		neg   r8
-		sbb   r8, r8
-	       andn   rcx, r8, rcx
-		 or   rsi, rcx
-		bsf   rcx, rax
-		jnz   ..PinnedLoop
-		and   rsi, qword[rbp+Pos.typeBB+8*Us]
-		jmp   Evaluate.EvalInit_HavePinners#Us#Ret
-}
-
 
 
 
@@ -67,13 +45,14 @@ match =Black, Us
 ..NoPinned:
 		mov   qword[.ei.pinnedPieces+8*Us], rsi
 
-		mov   edx, dword[.ei.ksq+4*Them]
-		mov   rdx, qword[KingAttacks+8*rdx]
-		mov   qword[.ei.attackedBy+8*(8*Them+King)], rdx
+
+		mov   rdx, qword[.ei.attackedBy+8*(8*Them+King)]
 		 or   qword[.ei.attackedBy+8*(8*Them+0)], rdx
 		mov   rax, qword[rdi+PawnEntry.pawnAttacks+8*Us]
 		mov   qword[.ei.attackedBy+8*(8*Us+Pawn)], rax
 		 or   qword[.ei.attackedBy+8*(8*Us+0)], rax
+		and   rax, qword[.ei.attackedBy+8*(8*Us+King)]
+		mov   qword[.ei.attackedBy2+8*Us], rax
 	; rdx = b
 
 		xor   r8, r8
@@ -210,6 +189,9 @@ match =Queen, Pt \{
 	  display 13,10
 	  err
     end if
+
+	; r12 = b
+
 		mov   rax, qword[.ei.pinnedPieces+8*Us]
 		mov   rcx, qword[.ei.attackedBy+8*(8*Us+Pt)]
 		 bt   rax, r14
@@ -219,9 +201,14 @@ match =Queen, Pt \{
 		and   r12, qword[LineBB+rax+8*r14]
 ..NoPinned:
 		mov   rax, qword[.ei.attackedBy+8*(8*Us+Pt)]
+		mov   rdx, qword[.ei.attackedBy+8*(8*Us+0)]
+		mov   rcx, r12
+		and   rcx, rdx
 		 or   rax, r12
+		 or   rdx, rax
+		 or   qword[.ei.attackedBy2+8*Us], rcx
 		mov   qword[.ei.attackedBy+8*(8*Us+Pt)], rax
-		 or   qword[.ei.attackedBy+8*(8*Us+0)], rax
+		mov   qword[.ei.attackedBy+8*(8*Us+0)], rdx
 
 	       test   r12, qword[.ei.kingRing+8*Them]
 		 jz   ..NoKingRing	; 74.44%
@@ -537,11 +524,7 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 	       test   r11d, r11d
 		 jz   ..AllDone
 
-		mov   r8, qword[.ei.attackedBy+8*(8*Us+Pawn)]
-		 or   r8, qword[.ei.attackedBy+8*(8*Us+Knight)]
-		 or   r8, qword[.ei.attackedBy+8*(8*Us+Bishop)]
-		 or   r8, qword[.ei.attackedBy+8*(8*Us+Rook)]
-		 or   r8, qword[.ei.attackedBy+8*(8*Us+Queen)]
+		mov   r8, qword[.ei.attackedBy2+8*Us]
 		not   r8
 		and   r8, qword[.ei.attackedBy+8*(8*Us+King)]
 		and   r8, qword[.ei.attackedBy+8*(8*Them+0)]
@@ -588,17 +571,10 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 		not   r9
 		and   r9, qword[.ei.attackedBy+8*(8*Them+Queen)]
 		and   r9, r8
-		 jz   ..NoQueenContactCheck
-		mov   r10, qword[.ei.attackedBy+8*(8*Them+Pawn)]
-		 or   r10, qword[.ei.attackedBy+8*(8*Them+Knight)]
-		 or   r10, qword[.ei.attackedBy+8*(8*Them+Bishop)]
-		 or   r10, qword[.ei.attackedBy+8*(8*Them+Rook)]
-		 or   r10, qword[.ei.attackedBy+8*(8*Them+King)]
-		and   r9, r10
+		and   r9, qword[.ei.attackedBy2+8*Them]
 	     popcnt   rax, r9, rcx
 	       imul   eax, QueenContactCheck
 		add   edi, eax
-..NoQueenContactCheck:
 
 	; lower 32 bits of rsi are for additional attackunits, which is always positive
 		shl   rsi, 32
@@ -623,6 +599,7 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
       BishopAttacks   r11, rax, r15, rdx
 	; r11 = b1 = pos.attacks_from<BISHOP>(ksq)
 
+	; Enemy queen safe checks
 		mov   rcx, ((-SafeCheck) shl 32) + QueenCheck
 		mov   rax, r10
 		 or   rax, r11
@@ -633,6 +610,16 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 		and   rax, rcx
 		add   rsi, rax
 
+	; For other pieces, also consider the square safe if attacked twice,
+	; and only defended by a queen.
+		mov   rax, qword[rbp+Pos.typeBB+8*Them]
+		 or   rax, qword[.ei.attackedBy2+8*Us]
+		not   rax
+		and   rax, qword[.ei.attackedBy+8*(8*Us+Queen)]
+		and   rax, qword[.ei.attackedBy2+8*Them]
+		 or   r8, rax
+
+	; Enemy rooks safe and other checks
 		and   r10, qword[.ei.attackedBy+8*(8*Them+Rook)]
 		mov   rcx, ((-SafeCheck) shl 32) + RookCheck
 		mov   rax, r8
@@ -650,6 +637,7 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 		and   rcx, rax
 		add   rsi, rcx
 
+	; Enemy bishops safe and other checks
 		and   r11, qword[.ei.attackedBy+8*(8*Them+Bishop)]
 		mov   rcx, ((-SafeCheck) shl 32) + BishopCheck
 		mov   rax, r8
@@ -667,6 +655,7 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 		and   rcx, rax
 		add   rsi, rcx
 
+	; Enemy knights safe and other checks
 		mov   edx, dword[.ei.ksq+4*Us]
 		mov   r12, qword[KnightAttacks+8*rdx]
 		and   r12, qword[.ei.attackedBy+8*(8*Them+Knight)]
@@ -685,6 +674,9 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
 		sbb   rax, rax
 		and   rcx, rax
 		add   rsi, rcx
+
+	; Finally, extract the king danger score from the KingDanger[]
+	; array and subtract the score from the evaluation.
 
 		add   edi, esi
 		shr   rsi, 32
@@ -1104,6 +1096,29 @@ match =Black, Us
 	       imul   eax, ThreatByPawnPush
 		add   esi, eax
 
+		mov   eax, dword[.ei.ksq+4*Them]
+		and   eax, 7
+		mov   rax, qword[KingFlank+8*(8*Us+rax)]
+		and   rax, qword[.ei.attackedBy+8*(8*Us+0)]
+		mov   rdx, qword[.ei.attackedBy+8*(8*Them+Pawn)]
+		not   rdx
+		and   rdx, qword[.ei.attackedBy2+8*Us]
+		and   rdx, rax
+	if Us eq White
+		shr   rax, 4
+	else if Us eq Black
+		shl   rax, 4
+	end if
+		 or   rax, rdx
+	     popcnt   rax, rax, rcx
+SD_String db 'pct:'
+SD_Int rax
+SD_String db '|'
+	       imul   eax, (7 shl 16) + 0
+		add   esi, eax
+
+
+
 	if Us eq White
 		add   dword[.ei.score], esi
 	else if Us eq Black
@@ -1488,10 +1503,15 @@ ED_NewLine
 		and   r8, qword[rbp+Pos.typeBB+8*White]
 		bsf   r8, r8
 		mov   dword[.ei.ksq+4*White], r8d
+		mov   r8, qword[KingAttacks+8*r8]
+		mov   qword[.ei.attackedBy+8*(8*White+King)], r8
+
 		mov   r9, qword[rbp+Pos.typeBB+8*King]
 		and   r9, qword[rbp+Pos.typeBB+8*Black]
 		bsf   r9, r9
 		mov   dword[.ei.ksq+4*Black], r9d
+		mov   r9, qword[KingAttacks+8*r9]
+		mov   qword[.ei.attackedBy+8*(8*Black+King)], r9
 
 		cmp   rdx, qword[rbx+State.materialKey]
 		jne   DoMaterialEval	; 0.87%

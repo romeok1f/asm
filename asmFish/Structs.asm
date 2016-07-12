@@ -7,6 +7,7 @@
 ; this struct sits on the stack for the whole duration of evaluation
 struct EvalInfo
  attackedBy   rq 16
+ attackedBy2  rq 2
  pinnedPieces rq 2
  mobilityArea rq 2
  kingRing     rq 2

@@ -6,7 +6,7 @@
 
 2. assembling:
 - main source is asmFishW.asm for windows asmFish.asm for unix
-  - source is divided up into many files becuase ordering of these files in asmFish.asm can effect performance
+  - source is divided into many files because ordering of these files in asmFish.asm can affect performance
 - asmFish is written for haswell with macros used to simulate instructions on lower cpu's
   - even without popcnt, performance only drops a few %
 - CPU_HAS_... (most important) indicates available instructions
@@ -14,10 +14,7 @@
 - DEBUG turns on some printing and asserts
 - VERBOSE turns on lots of printing and should only be used when searching for bugs
 
-3. commands:
-- uci
-  - Weakness: set this to n>0 so that the engine tries to lose n cp on average per move
-- uci extra:
+3. extra commands in debug:
   - moves x..	  makes the moves x.. from the current pos. if illegal move appears in list, parsing stops there
   - show	  displays the current board
   - eval	  displays the output of Evaluate on current position

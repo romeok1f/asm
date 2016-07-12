@@ -60,7 +60,7 @@ Position_SetState:
 		and   rdx, qword [rbp+Pos.typeBB+8*rcx]
 		bsf   rdx, rdx
 	       call   AttackersTo_Side
-		mov   qword [rbx+State.checkersBB], rax
+		mov   qword[rbx+State.checkersBB], rax
 
 	       call   SetCheckInfo
 
@@ -164,36 +164,50 @@ Position_IsLegal:
 
 	       push   rbx rdi
 
+	; pieces shoyld not intersect
 		mov   rax, qword[rbp+Pos.typeBB+8*White]
-		and   rax, qword[rbp+Pos.typeBB+8*Black]
+		mov   rcx, qword[rbp+Pos.typeBB+8*Black]
+	       test   rax, rcx
 		jnz   .Failed
 
+	; at most 16 of each type
+	     popcnt   rax, rax, r8
+		cmp   eax, 17
+		jae   .Failed
+	     popcnt   rcx, rcx, r8
+		cmp   ecx, 17
+		jae   .Failed
+
+	; at most 2 checkers
+		mov   rbx, qword[rbp+Pos.state]
+	     popcnt   rax, qword[rbx+State.checkersBB], r8
+		cmp   eax, 3
+		jae   .Failed
 
 .VerifyKings:
-		mov   rax, qword [rbp+Pos.typeBB+8*White]
-		and   rax, qword [rbp+Pos.typeBB+8*King]
+		mov   rax, qword[rbp+Pos.typeBB+8*White]
+		and   rax, qword[rbp+Pos.typeBB+8*King]
 	     popcnt   rax, rax, r8
 		cmp   eax, 1
 		jne   .Failed
-		mov   rax, qword [rbp+Pos.typeBB+8*Black]
-		and   rax, qword [rbp+Pos.typeBB+8*King]
+		mov   rax, qword[rbp+Pos.typeBB+8*Black]
+		and   rax, qword[rbp+Pos.typeBB+8*King]
 	     popcnt   rax, rax, r8
 		cmp   eax, 1
 		jne   .Failed
-
 
 .VerifyPawns:
 		mov   rax, 0xFF000000000000FF
-	       test   rax, qword [rbp+Pos.typeBB+8*Pawn]
+	       test   rax, qword[rbp+Pos.typeBB+8*Pawn]
 		jnz   .Failed
 
 .VerifyPieces:
-		mov   rcx, qword [rbp+Pos.typeBB+8*White]
+		mov   rcx, qword[rbp+Pos.typeBB+8*White]
 		mov   r9, rcx
-		and   rcx, qword [rbp+Pos.typeBB+8*King]
+		and   rcx, qword[rbp+Pos.typeBB+8*King]
 	     popcnt   rdx, r9, r8
 irps p, Pawn Knight Bishop Rook Queen {
-		mov   rax, qword [rbp+Pos.typeBB+8*p]
+		mov   rax, qword[rbp+Pos.typeBB+8*p]
 		and   rax, r9
 		 or   rcx, rax
 	     popcnt   rax, rax, r8
@@ -205,12 +219,12 @@ irps p, Pawn Knight Bishop Rook Queen {
 		jne   .Failed
 
 
-		mov   rcx, qword [rbp+Pos.typeBB+8*Black]
+		mov   rcx, qword[rbp+Pos.typeBB+8*Black]
 		mov   r9, rcx
-		and   rcx, qword [rbp+Pos.typeBB+8*King]
+		and   rcx, qword[rbp+Pos.typeBB+8*King]
 	     popcnt   rdx, r9, r8
 irps p, Pawn Knight Bishop Rook Queen {
-		mov   rax, qword [rbp+Pos.typeBB+8*p]
+		mov   rax, qword[rbp+Pos.typeBB+8*p]
 		and   rax, r9
 		 or   rcx, rax
 	     popcnt   rax, rax, r8
@@ -235,20 +249,20 @@ irps p, Pawn Knight Bishop Rook Queen {
 		cmp   eax, 1
 		 je   .Failed
 		and   ecx, 8
-		mov   r8, [rbp+Pos.typeBB+8*rax]
-		and   r8, [rbp+Pos.typeBB+rcx]
+		mov   r8, qword[rbp+Pos.typeBB+8*rax]
+		and   r8, qword[rbp+Pos.typeBB+rcx]
 		 bt   r8, rdx
 		jnc   .Failed
 		jmp   .next
 .empty:
-		mov   r8, [rbp+Pos.typeBB+8*0]
-		 or   r8, [rbp+Pos.typeBB+8*1]
-		 or   r8, [rbp+Pos.typeBB+8*2]
-		 or   r8, [rbp+Pos.typeBB+8*3]
-		 or   r8, [rbp+Pos.typeBB+8*4]
-		 or   r8, [rbp+Pos.typeBB+8*5]
-		 or   r8, [rbp+Pos.typeBB+8*6]
-		 or   r8, [rbp+Pos.typeBB+8*7]
+		mov   r8, qword[rbp+Pos.typeBB+8*0]
+		 or   r8, qword[rbp+Pos.typeBB+8*1]
+		 or   r8, qword[rbp+Pos.typeBB+8*2]
+		 or   r8, qword[rbp+Pos.typeBB+8*3]
+		 or   r8, qword[rbp+Pos.typeBB+8*4]
+		 or   r8, qword[rbp+Pos.typeBB+8*5]
+		 or   r8, qword[rbp+Pos.typeBB+8*6]
+		 or   r8, qword[rbp+Pos.typeBB+8*7]
 		 bt   r8, rdx
 		 jc   .Failed
 
@@ -294,10 +308,10 @@ irps p, Pawn Knight Bishop Rook Queen {
 
 .VerifyKingCapture:
 	; make sure we can't capture their king
-	      movzx   ecx, byte [rbp+Pos.sideToMove]
+	      movzx   ecx, byte[rbp+Pos.sideToMove]
 		xor   ecx, 1
-		mov   rdx, qword [rbp+Pos.typeBB+8*King]
-		and   rdx, qword [rbp+Pos.typeBB+8*rcx]
+		mov   rdx, qword[rbp+Pos.typeBB+8*King]
+		and   rdx, qword[rbp+Pos.typeBB+8*rcx]
 		bsf   rdx, rdx
 	       call   AttackersTo_Side
 	       test   rax, rax
