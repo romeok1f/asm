@@ -52,7 +52,6 @@ Any help with this issue would be appreciated.
     - there are three other places with VERY minor functional changes, only affecting evaluation
   - syzygy path now has no length limit
   - fix crash when thinking about a position that is mate
-    - master is dirty in this respect, as the operator [0] is used on an empty root moves vector
   - fix numerous bugs in tablebase probing code
   - fix bug in Move_Do: condition for faster update of checkersBB is working now
   - fix bugs in KNPKB and KRPKR endgames: some cases were mis-evaluated
