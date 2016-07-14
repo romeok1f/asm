@@ -256,6 +256,7 @@ KPKEndgameTableOffset	rcx, tn, to, wk, bk
 .End:
 
 		pop   rcx
+		mov   edx, 64*64*2*64
 	       call   _VirtualFree
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret

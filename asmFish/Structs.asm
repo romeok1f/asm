@@ -1,33 +1,5 @@
 ; these are all of the structs used
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
-; evaluation structures
-;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; this struct sits on the stack for the whole duration of evaluation
-struct EvalInfo
- attackedBy   rq 16
- attackedBy2  rq 2
- pinnedPieces rq 2
- mobilityArea rq 2
- kingRing     rq 2
- kingAttackersCount rd 2
- kingAttackersWeight rd 2
- kingAdjacentZoneAttacksCount rd 2
- ksq  rd 2
- me   rq 1
- pi   rq 1
- score	   rd 1
-	   rd 1
- _mobility rd 2  ; not used anymore
-ends
-
-struct EndgameMapEntry
- key	rq 1
- entry	rb 1
-	rb 7 ; assumed to be zeros
-ends
-
 
 ;;;;;;;;;;;;;;;;;;;;
 ; hash table structures
@@ -77,6 +49,34 @@ struct PawnEntry	; 80 bytes
  castlingRights rb 1
 ends
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+; evaluation structures
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; this struct sits on the stack for the whole duration of evaluation
+struct EvalInfo
+ attackedBy   rq 16
+ attackedBy2  rq 2
+ pinnedPieces rq 2
+ mobilityArea rq 2
+ kingRing     rq 2
+ kingAttackersCount  rd 2
+ kingAttackersWeight rd 2
+ kingAdjacentZoneAttacksCount rd 2
+ ksq			      rd 2
+ me   rq 1
+ pi   rq 1
+ score	   rd 1
+	   rd 1
+ _mobility rd 2  ; not used anymore
+ends
+
+struct EndgameMapEntry
+ key	rq 1
+ entry	rb 1
+	rb 7 ; assumed to be zeros
+ends
 
 ;;;;;;;;;;;;;;;;;;;;
 ; move structures

@@ -40,6 +40,7 @@ ThreadPool_Destroy:
 		add   rbx, rdi
 .NextNumaNode:
 		mov   rcx, qword[rdi+NumaNode.cmhTable]
+		mov   edx, 4*16*64*16*64
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[rdi+NumaNode.cmhTable], rax

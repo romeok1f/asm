@@ -1125,12 +1125,12 @@ Position_CopyTo:
 	       test   rdi, rdi
 		 jz   .alloc
 
-	; rcx = capacity of states in destination
-		mov   rcx, qword[r13+Pos.stateEnd]
-		sub   rcx, rdi
+	; rdx = capacity of states in destination
+		mov   rdx, qword[r13+Pos.stateEnd]
+		sub   rdx, rdi
 
-	; if rcx < r14, we need to realloc
-		cmp   rcx, r14
+	; if rdx < r14, we need to realloc
+		cmp   rdx, r14
 		 jb   .realloc
 
 .copy_states:
@@ -1148,6 +1148,7 @@ Position_CopyTo:
 
 .realloc:
 		mov   rcx, rdi
+		; rdx already has the size
 	       call   _VirtualFree
 .alloc:
 		lea   rcx, [2*r14]
@@ -1191,9 +1192,9 @@ Position_CopyToSearch:
 
 	; rcx = capacity of states in destination
 	; if rcx < MAX_PLY+102, we need to realloc
-		mov   rcx, qword[r13+Pos.stateEnd]
-		sub   rcx, r9
-		cmp   rcx, sizeof.State*(100+MAX_PLY+2)
+		mov   rdx, qword[r13+Pos.stateEnd]
+		sub   rdx, r9
+		cmp   rdx, sizeof.State*(100+MAX_PLY+2)
 		 jb   .realloc
 .copy_states:
 	; r9 = address of its state table
@@ -1228,6 +1229,7 @@ Position_CopyToSearch:
 
 .realloc:
 		mov   rcx, r9
+		; rdx already has the size
 	       call   _VirtualFree
 .alloc:
 		mov   ecx, sizeof.State*(100+MAX_PLY+2)
@@ -1269,6 +1271,8 @@ Position_SetExtraCapacity:
 		shr   ecx, 3
 	  rep movsq
 		mov   rcx, qword[rbp+Pos.stateTable]
+		mov   rdx, qword[rbp+Pos.stateEnd]
+		sub   rdx, rcx
 		mov   rbx, r9
 		mov   qword[rbp+Pos.state], r9
 		mov   qword[rbp+Pos.stateTable], r8

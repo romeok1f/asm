@@ -21,9 +21,15 @@ _MutexDestroy:
 ;;;;;;;;
 
 _FileOpen:
-	; in: rcx path string
-	; out: rax handle from CreateFile (win), fd (linux)
-	       int3
+	; in: rcx path string  
+	; out: rax handle from CreateFile (win), fd (linux)  
+	       push   rbx rsi rdi  
+		mov   rdi, rcx
+		mov   esi, O_RDWR
+		mov   eax, sys_open
+	    syscall  
+		pop   rdi rsi rbx 
+		ret
 
 _FileClose:
 	; in: rcx handle from CreateFile (win), fd (linux)
@@ -77,6 +83,7 @@ _ThreadJoin:
 
 _ExitProcess:
 	; rcx is exit code
+	       push   rdi
 		mov   rdi, rcx
 		mov   eax, sys_exit
 	    syscall

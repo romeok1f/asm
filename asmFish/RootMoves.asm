@@ -45,6 +45,7 @@ RootMovesVec_Destroy:
 		xor   eax, eax
 		mov   qword[rbx+RootMovesVec.table], rax
 		mov   qword[rbx+RootMovesVec.ender], rax
+		mov   edx, sizeof.RootMove*MAX_MOVES
 	       call   _VirtualFree
 		pop   rbx
 		ret

@@ -90,6 +90,12 @@ Evaluate_Init:
 		mov   ecx, 8
 	  rep movsd
 
+		lea   rsi, [.Linear]
+		lea   rdi, [DoMaterialEval_Data]
+		mov   ecx, 8*(1+6+6)
+	  rep movsd
+
+
 		lea   rdi, [KingFlank]
 		mov   rax, (Rank4BB or Rank5BB or Rank6BB or Rank7BB or Rank8BB) and (FileABB or FileBBB or FileCBB or FileDBB)
 	      stosq
@@ -299,6 +305,23 @@ align 4
  dd 0
 
 
+
+.Linear:
+	dd 0, 1667, -168,-1027, -166,  238, -138,    0
+.QuadraticOurs:
+	dd 0,	 0,    0,    0,    0,	 0,    0,    0
+	dd 0,	40,    2,    0,    0,	 0,    0,    0
+	dd 0,	32,  255,   -3,    0,	 0,    0,    0
+	dd 0,	 0,  104,    4,    0,	 0,    0,    0
+	dd 0,  -26,   -2,   47,  105, -149,    0,    0
+	dd 0, -185,   24,  122,  137, -134,    0,    0
+.QuadraticTheirs:
+	dd 0,	 0,    0,    0,    0,	 0,    0,    0
+	dd 0,	36,    0,    0,    0,	 0,    0,    0
+	dd 0,	 9,   63,    0,    0,	 0,    0,    0
+	dd 0,	59,   65,   42,    0,	 0,    0,    0
+	dd 0,	46,   39,   24,  -24,	 0,    0,    0
+	dd 0,  101,  100,  -37,  141,  268,    0,    0
 
 
 

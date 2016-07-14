@@ -10,15 +10,17 @@ MainHash_Allocate:
 	      cmova   eax, edx
 		xor   ebx, ebx
 		bts   rbx, rax
-		mov   dword[rsi+MainHash.sizeMB], ebx
 
 		mov   rcx, qword[rsi+MainHash.table]
+		mov   edx, dword[rsi+MainHash.sizeMB]
+		shl   rdx, 20
 	       call   _VirtualFree
 
+		mov   dword[rsi+MainHash.sizeMB], ebx
 		shl   rbx, 20	; rbx = # of bytes in HashTable
 		mov   rcx, rbx
 	       call   _VirtualAlloc
-		shr   rbx, 5
+		shr   rbx, 5	; cluster size is 32 bytes
 		sub   rbx, 1
 		mov   qword[rsi+MainHash.table], rax
 		mov   qword[rsi+MainHash.mask], rbx
@@ -43,6 +45,8 @@ MainHash_Clear:
 MainHash_Free:
 	       push   rbp
 		mov   rcx, qword[mainHash.table]
+		mov   edx, dword[mainHash.sizeMB]
+		shl   rdx, 20
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[mainHash.table], rax

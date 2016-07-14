@@ -305,9 +305,19 @@ _VirtualAllocNuma:
 	       test   rax, rax
 		 jz   _VirtualAlloc
 		sub   rsp, 8*7
+
+if DEBUG > 0
+add qword[DebugBalance], rcx
+end if
+
+
+GD_String db 'size: '
+GD_Int rcx
+GD_NewLine
 GD_String db 'alloc'
 GD_Int rdx
 GD_String db ': '
+
 		mov   qword[rsp+8*5], rdx
 		mov   qword[rsp+8*4], PAGE_READWRITE
 		mov   r9d, MEM_COMMIT
@@ -317,11 +327,9 @@ GD_String db ': '
 	       call   rax
 	       test   rax, rax
 		 jz   Failed__imp_VirtualAllocExNuma
-if DEBUG > 0
-add dword[DebugBalance], 1
-end if
 GD_Hex rax
 GD_NewLine
+
 		add   rsp, 8*7
 		ret
 
@@ -331,7 +339,15 @@ _VirtualAlloc:
 	; rcx is size
 	;  if this fails, we want to exit immediately
 		sub   rsp, 8*5
+
+if DEBUG > 0
+add qword[DebugBalance], rcx
+end if
+GD_String db 'size: '
+GD_Int rcx
+GD_NewLine
 GD_String db 'alloc:  '
+
 		mov   rdx, rcx
 		xor   ecx, ecx
 		mov   r8d, MEM_COMMIT
@@ -339,32 +355,35 @@ GD_String db 'alloc:  '
 	       call   qword[__imp_VirtualAlloc]
 	       test   rax, rax
 		 jz   Failed__imp_VirtualAlloc
-if DEBUG > 0
-add dword[DebugBalance], 1
-end if
 GD_Hex rax
 GD_NewLine
+
 		add   rsp, 8*5
 		ret
 
 
 _VirtualFree:
 	; in: rcx address     if 0 is passed, we should do nothing
-	;     rdx don't care (win), size (linux)
+	;     rdx don't care (win), size (linux)  however we do care about this for DEBUG
 		sub   rsp, 8*5
-		xor   edx, edx
 		mov   r8d, MEM_RELEASE
 	       test   rcx, rcx
 		 jz   .null
+
+if DEBUG > 0
+sub qword[DebugBalance], rdx
+end if
+GD_String db 'size: '
+GD_Int rdx
+GD_NewLine
 GD_String db 'free:  '
 GD_Hex rcx
 GD_NewLine
+
+		xor   edx, edx
 	       call   qword[__imp_VirtualFree]
 	       test   eax, eax
 		 jz   Failed__imp_VirtualFree
-if DEBUG > 0
-sub dword[DebugBalance], 1
-end if
  .null:
 		add   rsp, 8*5
 		ret
@@ -456,21 +475,31 @@ _ReadIn:
 		cmp   rax, rcx
 		mov   rdx, rcx
 		 jl   ?_1063
+
+GD_String db 'INPUT REALLOC'
+GD_NewLine
+
 		add   edx, 4096
 		mov   r9d, 4
 		mov   r8d, 4096
 		xor   ecx, ecx
+if DEBUG > 0
+add qword[DebugBalance], rdx
+end if
 	       call   qword[__imp_VirtualAlloc]
 	       test   rax, rax
 		 jz   Failed__imp_VirtualAlloc_ReadIn
-if DEBUG > 0
-add dword[DebugBalance], 1
-end if
+
 GD_String db 'alloc: '
 GD_Hex rax
 GD_NewLine
 
-		mov   ecx, dword[InputBufferSizeB]
+		mov   rcx, qword[InputBufferSizeB]
+
+if DEBUG > 0
+sub qword[DebugBalance], rcx
+end if
+
 		mov   r8d, MEM_RELEASE
 		xor   edx, edx
 		mov   rsi, qword[InputBuffer]
@@ -486,9 +515,6 @@ GD_NewLine
 	       call   qword[__imp_VirtualFree]
 	       test   rax, rax
 		 jz   Failed__imp_VirtualFree_ReadIn
-if DEBUG > 0
-sub dword[DebugBalance], 1
-end if
 		sub   rbx, qword [InputBuffer]
 		mov   qword[InputBuffer], rbp
 		add   qword[InputBufferSizeB], 4096
@@ -682,6 +708,7 @@ GD_String db '*** finished enumerating processor cores *** '
 GD_NewLine
 GD_NewLine
 		mov   rcx, r15
+		mov   edx, dword[rsp+8*8]
 	       call   _VirtualFree
 
 
@@ -861,68 +888,68 @@ Failed:
 Failed_HashmaxTooLow:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db 'HSHMAX too low!'
+		@@: db 'HSHMAX too low!',0
 Failed__imp_CreateFileMappingA:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_CreateFileMappingA failed'
+		@@: db '__imp_CreateFileMappingA failed',0
 Failed__imp_MapViewOfFile:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_MapViewOfFile failed'
+		@@: db '__imp_MapViewOfFile failed',0
 
 Failed__imp_SetEvent:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_SetEvent failed'
+		@@: db '__imp_SetEvent failed',0
 Failed__imp_CreateEvent:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_CreateEvent failed'
+		@@: db '__imp_CreateEvent failed',0
 Failed__imp_WaitForSingleObject:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_WaitForSingleObject failed'
+		@@: db '__imp_WaitForSingleObject failed',0
 Failed__imp_CreateThread_CREATE_SUSPENDED:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_CreateThread CREATE_SUSPENDED failed'
+		@@: db '__imp_CreateThread CREATE_SUSPENDED failed',0
 Failed__imp_SetThreadGroupAffinity:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_SetThreadGroupAffinity failed'
+		@@: db '__imp_SetThreadGroupAffinity failed',0
 Failed__imp_ResumeThread:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_ResumeThread failed'
+		@@: db '__imp_ResumeThread failed',0
 Failed__imp_CreateThread:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_CreateThread failed'
+		@@: db '__imp_CreateThread failed',0
 Failed__imp_QueryPerformanceFrequency:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_QueryPerformanceFrequency failed'
+		@@: db '__imp_QueryPerformanceFrequency failed',0
 Failed__imp_VirtualAllocExNuma:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_VirtualAllocExNuma failed'
+		@@: db '__imp_VirtualAllocExNuma failed',0
 Failed__imp_VirtualAlloc:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_VirtualAlloc failed'
+		@@: db '__imp_VirtualAlloc failed',0
 Failed__imp_VirtualFree:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_VirtualFree failed'
+		@@: db '__imp_VirtualFree failed',0
 Failed__imp_VirtualAlloc_ReadIn:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_VirtualAlloc inside _ReadIn failed'
+		@@: db '__imp_VirtualAlloc inside _ReadIn failed',0
 Failed__imp_VirtualFree_ReadIn:
 		lea   rdi, [@f]
 		jmp   Failed
-		@@: db '__imp_VirtualFree inside _ReadIn failed'
+		@@: db '__imp_VirtualFree inside _ReadIn failed',0
 
 
 

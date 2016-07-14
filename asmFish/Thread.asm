@@ -157,18 +157,21 @@ Thread_Delete:
 
 	; free material hash
 		mov   rcx, qword[rbx+Thread.rootPos+Pos.materialTable]
+		mov   edx, MATERIAL_HASH_ENTRY_COUNT*sizeof.MaterialEntry
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[rbx+Thread.rootPos+Pos.materialTable], rax
 
 	; free pawn hash
 		mov   rcx, qword[rbx+Thread.rootPos+Pos.pawnTable]
+		mov   edx, PAWN_HASH_ENTRY_COUNT*sizeof.PawnEntry
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[rbx+Thread.rootPos+Pos.pawnTable], rax
 
 	; free history and counterMoves
 		mov   rcx, qword[rbx+Thread.rootPos+Pos.history]
+		mov   edx, 4*16*64*2
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[rbx+Thread.rootPos+Pos.history], rax
@@ -180,6 +183,8 @@ Thread_Delete:
 
 	; destroy the state table
 		mov   rcx, qword[rbx+Thread.rootPos+Pos.stateTable]
+		mov   rdx, qword[rbx+Thread.rootPos+Pos.stateEnd]
+		sub   rdx, rcx
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[rbx+Thread.rootPos+Pos.state], rax
@@ -196,6 +201,7 @@ Thread_Delete:
 
 	; free self
 		mov   rcx, qword[threadPool.threadTable+8*rsi]
+		mov   edx, sizeof.Thread
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[threadPool.threadTable+8*rsi], rax

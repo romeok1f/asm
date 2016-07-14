@@ -351,6 +351,23 @@ Threat_Rook rd 16
 PassedRank rd 8
 PassedFile rd 8
 
+DoMaterialEval_Data:
+.Linear:
+	rd 8
+.QuadraticOurs:
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+.QuadraticTheirs:
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+	rd 8
 
 
 ;;;;;;;;;;;;;; data for endgames ;;;;;;;;;;;;;;
@@ -510,6 +527,7 @@ Start:
        PrintNewLine
 		mov   rcx, qword[InputBuffer]
 	       call   _WriteOut
+
 		mov   ecx, 1000
 	       call   _Sleep
 

@@ -247,7 +247,7 @@ macro andn a,b,c {
  \}
  match =0, CPU_HAS_BMI1 \{
 	if b eq c
-	  display 'arguments of _andn are strange'
+	  display 'arguments of andn are strange'
 	  display 13,10
 	  err
 	else if a eq c

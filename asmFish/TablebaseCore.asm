@@ -90,8 +90,6 @@ _Z10pos_piecesR8Position5Color9PieceType:
 	;     edx color
 	;     r8d piece type (1=pawn, 2=knight, ..., 6=king)
 	; out: rax bitboard of pieces
-
-
 		mov   rax, qword[rcx+Pos.typeBB+8*rdx]
 		and   rax, qword[rcx+Pos.typeBB+8*(r8+1)]   ; we are shifted by one
 		ret
@@ -189,33 +187,49 @@ irps color, White Black {     ; not used;  edx has the color
 		ret
 
 
+; todo: malloc and free need a little work after profiling to see what sizes are common
+;  for now, we just call _VirtualAlloc on size+16 and store the size in the first qword
+;     of the returned page(s).
+
+malloc: 	add   rcx, 16
+	       push   rcx
+	       call   _VirtualAlloc
+		pop   rcx
+		mov   qword[rax], rcx
+		add   rax, 16
+		ret
+
+free:		sub   rcx, 16
+		 js   @f
+		mov   rdx, qword[rcx]
+		jmp   _VirtualFree
+	@@:	ret
 
 
-malloc: jmp	_VirtualAlloc
-free:	jmp	_VirtualFree
-exit:	jmp	_ExitProcess
+
+exit:		jmp   _ExitProcess
 printf: 	;  don't care about printf's arguments
 puts:
-	push	rdi
-	lea	rdi, [Output]
-	call	PrintString
-	call	_WriteOut_Output
-	pop	rdi
-	ret
+	       push   rdi
+		lea   rdi, [Output]
+	       call   PrintString
+	       call   _WriteOut_Output
+		pop   rdi
+		ret
 strcat:
-	mov	al, byte[rcx]
-	inc	rcx
-	test	al, al
-	jne	strcat
-	dec	rcx
+		mov   al, byte[rcx]
+		inc   rcx
+	       test   al, al
+		jne   strcat
+		dec   rcx
 strcpy:
-	mov	al, byte[rdx]
-	inc	rdx
-	mov	byte[rcx], al
-	inc	rcx
-	test	al, al
-	jne	strcpy
-	ret
+		mov   al, byte[rdx]
+		inc   rdx
+		mov   byte[rcx], al
+		inc   rcx
+	       test   al, al
+		jne   strcpy
+		ret
 
 
 
@@ -1751,7 +1765,12 @@ _ZN13TablebaseCore4initEPKc:
 	xor	esi, esi				
 	call	free					
 	mov	rcx, qword [ _ZL5paths] 	
-	call	free					
+	call	free
+
+	xor	eax, eax
+	mov	qword [ _ZL11path_string], rax
+	mov	qword [ _ZL5paths], rax
+
 ?_176:	cmp	esi, dword [ _ZL11TBnum_piece]	
 	jge	?_177					
 	mov	rcx, rdi				

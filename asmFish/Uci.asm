@@ -54,6 +54,8 @@ end virtual
 
 UciNewGame:
 		mov   rcx, qword[UciLoop.th1.rootPos.stateTable]
+		mov   rdx, qword[UciLoop.th1.rootPos.stateEnd]
+		sub   rdx, rcx
 	       call   _VirtualFree
 		xor   eax, eax
 		lea   rbp, [UciLoop.th1.rootPos]
@@ -245,6 +247,8 @@ UciQuit:
 		mov   rcx, qword[threadPool.threadTable+8*0]
 	       call   Thread_WaitForSearchFinished
 		mov   rcx, qword[UciLoop.th1.rootPos.stateTable]
+		mov   rdx, qword[UciLoop.th1.rootPos.stateEnd]
+		sub   rdx, rcx
 	       call   _VirtualFree
 		xor   eax, eax
 		add   rsp, UciLoop.localsize
@@ -788,8 +792,6 @@ UciBench:
 		lea   rdi, [Output]
 		mov   eax, '*** '
 	      stosd
-		mov   rax, 'starting'
-	      stosq
 		mov   rax, 'bench wi'
 	      stosq
 		mov   rax, 'th hash='
@@ -802,8 +804,9 @@ UciBench:
 	      stosb
 		mov   eax, r13d
 	       call   PrintUnsignedInteger
-		mov   rax, ' depth ='
+		mov   rax, ' depth='
 	      stosq
+		sub   rdi, 1
 		mov   eax, r12d
 	       call   PrintUnsignedInteger
 		mov   eax, ' ***'
@@ -1094,11 +1097,13 @@ UciEval:
 		mov   r15d, eax
 	; free material hash
 		mov   rcx, qword[rbp+Pos.materialTable]
+		mov   edx, MATERIAL_HASH_ENTRY_COUNT*sizeof.MaterialEntry
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[rbp+Pos.materialTable], rax
 	; free pawn hash
 		mov   rcx, qword[rbp+Pos.pawnTable]
+		mov   edx, PAWN_HASH_ENTRY_COUNT*sizeof.PawnEntry
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[rbp+Pos.pawnTable], rax

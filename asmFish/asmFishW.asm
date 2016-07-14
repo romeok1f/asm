@@ -37,8 +37,8 @@ end if
 
 if DEBUG > 0
   align 16
+  DebugBalance rq 1
   DebugOutput  rq 1024
-  DebugBalance rd 1
 end if
 
 align 16
@@ -221,7 +221,9 @@ BenchFens: ;fens must be separated by one or more space char
 .bench_fen26 db "6k1/6p1/P6p/r1N5/5p2/7P/1b3PP1/4R1K1 w - - 0 1",' '
 .bench_fen27 db "1r3k2/4q3/2Pp3b/3Bp3/2Q2p2/1p1P2P1/1P2KP2/3N4 w - - 0 1",' '
 .bench_fen28 db "6k1/4pp1p/3p2p1/P1pPb3/R7/1r2P1PP/3B1P2/6K1 w - - 0 1",' '
-.bench_fen29 db "8/3p3B/5p2/5P2/p7/PP5b/k7/6K1 w - - 0 1",' '
+.bench_fen29 db "8/3p3B/5p2/5P2/p7/PP5b/k7/6K1 w - - 0 1"
+BenchFensEnd: db 0
+
   ; 5-man positions
 .bench_fen30 db "8/8/8/8/5kp1/P7/8/1K1N4 w - - 0 1",' '     ; Kc2 - mate
 .bench_fen31 db "8/8/8/5N2/8/p7/8/2NK3k w - - 0 1",' '	    ; Na2 - mate
@@ -232,7 +234,6 @@ BenchFens: ;fens must be separated by one or more space char
 .bench_fen35 db "8/8/3P3k/8/1p6/8/1P6/1K3n2 b - - 0 1",' '  ; Nd2 - draw
   ; 7-man positions
 .bench_fen36 db "8/R7/2q5/8/6k1/8/1P5p/K6R w - - 0 124"  ; Draw
-BenchFensEnd: db 0
 
 
 sz_kernel32 db 'kernel32',0
@@ -364,6 +365,24 @@ Threat_Minor rd 16
 Threat_Rook rd 16
 PassedRank rd 8
 PassedFile rd 8
+
+DoMaterialEval_Data:
+.Linear:
+	rd 8
+.QuadraticOurs:
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+.QuadraticTheirs:
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+	rd 8
+	rd 8
 
 
 
@@ -537,6 +556,8 @@ mov qword[VerboseTime1+8*1], rax
 	       call   TableBase_Init
 
 	; command line could contain commands
+	; this function also initializes InputBuffer
+	; which contains the commands we should process first
 	       call   ParseCommandLine
 
 	; display how much time was taken for init
@@ -580,12 +601,18 @@ match =0, VERBOSE {
 
 	; clean up input buffer
 		mov   rcx, qword[InputBuffer]
+		mov   rdx, qword[InputBufferSizeB]
 	       call   _VirtualFree
 		xor   ecx, ecx
 		mov   qword[InputBuffer], rcx
 		mov   qword[InputBufferSizeB], rcx
 
-	     Assert   e, dword[DebugBalance], 0, 'assertion dword[DebugBalance]=0 failed'
+
+GD_String db 'DebugBalance: '
+GD_Int qword[DebugBalance]
+GD_NewLine
+	     Assert   e, qword[DebugBalance], 0, 'assertion DebugBalance=0 failed'
+
 	       call   _ExitProcess
 
 include 'ParseCommandLine.asm'
