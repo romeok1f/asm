@@ -1,4 +1,5 @@
-GoDirection:	; in: ebx square
+GoDirection:
+	; in: ebx square
 	;     cl  x coord
 	;     ch  y coord
 	; out: eax square ebx + (x,y) or 64 if rbx + (x,y) is off board
@@ -20,7 +21,8 @@ GoDirection:	; in: ebx square
      .Fail:	mov   eax, 64
 		ret
 
-SquareToXY:	; in: rbx square
+SquareToXY:
+	; in: rbx square
 	; out: al  x coord
 	;      ah  y coord
 		xor   eax, eax
@@ -31,10 +33,118 @@ SquareToXY:	; in: rbx square
 		ret
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+if 0
+
+Init_VAttacks:
+		xor   r15d, r15d
+.NextSquare:
+		mov   ecx, r15d
+		and   ecx, 7
+		mov   rax, 0x0001010101010100
+		shl   rax, cl
+		btr   rax, r15
+		mov   qword[VAttacksPEXT+8*r15], rax
+		xor   r14d, r14d
+.NextMask:
+	      _pdep   r12, r14, qword[VAttacksPEXT+8*r15], rax, rbx, rcx
+		xor   r13, r13
+		mov   eax, r15d
+ .GoUp:
+		mov   cl, 0
+		mov   ch, 1
+		mov   ebx, eax
+	       call   GoDirection
+		cmp   eax, 64	   ; off the board?
+		jae   .GoUpDone
+		bts   r13, rax	   ; set square in BB
+		 bt   r12, rax	   ; hit an occupancy?
+		jnc   .GoUp
+ .GoUpDone:
+		mov   eax, r15d
+ .GoDown:
+		mov   cl, 0
+		mov   ch, -1
+		mov   ebx, eax
+	       call   GoDirection
+		cmp   eax, 64	   ; off the board?
+		jae   .GoDownDone
+		bts   r13, rax	   ; set square in BB
+		 bt   r12, rax	   ; hit an occupancy?
+		jnc   .GoDown
+ .GoDownDone:
+	       imul   ecx, r15d, 64*8
+		mov   qword[VAttacks+rcx+8*r14], r13
+		add   r14d, 1
+		cmp   r14d, 64	   ; we only need to go up to 64 for the edges; a little waste
+		 jb   .NextMask
+		add   r15d, 1
+		cmp   r15d, 64
+		 jb   .NextSquare
+		ret
+
+
+
+Init_HAttacks:
+		xor   r15d, r15d
+.NextSquare:
+		mov   ecx, r15d
+		and   ecx, 56
+		mov   rax, 0x000000000000007E
+		shl   rax, cl
+		btr   rax, r15
+		mov   qword[HAttacksPEXT+8*r15], rax
+		xor   r14d, r14d
+.NextMask:
+	      _pdep   r12, r14, qword[HAttacksPEXT+8*r15], rax, rbx, rcx
+		xor   r13, r13
+		mov   eax, r15d
+ .GoRight:
+		mov   cl, 1
+		mov   ch, 0
+		mov   ebx, eax
+	       call   GoDirection
+		cmp   eax, 64	   ; off the board?
+		jae   .GoRightDone
+		bts   r13, rax	   ; set square in BB
+		 bt   r12, rax	   ; hit an occupancy?
+		jnc   .GoRight
+ .GoRightDone:
+		mov   eax, r15d
+ .GoLeft:
+		mov   cl, -1
+		mov   ch, 0
+		mov   ebx, eax
+	       call   GoDirection
+		cmp   eax, 64	   ; off the board?
+		jae   .GoLeftDone
+		bts   r13, rax	   ; set square in BB
+		 bt   r12, rax	   ; hit an occupancy?
+		jnc   .GoLeft
+ .GoLeftDone:
+	       imul   ecx, r15d, 64*8
+		mov   qword[HAttacks+rcx+8*r14], r13
+		add   r14d, 1
+		cmp   r14d, 64	   ; we only need to go up to 64 for the edges; a little waste
+		 jb   .NextMask
+		add   r15d, 1
+		cmp   r15d, 64
+		 jb   .NextSquare
+		ret
+
+end if
+
+
 
 
 MoveGen_Init:
 	       push   r15 r14 r13 r12
+
+;               call   Init_VAttacks
+;               call   Init_HAttacks
 
 
 ;for rook/bishop attacks the PDEP bitboard for a square s consists of all squares

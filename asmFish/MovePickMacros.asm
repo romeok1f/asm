@@ -37,7 +37,6 @@ macro GetNextMove {
 		mov   qword[rsi+Pick.stage], rdx
 }
 
-
 macro InsertionSort begin, ender, p, q {
 local ..Outer, ..Inner, ..InnerDone, ..OuterDone
 		lea   p, [begin+sizeof.ExtMove]
@@ -212,20 +211,20 @@ local ..Positive
 match =1, PROFILE \{
 lock inc qword[profile.moveUnpack]
 \}
-	      movzx   r10d, byte [rbp+Pos.board+r8]	; r10 = FROM PIECE
-	      movzx   r11d, byte [rbp+Pos.board+r9]	; r11 = TO PIECE
-		mov   r8, SeeSignBitMask
-		and   r10d, 7
-		and   r11d, 7
-		lea   r10d, [r10+8*r11]
+	      movzx   eax, byte[rbp+Pos.board+r8]     ; r10 = FROM PIECE
+	      movzx   edx, byte[rbp+Pos.board+r9]     ; r11 = TO PIECE
+		mov   r10, SeeSignBitMask
+		and   eax, 7
+		and   edx, 7
+		lea   edx, [rax+8*rdx]
 		mov   eax, VALUE_KNOWN_WIN
-		 bt   r8, r10
+		 bt   r10, rdx
 if JmpTo eq
 		jnc   ..Positive
 else
 		jnc   JmpTo
 end if
-	       call   See
+	       call   See.HaveFromTo
 ..Positive:
 }
 
@@ -306,7 +305,7 @@ match = 1, DEBUG \{
 		lea   start, [start+sizeof.ExtMove]
 		and   ecx, 63
 		and   edx, 63
-	      movzx   edx, [rbp+Pos.board+rdx]
+	      movzx   edx, byte[rbp+Pos.board+rdx]
 		shl   edx, 6
 		add   edx, ecx
 		mov   eax, dword[r8+4*rdx]

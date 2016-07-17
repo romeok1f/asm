@@ -346,7 +346,7 @@ pop r15 r14 r13 r9 r8 rdx rcx
 		mov   qword[rsi+Pick.endMoves], r15
 
 
-
+	      align   8
 .MovePickLoop:
 
 		lea   rsi, [.movepick]

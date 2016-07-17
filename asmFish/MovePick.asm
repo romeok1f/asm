@@ -62,6 +62,7 @@ SD_String db '|'
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8
 MovePick_MainSearch:
 		cmp   r14, r15
 		 je   GenNext_GoodCaptures
@@ -72,6 +73,7 @@ MovePick_MainSearch:
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8, MovePick_GoodCaptures
 GenNext_GoodCaptures:
 		lea   rdi, [rsi+Pick.moves]
 		mov   r14, rdi
@@ -79,7 +81,6 @@ GenNext_GoodCaptures:
 		mov   r15, rdi
 		mov   r13, r14
       ScoreCaptures   r13, rdi
-
 
 
 MovePick_GoodCaptures:
@@ -106,6 +107,7 @@ MovePick_GoodCaptures:
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8, MovePick_Killers
 GenNext_Killers:
 		lea   r14, [rsi+Pick.killers+0*sizeof.ExtMove]
 		lea   r15, [rsi+Pick.killers+3*sizeof.ExtMove]
@@ -168,7 +170,9 @@ SD_Move rax
 SD_String db '|'
 		ret
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8, MovePick_Quiets
 GenNext_Quiets:
 		lea   rdi, [rsi+Pick.moves]
 		mov   r14, rdi
@@ -211,12 +215,7 @@ stosb
 add  r12, 8
 jmp  .1c
 .2c:
-match =1, OS_IS_WINDOWS \{
- mov al, 13
- stosb
-\}
-mov al, 10
-stosb
+PrintNewLine
 lea rcx, [VerboseOutput]
 call _WriteOut
 }
@@ -261,17 +260,19 @@ GenNext_Evasion:
 		xor   edx, edx
 		ret
 
+	      align   8
 MovePick_Evasion:
 		cmp   r14, r15
 		 je   GenNext_AllEvasions
-		mov   r14, r15
+		;mov   r14, r15
 		mov   eax, dword[rsi+Pick.ttMove]
-		lea   rdx, [MovePick_Evasion]
+		lea   rdx, [GenNext_AllEvasions]
 		ret
 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8, MovePick_AllEvasions
 GenNext_AllEvasions:
 		lea   rdi, [rsi+Pick.moves]
 		mov   r14, rdi
@@ -306,16 +307,18 @@ GenNext_QSearchWithChecks:
 		xor   edx, edx
 		ret
 
+	      align   8
 MovePick_QSearchWithChecks:
 		cmp   r14, r15
 		 je   GenNext_QCaptures1
-		mov   r14, r15
+		;mov   r14, r15
 		mov   eax, dword[rsi+Pick.ttMove]
-		lea   rdx, [MovePick_QSearchWithChecks]
+		lea   rdx, [GenNext_QCaptures1]
 		ret
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8, MovePick_QCaptures1
 GenNext_QCaptures1:
 		lea   rdi, [rsi+Pick.moves]
 		mov   r14, rdi
@@ -335,6 +338,7 @@ MovePick_QCaptures1:
 		ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8, MovePick_Checks
 GenNext_Checks:
 		lea   rdi, [rsi+Pick.moves]
 		mov   r14, rdi
@@ -357,16 +361,18 @@ GenNext_QSearchWithoutChecks:
 		xor   edx, edx
 		ret
 
+	      align   8
 MovePick_QSearchWithoutChecks:
 		cmp   r14, r15
 		 je   GenNext_QCaptures2
-		mov   r14, r15
+		;mov   r14, r15
 		mov   eax, dword[rsi+Pick.ttMove]
-		lea   rdx, [MovePick_QSearchWithoutChecks]
+		lea   rdx, [GenNext_QCaptures2]
 		ret
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8, MovePick_QCaptures2
 GenNext_QCaptures2:
 		lea   rdi, [rsi+Pick.moves]
 		mov   r14, rdi
@@ -392,16 +398,18 @@ GenNext_Probcut:
 		xor   edx, edx
 		ret
 
+	      align   8
 MovePick_Probcut:
 		cmp   r14, r15
 		 je   GenNext_ProbcutCaptures
-		mov   r14, r15
+		;mov   r14, r15
 		mov   eax, dword[rsi+Pick.ttMove]
-		lea   rdx, [MovePick_Probcut]
+		lea   rdx, [GenNext_ProbcutCaptures]
 		ret
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	      align   8, MovePick_ProbcutCaptures
 GenNext_ProbcutCaptures:
 		lea   rdi, [rsi+Pick.moves]
 		mov   r14, rdi
@@ -430,11 +438,9 @@ GenNext_Recapture:
 		xor   edx, edx
 		ret
 
+	      align   8, MovePick_Recaptures
 MovePick_Recapture:
-		cmp   r14, r15
-		 je   GenNext_Recaptures
-	       int3
-
+	     Assert   e, r14, r15, 'assertion r14==r15 failed in MovePick_Recapture'
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -462,9 +468,6 @@ MovePick_Recaptures:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 GenNext_Stop:
-		xor   eax, eax
-		xor   edx, edx
-		ret
 MovePick_Stop:
 		xor   eax, eax
 		xor   edx, edx

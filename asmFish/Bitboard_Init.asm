@@ -121,6 +121,8 @@ Init_AdjacentFilesBB:
 
 
 Init_BetweenBB_LineBB:
+
+
 		xor   r15d,r15d
 .NextSquare1:	xor   r14d,r14d
 .NextSquare2:

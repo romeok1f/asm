@@ -206,7 +206,7 @@ struct Limits
  mate	     rd 1
  multiPV     rd 1
 	     rd 1
- infinite    rb 1
+ infinite    rb 1	; 0 or -1 bool
  ponder      rb 1
  useTimeMgmt rb 1
 	     rb 1
@@ -220,8 +220,7 @@ struct Options
  hash	       rd 1
  multiPV       rd 1
  threads       rd 1
-	       rd 1
-; weakness      rd 1
+ weakness      rd 1
  chess960	rd 1
  minThinkTime	rd 1
  slowMover	rd 1
@@ -233,6 +232,7 @@ struct Options
  syzygyProbeDepth rd 1
  syzygyProbeLimit rd 1
 ends
+
 
 
 struct EasyMoveMng

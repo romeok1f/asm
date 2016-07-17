@@ -380,8 +380,15 @@ match =0, VERBOSE {
 
 
 .id_loop_done:
+		mov   al, byte[rbp-Thread.rootPos+Thread.easyMovePlayed]
+		mov   ecx, dword[easyMoveMng.stableCnt]
 		cmp   dword[rbp-Thread.rootPos+Thread.idx], 0
 		jne   .done
+		cmp   ecx, 6
+		 jb   @f
+	       test   al, al
+		 jz   .done
+	@@:    call   EasyMoveMng_Clear
 
 .done:
 
@@ -419,19 +426,21 @@ GD_NewLine
 		mov   dword[DrawValue+4*rax], ecx
 		add   byte[mainHash.date], 4
 
-;        ; when weakness is not 0, set multipv and change maximumTime
-;                mov   ecx, dword[options.weakness]
-;               test   ecx, ecx
-;                 jz   .no_weakness
-;                shr   ecx, 4
-;                add   ecx, 2
-;                mov   dword[options.multiPV], ecx
-;                lea   eax, [rcx-1]
-;                mul   dword[time.optimumTime]
-;                add   eax, dword[time.maximumTime]
-;                div   ecx
-;                mov   dword[time.maximumTime], eax
-;.no_weakness:
+if CPU_VERSION eq 'base'
+	; when weakness is not 0, set multipv and change maximumTime
+		mov   ecx, dword[options.weakness]
+	       test   ecx, ecx
+		 jz   .no_weakness
+		shr   ecx, 4
+		add   ecx, 2
+		mov   dword[options.multiPV], ecx
+		lea   eax, [rcx-1]
+		mul   dword[time.optimumTime]
+		add   eax, dword[time.maximumTime]
+		div   ecx
+		mov   dword[time.maximumTime], eax
+.no_weakness:
+end if
 
 	; check for mate
 		mov   r8, qword[rbp+Pos.rootMovesVec+RootMovesVec.ender]
@@ -487,9 +496,11 @@ GD_NewLine
 		cmp   r8, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
 		 je   .mate_bestmove
 
-;                mov   ecx, dword[options.weakness]
-;               test   ecx, ecx
-;                jnz   .pick_weak_move
+if CPU_VERSION eq 'base'
+		mov   ecx, dword[options.weakness]
+	       test   ecx, ecx
+		jnz   .pick_weak_move
+end if
 
 	; find best thread  index esi
 		xor   esi, esi
@@ -539,11 +550,12 @@ GD_NewLine
 		pop   r15 rdi rsi rbx rbp
 		ret
 
-;.pick_weak_move:
-;               call   Weakness_PickMove
-;                xor   esi, esi
-;                jmp   .display_move
-
+if CPU_VERSION eq 'base'
+.pick_weak_move:
+	       call   Weakness_PickMove
+		xor   esi, esi
+		jmp   .display_move
+end if
 
 
 .mate:

@@ -426,21 +426,22 @@ match =1, DEBUG \{
 	; Step 8. Null move search with verification search (is omitted in PV nodes)
     if .PvNode eq 0
 		mov   edx, dword[.depth]
+	       imul   eax, edx, 35
+		add   eax, dword[rbx+State.staticEval]
+		mov   esi, dword[.beta]
+		mov   ecx, dword[rbp+Pos.sideToMove]
 		cmp   edx, 2*ONE_PLY
 		 jl   .8skip
-		mov   eax, dword[.eval]
-		cmp   eax, dword[.beta]
-		 jl   .8skip
-		mov   ecx, dword[rbp+Pos.sideToMove]
+		cmp   esi, dword[.eval]
+		 jg   .8skip
 	      movzx   ecx, word[rbx+State.npMaterial+2*rcx]
+		add   esi, 35*6
 	       test   ecx, ecx
 		 jz   .8skip
-		sub   edx, 12*ONE_PLY
-		mov   eax, dword[rbx+State.staticEval]
-		sub   eax, dword[.beta]
+		sub   edx, 13*ONE_PLY
+		sub   eax, esi
 		and   edx, eax
 		 js   .8skip
-
 
 		xor   eax, eax
 		mov   dword[rbx+State.currentMove], MOVE_NULL
@@ -765,6 +766,7 @@ lock inc qword[profile.moveUnpack]
 
 
 	; Step 11. Loop through moves
+	      align   8
 .MovePickLoop:	     ; this is the head of the loop
 
 		lea   rsi, [.movepick]
@@ -803,6 +805,24 @@ SD_String db '|'
 SD_String db 'mc='
 SD_Int rax
 SD_String db '|'
+
+
+	if .RootNode eq 1
+		mov   eax, dword[rbp-Thread.rootPos+Thread.idx]
+		mov   ecx, 20
+	      movsx   edx, byte[limits.infinite]
+		sub   eax, 1
+		sub   ecx, dword[.depth]
+		and   eax, ecx
+		and   eax, edx
+		 js   .PrintCurrentMove
+.PrintCurrentMoveRet:
+
+
+
+
+
+	end if
 
 
 		xor   eax, eax
@@ -1096,17 +1116,12 @@ SD_String db '|'
 		mov   ecx, dword[.move]
 		cmp   ecx, MOVE_TYPE_PROM shl 12
 		jae   .15skipA
-		mov   eax, r15d
-		and   eax, 7
-		cmp   eax, Pawn
-		 je   .15skipA
-		mov   eax, ecx
-		and   eax, 63
-		shl   eax, 6
-		shr   ecx, 6
-		and   ecx, 63
-		add   ecx, eax
-	       call   See
+		lea   eax, [r15d-Pawn]
+	       test   eax, 7
+		 jz   .15skipA
+		mov   r9d, r12d
+		mov   r8d, r13d
+	       call   See.HaveFromTo
 	       test   eax, eax
 		jns   .15skipA
 		sub   edi, 2*ONE_PLY
@@ -1730,5 +1745,41 @@ end if
 		mov   eax, edi
 		jmp   .Return
     end if
+
+
+    if .RootNode eq 1
+	      align   8
+.PrintCurrentMove:
+		sub   rsp, 128
+		mov   rdi, rsp
+		mov   rax, 'info dep'
+	      stosq
+		mov   eax, 'th '
+	      stosd
+		sub   rdi, 1
+		mov   eax, dword[.depth+128]
+	       call   PrintUnsignedInteger
+		mov   rax, ' currmov'
+	      stosq
+		mov   eax, 'e '
+	      stosw
+		mov   ecx, dword[.move+128]
+		mov   edx, dword[rbp+Pos.chess960]
+	       call   PrintUciMove
+		mov   rax, ' currmov'
+	      stosq
+		mov   rax, 'enumber '
+	      stosq
+		mov   eax, dword[.moveCount+128]
+		add   eax, dword[rbp-Thread.rootPos+Thread.PVIdx]
+	       call   PrintUnsignedInteger
+		mov   rcx, rsp
+       PrintNewLine
+	       call   _WriteOut
+		add   rsp, 128
+		jmp   .PrintCurrentMoveRet
+    end if
+
+
 
 }

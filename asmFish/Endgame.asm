@@ -1083,17 +1083,17 @@ KRPPKRPScaleFactors equ (0+256*(9+256*(10+256*(14+256*(21+256*(44))))))
 		cmp   edx, r11d
 		jbe   .ReturnNone
 		mov   eax, bksq
-		and   eax, 3
+		and   eax, 7
 		mov   edx, wpsq1
-		and   edx, 3
+		and   edx, 7
 		sub   eax, edx
 		add   eax, 1
 		cmp   eax, 3
 		jae   .ReturnNone
 		mov   eax, bksq
-		and   eax, 3
+		and   eax, 7
 		mov   edx, wpsq2
-		and   edx, 3
+		and   edx, 7
 		sub   eax, edx
 		add   eax, 1
 		cmp   eax, 3

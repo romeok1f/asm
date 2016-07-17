@@ -180,10 +180,12 @@ _ThreadCreate:
 		mov   r8, rcx		; lpStartAddress
 		mov   r9, rdx		; lpParameter
 		xor   ecx, ecx		; lpThreadAttributes
-		mov   edx, 100000	; dwStackSize
+		mov   edx, 1000 	; dwStackSize
 		; at least 1000000 bytes are reserved for the stack by the "stack 1000000" directive in asmFishW.asm
-		; here we commit 100000 bytes which gives space for about 100000/2800 = 35 plies in the search
-		;    each call to search uses about 2800 bytes of stack space
+		; when creating a thread, it is not clear how windows allocates the memory for the stack
+		; we hope here that if a small number is given for the commit size, then as the thread commits more
+		;  pages, it chooses them from the correct node
+		; again, not sure how this works
 
 	       test   rbx, rbx
 		 jz   .DontSetAffinity

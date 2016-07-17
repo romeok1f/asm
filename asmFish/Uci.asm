@@ -9,7 +9,6 @@ Options_Init:
 		mov   dword[rdx+Options.hash], 16
 		mov   byte[rdx+Options.ponder], 0
 		mov   dword[rdx+Options.multiPV], 1
-;                mov   dword[rdx+Options.weakness], 0
 		mov   dword[rdx+Options.moveOverhead], 30
 		mov   dword[rdx+Options.minThinkTime], 20
 		mov   dword[rdx+Options.slowMover], 80
@@ -17,6 +16,7 @@ Options_Init:
 		mov   dword[rdx+Options.syzygyProbeDepth], 1
 		mov   byte[rdx+Options.syzygy50MoveRule], -1
 		mov   dword[rdx+Options.syzygyProbeLimit], 6
+		mov   dword[rdx+Options.weakness], 0
 		ret
 
 
@@ -563,12 +563,13 @@ UciSetOption:
 	       test   eax, eax
 		jnz   .CheckValue
 
-;                lea   rcx, [sz_weakness]
-;               call   CmpStringCaseless
-;                lea   rbx, [.Weakness]
-;               test   eax, eax
-;                jnz   .CheckValue
-
+if CPU_VERSION eq 'base'
+		lea   rcx, [sz_weakness]
+	       call   CmpStringCaseless
+		lea   rbx, [.Weakness]
+	       test   eax, eax
+		jnz   .CheckValue
+end if
 		lea   rcx, [sz_moveoverhead]
 	       call   CmpStringCaseless
 		lea   rbx, [.MoveOverhead]
@@ -652,11 +653,13 @@ UciSetOption:
       ClampUnsigned   eax, 1, MAX_MOVES
 		mov   dword[options.multiPV], eax
 		jmp   UciGetInput
-;.Weakness:
-;               call   ParseInteger
-;      ClampUnsigned   eax, 0, 200
-;                mov   dword[options.weakness], eax
-;                jmp   UciGetInput
+if CPU_VERSION eq 'base'
+.Weakness:
+	       call   ParseInteger
+      ClampUnsigned   eax, 0, 200
+		mov   dword[options.weakness], eax
+		jmp   UciGetInput
+end if
 .Chess960:
 	       call   ParseBoole
 		mov   byte[options.chess960], al

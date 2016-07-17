@@ -1,6 +1,26 @@
 ; this is the source for windows  see asmFish.asm for unix
 ; this is included in asmFishW_popcnt.asm asmFishW_base.asm and asmFishW_bmi2.asm
 
+; sanity check on compile options
+if (not CPU_HAS_POPCNT) and (CPU_HAS_AVX1 or CPU_HAS_AVX2 or CPU_HAS_BMI1 or CPU_HAS_BMI2)
+	  display 'WARNING: if cpu does not have POPCNT, it probably does not have higher capabilities'
+	  display 13,10
+end if
+
+if (not CPU_HAS_AVX1) and CPU_HAS_AVX2
+	  display 'ERROR: if cpu does not have AVX1, it definitely does not have AVX2'
+	  display 13,10
+	  err
+end if
+
+if (not CPU_HAS_BMI1) and CPU_HAS_BMI2
+	  display 'ERROR: if cpu does not have BMI1, it definitely does not have BMI2'
+	  display 13,10
+	  err
+end if
+
+
+
 format PE64 console
 stack 1000000	; this stack size should be sufficient for MAX_PLY=128 in search
 entry Start
@@ -121,17 +141,19 @@ szGreetingEnd:
 		db 'option name Contempt type spin default 0 min -100 max 100',13,10
 		db 'option name Threads type spin default 1 min 1 max 256',13,10
 		db 'option name Hash type spin default 16 min 1 max 1048576',13,10
-		db 'option name ClearHash type button',13,10
 		db 'option name MultiPV type spin default 1 min 1 max 224',13,10
-;                db 'option name Weakness type spin default 0 min 0 max 200',10
+if CPU_VERSION eq 'base'
+		db 'option name Weakness type spin default 0 min 0 max 200',13,10
+end if
 		db 'option name MoveOverhead type spin default 30 min 0 max 5000',13,10
 		db 'option name MinThinkTime type spin default 20 min 0 max 5000',13,10
 		db 'option name SlowMover type spin default 80 min 10 max 1000',13,10
-		db 'option name UCI_Chess960 type check default false',13,10
-		db 'option name SyzygyPath type string default <empty>',13,10
 		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',13,10
 		db 'option name Syzygy50MoveRule type check default true',13,10
 		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',13,10
+		db 'option name SyzygyPath type string default <empty>',13,10
+		db 'option name ClearHash type button',13,10
+		db 'option name UCI_Chess960 type check default false',13,10
 		db 'uciok'
 sz_NewLine:
 		db 13,10
@@ -221,9 +243,7 @@ BenchFens: ;fens must be separated by one or more space char
 .bench_fen26 db "6k1/6p1/P6p/r1N5/5p2/7P/1b3PP1/4R1K1 w - - 0 1",' '
 .bench_fen27 db "1r3k2/4q3/2Pp3b/3Bp3/2Q2p2/1p1P2P1/1P2KP2/3N4 w - - 0 1",' '
 .bench_fen28 db "6k1/4pp1p/3p2p1/P1pPb3/R7/1r2P1PP/3B1P2/6K1 w - - 0 1",' '
-.bench_fen29 db "8/3p3B/5p2/5P2/p7/PP5b/k7/6K1 w - - 0 1"
-BenchFensEnd: db 0
-
+.bench_fen29 db "8/3p3B/5p2/5P2/p7/PP5b/k7/6K1 w - - 0 1",' '
   ; 5-man positions
 .bench_fen30 db "8/8/8/8/5kp1/P7/8/1K1N4 w - - 0 1",' '     ; Kc2 - mate
 .bench_fen31 db "8/8/8/5N2/8/p7/8/2NK3k w - - 0 1",' '	    ; Na2 - mate
@@ -234,6 +254,7 @@ BenchFensEnd: db 0
 .bench_fen35 db "8/8/3P3k/8/1p6/8/1P6/1K3n2 b - - 0 1",' '  ; Nd2 - draw
   ; 7-man positions
 .bench_fen36 db "8/R7/2q5/8/6k1/8/1P5p/K6R w - - 0 124"  ; Draw
+BenchFensEnd: db 0
 
 
 sz_kernel32 db 'kernel32',0
@@ -298,6 +319,12 @@ match =0, CPU_HAS_BMI2 {
  BishopAttacksSHIFT  rb 64
  RookAttacksSHIFT    rb 64
 }
+
+; VAttacks       rq 64*64
+; VAttacksPEXT   rq 64
+; HAttacksPEXT   rq 64
+; HAttacks       rq 64*64
+
 PawnAttacks:
  WhitePawnAttacks    rq 64     ; bitboards
  BlackPawnAttacks    rq 64     ; bitboards
@@ -517,8 +544,9 @@ include 'Math.asm'
 
 include 'OsWindows.asm'
 
-;include 'Weakness.asm'
-
+if CPU_VERSION eq 'base'
+ include 'Weakness.asm'
+end if
 
 Start:
 	       push   rbp

@@ -11,6 +11,22 @@ rsid equ esi
 rdid equ edi
 
 
+macro align value,addr
+{
+  local base,size
+if addr eq
+  align value
+else
+  if addr>$
+    base = addr-size
+    size = ((base+value-1)/value*value-base)
+    db size dup 90h
+  else
+    db ((addr+value-1)/value*value-addr) dup 90h
+  end if
+end if
+}
+
 macro PrintNewLine {
 if OS_IS_WINDOWS
 		mov   al, 13
