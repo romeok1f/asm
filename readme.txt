@@ -64,10 +64,10 @@ A: There are currently four places. With these changes, asmFish should should pr
   
 
 ******** updates ********
-2016-07-17: "Gradually relax the NMP staticEval check"
+2016-07-18: "Gradually relax the NMP staticEval check"
   - fixed broken ponder in 07-17
   - added gui spam with current move info when not using time management for gui's that do that
-  - added parsing of 'searchmoves' token, which should fix 'nexbest move' if your gui does that
+  - added parsing of 'searchmoves' token, which should fix 'nextbest move' if your gui does that
 
 2016-07-17: "Gradually relax the NMP staticEval check"
   - linux version is in the works
