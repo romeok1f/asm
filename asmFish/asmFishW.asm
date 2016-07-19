@@ -153,6 +153,7 @@ end if
 		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',13,10
 		db 'option name SyzygyPath type string default <empty>',13,10
 		db 'option name ClearHash type button',13,10
+		db 'option name Ponder type check default false',13,10
 		db 'option name UCI_Chess960 type check default false',13,10
 		db 'uciok'
 sz_NewLine:
@@ -169,9 +170,9 @@ szCPUError	db 'Error: processor does not support',0
 szStartFEN	db 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',0
 PieceToChar	db '.?PNBRQK??pnbrqk'
 
+sz_error_think	db 'error: setoption called while thinking',0
 sz_error_value	db 'error: setoption has no value',0
 sz_error_name	db 'error: setoption has no name',0
-
 
 sz_position		db 'position',0
 sz_go			db 'go',0
@@ -188,6 +189,9 @@ sz_wtime		db 'wtime',0
 sz_btime		db 'btime',0
 sz_winc 		db 'winc',0
 sz_binc 		db 'binc',0
+sz_fen			db 'fen',0
+sz_startpos		db 'startpos',0
+sz_searchmoves		db 'searchmoves',0
 sz_infinite		db 'infinite',0
 sz_movestogo		db 'movestogo',0
 sz_nodes		db 'nodes',0

@@ -808,20 +808,14 @@ SD_String db '|'
 
 
 	if .RootNode eq 1
-		mov   eax, dword[rbp-Thread.rootPos+Thread.idx]
-		mov   ecx, 20
-	      movsx   edx, byte[limits.infinite]
-		sub   eax, 1
-		sub   ecx, dword[.depth]
-		and   eax, ecx
-		and   eax, edx
-		 js   .PrintCurrentMove
+	      movzx   eax, byte[limits.useTimeMgmt]
+		 or   eax, dword[rbp-Thread.rootPos+Thread.idx]
+		neg   eax
+		mov   ecx, dword[.depth]
+		sub   ecx, 20
+		 or   eax, ecx
+		jns   .PrintCurrentMove
 .PrintCurrentMoveRet:
-
-
-
-
-
 	end if
 
 

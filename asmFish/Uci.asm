@@ -146,6 +146,15 @@ mov qword[VerboseTime1+8*1], rax
 		cmp   byte[rsi], ' '
 		 jb   UciGetInput     ; don't process empty lines
 
+
+	     ;   lea   rdi, [Output]
+	     ;   mov   rcx, rsi
+	     ;  call   PrintString
+	     ;   mov   eax, 0
+	     ; stosd
+	     ;   lea   rdi, [Output]
+	     ;  call   _ErrorBox
+
 UciChoose:
 	       call   SkipSpaces
 
@@ -233,8 +242,7 @@ UciUnknown:
 	     szcall   PrintString, 'error: unknown command '
 		mov   ecx, 64
 	       call   ParseToken
-		mov   al, 10
-	      stosb
+       PrintNewLine
 		jmp   UciWriteOut
 
 
@@ -286,8 +294,13 @@ UciIsReady:
 UciPonderHit:
 		mov   al, byte[signals.stopOnPonderhit]
 	       test   al, al
-		jnz   UciStop
+		jnz   @f
 		mov   byte[limits.ponder], al
+		jmp   UciGetInput
+@@:
+		mov   byte[signals.stop], -1
+		mov   rcx, qword[threadPool.threadTable+8*0]
+	       call   Thread_StartSearching_TRUE
 		jmp   UciGetInput
 ;;;;;;;;
 ; stop
@@ -297,6 +310,8 @@ UciStop:
 		mov   byte[signals.stop], -1
 		mov   rcx, qword[threadPool.threadTable+8*0]
 	       call   Thread_StartSearching_TRUE
+		mov   rcx, qword[threadPool.threadTable+8*0]
+	       call   Thread_WaitForSearchFinished
 		jmp   UciGetInput
 
 ;;;;;;;
@@ -304,6 +319,7 @@ UciStop:
 ;;;;;;;
 
 UciGo:
+		xor   r15, r15			; not reading searchmoves
 		lea   rcx, [UciLoop.limits]
 	       call   Limits_Init
 .ReadLoop:
@@ -376,15 +392,28 @@ UciGo:
 	       call   CmpString
 	       test   eax, eax
 		jnz   .parse_true
+
+		lea   rcx, [sz_searchmoves]
+	       call   CmpString
+	       test   eax, eax
+		jnz   .parse_searchmoves
+
+
+.Error:
+		lea   rdi, [Output]
+	     szcall   PrintString, 'error: unexpected token '
 		mov   ecx, 64
-	       call   SkipToken
-		jmp   .ReadLoop
+	       call   ParseToken
+       PrintNewLine
+		jmp   UciWriteOut
+
 .ReadLoopDone:
 		lea   rcx, [UciLoop.limits]
 	       call   Limits_Set
 		lea   rcx, [UciLoop.limits]
 	       call   ThreadPool_StartThinking
 		jmp   UciGetInput
+
 .parse_qword:
 	       call   SkipSpaces
 	       call   ParseInteger
@@ -398,7 +427,19 @@ UciGo:
 .parse_true:
 		mov   byte[rdi], -1
 		jmp   .ReadLoop
-
+.parse_searchmoves:
+	       call   SkipSpaces
+	       call   ParseUciMove
+	       test   eax, eax
+		 jz   .ReadLoop
+		mov   ecx, dword[UciLoop.limits.moveVecSize]
+		lea   rdi, [UciLoop.limits.moveVec]
+	repne scasw
+	       test   ecx, ecx		   ; is the move already in the list?
+		jnz   .parse_searchmoves
+	      stosw
+		add   dword[UciLoop.limits.moveVecSize], 1
+		jmp   .parse_searchmoves
 
 
 ;;;;;;;;;;;;
@@ -413,10 +454,13 @@ UciPosition:
 	; write to pos2 in case of failure
 		lea   rbp, [UciLoop.th2.rootPos]
 
-	     szcall   CmpString, 'fen'
+		lea   rcx, [sz_fen]
+	       call   CmpString
 	       test   eax, eax
 		jnz   .Fen
-	     szcall   CmpString, 'startpos'
+
+		lea   rcx, [sz_startpos]
+	       call   CmpString
 	       test   eax, eax
 		 jz   .BadCmd
 .Start:
@@ -518,6 +562,11 @@ match =0, VERBOSE {
 
 
 UciSetOption:
+		mov   rax, qword[threadPool.threadTable+8*0]
+		mov   al, byte[rax+Thread.searching]
+		lea   rcx, [sz_error_think]
+	       test   al, al
+		jnz   .Error
 .Read:
 	       call   SkipSpaces
 		lea   rcx, [sz_name]
@@ -622,8 +671,7 @@ end if
 .Error:
 		lea   rdi, [Output]
 	       call   PrintString
-		mov   al, 10
-	      stosb
+       PrintNewLine
 	       call   _WriteOut_Output
 		jmp   UciGetInput
 .CheckValue:

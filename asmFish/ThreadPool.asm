@@ -96,7 +96,7 @@ ThreadPool_StartThinking:
 	;     rcx address of limits struct
 	;            this will be copied to the global limits struct
 	;            so that search threads can see it
-	       push   rbp rbx rsi rdi r15
+	       push   rbp rbx rsi rdi r13 r14 r15
 virtual at rsp
   .moveList rb sizeof.ExtMove*MAX_MOVES
   .lend rb 0
@@ -107,8 +107,12 @@ end virtual
 		sub   rsp, .localsize
 		mov   rsi, rcx
 		mov   r15, rbp
+		mov   r14, qword[threadPool.threadTable+8*0]
+	; rsi = address of limits
+	; r15 = gui position
+	; r14 = main thread
 
-		mov   rcx, qword[threadPool.threadTable+8*0]
+		mov   rcx, r14
 	       call   Thread_WaitForSearchFinished
 
 		xor   eax, eax
@@ -119,25 +123,27 @@ end virtual
 	       call   Limits_Copy
 
 	; copy to mainThread
-		mov   rbx, qword[rbp+Pos.state]
-	       call   SetCheckInfo
-		lea   rdi, [.moveList]
-	       call   Gen_Legal
-
-		mov   rbx, qword[threadPool.threadTable+8*0]
-		lea   rcx, [rbx+Thread.rootPos]
+		lea   rcx, [r14+Thread.rootPos]
 	       call   Position_CopyToSearch
 		xor   eax, eax
-		mov   dword[rbx+Thread.rootDepth], eax
-		mov   qword[rbx+Thread.nodes], rax
+		mov   dword[r14+Thread.rootDepth], eax
+		mov   qword[r14+Thread.nodes], rax
 
+		lea   rsi, [limits.moveVec]
+		lea   rdi, [.moveList]
+		mov   ecx, dword[limits.moveVecSize]
+	       test   ecx, ecx
+		jnz   .use_searchmoves
+		mov   rbx, qword[rbp+Pos.state]
+	       call   Gen_Legal
+.have_moves:
 		lea   rsi, [.moveList]
-		lea   rcx, [rbx+Thread.rootPos+Pos.rootMovesVec]
+		lea   rcx, [r14+Thread.rootPos+Pos.rootMovesVec]
 	       call   RootMovesVec_Clear
     .push_moves:
 		cmp   rsi, rdi
 		jae   .push_moves_done
-		lea   rcx, [rbx+Thread.rootPos+Pos.rootMovesVec]
+		lea   rcx, [r14+Thread.rootPos+Pos.rootMovesVec]
 		mov   edx, dword[rsi+ExtMove.move]
 		add   rsi, sizeof.ExtMove
 	       call   RootMovesVec_PushBackMove
@@ -145,7 +151,7 @@ end virtual
     .push_moves_done:
 
 	; the main thread should get the position for tb move filtering
-		lea   rbp, [rbx+Thread.rootPos]
+		lea   rbp, [r14+Thread.rootPos]
 		mov   rbx, qword[rbp+Pos.state]
 	; Skip TB probing when no TB found
 		xor   eax, eax
@@ -171,14 +177,10 @@ end virtual
 		 jz   .check_tb
 .check_tb_ret:
 
-	; filtering moves may have incremented nodes count
-		mov   qword[rbx+Thread.nodes], rax
-
-
 	; copy original position to workers
 		xor   eax, eax
 		mov   rbp, r15
-		mov   rsi, qword[threadPool.threadTable+8*0]
+		mov   rsi, r14
 		mov   qword[rsi+Thread.nodes], rax  ;filtering moves may have incremented mainThread.nodes
 		xor   edi, edi
 .next_thread:
@@ -212,11 +214,11 @@ end virtual
 		jmp   .next_thread
 .thread_copy_done:
 
-		mov   rcx, qword[threadPool.threadTable+8*0]
+		mov   rcx, r14
 	       call   Thread_StartSearching
 
 		add   rsp, .localsize
-		pop   r15 rdi rsi rbx rbp
+		pop   r15 r14 r13 rdi rsi rbx rbp
 		ret
 
 .check_tb:
@@ -235,15 +237,25 @@ end virtual
 		mov   dword[Tablebase_Cardinality], edx
 	       call   RootMovesVec_Size
 		mov   dword[Tablebase_Hits], eax
-		mov   dl, byte[Tablebase_UseRule50]
+	      movzx   edx, byte[Tablebase_UseRule50]
 		mov   eax, dword[Tablebase_Score]
 	       test   dl, dl
 		jnz   .check_tb_ret
 		mov   ecx, VALUE_MATE - MAX_PLY - 1
-		cmp   eax, 0
+		cmp   eax, edx
 	      cmovg   eax, ecx
 		neg   ecx
-		cmp   eax, 0
+		cmp   eax, edx
 	      cmovl   eax, ecx
 		mov   dword[Tablebase_Score], eax
 		jmp   .check_tb_ret
+
+.use_searchmoves:
+	; use the moves obtained from 'searchmoves' command
+	; these have already been checked for legality
+		xor   eax, eax
+	      lodsw
+	      stosq
+		sub   ecx, 1
+		jnz   .use_searchmoves
+		jmp   .have_moves

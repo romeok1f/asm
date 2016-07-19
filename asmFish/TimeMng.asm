@@ -88,8 +88,8 @@ end virtual
 		add   r12, rcx
 .noponder:
 
-		mov   dword[time.optimumTime], r12d
-		mov   dword[time.maximumTime], r13d
+		mov   qword[time.optimumTime], r12
+		mov   qword[time.maximumTime], r13
 
 		add   rsp, .localsize
 		pop   r15 r14 r13 r12 rdi rsi rbx

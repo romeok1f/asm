@@ -198,19 +198,20 @@ ends
 struct Limits
  nodes	     rq 1
  startTime   rq 1
- time	     rd 2
- incr	     rd 2
+ time	      rd 2
+ incr	      rd 2
  movestogo   rd 1
  depth	     rd 1
  movetime    rd 1
  mate	     rd 1
- multiPV     rd 1
-	     rd 1
- infinite    rb 1	; 0 or -1 bool
- ponder      rb 1
- useTimeMgmt rb 1
-	     rb 1
-	     rb 4
+ multiPV      rd 1
+	      rd 1
+ infinite     rb 1	 ; bool 0 or -1
+ ponder       rb 1	 ; bool 0 or -1
+ useTimeMgmt  rb 1	 ; bool 0 or -1
+	      rb 1
+ moveVecSize  rd 1
+ moveVec    rw MAX_MOVES
 ends
 
 

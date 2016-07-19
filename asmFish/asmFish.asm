@@ -108,9 +108,10 @@ rsquare_lookup:  db SQ_F1, SQ_D1, SQ_F8, SQ_D8
 ksquare_lookup:  db SQ_G1, SQ_C1, SQ_G8, SQ_C8
 
 
+
 szUciResponse:	db 'id name '
 szGreeting:
-		db 'asmFish_'
+		db 'asmFishW_'
 		create_build_time DAY, MONTH, YEAR
 		db '_'
 		db CPU_VERSION
@@ -120,17 +121,20 @@ szGreetingEnd:
 		db 'option name Contempt type spin default 0 min -100 max 100',10
 		db 'option name Threads type spin default 1 min 1 max 256',10
 		db 'option name Hash type spin default 16 min 1 max 1048576',10
-		db 'option name ClearHash type button',10
 		db 'option name MultiPV type spin default 1 min 1 max 224',10
-;                db 'option name Weakness type spin default 0 min 0 max 200',10
+if CPU_VERSION eq 'base'
+		db 'option name Weakness type spin default 0 min 0 max 200',10
+end if
 		db 'option name MoveOverhead type spin default 30 min 0 max 5000',10
 		db 'option name MinThinkTime type spin default 20 min 0 max 5000',10
 		db 'option name SlowMover type spin default 80 min 10 max 1000',10
-		db 'option name UCI_Chess960 type check default false',10
-		db 'option name SyzygyPath type string default <empty>',10
 		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',10
 		db 'option name Syzygy50MoveRule type check default true',10
 		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',10
+		db 'option name SyzygyPath type string default <empty>',10
+		db 'option name ClearHash type button',10
+		db 'option name Ponder type check default false',10
+		db 'option name UCI_Chess960 type check default false',10
 		db 'uciok'
 sz_NewLine:
 		db 10
@@ -146,9 +150,9 @@ szCPUError	db 'Error: processor does not support',0
 szStartFEN	db 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',0
 PieceToChar	db '.?PNBRQK??pnbrqk'
 
+sz_error_think	db 'error: setoption called while thinking',0
 sz_error_value	db 'error: setoption has no value',0
 sz_error_name	db 'error: setoption has no name',0
-
 
 sz_position		db 'position',0
 sz_go			db 'go',0
@@ -165,6 +169,9 @@ sz_wtime		db 'wtime',0
 sz_btime		db 'btime',0
 sz_winc 		db 'winc',0
 sz_binc 		db 'binc',0
+sz_fen			db 'fen',0
+sz_startpos		db 'startpos',0
+sz_searchmoves		db 'searchmoves',0
 sz_infinite		db 'infinite',0
 sz_movestogo		db 'movestogo',0
 sz_nodes		db 'nodes',0
@@ -189,6 +196,7 @@ sz_syzygyprobedepth	db 'syzygyprobedepth',0
 sz_syzygy50moverule	db 'syzygy50moverule',0
 sz_syzygyprobelimit	db 'syzygyprobelimit',0
 sz_Info 		db 'info string processed cmd line command: ',0
+
 
 BenchFens: ;fens must be separated by one or more space char
 .bench_fen00 db "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",' '
@@ -497,14 +505,16 @@ include 'Search_Clear.asm'
 
 include 'PrintParse.asm'
 include 'Math.asm'
+if CPU_VERSION eq 'base'
+ include 'Weakness.asm'
+end if
 
 include 'OsLinux.asm'
-
-;include 'Weakness.asm'
 
 
 Start:
 	       push   rbp
+
 
 
 ; very few functions are working so lets use the ones we have
@@ -557,7 +567,6 @@ Start:
 	       call   _ExitProcess
 
 
-; start of real program
 
 	       call   _SetStdHandles
 	       call   _SetFrequency
@@ -592,6 +601,8 @@ mov qword[VerboseTime1+8*1], rax
 	       call   TableBase_Init
 
 	; command line could contain commands
+	; this function also initializes InputBuffer
+	; which contains the commands we should process first
 	       call   ParseCommandLine
 
 	; display how much time was taken for init
@@ -635,12 +646,18 @@ match =0, VERBOSE {
 
 	; clean up input buffer
 		mov   rcx, qword[InputBuffer]
+		mov   rdx, qword[InputBufferSizeB]
 	       call   _VirtualFree
 		xor   ecx, ecx
 		mov   qword[InputBuffer], rcx
 		mov   qword[InputBufferSizeB], rcx
 
-	     Assert   e, dword[DebugBalance], 0, 'assertion dword[DebugBalance]=0 failed'
+
+GD_String db 'DebugBalance: '
+GD_Int qword[DebugBalance]
+GD_NewLine
+	     Assert   e, qword[DebugBalance], 0, 'assertion DebugBalance=0 failed'
+
 	       call   _ExitProcess
 
 include 'ParseCommandLine.asm'

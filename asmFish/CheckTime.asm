@@ -27,9 +27,10 @@ CheckTime:
 
 .stop:
 
-	       push   rax
+match =1, VERBOSE {
+push   rax
 GD_String <db 'setting signals.stop in CheckTime',10>
-		pop   rax
-
+pop   rax
+}
 		mov   byte[signals.stop], -1
 		ret
