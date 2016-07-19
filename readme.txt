@@ -1,7 +1,6 @@
 *************** WARNING: DO NOT READ WHAT FOLLOWS ********************
 ***************  AS IT IS SECRET INFORMATION !!!  ********************
 
-
 ******** introduction ********
 Welcome to the project of converting stockfish into x86-64!
 The source files can be found in the asmFish folder.
@@ -34,7 +33,7 @@ A: With this approach the critical functions would still need to conform to the 
 Q: asmFish doesn't work in my gui, what should I do?
 A: I told you not to read the introduction.
 
-Q: Is asmFish the same and the official stockfish ?
+Q: Is asmFish the same as official stockfish?
 A: It is extremely similar but there are some inconsequential functional differences.
 
 Q: How are you sure that there are not tiny bugs in asmFish?
@@ -55,64 +54,21 @@ A: There are currently four places. With these changes, asmFish should should pr
         to
                     && !ei.pi->semiopen_side(Us, file_of(ksq), file_of(s) <= file_of(ksq)))
 
-    (3) In evaluate() function of evaluate.cpp, change
-                  Value v =  mg_value(score) * int(ei.me->game_phase())
-                           + eg_value(score) * int(PHASE_MIDGAME - ei.me->game_phase()) * sf / SCALE_FACTOR_NORMAL;
-                  v /= int(PHASE_MIDGAME);
-        to
-                  Value v =  mg_value(score) * int(ei.me->game_phase()) * SCALE_FACTOR_NORMAL
-                           + eg_value(score) * int(PHASE_MIDGAME - ei.me->game_phase()) * sf;
-
-                  unsigned int rv = ((unsigned int)(abs(v)+PHASE_MIDGAME*SCALE_FACTOR_NORMAL/2-1))/((unsigned int)(PHASE_MIDGAME*SCALE_FACTOR_NORMAL));
-                  if (v>=0) {v=Value(rv);} else {v=Value(-rv);}
-        The change is
-            from a division that rounds towards zero
-            to a division that rounds towards the nearest integer with ties going towards 0,
-            which is easy to do at the machine code level
+    (3) Interpolation in evaluate() resembles a failed 'quantum' patch on fishtest.
+        The change is from a division that rounds towards zero
+          to a division that rounds towards the nearest integer with ties going towards 0,
+          which is easy to do at the machine code level. see [1] of appendix
 
     (4) Piece lists have been removed. A minimaly-invasive way to enforce this functional change
-        in cppFish involves changing the functions at the end of position.h:
-
-            inline void Position::put_piece(Color c, PieceType pt, Square s) {
-              board[s] = make_piece(c, pt);
-              byTypeBB[ALL_PIECES] |= s;
-              byTypeBB[pt] |= s;
-              byColorBB[c] |= s;
-              pieceCount[c][pt]++;
-              pieceCount[c][ALL_PIECES]++;
-              Bitboard b = byColorBB[c] & byTypeBB[pt];
-              for (int i=0; i<pieceCount[c][pt]; i++)
-                pieceList[c][pt][i] = pop_lsb(&b);
-              pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
-            }
-
-            inline void Position::remove_piece(Color c, PieceType pt, Square s) {
-              byTypeBB[ALL_PIECES] ^= s;
-              byTypeBB[pt] ^= s;
-              byColorBB[c] ^= s;
-              pieceCount[c][pt]--;
-              pieceCount[c][ALL_PIECES]--;
-              Bitboard b = byColorBB[c] & byTypeBB[pt];
-              for (int i=0; i<pieceCount[c][pt]; i++)
-                pieceList[c][pt][i] = pop_lsb(&b);
-              pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
-            }
-
-            inline void Position::move_piece(Color c, PieceType pt, Square from, Square to) {
-              Bitboard from_to_bb = SquareBB[from] ^ SquareBB[to];
-              byTypeBB[ALL_PIECES] ^= from_to_bb;
-              byTypeBB[pt] ^= from_to_bb;
-              byColorBB[c] ^= from_to_bb;
-              board[from] = NO_PIECE;
-              board[to] = make_piece(c, pt);
-              Bitboard b = byColorBB[c] & byTypeBB[pt];
-              for (int i=0; i<pieceCount[c][pt]; i++)
-                pieceList[c][pt][i] = pop_lsb(&b);
-              pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
-            }
+        in cppFish involves sorting the piece lists and is shown in [2] of the appendix
   
 
 ******** updates ********
+2016-07-17: "Gradually relax the NMP staticEval check"
+  - fixed broken ponder in 07-17
+  - added gui spam with current move info when not using time management for gui's that do that
+  - added parsing of 'searchmoves' token, which should fix 'nexbest move' if your gui does that
+
 2016-07-17: "Gradually relax the NMP staticEval check"
   - linux version is in the works
   - fixed bug in KRPPKRP endgames: case was mis-evaluated
@@ -174,3 +130,57 @@ A: There are currently four places. With these changes, asmFish should should pr
 
 2016-06-16:
   - first stable release
+
+
+******** appendix ********
+  [1] To get the more accurate division in evaluate() function of evaluate.cpp, change
+          Value v =  mg_value(score) * int(ei.me->game_phase())
+                   + eg_value(score) * int(PHASE_MIDGAME - ei.me->game_phase()) * sf / SCALE_FACTOR_NORMAL;
+          v /= int(PHASE_MIDGAME);
+      to
+          Value v =  mg_value(score) * int(ei.me->game_phase()) * SCALE_FACTOR_NORMAL
+                   + eg_value(score) * int(PHASE_MIDGAME - ei.me->game_phase()) * sf;
+
+          unsigned int rv = ((unsigned int)(abs(v)+PHASE_MIDGAME*SCALE_FACTOR_NORMAL/2-1))/((unsigned int)(PHASE_MIDGAME*SCALE_FACTOR_NORMAL));
+          if (v>=0) {v=Value(rv);} else {v=Value(-rv);}
+
+  [2] To functionally remove piece lists, changing the functions at the end of position.h:
+
+    inline void Position::put_piece(Color c, PieceType pt, Square s) {
+      board[s] = make_piece(c, pt);
+      byTypeBB[ALL_PIECES] |= s;
+      byTypeBB[pt] |= s;
+      byColorBB[c] |= s;
+      pieceCount[c][pt]++;
+      pieceCount[c][ALL_PIECES]++;
+      Bitboard b = byColorBB[c] & byTypeBB[pt];
+      for (int i=0; i<pieceCount[c][pt]; i++)
+        pieceList[c][pt][i] = pop_lsb(&b);
+      pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
+    }
+
+    inline void Position::remove_piece(Color c, PieceType pt, Square s) {
+      byTypeBB[ALL_PIECES] ^= s;
+      byTypeBB[pt] ^= s;
+      byColorBB[c] ^= s;
+      pieceCount[c][pt]--;
+      pieceCount[c][ALL_PIECES]--;
+      Bitboard b = byColorBB[c] & byTypeBB[pt];
+      for (int i=0; i<pieceCount[c][pt]; i++)
+        pieceList[c][pt][i] = pop_lsb(&b);
+      pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
+    }
+
+    inline void Position::move_piece(Color c, PieceType pt, Square from, Square to) {
+      Bitboard from_to_bb = SquareBB[from] ^ SquareBB[to];
+      byTypeBB[ALL_PIECES] ^= from_to_bb;
+      byTypeBB[pt] ^= from_to_bb;
+      byColorBB[c] ^= from_to_bb;
+      board[from] = NO_PIECE;
+      board[to] = make_piece(c, pt);
+      Bitboard b = byColorBB[c] & byTypeBB[pt];
+      for (int i=0; i<pieceCount[c][pt]; i++)
+        pieceList[c][pt][i] = pop_lsb(&b);
+      pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
+    }
+
