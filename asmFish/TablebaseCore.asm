@@ -39,6 +39,14 @@
 ;extern _Z17calc_key_from_pcsPii                         ; near
 
 
+match =1, OS_IS_WINDOWS {
+SEP_CHAR equ ';'
+}
+
+match =0, OS_IS_WINDOWS {
+SEP_CHAR equ ':'
+}
+
 
 _Z16pos_material_keyR8Position:
 	; in: rcx address of position
@@ -1336,7 +1344,7 @@ _ZL7init_tbPc.constprop.4:
 	mov	rbx, rcx				
 	call	_ZL7open_tbPKcS0_			
 	cmp	rax, -1 				
-	je	?_149					
+	je	?_149
 	lea	rdi, [rsp+20H]				
 	mov	rcx, rax				
 	call	_FileClose
@@ -1933,13 +1941,13 @@ _ZN13TablebaseCore4initEPKc:
 ?_196:	movsxd	rdx, eax				
 	xor	ecx, ecx				
 	add	rdx, rsi				
-	cmp	byte [rdx], 59				
+	cmp	byte [rdx], SEP_CHAR
 	setne	cl					
 	add	ebx, ecx				
 ?_197:	mov	cl, byte [rdx]				
 	mov	r8, rdx 				
 	inc	rdx					
-	cmp	cl, 59					
+	cmp	cl, SEP_CHAR
 	jz	?_198					
 	test	cl, cl					
 	jz	?_198					

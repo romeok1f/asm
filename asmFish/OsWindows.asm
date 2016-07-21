@@ -111,6 +111,7 @@ _EventDestroy:
 _FileOpen:
 	; in: rcx path string
 	; out: rax handle from CreateFile (win), fd (linux)
+	;      rax=-1 on error
 		sub   rsp, 8*9
 		mov   edx, 2147483648
 		mov   r8d, 1

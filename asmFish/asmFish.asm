@@ -599,10 +599,11 @@ match =0, VERBOSE {
 		mov   qword[InputBuffer], rcx
 		mov   qword[InputBufferSizeB], rcx
 
-
+match =1, DEBUG {
 GD_String db 'DebugBalance: '
 GD_Int qword[DebugBalance]
 GD_NewLine
+}
 	     Assert   e, qword[DebugBalance], 0, 'assertion DebugBalance=0 failed'
 
 	       call   _ExitProcess

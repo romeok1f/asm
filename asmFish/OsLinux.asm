@@ -7,27 +7,6 @@
 
 LOCK_CONTEND	= 0x0101
 
-;typedef union mutex mutex;
-;
-;union mutex
-;{
-;        unsigned u;
-;        struct
-;        {
-;                unsigned char locked;
-;                unsigned char contended;
-;        } b;
-;};
-
-
-;int mutex_init(mutex *m, const pthread_mutexattr_t *a)
-;{
-;        (void) a;
-;        m->u = 0;
-;        return 0;
-;}
-
-
 _MutexCreate:
 	; rcx: address of Mutex
 	       push   rbx rsi rdi
@@ -37,15 +16,6 @@ _MutexCreate:
 		pop   rdi rsi rbx
 		ret
 
-
-
-;int mutex_destroy(mutex *m)
-;{
-;        /* Do nothing */
-;        (void) m;
-;        return 0;
-;}
-
 _MutexDestroy:
 	; rcx: address of Mutex
 	       push   rbx rsi rdi
@@ -53,30 +23,6 @@ _MutexDestroy:
 		xor   eax, eax
 		pop   rdi rsi rbx
 		ret
-
-
-;int mutex_lock(mutex *m)
-;{
-;        int i;
-;
-;        /* Try to grab lock */
-;        for (i = 0; i < 100; i++)
-;        {
-;                if (!xchg_8(&m->b.locked, 1)) return 0;
-;
-;                cpu_relax();
-;        }
-;
-;        /* Have to sleep */
-;        while (xchg_32(&m->u, 257) & 1)
-;        {
-;                sys_futex(m, FUTEX_WAIT_PRIVATE, 257, NULL, NULL, 0);
-;        }
-;
-;        return 0;
-;}
-
-
 
 _MutexLock:
 	; rcx: address of Mutex
@@ -106,37 +52,6 @@ _MutexLock:
 .4:		xor   eax, eax
 		pop   rdi rsi rbx
 		ret
-
-
-
-;int mutex_unlock(mutex *m)
-;{
-;        int i;
-;
-;        /* Locked and not contended */
-;        if ((m->u == 1) && (cmpxchg(&m->u, 1, 0) == 1)) return 0;
-;
-;        /* Unlock */
-;        m->b.locked = 0;
-;
-;        barrier();
-;
-;        /* Spin and hope someone takes the lock */
-;        for (i = 0; i < 200; i++)
-;        {
-;                if (m->b.locked) return 0;
-;
-;                cpu_relax();
-;        }
-;
-;        /* We need to wake someone up */
-;        m->b.contended = 0;
-;
-;        sys_futex(m, FUTEX_WAKE_PRIVATE, 1, NULL, NULL, 0);
-;
-;        return 0;
-;}
-
 
 _MutexUnlock:
 	; rcx: address of Mutex
@@ -171,34 +86,9 @@ _MutexUnlock:
 
 
 
-
-
 ;;;;;;;;;
 ; event ;
 ;;;;;;;;;
-
-
-;typedef struct cv cv;
-;struct cv
-;{
-;        mutex *m;
-;        int seq;
-;        int pad;
-;};
-;
-;#define PTHREAD_COND_INITIALIZER {NULL, 0, 0}
-;
-;int cond_init(cv *c, pthread_condattr_t *a)
-;{
-;        (void) a;
-;
-;        c->m = NULL;
-;
-;        /* Sequence variable doesn't actually matter, but keep valgrind happy */
-;        c->seq = 0;
-;
-;        return 0;
-;}
 
 
 _EventCreate:
@@ -211,13 +101,6 @@ _EventCreate:
 		pop   rdi rsi rbx
 		ret
 
-;int cond_destroy(cv *c)
-;{
-;        /* No need to do anything */
-;        (void) c;
-;        return 0;
-;}
-
 _EventDestroy:
 	; rcx: address of ConditionalVariable
 	       push   rbx rsi rdi
@@ -225,19 +108,6 @@ _EventDestroy:
 		xor   eax, eax
 		pop   rdi rsi rbx
 		ret
-
-
-
-;int cond_signal(cv *c)
-;{
-;        /* We are waking someone up */
-;        atomic_add(&c->seq, 1);
-;
-;        /* Wake up a thread */
-;        sys_futex(&c->seq, FUTEX_WAKE_PRIVATE, 1, NULL, NULL, 0);
-;
-;        return 0;
-;}
 
 _EventSignal:
 	; rcx: address of ConditionalVariable
@@ -254,33 +124,6 @@ _EventSignal:
 		pop   rdi rsi rbx
 		ret
 
-
-
-
-;int cond_wait(cv *c, mutex *m)
-;{
-;        int seq = c->seq;
-;
-;        if (c->m != m)
-;        {
-;                /* Atomically set mutex inside cv */
-;                cmpxchg(&c->m, NULL, m);
-;                if (c->m != m) return EINVAL;
-;        }
-;
-;        mutex_unlock(m);
-;
-;        sys_futex(&c->seq, FUTEX_WAIT_PRIVATE, seq, NULL, NULL, 0);
-;
-;        while (xchg_32(&m->b.locked, 257) & 1)
-;        {
-;                sys_futex(m, FUTEX_WAIT_PRIVATE, 257, NULL, NULL, 0);
-;        }
-;
-;        return 0;
-;}
-
-
 _EventWait:
 	; rcx: address of ConditionalVariable
 	; rdx: address of Mutex
@@ -289,9 +132,9 @@ _EventWait:
 		mov   rsi, rdx
 		cmp   rsi, qword[rdi+8]
 		jne   .4
-	; Hack, save seq into r8 since unlock doesn't touch it
+	; save seq into r14d
 .1:		mov   r14d, dword[rdi]
-	; Hack, save mutex into r9 (we can be awoken after cond is destroyed)
+	; save mutex into r15
 		mov   r15, rsi
 	; Unlock
 		mov   rbx, rdi
@@ -330,21 +173,23 @@ _EventWait:
 
 
 
-
-
-
 ;;;;;;;;
 ; file ;
 ;;;;;;;;
 
 _FileOpen:
 	; in: rcx path string  
-	; out: rax handle from CreateFile (win), fd (linux)  
-	       push   rbx rsi rdi  
+	; out: rax handle from CreateFile (win), fd (linux)
+	;      rax=-1 on error
+	       push   rbx rsi rdi
 		mov   rdi, rcx
 		mov   esi, O_RDWR
 		mov   eax, sys_open
-	    syscall  
+	    syscall
+		mov   edx, eax
+		sar   edx, 31
+		 or   eax, edx
+	     movsxd   rax, eax
 		pop   rdi rsi rbx 
 		ret
 

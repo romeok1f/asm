@@ -21,13 +21,15 @@ end if
 
 
 
+include 'Def.asm'
+
 format PE64 console
-stack 1000000	; this stack size should be sufficient for MAX_PLY=128 in search
+stack THREAD_STACK_SIZE
 entry Start
 
 include 'myWin64a.asm'
 
-include 'Def.asm'
+
 include 'BasicMacros.asm'
 include 'Structs.asm'
 include 'Debug.asm'
@@ -639,10 +641,11 @@ match =0, VERBOSE {
 		mov   qword[InputBuffer], rcx
 		mov   qword[InputBufferSizeB], rcx
 
-
+match =1, DEBUG {
 GD_String db 'DebugBalance: '
 GD_Int qword[DebugBalance]
 GD_NewLine
+}
 	     Assert   e, qword[DebugBalance], 0, 'assertion DebugBalance=0 failed'
 
 	       call   _ExitProcess
