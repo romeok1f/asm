@@ -3,10 +3,12 @@
 
 ******** introduction ********
 Welcome to the project of converting stockfish into x86-64!
-The source files can be found in the asmFish folder.
 The executables can be found in the Windows folder.
+The source files can be found in the asmFish folder.
+  - run fasm on asmFishW_base[_popcnt,_bmi2].asm to produce executables for windows
+  - run fasm on asmFish_base[_popcnt,_bmi2].asm to produce executables for linux
 For more information on this project see the asmFish/asmReadMe.txt.
-Run make.bat to assemble the source for the three supported cpu capabilities
+Run make.bat to automatically assemble the windows/linux sources for the three capabilities
   - base: should run on any 64bit x86 cpu
   - popcnt: generate popcnt instruction
   - bmi2: use instructions introduced in haswell
