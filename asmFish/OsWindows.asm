@@ -8,29 +8,102 @@
 ;;;;;;;;;
 
 _MutexCreate:
-	; rcx: address of critial section object
+	; rcx: address of critial section object (win), Mutex (linux)
 		sub   rsp, 8*5
 	       call   qword[__imp_InitializeCriticalSection]
 		add   rsp, 8*5
 		ret
 _MutexLock:
-	; rcx: address of critial section object
+	; rcx: address of critial section object (win), Mutex (linux)
 		sub   rsp, 8*5
 	       call   qword[__imp_EnterCriticalSection]
 		add   rsp, 8*5
 		ret
 _MutexUnlock:
-	; rcx: address of critial section object
+	; rcx: address of critial section object (win), Mutex (linux)
 		sub   rsp, 8*5
 	       call   qword[__imp_LeaveCriticalSection]
 		add   rsp, 8*5
 		ret
 _MutexDestroy:
-	; rcx: address of critial section object
+	; rcx: address of critial section object (win), Mutex (linux)
 		sub   rsp, 8*5
 	       call   qword[__imp_DeleteCriticalSection]
 		add   rsp, 8*5
 		ret
+
+
+;;;;;;;;;
+; event ;
+;;;;;;;;;
+
+_EventCreate:
+	; rcx: address of ConditionalVariable
+	       push   rbx
+		sub   rsp, 8*4
+		mov   rbx, rcx
+		xor   ecx, ecx
+		xor   edx, edx
+		xor   r8d, r8d
+		xor   r9d, r9d
+	       call   qword[__imp_CreateEvent]
+	       test   rax, rax
+		 jz   Failed__imp_CreateEvent
+		mov   qword[rbx+ConditionalVariable.handle], rax
+		add   rsp, 8*4
+		pop   rbx
+		ret
+
+
+_EventSignal:
+	; rcx: address of ConditionalVariable
+		sub   rsp, 8*5
+		mov   rcx, qword[rcx+ConditionalVariable.handle]
+	       call   qword[__imp_SetEvent]
+	       test   eax, eax
+		 jz   Failed__imp_SetEvent
+		add   rsp, 8*5
+		ret
+
+_EventWait:
+	; rcx: address of ConditionalVariable
+	; rdx: address of Mutex
+	       push   rbx rsi
+		sub   rsp, 8*5
+		mov   rbx, qword[rcx+ConditionalVariable.handle]
+		mov   rsi, rdx
+		mov   rcx, rdx
+	       call   qword[__imp_LeaveCriticalSection]
+		mov   rcx, rbx
+		 or   edx, -1
+	       call   qword[__imp_WaitForSingleObject]
+		cmp   eax, WAIT_FAILED
+		 je   Failed__imp_WaitForSingleObject
+		mov   rcx, rsi
+	       call   qword[__imp_EnterCriticalSection]
+		add   rsp, 8*5
+		pop   rsi rbx
+		ret
+
+_EventDestroy:
+	; rcx: address of ConditionalVariable
+	       push   rbx
+		sub   rsp, 8*4
+		mov   rbx, rcx
+		mov   rcx, qword[rbx+ConditionalVariable.handle]
+	       call   qword[__imp_CloseHandle]
+		xor   eax, eax
+		mov   qword[rbx+ConditionalVariable.handle], rax
+		add   rsp, 8*4
+		pop   rbx
+		ret
+
+
+
+
+
+
+
 ;;;;;;;;
 ; file ;
 ;;;;;;;;
@@ -110,59 +183,6 @@ _FileUnmap:
 		pop   rbx
 		ret
 
-;;;;;;;;;
-; event ;
-;;;;;;;;;
-
-_EventCreate:
-	; no arguments
-		sub   rsp, 8*5
-		xor   ecx, ecx
-		xor   edx, edx
-		xor   r8d, r8d
-		xor   r9d, r9d
-	       call   qword[__imp_CreateEvent]
-	       test   rax, rax
-		 jz   Failed__imp_CreateEvent
-		add   rsp, 8*5
-		ret
-
-
-_EventSignal:
-	; rcx: handle
-		sub   rsp, 8*5
-	       call   qword[__imp_SetEvent]
-	       test   eax, eax
-		 jz   Failed__imp_SetEvent
-		add   rsp, 8*5
-		ret
-
-_EventWait:
-	; rcx: handle
-	; rdx: address of critial section object
-	       push   rbx rsi
-		sub   rsp, 8*5
-		mov   rbx, rcx
-		mov   rsi, rdx
-		mov   rcx, rdx
-	       call   qword[__imp_LeaveCriticalSection]
-		mov   rcx, rbx
-		 or   edx, -1
-	       call   qword[__imp_WaitForSingleObject]
-		cmp   eax, WAIT_FAILED
-		 je   Failed__imp_WaitForSingleObject
-		mov   rcx, rsi
-	       call   qword[__imp_EnterCriticalSection]
-		add   rsp, 8*5
-		pop   rsi rbx
-		ret
-
-_EventDestroy:
-	; rcx: handle
-		sub   rsp, 8*5
-	       call   qword[__imp_CloseHandle]
-		add   rsp, 8*5
-		ret
 
 ;;;;;;;;;;
 ; thread ;
@@ -172,10 +192,12 @@ _ThreadCreate:
 	; in: rcx start address
 	;     rdx parameter to pass
 	;     r8  address of GROUP_AFFINITY structure (ignored if numa functions not avaiable)
+	;     r9  address of ThreadHandle Struct
 	       push   rbx rsi rdi
 		sub   rsp, 8*6
 		mov   rbx, qword[__imp_SetThreadGroupAffinity]
 		mov   rdi, r8
+		mov   rsi, r9
 
 		mov   r8, rcx		; lpStartAddress
 		mov   r9, rdx		; lpParameter
@@ -193,7 +215,7 @@ _ThreadCreate:
 		mov   qword[rsp+8*4], CREATE_SUSPENDED	; dwCreationFlags
 		mov   qword[rsp+8*5], rcx		; lpThreadId
 	       call   qword[__imp_CreateThread]
-		mov   rsi, rax
+		mov   qword[rsi+ThreadHandle.handle], rax
 	       test   rax, rax
 		 jz   Failed__imp_CreateThread_CREATE_SUSPENDED
 
@@ -204,12 +226,11 @@ _ThreadCreate:
 	       test   eax, eax
 		 jz   Failed__imp_SetThreadGroupAffinity
 
-		mov   rcx, rsi
+		mov   rcx, qword[rsi+ThreadHandle.handle]
 	       call   qword[__imp_ResumeThread]
 		cmp   eax, 1
 		jne   Failed__imp_ResumeThread
-	       
-		mov   rax, rsi
+
 		add   rsp, 8*6
 		pop   rdi rsi rbx
 		ret
@@ -228,9 +249,10 @@ _ThreadCreate:
 
 
 _ThreadJoin:
-	; rcx: handle
+	; rcx: address of ThreadHandle Struct
 	       push   rbx
 		sub   rsp, 8*4
+		mov   rcx, qword[rcx+ThreadHandle.handle]
 		mov   rbx, rcx
 		 or   edx, -1
 	       call   qword[__imp_WaitForSingleObject]
@@ -246,6 +268,8 @@ _ExitProcess:
 		jmp   qword[__imp_ExitProcess]
 _ExitThread:
 	; rcx is exit code
+	; must not call _ExitThread on linux
+	;  thread should just return
 		sub   rsp, 8*5
 		jmp   qword[__imp_ExitThread]
 
@@ -610,9 +634,6 @@ _SetThreadPoolInfo:
 		 jz   .Absent  ; < vista
 
 	; figure out numa configuation
-
-RelationProcessorCore = 0
-RelationNumaNode      = 1
 
 
 GD_String db '*** enumerating nodes *** '

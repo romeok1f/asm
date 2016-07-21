@@ -4,8 +4,14 @@ MAX_MOVES equ 224    ; this should be >= the # pseudo legal moves for any positi
 MAX_THREADS equ 256
 MAX_NUMANODES equ 32
 MAX_HASH_LOG2MB equ 16
+THREAD_STACK_SIZE equ 1048576
 PAWN_HASH_ENTRY_COUNT equ 16384
 MATERIAL_HASH_ENTRY_COUNT equ 8192
+
+
+; numa
+RelationProcessorCore = 0
+RelationNumaNode      = 1
 
 
 ; some bitboards
@@ -89,8 +95,6 @@ MATERIAL_HASH_ENTRY_COUNT equ 8192
  SCALE_FACTOR_MAX     = 128
  SCALE_FACTOR_NONE    = 255
 
-
-	ISOLATED_PAWN_PENALTY = 40
 
 ; depths for search
  ONE_PLY = 1

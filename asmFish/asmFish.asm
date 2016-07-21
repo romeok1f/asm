@@ -513,60 +513,7 @@ include 'OsLinux.asm'
 
 
 Start:
-	       push   rbp
-
-
-
-; very few functions are working so lets use the ones we have
-		mov   ecx, 4096
-		mov   qword[InputBufferSizeB], rcx
-	       call   _VirtualAlloc
-		mov   qword[InputBuffer], rax
-
-		mov   rdi, qword[InputBuffer]
-		mov   rax, 'Hello!  '
-	      stosq
-       PrintNewLine
-
-		mov   rax, ' time = '
-	      stosq
-	       call   _GetTime
-	       call   PrintUnsignedInteger
-		mov   ax, 'ms'
-	      stosw
-       PrintNewLine
-		mov   rcx, qword[InputBuffer]
-	       call   _WriteOut
-
-		mov   ecx, 1000
-	       call   _Sleep
-
-		mov   rdi, qword[InputBuffer]
-		mov   rax, 'one seco'
-	      stosq
-		mov   rax, 'nd later'
-	      stosq
-       PrintNewLine
-
-		mov   rax, ' time = '
-	      stosq
-	       call   _GetTime
-	       call   PrintUnsignedInteger
-		mov   ax, 'ms'
-	      stosw
-       PrintNewLine
-
-		mov   rcx, qword[InputBuffer]
-	       call   _WriteOut
-
-		mov   rcx, qword[InputBuffer]
-		mov   rdx, qword[InputBufferSizeB]
-	       call   _VirtualFree
-
-		xor   ecx, ecx
-	       call   _ExitProcess
-
-
+	; starts with rsp 16-byte aligned
 
 	       call   _SetStdHandles
 	       call   _SetFrequency

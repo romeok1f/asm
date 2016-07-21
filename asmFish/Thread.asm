@@ -74,10 +74,10 @@ Thread_Create:
 	; create sync objects
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexCreate
+		lea   rcx, [rbx+Thread.sleep1]
 	       call   _EventCreate
-		mov   qword[rbx+Thread.sleepCond], rax
+		lea   rcx, [rbx+Thread.sleep2]
 	       call   _EventCreate
-		mov   qword[rbx+Thread.sleepCond2], rax
 
 	; the states will be allocated when copying position to thread
 		xor   eax, eax
@@ -116,23 +116,37 @@ Thread_Create:
 	; start the thread and wait for it to enter the idle loop
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
+
 		mov   byte[rbx+Thread.searching], -1
 		lea   rcx, [Thread_IdleLoop]
 		mov   rdx, rbx
-		mov   r8, rdi
-		add   r8, NumaNode.GroupMask
+		lea   r8, [rdi+NumaNode.GroupMask]
+		lea   r9, [rbx+Thread.threadHandle]
 	       call   _ThreadCreate
-		mov   qword[rbx+Thread.handle], rax
+GD_String db '_ThreadCreate done'
+GD_NewLine
+
 		jmp   .check
-    .wait:	mov   rcx, qword[rbx+Thread.sleepCond2]
+    .wait:
+GD_String db 'calling _EventWait2 '
+GD_Hex rbx
+GD_NewLine
+		lea   rcx, [rbx+Thread.sleep2]
 		lea   rdx, [rbx+Thread.mutex]
 	       call   _EventWait
+GD_String db '_EventWait done'
+GD_NewLine
     .check:	mov   al, byte[rbx+Thread.searching]
 	       test   al, al
 		jnz   .wait
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
 
+GD_String db '_MutexUnlock done'
+GD_NewLine
+
+
+.done:
 		add   rsp, 8*8
 		pop   rdi rsi rbx
 		ret
@@ -140,19 +154,18 @@ Thread_Create:
 
 Thread_Delete:
 	; ecx: index of thread
-
 	       push   rsi rdi rbx
 		mov   esi, ecx
 		mov   rbx, qword[threadPool.threadTable+8*rcx]
 
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
-		mov   byte [rbx+Thread.exit], -1
-		mov   rcx, qword[rbx+Thread.sleepCond]
+		mov   byte[rbx+Thread.exit], -1
+		lea   rcx, [rbx+Thread.sleep1]
 	       call   _EventSignal
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
-		mov   rcx, qword[rbx+Thread.handle]
+		lea   rcx, [rbx+Thread.threadHandle]
 	       call   _ThreadJoin
 
 	; free material hash
@@ -192,9 +205,9 @@ Thread_Delete:
 		mov   qword[rbx+Thread.rootPos+Pos.stateEnd], rax
 
 	; destroy sync objects
-		mov   rcx, qword[rbx+Thread.sleepCond2]
+		lea   rcx, [rbx+Thread.sleep2]
 	       call   _EventDestroy
-		mov   rcx, qword[rbx+Thread.sleepCond]
+		lea   rcx, [rbx+Thread.sleep1]
 	       call   _EventDestroy
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexDestroy
@@ -212,56 +225,77 @@ Thread_Delete:
 
 Thread_IdleLoop:
 	; in: rcx address of Thread struct
-	       push   rbp
+	       push   rbx rsi rdi
 if DEBUG > 0
 mov qword[rcx+Thread.stackBase], rsp
 mov qword[rcx+Thread.stackRecord], 0
 end if
+
+GD_String db '...Thread_IdleLoop enter'
+GD_NewLine
+
 		mov   rbx, rcx
-		lea   rbp, [Thread_Think]
+		lea   rdi, [Thread_Think]
 		lea   rdx, [MainThread_Think]
 		mov   eax, dword[rbx+Thread.idx]
 	       test   eax, eax
-	      cmove   rbp, rdx
-		mov   rsi, qword[rbx+Thread.sleepCond]
-		mov   rdi, qword[rbx+Thread.sleepCond2]
-GD_String <db 'Thread_IdleLoop enter',10>
-		mov   al, byte[rbx+Thread.exit]
-	       test   al, al
-		jnz   .exit
+	      cmovz   rdi, rdx
+
+GD_String db '... rbx:'
+GD_Hex rbx
+GD_NewLine
+
 		jmp   .lock
 .loop:
 		mov   rcx, rbx
-	       call   rbp
+	       call   rdi
 .lock:
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
 		mov   byte[rbx+Thread.searching], 0
+GD_String db '..._MutexLock returned'
+GD_NewLine
 
     .check_exit:
 		mov   al, byte[rbx+Thread.exit]
 	       test   al, al
 		jnz   .unlock
-		mov   rcx, rdi
+GD_String db '...calling _EventSignal2 '
+GD_Hex rbx
+GD_NewLine
+		lea   rcx, [rbx+Thread.sleep2]
 	       call   _EventSignal
-		mov   rcx, rsi
+		lea   rcx, [rbx+Thread.sleep1]
 		lea   rdx, [rbx+Thread.mutex]
 	       call   _EventWait
+GD_String db '..._EventWait returned'
+GD_NewLine
 		mov   al, byte[rbx+Thread.searching]
 	       test   al, al
 		 jz   .check_exit
     .unlock:
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
+
+GD_String db '..._MutexUnlock returned'
+GD_NewLine
+
 .check_out:
 		mov   al, byte[rbx+Thread.exit]
 	       test   al, al
 		 jz   .loop
 .exit:
-GD_String <db 'Thread_IdleLoop exit',10>
+
+GD_String db '...Thread_IdleLoop exit'
+GD_NewLine
+
+if OS_IS_WINDOWS
 		xor   ecx, ecx
 	       call   _ExitThread
-
+else
+		pop   rdi rsi rbx
+		ret
+end if
 
 
 
@@ -272,7 +306,7 @@ Thread_StartSearching:
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
 		mov   byte[rbx+Thread.searching], -1
-.signal:	mov   rcx, qword[rbx+Thread.sleepCond]
+.signal:	lea   rcx, [rbx+Thread.sleep1]
 	       call   _EventSignal
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
@@ -293,19 +327,15 @@ Thread_WaitForSearchFinished:
 	       push   rsi rdi rbx
 		mov   rbx, rcx
 		cmp   al, byte[rbx]
-		mov   rsi, qword[rbx+Thread.sleepCond2]
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
 		jmp   .check
-.wait:
-		mov   rcx, rsi
+.wait:		lea   rcx, [rbx+Thread.sleep2]
 		lea   rdx, [rbx+Thread.mutex]
 	       call   _EventWait
-.check:
-		mov   al, byte[rbx+Thread.searching]
+.check: 	mov   al, byte[rbx+Thread.searching]
 	       test   al, al
 		jnz   .wait
-
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
 		pop   rbx rdi rsi
@@ -319,19 +349,15 @@ Thread_Wait:
 	       push   rsi rdi rbx
 		mov   rbx, rcx
 		mov   rdi, rdx
-		mov   rsi, qword[rbx+Thread.sleepCond]
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
 		jmp   .check
-.wait:
-		mov   rcx, rsi
+.wait:		lea   rcx, [rbx+Thread.sleep1]
 		lea   rdx, [rbx+Thread.mutex]
 	       call   _EventWait
-.check:
-		mov   al, byte[rdi]
+.check: 	mov   al, byte[rdi]
 	       test   al, al
 		 jz   .wait
-
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
 		pop   rbx rdi rsi

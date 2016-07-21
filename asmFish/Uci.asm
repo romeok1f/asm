@@ -147,14 +147,6 @@ mov qword[VerboseTime1+8*1], rax
 		 jb   UciGetInput     ; don't process empty lines
 
 
-	     ;   lea   rdi, [Output]
-	     ;   mov   rcx, rsi
-	     ;  call   PrintString
-	     ;   mov   eax, 0
-	     ; stosd
-	     ;   lea   rdi, [Output]
-	     ;  call   _ErrorBox
-
 UciChoose:
 	       call   SkipSpaces
 

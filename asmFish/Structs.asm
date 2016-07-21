@@ -265,11 +265,53 @@ ends
 ; thread structures
 ;;;;;;;;;;;;;;;;;;;;
 
+match =1, OS_IS_WINDOWS {
+
+  struct ThreadHandle
+   handle   rq 1
+  ends
+
+  struct Mutex
+   rq 5
+  ends
+
+  struct ConditionalVariable
+   handle rq 5
+  ends
+
+
+}
+
+match =0, OS_IS_WINDOWS {
+
+  struct ThreadHandle
+   stackAddress rq 1
+   mutex	rd 1
+		rd 1
+  ends
+
+  struct Mutex
+   rd 1
+   rd 1  ; extra
+   rq 1  ; extra
+  ends
+
+  struct ConditionalVariable
+   rd 1
+   rd 1  ; extra
+   rq 1
+  ends
+
+
+}
+
+
+
 struct Thread
- mutex		 rq 5
- sleepCond	 rq 1
- sleepCond2	 rq 1
- handle 	 rq 1
+ mutex		 Mutex
+ sleep1 	 ConditionalVariable
+ sleep2 	 ConditionalVariable
+ threadHandle	 ThreadHandle
  numaNode	 rq 1
  bestMoveChanges rq 1
  nodes		 rq 1
