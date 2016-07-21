@@ -373,11 +373,11 @@ _FileMap:
 		 je   Failed_sys_fstat
 		mov   rbx, qword[rsp+0x30] ; file size
 	; map file
-		pop   r8		; fd
 		xor   edi, edi		; addr
-		mov   rsi, rdx		; length
+		mov   rsi, rbx		; length
 		mov   edx, PROT_READ	; protection flags
 		mov   r10, MAP_PRIVATE	; mapping flags
+		mov   r8, rbp		; fd
 		xor   r9d, r9d		; offset
 		mov   eax, sys_mmap 
 	    syscall
@@ -385,7 +385,6 @@ _FileMap:
 		 je   Failed_sys_mmap
 	; return size in rdx, base address in rax 
 		mov   rdx, rbx
-
 		add   rsp, 20*8
 		pop   r15 rdi rsi rbx rbp
 		ret
