@@ -1,1 +1,1 @@
-This folder contains a simple timer test for now.
+These *should* be fully functional now.
