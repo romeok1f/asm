@@ -167,9 +167,8 @@ _EventWait:
 		 jz   .1
 		cmp   qword[rdi+8], rsi
 		 je   .1
-.5:		mov   eax, EINVAL
-		pop   r15 r14 rdi rsi rbx
-		ret
+.5:
+		jmp   Failed_EventWait
 
 
 
@@ -224,10 +223,10 @@ _FileMap:
 		mov   r10, MAP_PRIVATE	; mapping flags
 		mov   r8, rbp		; fd
 		xor   r9d, r9d		; offset
-		mov   eax, sys_mmap 
+		mov   eax, sys_mmap
 	    syscall
-	       test   eax, eax
-		jnz   Failed_sys_munmap
+	       test   rax, rax
+		 js   Failed_sys_mmap
 	; return size in rdx, base address in rax
 		mov   rdx, rbx
 		add   rsp, 20*8
@@ -237,14 +236,16 @@ _FileMap:
 _FileUnmap:
 	; in: rcx base address 
 	;     rdx handle from CreateFileMapping (win), size (linux) 
-	       push   rbx rsi rdi 
+	       push   rbx rsi rdi
+	       test   rcx, rcx
+		 jz   @f
 		mov   rdi, rcx	      ; addr 
 		mov   rsi, rdx	      ; length 
 		mov   eax, sys_munmap 
 	    syscall
 	       test   eax, eax
-		jnz   Failed_sys_munmap
-		pop   rdi rsi rbx
+		jnz   Failed_sys_munmap_FileUnmap
+	@@:	pop   rdi rsi rbx
 		ret
 
 
@@ -287,6 +288,9 @@ _ThreadCreate:
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
 .WeAreChild:
+		mov   eax, dword[r12+NumaNode.nodeNumber]
+		cmp   eax, -1
+		 je   .DontSetAffinity
 		xor   edi, edi
 		mov   esi, 512/8
 		lea   rdx, [r12+NumaNode.cpuMask]
@@ -294,6 +298,7 @@ _ThreadCreate:
 	    syscall
 	       test   eax, eax
 		jnz   Failed_sys_sched_setaffinity
+.DontSetAffinity:
 
 		mov   rcx, r15
 	       call   r14
@@ -331,7 +336,7 @@ _ThreadJoin:
 		mov   eax, sys_munmap
 	    syscall
 	       test   eax, eax
-		jnz   Failed_sys_munmap
+		jnz   Failed_sys_munmap_ThreadJoin
 		pop   rdi rsi rbx
 		ret
 
@@ -478,7 +483,7 @@ _VirtualFree:
 		mov   eax, sys_munmap
 	    syscall
 	       test   eax, eax
-		jnz   Failed_sys_munmap
+		jnz   Failed_sys_munmap_VirtualFree
 	@@:	pop   rbx rdi rsi
 		ret
 
@@ -1044,6 +1049,23 @@ Failed_sys_fstat:
 		lea   rdi, [@f]
 		jmp   Failed
 		@@: db 'sys_fstat failed',0
+
+
+
+Failed_sys_munmap_VirtualFree:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'sys_munmap in _VirtualFree failed',0
+Failed_sys_munmap_ThreadJoin:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'sys_munmap in _ThreadJoin failed',0
+Failed_sys_munmap_FileUnmap:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'sys_munmap in _FileUnmap failed',0
+
+
 Failed_sys_munmap:
 		lea   rdi, [@f]
 		jmp   Failed
@@ -1064,9 +1086,10 @@ Failed_sys_mbind:
 		lea   rdi, [@f]
 		jmp   Failed
 		@@: db 'sys_mbind failed',0
-
-
-
+Failed_EventWait:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '_EventWait failed',0
 Failed_MatchingCore:
 		lea   rdi, [@f]
 		jmp   Failed
