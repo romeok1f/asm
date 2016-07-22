@@ -582,6 +582,14 @@ mov qword[VerboseTime1+8*1], rax
 	       call   Pawn_Init
 	       call   Endgame_Init
 
+	; write engine name
+match =0, VERBOSE {
+		lea   rdi, [szGreetingEnd]
+		lea   rcx, [szGreeting]
+	       call   _WriteOut
+}
+
+
 	; set up threads, hash, and tablebases
 		mov   ecx, dword[options.hash]
 	       call   MainHash_Allocate
@@ -617,12 +625,6 @@ lea rcx, [VerboseOutput]
 call _WriteOut
 }
 
-	; write engine name
-match =0, VERBOSE {
-		lea   rdi, [szGreetingEnd]
-		lea   rcx, [szGreeting]
-	       call   _WriteOut
-}
 
 	; enter the main loop
 	       call   UciLoop

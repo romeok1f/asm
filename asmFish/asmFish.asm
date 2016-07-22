@@ -519,7 +519,7 @@ Start:
 	       call   _SetFrequency
 	       call   _CheckCPU
 
-GD_String db ' *** General Verbosity ON !! ***'
+GD_String ' *** General Verbosity ON !! ***'
 GD_NewLine
 GD_NewLine
 
@@ -600,7 +600,7 @@ match =0, VERBOSE {
 		mov   qword[InputBufferSizeB], rcx
 
 match =1, DEBUG {
-GD_String db 'DebugBalance: '
+GD_String 'DebugBalance: '
 GD_Int qword[DebugBalance]
 GD_NewLine
 }

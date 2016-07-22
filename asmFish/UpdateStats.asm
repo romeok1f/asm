@@ -49,15 +49,15 @@ end virtual
 		mov   qword[.quiets], r8
 		mov   dword[.quietsCnt], r9d
 
-SD_String db 'us:'
+SD_String 'us:'
 SD_Move rcx
-SD_String db '|'
+SD_String '|'
 
 
 
-SD_String db 'qct'
+SD_String 'qct'
 SD_Int r9
-SD_String db '|'
+SD_String '|'
 
 		mov   eax, edx
 	       imul   eax, edx
@@ -84,9 +84,9 @@ SD_String db '|'
 
 		mov   eax, dword[rbx-1*sizeof.State+State.currentMove]
 
-SD_String db 'pm:'
+SD_String 'pm:'
 SD_Move rax
-SD_String db '|'
+SD_String '|'
 
 
 		and   eax, 63
@@ -187,9 +187,9 @@ SD_String db '|'
 .quiets_done:
 
 		mov   eax, dword[rbx-1*sizeof.State+State.moveCount]
-SD_String db 'mc'
+SD_String 'mc'
 SD_Int rax
-SD_String db '|'
+SD_String '|'
 
 		cmp   eax, 1
 		jne   .done

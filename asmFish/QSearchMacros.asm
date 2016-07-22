@@ -355,9 +355,9 @@ pop r15 r14 r13 r9 r8 rdx rcx
 	       test   eax, eax
 		 jz   .MovePickDone
 
-SD_String db 'Qmp='
+SD_String 'Qmp='
 SD_Move rax
-SD_String db '|'
+SD_String '|'
 
 
 	; check for check and get address of search function

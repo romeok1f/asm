@@ -44,7 +44,7 @@ RelationNumaNode      = 1
 
 ; special moves
  MOVE_NONE    equ 0
- MOVE_NULL    equ 65 + 0x0FFFFF000
+ MOVE_NULL    equ (65 + 0x0FFFFF000)
 
 
 

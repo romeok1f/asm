@@ -77,8 +77,8 @@ _MutexUnlock:
 		mov   edx, 1
 		mov   eax, sys_futex
 	    syscall
-		cmp   eax, -1
-		 je   Failed_sys_futex
+	       test   eax, eax
+		 js   Failed_sys_futex
 
 .3:		xor   eax, eax
 		pop   rdi rsi rbx
@@ -118,8 +118,8 @@ _EventSignal:
 		mov   esi, FUTEX_WAKE_PRIVATE
 		mov   edx, 1
 	    syscall
-		cmp   eax, -1
-		 je   Failed_sys_futex
+	       test   eax, eax
+		 js   Failed_sys_futex
 		xor   eax, eax
 		pop   rdi rsi rbx
 		ret
@@ -183,7 +183,7 @@ _FileOpen:
 	;      rax=-1 on error
 	       push   rbx rsi rdi
 		mov   rdi, rcx
-		mov   esi, O_RDWR
+		mov   esi, O_RDONLY
 		mov   eax, sys_open
 	    syscall
 		mov   edx, eax
@@ -214,8 +214,8 @@ _FileMap:
 		mov   rsi, rsp 
 		mov   eax, sys_fstat 
 	    syscall
-		cmp   eax, -1
-		 je   Failed_sys_fstat
+	       test   eax, eax
+		jnz   Failed_sys_fstat
 		mov   rbx, qword[rsp+0x30] ; file size
 	; map file
 		xor   edi, edi		; addr
@@ -226,9 +226,9 @@ _FileMap:
 		xor   r9d, r9d		; offset
 		mov   eax, sys_mmap 
 	    syscall
-		cmp   rax, -1
-		 je   Failed_sys_mmap
-	; return size in rdx, base address in rax 
+	       test   eax, eax
+		jnz   Failed_sys_munmap
+	; return size in rdx, base address in rax
 		mov   rdx, rbx
 		add   rsp, 20*8
 		pop   r15 rdi rsi rbx rbp
@@ -242,9 +242,9 @@ _FileUnmap:
 		mov   rsi, rdx	      ; length 
 		mov   eax, sys_munmap 
 	    syscall
-		cmp   eax, -1
-		 je   Failed_sys_munmap
-		pop   rdi rsi rbx 
+	       test   eax, eax
+		jnz   Failed_sys_munmap
+		pop   rdi rsi rbx
 		ret
 
 
@@ -257,39 +257,44 @@ _FileUnmap:
 _ThreadCreate:
 	; in: rcx start address
 	;     rdx parameter to pass
-	;     r8  address of GROUP_AFFINITY structure (ignored if numa functions not avaiable)
+	;     r8  address of NumaNode struct
 	;     r9  address of ThreadHandle Struct
 	       push   rbx rsi rdi r12 r13 r14 r15
+		mov   r12, r8
 		mov   r13, r9
 		mov   r14, rcx
 		mov   r15, rdx
-	; allocate memory for the thread stack 
-		xor   edi, edi						  ; addr
-		mov   esi, THREAD_STACK_SIZE				  ; length
-		mov   edx, PROT_READ or PROT_WRITE			  ; protection flags
-		mov   r10d, MAP_PRIVATE or MAP_ANONYMOUS or MAP_GROWSDOWN ; mapping flags
-		 or   r8, -1						  ; fd
-		xor   r9, r9						  ; offset
-		mov   eax, sys_mmap 
-	    syscall
+	; allocate memory for the thread stack
+		mov   ecx, THREAD_STACK_SIZE
+		mov   edx, dword[r12+NumaNode.nodeNumber]
+	       call   _VirtualAllocNuma_GrowsDown
 		mov   qword[r13+ThreadHandle.stackAddress], rax
 		mov   rsi, rax
 	; create child
-		mov   edi, CLONE_VM or CLONE_FS or CLONE_FILES or CLONE_SIGHAND or CLONE_THREAD ; flags
-		add   rsi, THREAD_STACK_SIZE					       ; child_stack
-		xor   edx, edx									; ptid
-		mov   r10d, 0									; ctid
-		mov   r8d, 0									; regs
+		mov   edi, CLONE_VM or CLONE_FS or CLONE_FILES\
+			or CLONE_SIGHAND or CLONE_THREAD	; flags
+		add   rsi, THREAD_STACK_SIZE			; child_stack
+		xor   edx, edx					; ptid
+		xor   r10, r10					; ctid
+		xor   r8, r8					; regs
 		mov   eax, stub_clone
 	    syscall
-		cmp   eax, -1
-		 je   Failed_stub_clone
+	       test   eax, eax
+		 js   Failed_stub_clone
 	; redirect child to function
 	       test   eax, eax
 		 jz   .WeAreChild
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
 .WeAreChild:
+		xor   edi, edi
+		mov   esi, 512/8
+		lea   rdx, [r12+NumaNode.cpuMask]
+		mov   eax, sys_sched_setaffinity
+	    syscall
+	       test   eax, eax
+		jnz   Failed_sys_sched_setaffinity
+
 		mov   rcx, r15
 	       call   r14
 	; signal that we are done
@@ -299,8 +304,8 @@ _ThreadCreate:
 		mov   edx, 1
 		mov   eax, sys_futex
 	    syscall
-		cmp   eax, -1
-		 je   Failed_sys_futex
+	       test   eax, eax
+		 js   Failed_sys_futex
 	; exit
 		xor   edi, edi
 		mov   eax, sys_exit
@@ -314,19 +319,19 @@ _ThreadJoin:
 	; wait for the thread to return
 		lea   rdi, [rbx+ThreadHandle.mutex]
 		mov   esi, FUTEX_WAIT
-		mov   edx, 0
+		xor   edx, edx
 		xor   r10d, r10d
 		mov   eax, sys_futex
 	    syscall
-		cmp   eax, -1
-		 je   Failed_sys_futex
+	       test   eax, eax
+		 js   Failed_sys_futex
 	; free its stack
 		mov   rdi, qword[rbx+ThreadHandle.stackAddress]
 		mov   rsi, THREAD_STACK_SIZE
 		mov   eax, sys_munmap
 	    syscall
-		cmp   eax, -1
-		 je   Failed_sys_munmap
+	       test   eax, eax
+		jnz   Failed_sys_munmap
 		pop   rdi rsi rbx
 		ret
 
@@ -396,24 +401,68 @@ _Sleep:
 ;;;;;;;;;;
 
 
+_VirtualAllocNuma_GrowsDown:	 ; this is called to allocate stack on created thread
+	; rcx is size
+	; edx is numa node
+		mov   r10d, MAP_PRIVATE or MAP_ANONYMOUS or MAP_GROWSDOWN
+		jmp   _VirtualAllocNuma.go
+
 _VirtualAllocNuma:
 	; rcx is size
 	; edx is numa node
-
-
-_VirtualAlloc:
-	; rcx is size
-	       push   rsi rdi rbx
+		mov   r10d, MAP_PRIVATE or MAP_ANONYMOUS
+.go:
+		cmp   edx, -1
+		 je   _VirtualAlloc.go
+	       push   rbp rbx rsi rdi r15
+		sub   rsp, 16
+		mov   ebx, edx
+		mov   rbp, rcx
 		xor   edi, edi
 		mov   rsi, rcx
 		mov   edx, PROT_READ or PROT_WRITE
-		mov   r10d, MAP_PRIVATE or MAP_ANONYMOUS
 		 or   r8, -1
 		xor   r9, r9
 		mov   eax, sys_mmap
 	    syscall
-		cmp   rax, -1
-		 je   Failed_sys_mmap
+		mov   r15, rax
+	       test   rax, rax
+		 js   Failed_sys_mmap
+
+		mov   rdi, r15		; addr
+		mov   rsi, rbp		; len
+		mov   edx, MPOL_BIND	; mode
+		xor   eax, eax
+		bts   rax, rbx
+		mov   qword[rsp], rax
+		mov   r10, rsp		; nodemask
+		mov   r8d, 32		; maxnode
+		xor   r9, r9		; flags
+		mov   eax, sys_mbind
+	    syscall
+	       test   eax, eax
+		jnz   Failed_sys_mbind
+
+		mov   rax, r15
+		add   rsp, 16
+		pop   r15 rdi rsi rbx rbp
+		ret
+
+
+_VirtualAlloc:
+	; rcx is size
+		mov   r10d, MAP_PRIVATE or MAP_ANONYMOUS
+.go:
+	       push   rsi rdi rbx
+		xor   edi, edi
+		mov   rsi, rcx
+		mov   edx, PROT_READ or PROT_WRITE
+		 or   r8, -1
+		xor   r9, r9
+		mov   eax, sys_mmap
+	    syscall
+	       test   rax, rax
+		 js   Failed_sys_mmap
 		pop   rbx rdi rsi
 		ret
 
@@ -428,8 +477,8 @@ _VirtualFree:
 		mov   rsi, rdx
 		mov   eax, sys_munmap
 	    syscall
-		cmp   eax, -1
-		 je   Failed_sys_munmap
+	       test   eax, eax
+		jnz   Failed_sys_munmap
 	@@:	pop   rbx rdi rsi
 		ret
 
@@ -464,10 +513,11 @@ _WriteOut:
 		mov   rdx, rdi
 		sub   rdx, rcx
 		mov   edi, 1
+.go:
 		mov   eax, sys_write
 	    syscall
-		cmp   rax, -1
-		 je   Failed_sys_write
+	       test   rax, rax
+		 js   Failed_sys_write
 		pop   rbx rdi rsi
 		ret
 
@@ -480,12 +530,7 @@ _WriteError:
 		mov   rdx, rdi
 		sub   rdx, rcx
 		mov   edi, 2
-		mov   eax, sys_write
-	    syscall
-		cmp   rax, -1
-		 je   Failed_sys_write
-		pop   rbx rdi rsi
-		ret
+		jmp   _WriteOut.go
 
 
 
@@ -588,23 +633,305 @@ _SetNormalPriority:
 
 _SetThreadPoolInfo:
 	; see ThreadPool.asm for what this is supposed to do
-	; for now, this is set to the 'numa-unaware' state
-	       push   rdi
+
+	       push   rdi rsi rbx r12 r13 r14 r15
+virtual at rsp
+ .coremask rq 8
+ .buffer   rb 512
+ .fstat    rq 24
+ .fstring  rb 96
+ .lend	   rb 0
+end virtual
+.localsize = ((.lend-rsp+15) and (-16))
+
+	 _chkstk_ms   rsp, .localsize
+		sub   rsp, .localsize
+
+		xor   eax, eax
+		mov   dword[threadPool.nodeCnt], eax
+		mov   dword[threadPool.coreCnt], eax
+
+
+	; read node data
+	;  suppose that node0 has cpu0-cpu3 and cpu8-cpu11
+	;  then /sys/devices/system/node/node0/cpumap
+	;   contains "f0f\n"
+
+		lea   rbx, [threadPool.nodeTable]
+		 or   r12d, -1
+	;  r12d = N
+
+.TryNextNode:
+		add   r12d, 1
+		cmp   r12d, 32
+		jae   .TryNodesDone
+
+	; look at /sys/devices/system/node/nodeN/cpumap
+		lea   rdi, [.fstring]
+		mov   rax, '/sys/dev'
+	      stosq
+		mov   rax, 'ices/sys'
+	      stosq
+		mov   rax, 'tem/node'
+	      stosq
+		mov   rax, '/node'
+	      stosq
+		sub   rdi, 3
+		mov   eax, r12d
+	       call   PrintUnsignedInteger
+		mov   rax, '/cpumap'
+	      stosq
+		xor   eax, eax
+	      stosd
+
+		lea   rcx, [.fstring]
+	       call   _FileOpen
+		mov   r15, rax
+		cmp   rax, -1
+		 je   .TryNextNode
+		mov   rdi, r15
+		lea   rsi, [.buffer]
+		mov   edx, 512
+		mov   eax, sys_read 
+	    syscall
+		mov   rsi, rax
+		mov   rcx, r15
+	       call   _FileClose
+		cmp   rsi, 1
+		 jb   .TryNextNode
+
+	; at this point, N is a valid node number
+		mov   ecx, 4*16*64*16*64
+	       call   _VirtualAlloc
+		xor   edx, edx
+		mov   dword[rbx+NumaNode.nodeNumber], r12d
+		mov   dword[rbx+NumaNode.coreCnt], edx		; will increment later
+		mov   qword[rbx+NumaNode.cmhTable], rax
+		mov   qword[rbx+NumaNode.cpuMask+8*0], rdx
+		mov   qword[rbx+NumaNode.cpuMask+8*1], rdx
+		mov   qword[rbx+NumaNode.cpuMask+8*2], rdx
+		mov   qword[rbx+NumaNode.cpuMask+8*3], rdx
+		mov   qword[rbx+NumaNode.cpuMask+8*4], rdx
+		mov   qword[rbx+NumaNode.cpuMask+8*5], rdx
+		mov   qword[rbx+NumaNode.cpuMask+8*6], rdx
+		mov   qword[rbx+NumaNode.cpuMask+8*7], rdx
+.ReadNextB:
+		cmp   edx, 512
+		jae   .ReadDone
+		sub   esi, 1
+		 js   .ReadDone
+	      movzx   ecx, byte[.buffer+rsi]
+		sub   ecx, '0'
+		 js   .ReadNextB
+		cmp   ecx, 10
+		 jb   .ReadOk
+		sub   ecx, 'a'-'0'
+		 js   .ReadNextB
+		cmp   ecx, 'f'+1
+		jae   .ReadNextB
+		add   ecx, 10
+.ReadOk:
+	; each ascii char 0-9, a-f encodes 4 bits
+      irps i, 1 2 4 8 {
+	       test   ecx, i
+		 jz   @f
+		bts   [rbx+NumaNode.cpuMask], rdx
+	  @@:	add   edx, 1
+      }
+		jmp   .ReadNextB
+.ReadDone:
+		add   rbx, sizeof.NumaNode
+		add   dword[threadPool.nodeCnt], 1
+		jmp   .TryNextNode
+.TryNodesDone:
+
+
+	; if we didn't find any nodes, assume that numa is not present
+		mov   ebx, dword[threadPool.nodeCnt]
+	       test   ebx, ebx
+		 jz   .Absent
+
+
+	; read core data
+	;  suppose that cpu0 and cpu4 share the same core
+	;  then both /sys/devices/system/cpu/cpu0/topology/thread_siblings
+	;        and /sys/devices/system/cpu/cpu4/topology/thread_siblings
+	;   contain "11\n"
+
+		xor   eax, eax
+		mov   qword[.coremask+8*0], rax
+		mov   qword[.coremask+8*1], rax
+		mov   qword[.coremask+8*2], rax
+		mov   qword[.coremask+8*3], rax
+		mov   qword[.coremask+8*4], rax
+		mov   qword[.coremask+8*5], rax
+		mov   qword[.coremask+8*6], rax
+		mov   qword[.coremask+8*7], rax
+	; .coremask contains the lsb's of the thread_siblings entries
+
+		 or   r12d, -1
+	;  r12d = N
+.TryNextCore:
+		add   r12d, 1
+		cmp   r12d, 30
+		jae   .TryCoresDone
+
+GD_String 'trying core '
+GD_Int r12
+GD_NewLine
+
+	; look at /sys/devices/system/cpu/cpu0/topology/thread_siblings
+		lea   rdi, [.fstring]
+		mov   rax, '/sys/dev'
+	      stosq
+		mov   rax, 'ices/sys'
+	      stosq
+		mov   rax, 'tem/cpu/'
+	      stosq
+		mov   rax, 'cpu'
+	      stosd
+		sub   rdi, 1
+		mov   eax, r12d
+	       call   PrintUnsignedInteger
+		mov   rax, '/topolog'
+	      stosq
+		mov   rax, 'y/thread'
+	      stosq
+		mov   rax, '_sibling'
+	      stosq
+		mov   eax, 's'
+	      stosd
+
+		lea   rcx, [.fstring]
+	       call   _FileOpen
+		mov   r15, rax
+		cmp   rax, -1
+		 je   .TryNextCore
+		mov   rdi, r15
+		lea   rsi, [.buffer]
+		mov   edx, 512
+		mov   eax, sys_read 
+	    syscall
+		mov   rsi, rax
+		mov   rcx, r15
+	       call   _FileClose
+		cmp   rsi, 1
+		 jb   .TryNextCore
+
+		xor   edx, edx
+	; get the lsb of bit set
+.ReadNextB2:
+		cmp   edx, 512
+		jae   Failed_MatchingCore
+		sub   esi, 1
+		 js   Failed_MatchingCore
+	      movzx   ecx, byte[.buffer+rsi]
+		sub   ecx, '0'
+		 js   .ReadNextB2
+		cmp   ecx, 10
+		 jb   .ReadOk2
+		sub   ecx, 'a'-'0'
+		 js   .ReadNextB2
+		cmp   ecx, 'f'+1
+		jae   .ReadNextB2
+		add   ecx, 10
+.ReadOk2:
+	       test   ecx, ecx
+		jnz   .found
+		add   edx, 4
+		jmp   .ReadNextB2
+.found:
+		bsf   ecx, ecx
+		add   edx, ecx
+
+	; edx is now lsb of this thread_siblings entry
+	; mark this bit in .coremask
+		bts   [.coremask], rdx
+		jmp   .TryNextCore
+.TryCoresDone:
+
+	; finally loop through nodes
+	;   and add up cores
+	;   and print node/core data
+		lea   rsi, [threadPool.nodeTable]
+	       imul   ebx, sizeof.NumaNode
+		add   rbx, rsi
+.PrintNextNode:
+		mov   ecx, 7
+     .CoreCountLoop:
+		mov   rax, qword[rsi+NumaNode.cpuMask+8*rcx]
+		and   rax, qword[.coremask+8*rcx]
+	     popcnt   rax, rax, rdx
+		add   dword[rsi+NumaNode.coreCnt], eax
+		add   dword[threadPool.coreCnt], eax
+		sub   ecx, 1
+		jns   .CoreCountLoop
+
+		lea   rdi, [Output]
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing node'
+	      stosq
+		mov   al, ' '
+	      stosb
+		mov   eax, dword[rsi+NumaNode.nodeNumber]
+	       call   PrintUnsignedInteger
+		mov   rax, ': cores '
+	      stosq
+		mov   eax, dword[rsi+NumaNode.coreCnt]
+	       call   PrintUnsignedInteger
+		mov   rax, ' mask 0x'
+	      stosq
+		mov   r13d, 7
+	.PrintMaskLoop:
+		mov   rcx, qword[rsi+NumaNode.cpuMask+8*r13]
+	       test   rcx, rcx
+		jnz   .printfull
+		mov   al, '0'
+	      stosb
+		jmp   @f
+	.printfull:
+	       call   PrintAddress
+		add   rdi, 16
+	@@:    test   r13d, r13d
+		 jz   @f
+		mov   al, '_'
+	      stosb
+	@@:	sub   r13d, 1
+		jns   .PrintMaskLoop
+       PrintNewLine
+	       call   _WriteOut_Output
+
+		add   rsi, sizeof.NumaNode
+		cmp   rsi, rbx
+		 jb   .PrintNextNode
+
+
+.Return:
+		add   rsp, .localsize
+		pop   r15 r14 r13 r12 rbx rdi rsi
+		ret
+
+
+.Absent:
 		mov   dword[threadPool.nodeCnt], 1
 		mov   dword[threadPool.coreCnt], 1
 		lea   rdi, [threadPool.nodeTable]
-		mov   dword[rdi+NumaNode.Relationship], RelationNumaNode
-		mov   dword[rdi+NumaNode.Size], sizeof.NumaNode
-		mov   dword[rdi+NumaNode.NodeNumber], -1
+		mov   dword[rdi+NumaNode.nodeNumber], -1
+		mov   qword[rdi+NumaNode.coreCnt], 1
 		mov   ecx, 4*16*64*16*64
 	       call   _VirtualAlloc
 		mov   qword[rdi+NumaNode.cmhTable], rax
-		mov   qword[rdi+NumaNode.coreCnt], 1
 		xor   eax, eax
-		mov   qword[rdi+NumaNode.GroupMask.Mask], rax
-		mov   word[rdi+NumaNode.GroupMask.Group], ax
-		pop   rdi
-		ret
+		mov   qword[rdi+NumaNode.cpuMask+8*0], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*1], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*2], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*3], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*4], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*5], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*6], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*7], rax
+		jmp   .Return
 
 
 
@@ -729,6 +1056,21 @@ Failed_sys_futex:
 		lea   rdi, [@f]
 		jmp   Failed
 		@@: db 'sys_futex failed',0
+Failed_sys_sched_setaffinity:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'sys_sched_setaffinity failed',0
+Failed_sys_mbind:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'sys_mbind failed',0
+
+
+
+Failed_MatchingCore:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'matching core to node failed',0
 
 
 
@@ -744,7 +1086,12 @@ _ErrorBox:
 		mov   edi, stderr 
 		mov   rdx, rax 
 		mov   eax, sys_write 
-	    syscall 
+	    syscall
+		lea   rsi, [sz_NewLine]
+		mov   edi, stderr 
+		mov   rdx, 1
+		mov   eax, sys_write 
+	    syscall
 		pop   rbx rsi rdi 
 		ret
 

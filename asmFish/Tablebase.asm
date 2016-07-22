@@ -21,11 +21,11 @@ Tablebase_ProbeAB:
 	;     r8  address of success
 	; out: eax v
 
-SD_String db 'probe_ab('
+SD_String 'probe_ab('
 SD_Int rcx
-SD_String db ','
+SD_String ','
 SD_Int rdx
-SD_String db ')'
+SD_String ')'
 
 
 	       push   rsi rdi r13 r14 r15
@@ -133,9 +133,9 @@ end virtual
 .Return:
 		mov   dword[r13], edx
 
-SD_String db 'probe_ab '
+SD_String 'probe_ab '
 SD_Int rax
-SD_String db ','
+SD_String ','
 SD_Int qword[r13]
 SD_NewLine
 		add   rsp, .localsize
@@ -153,7 +153,7 @@ Tablebase_ProbeWDL:
 	;     rcx  address of success
 	; out: eax v
 
-SD_String db 'probe_wdl()'
+SD_String 'probe_wdl()'
 
 	       push   r15
 		mov   dword[rcx], 1		
@@ -166,9 +166,9 @@ SD_String db 'probe_wdl()'
 		cmp   byte[rbx+State.epSquare], 64
 		 jb   .HaveEP
 .Return1:
-SD_String db 'probe_wdl '
+SD_String 'probe_wdl '
 SD_Int rax
-SD_String db ','
+SD_String ','
 SD_Int qword[r15]
 SD_NewLine
 		pop   r15
@@ -257,9 +257,9 @@ end virtual
 .Return2:
 		add   rsp, .localsize
 		pop   rdi rsi r13 r14
-SD_String db 'probe_wdl '
+SD_String 'probe_wdl '
 SD_Int rax
-SD_String db ','
+SD_String ','
 SD_Int qword[r15]
 SD_NewLine
 		pop   r15
@@ -273,7 +273,7 @@ Tablebase_ProbeDTZNoEP:
 	;     rcx  address of success
 	; out: eax best
 
-SD_String db 'probe_dtz_no_ep()'
+SD_String 'probe_dtz_no_ep()'
 
 virtual at rsp
   .stack rb 192*sizeof.ExtMove
@@ -293,9 +293,9 @@ end virtual
 	       call   Tablebase_ProbeAB
 		mov   r14d, eax
 
-;SD_String db 'probe_dtz_no_ep() wdl='
+;SD_String 'probe_dtz_no_ep() wdl='
 ;SD_Int r14
-;SD_String db 10
+;SD_String 10
 
 	; r14d = wdl
 		mov   edx, dword[r15]
@@ -367,7 +367,7 @@ end virtual
 .MovesDone:
 .WdlIsNonpositive:
 
-SD_String db 'A|'
+SD_String 'A|'
 
 		sub   rsp, 8*4
 		mov   rcx, rbp
@@ -389,9 +389,9 @@ SD_String db 'A|'
 		xor   eax, ecx
 		sub   eax, ecx
 .Return:
-SD_String db 'probe_dtz_no_ep '
+SD_String 'probe_dtz_no_ep '
 SD_Int rax
-SD_String db ','
+SD_String ','
 SD_Int qword[r15]
 SD_NewLine
 		add   rsp, .localsize
@@ -417,7 +417,7 @@ Tablebase_ProbeDTZNoEP_SuccessIsNeg:
 		jle   Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsNonpositive
 
 Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsPositive:
-SD_String db 'B|'
+SD_String 'B|'
 		mov   r13d, 0x0FFFF
 	; r13d = best
 		lea   rsi, [Tablebase_ProbeDTZNoEP.stack-8]
@@ -470,9 +470,9 @@ SD_String db 'B|'
 .MovesDone:
 		mov   eax, r13d
 .Return:
-SD_String db 'probe_dtz_no_ep '
+SD_String 'probe_dtz_no_ep '
 SD_Int rax
-SD_String db ','
+SD_String ','
 SD_Int qword[r15]
 SD_NewLine
 		add   rsp, Tablebase_ProbeDTZNoEP.localsize
@@ -485,7 +485,7 @@ SD_NewLine
 
 Tablebase_ProbeDTZNoEP_SuccessIsNeg_WdlIsNonpositive:
 
-SD_String db 'C|'
+SD_String 'C|'
 
 		 or   r13d, -1
 		mov   rcx, qword[rbx+State.checkersBB]
@@ -544,9 +544,9 @@ SD_String db 'C|'
 .MovesDone:
 		mov   eax, r13d
 .Return:
-SD_String db 'probe_dtz_no_ep '
+SD_String 'probe_dtz_no_ep '
 SD_Int rax
-SD_String db ','
+SD_String ','
 SD_Int qword[r15]
 SD_NewLine
 		add   rsp, Tablebase_ProbeDTZNoEP.localsize
@@ -563,7 +563,7 @@ Tablebase_ProbeDTZ:
 	;     rcx  address of success
 	; out: eax v
 
-SD_String db 'probe_dtz()'
+SD_String 'probe_dtz()'
 
 	       push   r15
 		mov   dword[rcx], 1
@@ -573,9 +573,9 @@ SD_String db 'probe_dtz()'
 		cmp   byte[rbx+State.epSquare], 64
 		 jb   .HaveEP
 .Return:
-SD_String db 'probe_dtz '
+SD_String 'probe_dtz '
 SD_Int rax
-SD_String db ','
+SD_String ','
 SD_Int qword[r15]
 SD_NewLine
 		pop   r15
@@ -710,9 +710,9 @@ end virtual
 .V1GreaterEqual0:
 		mov   eax, r14d
 .Return:
-SD_String db 'probe_dtz '
+SD_String 'probe_dtz '
 SD_Int rax
-SD_String db ','
+SD_String ','
 SD_Int qword[r15]
 SD_NewLine
 		add   rsp, .localsize
@@ -736,7 +736,7 @@ Tablebase_RootProbe:
 	;     rbx address of state
 	; out: eax bool
 	;          score is in Tablebase_Score
-SD_String db 'root_probe()'
+SD_String 'root_probe()'
 
 	       push   rbx rsi rdi r12 r13 r14 r15
 virtual at rsp
@@ -878,7 +878,7 @@ end virtual
 		mov   dword[Tablebase_Score], eax
 
 
-SD_String db 'score='
+SD_String 'score='
 SD_Int rax
 SD_NewLine
 
@@ -889,7 +889,7 @@ SD_NewLine
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .Drawing:
-SD_String db 'drawing'
+SD_String 'drawing'
 SD_NewLine
 		lea   rsi, [rdi-sizeof.RootMove]
 .Drawing1:
@@ -917,7 +917,8 @@ SD_NewLine
 match =2, VERBOSE {
 test eax, eax
 jnz  @f
-SD_String <db 'root_probe false', 10>
+SD_String 'root_probe false'
+SD_NewLine
 add rsp, .localsize
 pop r15 r14 r13 r12 rdi rsi rbx
 ret
@@ -927,16 +928,16 @@ xor r15d, r15d
 .printnext:
 cmp rsi, qword[rbp+Pos.rootMovesVec.ender]
 jae .printdone
-SD_String db 'rm['
+SD_String 'rm['
 SD_Int r15
-SD_String db '].score='
+SD_String '].score='
 SD_Int qword[rsi+RootMove.score]
 SD_NewLine
 add r15d, 1
 add rsi, sizeof.RootMove
 jmp .printnext
 .printdone:
-SD_String db 'root_probe true'
+SD_String 'root_probe true'
 SD_NewLine
 or eax, -1
 add rsp, .localsize
@@ -951,7 +952,7 @@ ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 .Winning:
-SD_String db 'winning'
+SD_String 'winning'
 SD_NewLine
 
 		mov   r12d, 0x0FFFF
@@ -1004,7 +1005,7 @@ SD_NewLine
 		sub   r13d, r14d
 .WinningDontMax:
 
-SD_String db 'max='
+SD_String 'max='
 SD_Int r13
 SD_NewLine
 
@@ -1015,7 +1016,7 @@ SD_NewLine
 		cmp   rsi, qword[rbp+Pos.rootMovesVec.ender]
 		jae   .Winning2Done
 		mov   eax, dword[rsi+RootMove.score]
-SD_String db 'v='
+SD_String 'v='
 SD_Int rax
 SD_NewLine
 		cmp   eax, 0
@@ -1030,7 +1031,7 @@ SD_NewLine
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .Losing:
-SD_String db 'losing'
+SD_String 'losing'
 SD_NewLine
 
 		xor   edx, edx
@@ -1077,7 +1078,7 @@ Tablebase_RootProbeWDL:
 	; out: eax bool
 	;          score is in Tablebase_Score
 
-SD_String db 'root_probe_wdl()'
+SD_String 'root_probe_wdl()'
 
 	       push   rsi rdi r15
 virtual at rsp
@@ -1152,7 +1153,7 @@ end virtual
 match =2, VERBOSE {
 test eax, eax
 jnz  @f
-SD_String db 'root_probe_wdl false'
+SD_String 'root_probe_wdl false'
 SD_NewLine
 pop r15 rdi rsi
 ret
@@ -1162,16 +1163,16 @@ xor r15d, r15d
 .printnext:
 cmp rsi, qword[rbp+Pos.rootMovesVec.ender]
 jae .printdone
-SD_String db 'rm['
+SD_String 'rm['
 SD_Int r15
-SD_String db '].score='
+SD_String '].score='
 SD_Int qword[rsi+RootMove.score]
-SD_String db 10
+SD_NewLine
 add   r15d, 1
 add   rsi, sizeof.RootMove
 jmp   .printnext
 .printdone:
-SD_String db 'root_probe_wdl true'
+SD_String 'root_probe_wdl true'
 SD_NewLine
 or eax, -1
 pop r15 rdi rsi

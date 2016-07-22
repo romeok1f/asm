@@ -40,7 +40,8 @@ ThreadIdxToNode:
 		add   rax, sizeof.NumaNode
 		cmp   rax, rcx
 		 jb   .NextNode
-	     Assert   e, rsp, 0, 'ThreadIdxToNode failed: unreachable code reached'
+	     Assert   ne, eax, eax, 'ThreadIdxToNode failed: unreachable code reached'
+		lea   rax, [threadPool.nodeTable]
 .Return:
 		ret
 
@@ -48,17 +49,17 @@ ThreadIdxToNode:
 Thread_Create:
 	; in: ecx index of thread
 
-	       push   rbx rsi rdi
-		sub   rsp, 8*8
+	       push   rbx rsi rdi r14 r15
 		mov   esi, ecx
 
 	; get the right node to put this thread
 	       call   ThreadIdxToNode
 		mov   rdi, rax
+		mov   r15d, dword[rdi+NumaNode.nodeNumber]
 
 	; allocate self
 		mov   ecx, sizeof.Thread
-		mov   edx, dword[rdi+NumaNode.NodeNumber]
+		mov   edx, r15d
 	       call   _VirtualAllocNuma
 		mov   qword[threadPool.threadTable+8*rsi], rax
 		mov   rbx, rax
@@ -91,7 +92,7 @@ Thread_Create:
 
 	; allocate history and counterMoves
 		mov   ecx, 4*16*64*2
-		mov   edx, dword[rdi+NumaNode.NodeNumber]
+		mov   edx, r15d
 	       call   _VirtualAllocNuma
 		lea   rdx, [rax+4*16*64]
 		mov   qword[rbx+Thread.rootPos+Pos.history], rax
@@ -99,13 +100,13 @@ Thread_Create:
 
 	; allocate pawn hash
 		mov   ecx, PAWN_HASH_ENTRY_COUNT*sizeof.PawnEntry
-		mov   edx, dword[rdi+NumaNode.NodeNumber]
+		mov   edx, r15d
 	       call   _VirtualAllocNuma
 		mov   qword[rbx+Thread.rootPos+Pos.pawnTable], rax
 
 	; allocate material hash
 		mov   ecx, MATERIAL_HASH_ENTRY_COUNT*sizeof.MaterialEntry
-		mov   edx, dword[rdi+NumaNode.NodeNumber]
+		mov   edx, r15d
 	       call   _VirtualAllocNuma
 		mov   qword[rbx+Thread.rootPos+Pos.materialTable], rax
 
@@ -120,35 +121,45 @@ Thread_Create:
 		mov   byte[rbx+Thread.searching], -1
 		lea   rcx, [Thread_IdleLoop]
 		mov   rdx, rbx
-		lea   r8, [rdi+NumaNode.GroupMask]
+		mov   r8, rdi
 		lea   r9, [rbx+Thread.threadHandle]
 	       call   _ThreadCreate
-GD_String db '_ThreadCreate done'
-GD_NewLine
-
 		jmp   .check
     .wait:
-GD_String db 'calling _EventWait2 '
-GD_Hex rbx
-GD_NewLine
 		lea   rcx, [rbx+Thread.sleep2]
 		lea   rdx, [rbx+Thread.mutex]
 	       call   _EventWait
-GD_String db '_EventWait done'
-GD_NewLine
     .check:	mov   al, byte[rbx+Thread.searching]
 	       test   al, al
 		jnz   .wait
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
-
-GD_String db '_MutexUnlock done'
-GD_NewLine
-
-
 .done:
-		add   rsp, 8*8
-		pop   rdi rsi rbx
+
+match =0, VERBOSE {
+		lea   rdi, [Output]
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing star'
+	      stosq
+		mov   rax, 'ted thre'
+	      stosq
+		mov   eax, 'ad '
+	      stosd
+		sub   rdi, 1
+		mov   eax, esi
+	       call   PrintUnsignedInteger
+		mov   rax, ' on node'
+	      stosq
+		mov   al, ' '
+	      stosb
+	     movsxd   rax, r15d
+	       call   PrintSignedInteger
+       PrintNewLine
+	       call   _WriteOut_Output
+}
+
+		pop   r15 r14 rdi rsi rbx
 		ret
 
 
@@ -231,19 +242,12 @@ mov qword[rcx+Thread.stackBase], rsp
 mov qword[rcx+Thread.stackRecord], 0
 end if
 
-GD_String db '...Thread_IdleLoop enter'
-GD_NewLine
-
 		mov   rbx, rcx
 		lea   rdi, [Thread_Think]
 		lea   rdx, [MainThread_Think]
 		mov   eax, dword[rbx+Thread.idx]
 	       test   eax, eax
 	      cmovz   rdi, rdx
-
-GD_String db '... rbx:'
-GD_Hex rbx
-GD_NewLine
 
 		jmp   .lock
 .loop:
@@ -253,41 +257,26 @@ GD_NewLine
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexLock
 		mov   byte[rbx+Thread.searching], 0
-GD_String db '..._MutexLock returned'
-GD_NewLine
-
     .check_exit:
 		mov   al, byte[rbx+Thread.exit]
 	       test   al, al
 		jnz   .unlock
-GD_String db '...calling _EventSignal2 '
-GD_Hex rbx
-GD_NewLine
 		lea   rcx, [rbx+Thread.sleep2]
 	       call   _EventSignal
 		lea   rcx, [rbx+Thread.sleep1]
 		lea   rdx, [rbx+Thread.mutex]
 	       call   _EventWait
-GD_String db '..._EventWait returned'
-GD_NewLine
 		mov   al, byte[rbx+Thread.searching]
 	       test   al, al
 		 jz   .check_exit
     .unlock:
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
-
-GD_String db '..._MutexUnlock returned'
-GD_NewLine
-
 .check_out:
 		mov   al, byte[rbx+Thread.exit]
 	       test   al, al
 		 jz   .loop
 .exit:
-
-GD_String db '...Thread_IdleLoop exit'
-GD_NewLine
 
 if OS_IS_WINDOWS
 		xor   ecx, ecx

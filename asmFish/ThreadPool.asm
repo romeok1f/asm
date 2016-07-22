@@ -16,18 +16,8 @@
 ThreadPool_Create:
 	       push   rbx
 	       call   _SetThreadPoolInfo
-
-GD_String db '_SetThreadPoolInfo done'
-GD_NewLine
-
-
 		xor   ecx, ecx
 	       call   Thread_Create
-
-GD_String db 'Thread_Create done'
-GD_NewLine
-
-
 		mov   dword[threadPool.size], 1
 	       call   ThreadPool_ReadOptions
 		pop   rbx

@@ -13,9 +13,9 @@ MovePick_Init_Search:
 
 		mov   rdi, qword[rbp+Pos.counterMoves]
 		mov   eax, dword[rbx-1*sizeof.State+State.currentMove]
-SD_String db 'mppm:'
+SD_String 'mppm:'
 SD_Move rax
-SD_String db '|'
+SD_String '|'
 
 
 		and   eax, 63
@@ -25,9 +25,9 @@ SD_String db '|'
 		mov   eax, dword[rdi+4*rdx]
 		mov   dword[rsi+Pick.countermove], eax
 
-SD_String db 'cm:'
+SD_String 'cm:'
 SD_Move rax
-SD_String db '|'
+SD_String '|'
 
 
 		lea   r15, [rsi+Pick.moves]
@@ -124,11 +124,11 @@ GenNext_Killers:
 		cmp   edx, ecx
 	      cmove   r15, r13
 
-SD_String db 'kil012:'
+SD_String 'kil012:'
 SD_Move qword[rsi+Pick.killers+0*sizeof.ExtMove]
 SD_Move qword[rsi+Pick.killers+1*sizeof.ExtMove]
 SD_Move qword[rsi+Pick.killers+2*sizeof.ExtMove]
-SD_String db '|'
+SD_String '|'
 
 
 MovePick_Killers:
@@ -153,9 +153,9 @@ MovePick_Killers:
 		 jz   MovePick_Killers
 		mov   eax, edi
 		lea   rdx, [MovePick_Killers]
-SD_String db 'kil:'
+SD_String 'kil:'
 SD_Move rax
-SD_String db '|'
+SD_String '|'
 		ret
 .special:
 		cmp   edi, MOVE_TYPE_EPCAP shl 12
@@ -165,9 +165,9 @@ SD_String db '|'
 		 jz   MovePick_Killers
 		mov   eax, edi
 		lea   rdx, [MovePick_Killers]
-SD_String db 'kil:'
+SD_String 'kil:'
 SD_Move rax
-SD_String db '|'
+SD_String '|'
 		ret
 
 

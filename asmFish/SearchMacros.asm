@@ -775,9 +775,9 @@ lock inc qword[profile.moveUnpack]
 	       test   eax, eax
 		 jz   .MovePickDone
 
-SD_String db 'mp='
+SD_String 'mp='
 SD_Move rax
-SD_String db '|'
+SD_String '|'
 
 
 		cmp   eax, dword[.excludedMove]
@@ -802,9 +802,9 @@ SD_String db '|'
 		mov   dword[rbx+State.moveCount], eax
 		mov   dword[.moveCount], eax
 
-SD_String db 'mc='
+SD_String 'mc='
 SD_Int rax
-SD_String db '|'
+SD_String '|'
 
 
 	if .RootNode eq 1
@@ -862,7 +862,7 @@ lock inc qword[profile.moveUnpack]
 		sar   edx, 31
 		mov   byte[.moveCountPruning], dl
 
-SD_String db 'mcp='
+SD_String 'mcp='
 SD_Bool8 rdx
 SD_NewLine
 
@@ -1090,9 +1090,9 @@ lock inc qword[profile.moveUnpack]
 		mov   dword[.r], eax
 		mov   edi, eax
 
-SD_String db 'r='
+SD_String 'r='
 SD_Int rdi
-SD_String db '|'
+SD_String '|'
 
 		mov   r12d, dword[.move]
 		shr   r12d, 6
@@ -1121,9 +1121,9 @@ SD_String db '|'
 		sub   edi, 2*ONE_PLY
 .15skipA:
 
-SD_String db 'r='
+SD_String 'r='
 SD_Int rdi
-SD_String db '|'
+SD_String '|'
 
 		mov   ecx, dword[.moved_piece_to_sq]
 		mov   r8, qword[rbp+Pos.history]
@@ -1132,7 +1132,7 @@ SD_String db '|'
 		mov   r11, qword[.fmh2]
 		mov   eax, dword[r8+4*rcx]
 
-SD_String db 'v='
+SD_String 'v='
 SD_Int rax
 
 	       test   r9, r9
@@ -1146,9 +1146,9 @@ SD_Int rax
 		add   eax, dword[r11+4*rcx]
 	@@:
 
-SD_String db 'val='
+SD_String 'val='
 SD_Int rax
-SD_String db '|'
+SD_String '|'
 
 		sub   eax, 10000
 		cdq
@@ -1167,9 +1167,9 @@ SD_String db '|'
 	      cmovl   r8d, eax
 
 
-SD_String db '_d='
+SD_String '_d='
 SD_Int r8
-SD_String db '|'
+SD_String '|'
 
 		mov   edx, dword[.alpha]
 		neg   edx

@@ -109,7 +109,7 @@ local ..message, ..over
 		lea   rcx, [..message]
 		jmp   ..over
    ..message:
-	    m
+	    db m
 	    db 0
    ..over:
 		lea   rdi, [VerboseOutput]
@@ -152,7 +152,7 @@ macro GD_Hex x {
 
 
 
-macro GD_NewLine m {
+macro GD_NewLine {
 ; lets not clobber any registers here
 local ..message, ..over
  match =1, VERBOSE \{
@@ -160,7 +160,6 @@ local ..message, ..over
 		lea   rcx, [..message]
 		jmp   ..over
    ..message:
-	    m
   match =1, OS_IS_WINDOWS \\{
 	    db 13
   \\}
@@ -180,7 +179,7 @@ local ..message, ..over
 
 
 
-macro SD_NewLine m {
+macro SD_NewLine {
 ; lets not clobber any registers here
 local ..message, ..over
  match =2, VERBOSE \{
@@ -188,7 +187,6 @@ local ..message, ..over
 		lea   rcx, [..message]
 		jmp   ..over
    ..message:
-	    m
   match =1, OS_IS_WINDOWS \\{
 	    db 13
   \\}
@@ -212,7 +210,7 @@ local ..message, ..over
 		lea   rcx, [..message]
 		jmp   ..over
    ..message:
-	    m
+	    db m
 	    db 0
    ..over:
 		lea   rdi, [VerboseOutput]
@@ -301,7 +299,7 @@ local ..message, ..over
 		lea   rcx, [..message]
 		jmp   ..over
    ..message:
-	    m
+	    db m
 	    db 0
    ..over:
 		lea   rdi, [VerboseOutput]
@@ -354,14 +352,13 @@ macro ED_Score x {
 
 
 
-macro ED_NewLine m {
+macro ED_NewLine {
 local ..message, ..over
  match =3, VERBOSE \{
 	       push   rdi rax rcx rdx r8 r9 r10 r11
 		lea   rcx, [..message]
 		jmp   ..over
    ..message:
-	    m
   match =1, OS_IS_WINDOWS \\{
 	    db 13
   \\}

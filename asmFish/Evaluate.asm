@@ -1096,9 +1096,9 @@ match =Black, Us
 	end if
 		 or   rax, rdx
 	     popcnt   rax, rax, rcx
-SD_String db 'pct:'
+SD_String 'pct:'
 SD_Int rax
-SD_String db '|'
+SD_String '|'
 	       imul   eax, (7 shl 16) + 0
 	     addsub   esi, eax
 
@@ -1853,9 +1853,9 @@ pop r15 r14 rdx rcx rax rdi rsi
 		lea   eax, [rax+rdi+Eval_Tempo]
 
 
-SD_String db 'eval:'
+SD_String 'eval:'
 SD_Int rax
-SD_String db '|'
+SD_String '|'
 
 		add   rsp, sizeof.EvalInfo
 		pop   r15 r14 r13 r12 rdi rsi rbx

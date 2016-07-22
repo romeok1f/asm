@@ -192,8 +192,8 @@ _FileUnmap:
 _ThreadCreate:
 	; in: rcx start address
 	;     rdx parameter to pass
-	;     r8  address of GROUP_AFFINITY structure (ignored if numa functions not avaiable)
-	;     r9  address of ThreadHandle Struct
+	;     r8  address of NumaNode struct
+	;     r9  address of ThreadHandle struct
 	       push   rbx rsi rdi
 		sub   rsp, 8*6
 		mov   rbx, qword[__imp_SetThreadGroupAffinity]
@@ -221,7 +221,7 @@ _ThreadCreate:
 		 jz   Failed__imp_CreateThread_CREATE_SUSPENDED
 
 		mov   rcx, rax
-		mov   rdx, rdi
+		lea   rdx, [rdi+NumaNode.groupMask]
 		lea   r8, [rsp+8*4]
 	       call   rbx
 	       test   eax, eax
@@ -607,7 +607,16 @@ _SetThreadPoolInfo:
 	; see ThreadPool.asm for what this is supposed to do
 
 	       push   rdi rsi rbx r12 r13 r14 r15
-		sub   rsp, 8*16
+virtual at rsp
+	   rq 8
+ .size	   rq 8
+ .numadata rb sizeof.NumaNode*MAX_NUMANODES
+ .lend	   rb 0
+end virtual
+.localsize = ((.lend-rsp+15) and (-16))
+
+	 _chkstk_ms   rsp, .localsize
+		sub   rsp, .localsize
 
 	; figure out if we have the numa functions
 	; kernel32.dll is automatically loaded into exe
@@ -634,185 +643,142 @@ _SetThreadPoolInfo:
 	       test   rax, rax
 		 jz   .Absent  ; < vista
 
-	; figure out numa configuation
-
-
-GD_String db '*** enumerating nodes *** '
-GD_NewLine
+	; retrieve numa configuation
 		mov   ecx, RelationNumaNode
-		lea   rdx, [threadPool.nodeTable]
-		lea   r8, [rsp+8*8]
+		lea   rdx, [.numadata]
+		lea   r8, [.size]
 		mov   qword[r8], MAX_NUMANODES*sizeof.NumaNode
 	       call   qword[__imp_GetLogicalProcessorInformationEx]
-	     Assert   ne, eax, 0, 'GetLogicalProcessorInformationEx failed'
-		mov   ebx, dword[rsp+8*8]
-	     Assert   ne, ebx, 0, 'zero nodes returned in GetLogicalProcessorInformationEx'
-
+	       test   eax, eax
+		 jz   Failed__imp_GetLogicalProcessorInformationEx
+		mov   ebx, dword[.size]
+	       test   ebx, ebx
+		 jz   Failed__imp_GetLogicalProcessorInformationEx
+		mov   dword[threadPool.nodeCnt], 0
+		mov   dword[threadPool.coreCnt], 0
+		lea   rsi, [.numadata]
 		lea   rdi, [threadPool.nodeTable]
-		add   rbx, rdi
-		xor   esi, esi
+		add   rbx, rsi
 .NextNumaNode:
-		mov   dword[rdi+NumaNode.coreCnt], 0
-GD_String db 'node number = '
-GD_Int qword[rdi+NumaNode.NodeNumber]
-GD_String db ': group = '
-GD_Int qword[rdi+NumaNode.GroupMask.Group]
-GD_String db ', mask = 0x'
-GD_Hex qword[rdi+NumaNode.GroupMask.Mask]
-GD_NewLine
-		add   esi, 1
+		mov   ecx, 4*16*64*16*64
+		mov   edx, dword[rsi+WinNumaNode.NodeNumber+8*0]
+	       call   _VirtualAllocNuma
+		mov   edx, dword[rsi+WinNumaNode.NodeNumber+8*0]
+		mov   r8, qword[rsi+WinNumaNode.GroupMask+8*0]
+		mov   r9, qword[rsi+WinNumaNode.GroupMask+8*1]
+		mov   dword[rdi+NumaNode.nodeNumber], edx
+		mov   dword[rdi+NumaNode.coreCnt], 0	; initialize to zero - will increment later
+		mov   qword[rdi+NumaNode.cmhTable], rax
+		mov   qword[rdi+NumaNode.groupMask+8*0], r8
+		mov   qword[rdi+NumaNode.groupMask+8*1], r9
+		add   dword[threadPool.nodeCnt], 1
+		mov   eax, dword[rsi+WinNumaNode.Size]
+		add   rsi, rax
 		add   rdi, sizeof.NumaNode
-		cmp   rdi, rbx
+		cmp   rsi, rbx
 		 jb   .NextNumaNode
-		mov   dword[threadPool.nodeCnt], esi
 
-GD_String db '*** finished enumerating nodes *** '
-GD_NewLine
-GD_NewLine
-
-
-
-
-
-GD_String db '*** enumerating processor cores *** '
-GD_NewLine
-
+	; retrieve core configuation
 		mov   ecx, RelationProcessorCore
 		xor   edx, edx
-		lea   r8, [rsp+8*8]
+		lea   r8, [.size]
 		mov   qword[r8], 0
 	       call   qword[__imp_GetLogicalProcessorInformationEx]
-
-		mov   ecx, dword[rsp+8*8]
+		mov   ecx, dword[.size]
 	       call   _VirtualAlloc
 		mov   r15, rax
-
 		mov   ecx, RelationProcessorCore
 		mov   rdx, r15
-		lea   r8, [rsp+8*8]
+		lea   r8, [.size]
 	       call   qword[__imp_GetLogicalProcessorInformationEx]
-		mov   ebx, dword[rsp+8*8]
-
-		mov   rdi, r15
-		add   rbx, rdi
-		mov   r14, rbx
+		mov   ebx, dword[.size]
+		mov   rsi, r15
+		add   rbx, rsi
 .NextCore:
-	      movzx   eax, word[rdi+32+GROUP_AFFINITY.Group]
-		mov   rdx, qword[rdi+32+GROUP_AFFINITY.Mask]
-GD_String db ' group = '
-GD_Int rax
-GD_String db ', mask = 0x'
-GD_Hex rdx
-GD_String db ', belongs to node '
+	      movzx   eax, word[rsi+32+GROUP_AFFINITY.Group]
+		mov   rdx, qword[rsi+32+GROUP_AFFINITY.Mask]
 	; find numa node that has this core
 		lea   r8, [threadPool.nodeTable]
 	       imul   r9d, dword[threadPool.nodeCnt], sizeof.NumaNode
 		add   r9, r8
 .TryNextNode:
-		cmp   ax, word[r8+NumaNode.GroupMask.Group]
+		cmp   ax, word[r8+NumaNode.groupMask.Group]
 		jne   @f
-	       test   rdx, qword[r8+NumaNode.GroupMask.Mask]
+	       test   rdx, qword[r8+NumaNode.groupMask.Mask]
 		jnz   .Found
-	@@:
-		add   r8, sizeof.NumaNode
+	@@:	add   r8, sizeof.NumaNode
 		cmp   r8, r9
 		 jb   .TryNextNode
-GD_String db 'ERROR: this core does not belong to one of the nodes!'
-	     Assert   e, rsp, 0, 'ThreadPool_Create failed: no matching node for core'
+		jmp   Failed_MatchingCore
 .Found:
-		inc   dword[r8+NumaNode.coreCnt]
-GD_Int qword[r8+NumaNode.NodeNumber]
-.Skip:
-GD_NewLine
-		mov   ecx, dword[rdi+4]
-		add   rdi, rcx
-		cmp   rdi, rbx
+		add   dword[r8+NumaNode.coreCnt], 1
+		add   dword[threadPool.coreCnt], 1
+		mov   ecx, dword[rsi+4]
+		add   rsi, rcx
+		cmp   rsi, rbx
 		 jb   .NextCore
-GD_String db '*** finished enumerating processor cores *** '
-GD_NewLine
-GD_NewLine
 		mov   rcx, r15
-		mov   edx, dword[rsp+8*8]
+		mov   edx, dword[.size]
 	       call   _VirtualFree
 
 
-
-
-GD_String db '*** matching cores to nodes *** '
-GD_NewLine
-
-		lea   rdi, [threadPool.nodeTable]
+		lea   rsi, [threadPool.nodeTable]
 	       imul   ebx, dword[threadPool.nodeCnt], sizeof.NumaNode
-		add   rbx, rdi
-		xor   esi, esi
+		add   rbx, rsi
 .NextNumaNode2:
-
-		mov   ecx, 4*16*64*16*64
-		mov   edx, dword[rdi+NumaNode.NodeNumber]
-	       call   _VirtualAllocNuma
-		mov   qword[rdi+NumaNode.cmhTable], rax
-
-		add   esi, dword[rdi+NumaNode.coreCnt]
-
-GD_String db 'node number = '
-GD_Int qword[rdi+8]
-GD_String db ': group = '
-movzx eax, word[rdi+NumaNode.GroupMask.Group]
-GD_Int rax
-GD_String db ', mask = 0x'
-GD_Hex qword[rdi+NumaNode.GroupMask.Mask]
-GD_String db ', cores in node = '
-GD_Int qword[rdi+NumaNode.coreCnt]
-GD_String db ', cmh table = 0x'
-GD_Hex qword[rdi+NumaNode.cmhTable]
-GD_NewLine
-
-		add   rdi, sizeof.NumaNode
-		cmp   rdi, rbx
+		lea   rdi, [Output]
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing node'
+	      stosq
+		mov   al, ' '
+	      stosb
+		mov   eax, dword[rsi+NumaNode.nodeNumber]
+	       call   PrintUnsignedInteger
+		mov   rax, ': cores '
+	      stosq
+		mov   eax, dword[rsi+NumaNode.coreCnt]
+	       call   PrintUnsignedInteger
+		mov   rax, ' group '
+	      stosq
+		sub   rdi, 1
+	      movzx   eax, word[rsi+NumaNode.groupMask.Group]
+	       call   PrintUnsignedInteger
+		mov   rax, ' mask 0x'
+	      stosq
+		mov   rcx, qword[rsi+NumaNode.groupMask.Mask]
+	       call   PrintAddress
+		add   rdi, 16
+       PrintNewLine
+	       call   _WriteOut_Output
+		add   rsi, sizeof.NumaNode
+		cmp   rsi, rbx
 		 jb   .NextNumaNode2
 
-		mov   dword[threadPool.coreCnt], esi
 
-GD_String db ' total processor cores found: '
-GD_Int rsi
-GD_NewLine
-
-
-GD_String db '*** finished matching cores to nodes *** '
-GD_NewLine
-GD_NewLine
-
-
-.AbsentReturn:
-		add   rsp, 8*16
+.Return:
+		add   rsp, .localsize
 		pop   r15 r14 r13 r12 rbx rdi rsi
 		ret
 
 
 .Absent:
-
-GD_String db '*** numa functions not available ***'
-GD_NewLine
-GD_NewLine
-
 		mov   dword[threadPool.nodeCnt], 1
 		mov   dword[threadPool.coreCnt], 1
 		lea   rdi, [threadPool.nodeTable]
-		mov   dword[rdi+NumaNode.Relationship], RelationNumaNode
-		mov   dword[rdi+NumaNode.Size], sizeof.NumaNode
-		mov   dword[rdi+NumaNode.NodeNumber], -1
+		mov   dword[rdi+NumaNode.nodeNumber], -1
+		mov   qword[rdi+NumaNode.coreCnt], 1
 		mov   ecx, 4*16*64*16*64
 	       call   _VirtualAlloc
 		mov   qword[rdi+NumaNode.cmhTable], rax
-		mov   qword[rdi+NumaNode.coreCnt], 1
 		xor   eax, eax
-		mov   qword[rdi+NumaNode.GroupMask.Mask], rax
-		mov   word[rdi+NumaNode.GroupMask.Group], ax
+		mov   qword[rdi+NumaNode.groupMask.Mask], rax
+		mov   word[rdi+NumaNode.groupMask.Group], ax
 
 		mov   qword[__imp_GetLogicalProcessorInformationEx], rax
 		mov   qword[__imp_SetThreadGroupAffinity], rax
 		mov   qword[__imp_VirtualAllocExNuma], rax
-		jmp   .AbsentReturn
+		jmp   .Return
 
 
 
@@ -974,6 +940,16 @@ Failed__imp_VirtualFree_ReadIn:
 		lea   rdi, [@f]
 		jmp   Failed
 		@@: db '__imp_VirtualFree inside _ReadIn failed',0
+Failed__imp_GetLogicalProcessorInformationEx:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db '__imp_GetLogicalProcessorInformationEx failed',0
+Failed_MatchingCore:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'matching core to node failed',0
+
+
 
 
 

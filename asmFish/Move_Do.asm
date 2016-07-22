@@ -324,10 +324,10 @@ jnz Move_Do_post_posill
 match =2, VERBOSE {
 movsx eax, word[rbx+State.rule50]
 SD_Int rax
-SD_String db ','
+SD_String ','
 movsx eax, word[rbx+State.pliesFromNull]
 SD_Int rax
-SD_String db '|'
+SD_String '|'
 }
 
 		pop   r15 r14 r13 r12 rdi rsi

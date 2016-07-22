@@ -348,7 +348,17 @@ match =1, DEBUG {
 ends
 
 
-;print 'Thread.Pos', Thread.rootPos
+
+
+
+
+; windows uses the concept of processor groups
+;  each node is one group and has a cpu mask associated with it
+; the WinNumaNode struct is used by GetLogicalProcessorInformationEx
+; we then transfer the data to the NumaNode struct
+; the GROUP_AFFINITY struct is used by
+
+match =1, OS_IS_WINDOWS {
 
 struct GROUP_AFFINITY
   Mask	dq ?
@@ -356,18 +366,36 @@ struct GROUP_AFFINITY
 	dw ?,?,?
 ends
 
-
-struct NumaNode
+struct WinNumaNode
  Relationship	rd 1
  Size		rd 1
  NodeNumber	rd 1
-		rd 1
- cmhTable	rq 1  ; fill in some reserved parts of MS struct
- coreCnt	rd 1  ;
-		rd 1
+		rd 5
  GroupMask	GROUP_AFFINITY
 ends
 
+struct NumaNode
+ nodeNumber	rd 1
+ coreCnt	rd 1
+ cmhTable	rq 1
+ groupMask	GROUP_AFFINITY
+ends
+
+}
+
+
+; on linux, cpu data is held in a large bit mask
+
+match =0, OS_IS_WINDOWS {
+
+struct NumaNode
+ nodeNumber	rd 1
+ coreCnt	rd 1
+ cmhTable	rq 1
+ cpuMask	rq 8
+ends
+
+}
 
 
 struct ThreadPool

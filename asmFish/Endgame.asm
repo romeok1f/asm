@@ -71,7 +71,7 @@ match =1, DEBUG {
 		xor   eax, esi
 		sub   eax, esi
 
-SD_String db 'KXK eval: '
+SD_String 'KXK eval: '
 SD_Int rax
 		pop   rsi rdi r14 r15
 		ret
@@ -89,7 +89,7 @@ SD_Int rax
 	       blsr   r15, r15, rcx
 		jnz   .NextSquare
 		xor   eax, eax
-SD_String db 'KXK eval: '
+SD_String 'KXK eval: '
 SD_Int rax
 		pop   rsi rdi r14 r15
 		ret
@@ -129,7 +129,7 @@ EndgameEval_KBNK:
 		sub   ecx, 1
 		xor   eax, ecx
 		sub   eax, ecx
-SD_String db 'KBNK eval: '
+SD_String 'KBNK eval: '
 SD_Int rax
 		ret
 
@@ -202,7 +202,7 @@ match =1, DEBUG {
 		 bt   r11, rdx
 		sbb   edx, edx
 		and   eax, edx
-SD_String db 'KPK eval: '
+SD_String 'KPK eval: '
 SD_Int rax
 		ret
 
@@ -311,7 +311,7 @@ psq equ r11d
 		xor   eax, esi
 		sub   eax, esi
 		pop   rsi
-SD_String db 'KRKP eval: '
+SD_String 'KRKP eval: '
 SD_Int rax
 		ret
 
@@ -339,7 +339,7 @@ EndgameEval_KRKB:
 		sub   ecx, 1
 		xor   eax, ecx
 		sub   eax, ecx
-SD_String db 'KRKB eval: '
+SD_String 'KRKB eval: '
 SD_Int rax
 		ret
 
@@ -365,7 +365,7 @@ EndgameEval_KRKN:
 		sub   ecx, 1
 		xor   eax, ecx
 		sub   eax, ecx
-SD_String db 'KRKN eval: '
+SD_String 'KRKN eval: '
 SD_Int rax
 		ret
 
@@ -409,7 +409,7 @@ EndgameEval_KQKP:
 		sub   ecx, 1
 		xor   eax, ecx
 		sub   eax, ecx
-SD_String db 'KQKP eval: '
+SD_String 'KQKP eval: '
 SD_Int rax
 		ret
 
@@ -439,7 +439,7 @@ EndgameEval_KQKR:
 		sub   ecx, 1
 		xor   eax, ecx
 		sub   eax, ecx
-SD_String db 'KQKR eval: '
+SD_String 'KQKR eval: '
 SD_Int rax
 		ret
 
@@ -449,7 +449,7 @@ SD_Int rax
 EndgameEval_KNNK:
 	; Some cases of trivial draws
 		xor   eax, eax
-SD_String db 'KNNK eval: '
+SD_String 'KNNK eval: '
 SD_Int rax
 		ret
 
@@ -479,7 +479,7 @@ EndgameScale_KBPsK:
 		 jz   .AllOnGFile
 .ReturnNone:
 		mov   eax, SCALE_FACTOR_NONE
-SD_String db 'KBPsK scale: '
+SD_String 'KBPsK scale: '
 SD_Int rax
 		ret
 
@@ -507,7 +507,7 @@ SD_Int rax
 		cmp   byte[SquareDistance+rdx+rax], 2
 		jae   .ReturnNone
 		xor   eax, eax
-SD_String db 'KBPsK scale: '
+SD_String 'KBPsK scale: '
 SD_Int rax
 		ret
 
@@ -573,7 +573,7 @@ SD_Int rax
 		cmp   edx, SQ_A7
 		 jb   .ReturnNone
 		xor   eax, eax
-SD_String db 'KBPsK scale: '
+SD_String 'KBPsK scale: '
 SD_Int rax
 		ret
 
@@ -613,12 +613,12 @@ EndgameScale_KQKRPs:
 		cmp   r10d, RANK_3
 		jne   .ReturnNone
 		xor   eax, eax
-SD_String db 'KQKRPs scale: '
+SD_String 'KQKRPs scale: '
 SD_Int rax
 		ret
 .ReturnNone:
 		mov   eax, SCALE_FACTOR_NONE
-SD_String db 'KQKRPs scale: '
+SD_String 'KQKRPs scale: '
 SD_Int rax
 		ret
 
@@ -808,7 +808,7 @@ qs equ r15d
 		sub   eax, SCALE_FACTOR_MAX
 		neg   eax
 		pop   rbx r12 r13 r14 r15
-SD_String db 'KRPKR scale: '
+SD_String 'KRPKR scale: '
 SD_Int rax
 		ret
 .7:
@@ -865,7 +865,7 @@ SD_Int rax
 		add   eax, SCALE_FACTOR_MAX
 		add   eax, edx
 		pop   rbx r12 r13 r14 r15
-SD_String db 'KRPKR scale: '
+SD_String 'KRPKR scale: '
 SD_Int rax
 		ret
 .8:
@@ -881,7 +881,7 @@ SD_Int rax
 		jne   @f
 		mov   eax, 10
 		pop   rbx r12 r13 r14 r15
-SD_String db 'KRPKR scale: '
+SD_String 'KRPKR scale: '
 SD_Int rax
 		ret
 	@@:
@@ -901,19 +901,19 @@ SD_Int rax
 		sub   eax, 24
 		neg   eax
 		pop   rbx r12 r13 r14 r15
-SD_String db 'KRPKR scale: '
+SD_String 'KRPKR scale: '
 SD_Int rax
 		ret
 .9:
 		mov   eax, SCALE_FACTOR_NONE
 		pop   rbx r12 r13 r14 r15
-SD_String db 'KRPKR scale: '
+SD_String 'KRPKR scale: '
 SD_Int rax
 		ret
 .ReturnDraw:
 		xor   eax, eax
 		pop   rbx r12 r13 r14 r15
-SD_String db 'KRPKR scale: '
+SD_String 'KRPKR scale: '
 SD_Int rax
 		ret
 
@@ -977,7 +977,7 @@ ppush  equ r11d
 .ReturnNone:
 		mov   eax, SCALE_FACTOR_NONE
 .Return:
-SD_String db 'KRPKB scale: '
+SD_String 'KRPKB scale: '
 SD_Int rax
 		ret
 .Rank6:
@@ -999,7 +999,7 @@ SD_Int rax
 		cmp   eax, 3
 		 jb   .ReturnNone
 		mov   eax, 8
-SD_String db 'KRPKB scale: '
+SD_String 'KRPKB scale: '
 SD_Int rax
 		ret
 .Rank5:
@@ -1028,7 +1028,7 @@ SD_Int rax
 		cmp   ksq, edx
 		jne   .Return
 		mov   eax, 24
-SD_String db 'KRPKB scale: '
+SD_String 'KRPKB scale: '
 SD_Int rax
 		ret
 restore ksq_
@@ -1102,12 +1102,12 @@ KRPPKRPScaleFactors equ (0+256*(9+256*(10+256*(14+256*(21+256*(44))))))
 		lea   ecx, [8*r11]
 		shr   rax, cl
 	      movzx   eax, al
-SD_String db 'KRPPKRP scale: '
+SD_String 'KRPPKRP scale: '
 SD_Int rax
 		ret
 .ReturnNone:
 		mov   eax, SCALE_FACTOR_NONE
-SD_String db 'KRPPKRP scale: '
+SD_String 'KRPPKRP scale: '
 SD_Int rax
 		ret
 restore wpsq1_
@@ -1154,7 +1154,7 @@ ksq_  equ r9
 .ReturnNone:
 		mov   eax, SCALE_FACTOR_NONE
 .Return:
-SD_String db 'KPsK scale: '
+SD_String 'KPsK scale: '
 SD_Int rax
 		ret
 restore pawns
@@ -1217,7 +1217,7 @@ weakKingSq_	equ r11
 .ReturnDraw:
 		xor   eax, eax
 
-SD_String db 'KBPKB scale: '
+SD_String 'KBPKB scale: '
 SD_Int rax
 		pop   rbx
 		ret
@@ -1250,7 +1250,7 @@ SD_Int rax
 .ReturnNone:
 		mov   eax, SCALE_FACTOR_NONE
 
-SD_String db 'KBPKB scale: '
+SD_String 'KBPKB scale: '
 SD_Int rax
 		pop   rbx
 		ret
@@ -1313,7 +1313,7 @@ blockSq2_ equ r14
 .ReturnNone:
 		mov   eax, SCALE_FACTOR_NONE
 
-SD_String db 'KBPPKB scale: '
+SD_String 'KBPPKB scale: '
 SD_Int rax
 
 		pop   rbx r12 r13 r14 r15
@@ -1360,7 +1360,7 @@ SD_Int rax
 		 jb   .ReturnNone
 .ReturnDraw:
 		xor   eax, eax
-SD_String db 'KBPPKB scale: '
+SD_String 'KBPPKB scale: '
 SD_Int rax
 		pop   rbx r12 r13 r14 r15
 		ret
@@ -1389,7 +1389,7 @@ SD_Int rax
 .ReturnNone2:
 		mov   eax, SCALE_FACTOR_NONE
 		pop   rbx r12 r13 r14 r15
-SD_String db 'KBPPKB scale: '
+SD_String 'KBPPKB scale: '
 SD_Int rax
 		ret
 .c12:
@@ -1406,7 +1406,7 @@ SD_Int rax
 		jnz   .ReturnDraw
 		mov   eax, SCALE_FACTOR_NONE
 		pop   rbx r12 r13 r14 r15
-SD_String db 'KBPPKB scale: '
+SD_String 'KBPPKB scale: '
 SD_Int rax
 		ret
 restore wbsq
@@ -1476,13 +1476,13 @@ weakKingSq_	equ r10
 	@@:
 		xor   eax, eax
 		pop   rbx
-SD_String db 'KBPKN scale: '
+SD_String 'KBPKN scale: '
 SD_Int rax
 		ret
 .ReturnNone:
 		mov   eax, SCALE_FACTOR_NONE
 		pop   rbx
-SD_String db 'KBPKN scale: '
+SD_String 'KBPKN scale: '
 SD_Int rax
 		ret
 restore pawnSq
@@ -1519,7 +1519,7 @@ EndgameScale_KNPK:
 		 ja   .Return
 		xor   eax, eax
 .Return:
-SD_String db 'KNPK scale: '
+SD_String 'KNPK scale: '
 SD_Int rax
 		ret
 
@@ -1552,14 +1552,14 @@ weakKingSq_ equ r10
 	       test   rax, qword[ForwardBB+rsi+8*pawnSq_]
 		jnz   @f
 		mov   eax, SCALE_FACTOR_NONE
-SD_String db 'KNPKB scale: '
+SD_String 'KNPKB scale: '
 SD_Int rax
 		pop   rsi
 		ret
 @@:
 	       imul   eax, weakKingSq, 64
 	      movzx   eax, byte[SquareDistance+rax+pawnSq_]
-SD_String db 'KNPKB scale: '
+SD_String 'KNPKB scale: '
 SD_Int rax
 		pop   rsi
 		ret
@@ -1610,7 +1610,7 @@ EndgameScale_KPKP:
 		cmp   eax, 2
 		 jb   .try_KPK
 		mov   eax, SCALE_FACTOR_NONE
-SD_String db 'KPKP scale: '
+SD_String 'KPKP scale: '
 SD_Int rax
 		ret
 .try_KPK:
@@ -1632,6 +1632,6 @@ SD_Int rax
 		 bt   r11, rdx
 		sbb   eax, eax
 		and   eax, SCALE_FACTOR_NONE
-SD_String db 'KPKP scale: '
+SD_String 'KPKP scale: '
 SD_Int rax
 		ret

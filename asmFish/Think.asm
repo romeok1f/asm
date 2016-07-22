@@ -410,7 +410,7 @@ MainThread_Think:
 		lea   rbp, [rcx+Thread.rootPos]
 		mov   rbx, qword[rbp+Pos.state]
 
-GD_String db 'MainThread_Think'
+GD_String 'MainThread_Think'
 GD_NewLine
 
 		mov   ecx, dword[rbp+Pos.sideToMove]
@@ -544,7 +544,7 @@ end if
 
 .return:
 
-GD_String db 'MainThread_Think returning'
+GD_String 'MainThread_Think returning'
 GD_NewLine
 
 		pop   r15 rdi rsi rbx rbp
