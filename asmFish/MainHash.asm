@@ -32,6 +32,7 @@ MainHash_Allocate:
 
 
 MainHash_Clear:
+	; hmmm, not sure if we want calling thread to touch each hash page
 	       push   rdi
 		mov   rdi, qword[mainHash.table]
 		mov   ecx, dword[mainHash.sizeMB]

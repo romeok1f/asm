@@ -338,12 +338,12 @@ add qword[DebugBalance], rcx
 end if
 
 
-GD_String db 'size: '
+GD_String 'size: '
 GD_Int rcx
 GD_NewLine
-GD_String db 'alloc'
+GD_String 'alloc'
 GD_Int rdx
-GD_String db ': '
+GD_String ': '
 
 		mov   qword[rsp+8*5], rdx
 		mov   qword[rsp+8*4], PAGE_READWRITE
@@ -370,10 +370,10 @@ _VirtualAlloc:
 if DEBUG > 0
 add qword[DebugBalance], rcx
 end if
-GD_String db 'size: '
+GD_String 'size: '
 GD_Int rcx
 GD_NewLine
-GD_String db 'alloc:  '
+GD_String 'alloc:  '
 
 		mov   rdx, rcx
 		xor   ecx, ecx
@@ -400,10 +400,10 @@ _VirtualFree:
 if DEBUG > 0
 sub qword[DebugBalance], rdx
 end if
-GD_String db 'size: '
+GD_String 'size: '
 GD_Int rdx
 GD_NewLine
-GD_String db 'free:  '
+GD_String 'free:  '
 GD_Hex rcx
 GD_NewLine
 
@@ -503,9 +503,6 @@ _ReadIn:
 		mov   rdx, rcx
 		 jl   ?_1063
 
-GD_String db 'INPUT REALLOC'
-GD_NewLine
-
 		add   edx, 4096
 		mov   r9d, 4
 		mov   r8d, 4096
@@ -517,7 +514,7 @@ end if
 	       test   rax, rax
 		 jz   Failed__imp_VirtualAlloc_ReadIn
 
-GD_String db 'alloc: '
+GD_String 'alloc: '
 GD_Hex rax
 GD_NewLine
 
@@ -535,7 +532,7 @@ end if
 	  rep movsb
 		mov   rcx, qword[InputBuffer]
 
-GD_String db 'free:  '
+GD_String 'free:  '
 GD_Hex rcx
 GD_NewLine
 
@@ -747,7 +744,7 @@ end virtual
 		mov   rax, ' mask 0x'
 	      stosq
 		mov   rcx, qword[rsi+NumaNode.groupMask.Mask]
-	       call   PrintAddress
+	       call   PrintHex
 		add   rdi, 16
        PrintNewLine
 	       call   _WriteOut_Output
@@ -763,6 +760,11 @@ end virtual
 
 
 .Absent:
+		lea   rdi, [Output]
+	     szcall   PrintString, 'info string numa not detected'
+	       call   _WriteOut_Output
+
+
 		mov   dword[threadPool.nodeCnt], 1
 		mov   dword[threadPool.coreCnt], 1
 		lea   rdi, [threadPool.nodeTable]

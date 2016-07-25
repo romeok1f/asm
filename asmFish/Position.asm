@@ -386,60 +386,57 @@ end virtual
 	     szcall   PrintString, 'white:     '
 		mov   rcx, qword[rbp+Pos.typeBB+8*0]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 	     szcall   PrintString, 'black:     '
 		mov   rcx, qword [rbp+Pos.typeBB+8*1]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 	     szcall   PrintString, 'pawn:      '
 		mov   rcx, qword [rbp+Pos.typeBB+8*2]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 	     szcall   PrintString, 'knight:    '
 		mov   rcx, qword [rbp+Pos.typeBB+8*3]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 	     szcall   PrintString, 'bishop:    '
 		mov   rcx, qword [rbp+Pos.typeBB+8*4]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 	     szcall   PrintString, 'rook:      '
 		mov   rcx, qword [rbp+Pos.typeBB+8*5]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 	     szcall   PrintString, 'queen:     '
 		mov   rcx, qword [rbp+Pos.typeBB+8*6]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 	     szcall   PrintString, 'king:      '
 		mov   rcx, qword [rbp+Pos.typeBB+8*7]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'checkers:  '
 		mov   rcx, qword[rbx+State.checkersBB]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
 	     szcall   PrintString, 'pinned:    '
+
 		mov   rcx, qword[rbx+State.pinned]
 	       call   PrintBitboardCompact
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 
 	     szcall   PrintString, 'fen:            '
 	       call   Position_PrintFen
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'isok:           '
 	       call   Position_IsLegal
@@ -454,8 +451,8 @@ end virtual
 		sub   eax, 1
 		and   eax, 'w' - 'b'
 		add   eax, 'b'
-		mov   ah, 10
-	      stosw
+	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'castlingRights: '
 	      movzx   ecx, byte[rbx+State.castlingRights]
@@ -474,51 +471,43 @@ end virtual
 		 bt   ecx, i
 		adc   rdi, 0
 	}
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'epSquare:       '
 	      movzx   ecx, byte[rbx+State.epSquare]
 	       call   PrintSquare
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'rule50:         '
 	      movzx   rax, word[rbx+State.rule50]
 	       call   PrintUnsignedInteger
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'pliesFromNull:  '
 	      movzx   rax, word[rbx+State.pliesFromNull]
 	       call   PrintUnsignedInteger
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'capturedPiece:  '
 	      movzx   eax, byte[rbx+State.capturedPiece]
 		mov   al, byte[PieceToChar+rax]
 	      stosb
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'key:            '
 		mov   rcx, qword[rbx+State.key]
-	       call   PrintAddress
-		mov   al, 10
-	      stosb
+	       call   PrintHex
+       PrintNewLine
 
 	     szcall   PrintString, 'pawnKey:        '
 		mov   rcx, qword[rbx+State.pawnKey]
-	       call   PrintAddress
-		mov   al, 10
-	      stosb
+	       call   PrintHex
+       PrintNewLine
 
 	     szcall   PrintString, 'materialKey:    '
 		mov   rcx, qword[rbx+State.materialKey]
-	       call   PrintAddress
-		mov   al, 10
-	      stosb
+	       call   PrintHex
+       PrintNewLine
 
 	     szcall   PrintString, 'psq:            '
 		mov   eax, 'mg: '
@@ -534,8 +523,7 @@ end virtual
 	      stosd
 	      movsx   rax, word[rbx+State.psq+2*0]
 	       call   PrintSignedInteger
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, 'npMaterial:     '
 		mov   eax,'w: '
@@ -548,9 +536,7 @@ end virtual
 	      stosd
 	      movsx   rax, word[rbx+State.npMaterial+2*1]
 	       call   PrintSignedInteger
-		mov   al, 10
-	      stosb
-
+       PrintNewLine
 
 
 	     szcall   PrintString, 'Gen_Legal:      '

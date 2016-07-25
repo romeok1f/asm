@@ -64,6 +64,9 @@ Thread_Create:
 		mov   qword[threadPool.threadTable+8*rsi], rax
 		mov   rbx, rax
 
+	; fill in address of numanode struct
+		mov   qword[rbx+Thread.numaNode], rdi
+
 	; init some thread data
 		xor   eax, eax
 		mov   byte[rbx+Thread.exit], al
@@ -110,7 +113,7 @@ Thread_Create:
 	       call   _VirtualAllocNuma
 		mov   qword[rbx+Thread.rootPos+Pos.materialTable], rax
 
-	; use chm table from node
+	; use cmh table from node
 		mov   rax, qword[rdi+NumaNode.cmhTable]
 		mov   qword[rbx+Thread.rootPos.counterMoveHistory], rax
 
@@ -135,30 +138,6 @@ Thread_Create:
 		lea   rcx, [rbx+Thread.mutex]
 	       call   _MutexUnlock
 .done:
-
-match =0, VERBOSE {
-		lea   rdi, [Output]
-		mov   rax, 'info str'
-	      stosq
-		mov   rax, 'ing star'
-	      stosq
-		mov   rax, 'ted thre'
-	      stosq
-		mov   eax, 'ad '
-	      stosd
-		sub   rdi, 1
-		mov   eax, esi
-	       call   PrintUnsignedInteger
-		mov   rax, ' on node'
-	      stosq
-		mov   al, ' '
-	      stosb
-	     movsxd   rax, r15d
-	       call   PrintSignedInteger
-       PrintNewLine
-	       call   _WriteOut_Output
-}
-
 		pop   r15 r14 rdi rsi rbx
 		ret
 

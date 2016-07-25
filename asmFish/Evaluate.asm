@@ -412,25 +412,14 @@ end if
 ..AllDone:
 
 
-match =3, VERBOSE \{
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea rdi,[VerboseOutput]
-szcall PrintString, ' evaluate_pieces<'
-mov eax, Us
-call PrintUnsignedInteger
-mov ax, ', '
-stosw
-mov eax, Pt
-call PrintUnsignedInteger
-szcall PrintString, '>: '
-mov ecx, r13d
-call PrintScore
-mov al, 10
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
-\}
+
+ED_String ' evaluate_pieces<'
+ED_Int Us
+ED_String ', '
+ED_Int Pt
+ED_String '>: '
+ED_Score rsi
+ED_NewLine
 
 
 restore Them
@@ -493,16 +482,8 @@ match =Black, Us
 ..KingSafetyDoneRet:
 		mov   dword[rdi+PawnEntry.kingSafety+4*Us], esi
 
-match =3, VERBOSE \{
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea rdi,[VerboseOutput]
-szcall PrintString, 'ks:'
-mov ecx, esi
-call PrintScore
-lea rcx, [VerboseOutput]
-call _WriteOut
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
-\}
+ED_String 'ks:'
+ED_Int rsi
 
 
 		mov   r11d, dword[.ei.kingAttackersCount+4*Them]
@@ -743,21 +724,11 @@ match=1,DEBUG\{ and   rdx, qword[rcx+8*7] \}
 	end if
 
 
-match =3, VERBOSE \{
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea rdi,[VerboseOutput]
-szcall PrintString, ' evaluate_king<'
-mov eax, Us
-call PrintUnsignedInteger
-szcall PrintString, '>: '
-mov ecx, esi
-call PrintScore
-mov al, 10
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
-\}
+ED_String ' evaluate_king<'
+ED_Int Us
+ED_String '>: '
+ED_Score rsi
+ED_NewLine
 
 }
 
@@ -1103,22 +1074,11 @@ SD_String '|'
 	     addsub   esi, eax
 
 
-
-match =3, VERBOSE \{
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea rdi,[VerboseOutput]
-szcall PrintString, ' evaluate_threats<'
-mov eax, Us
-call PrintUnsignedInteger
-szcall PrintString, '>: '
-mov ecx, esi
-call PrintScore
-mov al, 10
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
-\}
+ED_String ' evaluate_threats<'
+ED_Int Us
+ED_String '>: '
+ED_Score rsi
+ED_NewLine
 
 
 restore PiecesPawn
@@ -1177,13 +1137,13 @@ match =Black, Us
 	       imul   r13d, r12d
 	; r13d = rr = r*(r-1)
 
-ED_String db 'r: '
+ED_String 'r: '
 ED_Int r12
-ED_String db 10
+ED_NewLine
 
-ED_String db 'rr: '
+ED_String 'rr: '
 ED_Int r13
-ED_String db 10
+ED_NewLine
 
 		lea   r14d, [rcx+Up]
 	; r14d = blockSq
@@ -1263,9 +1223,9 @@ ED_String db 10
 		add   eax, ecx
 	; eax = k/2
 
-ED_String db 'k/2: '
+ED_String 'k/2: '
 ED_Int rax
-ED_String db 10
+ED_NewLine
 
 
 		add   r13d, r13d
@@ -1285,21 +1245,11 @@ ED_String db 10
       ;  end if
 
 
-match =3, VERBOSE \{
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea rdi,[VerboseOutput]
-szcall PrintString, ' evaluate_passed_pawns<'
-mov eax, Us
-call PrintUnsignedInteger
-szcall PrintString, '>: '
-mov ecx, esi
-call PrintScore
-mov al, 10
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
-\}
+ED_String ' evaluate_passed_pawns<'
+ED_Int Us
+ED_String '>: '
+ED_Score rsi
+ED_NewLine
 
 
 }
@@ -1399,22 +1349,13 @@ match =Black, Us
 
 	     addsub   esi, eax
 
-match =3, VERBOSE \{
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-mov esi, eax
-lea rdi,[VerboseOutput]
-szcall PrintString, ' evaluate_space<'
-mov eax, Us
-call PrintUnsignedInteger
-szcall PrintString, '>: '
-mov ecx, esi
-call PrintScore
-mov al, 10
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
-\}
+ED_String ' evaluate_space<'
+ED_Int Us
+ED_String '>: '
+ED_Score rsi
+ED_NewLine
+
+
 
 
 restore PiecesPawn
@@ -1642,16 +1583,16 @@ ED_NewLine
 	     popcnt   r9, qword[rbp+Pos.typeBB+8*Pawn], rcx
 
 
-ED_String db 'pawns: '
+ED_String 'pawns: '
 ED_Int r9
-ED_String db 10
+ED_NewLine
 
 
 	      movzx   edx, byte[rdi+PawnEntry.asymmetry]
 
-ED_String db 'asymmetry: '
+ED_String 'asymmetry: '
 ED_Int rdx
-ED_String db 10
+ED_NewLine
 
 
 		lea   edx, [rdx+r9-15]
@@ -1662,9 +1603,9 @@ ED_String db 10
 	      movsx   r10d, si
 
 
-ED_String db 'eg: '
+ED_String 'eg: '
 ED_Int r10
-ED_String db 10
+ED_NewLine
 
 
 		sar   r10d, 31
@@ -1694,9 +1635,9 @@ ED_String db 10
 		lea   eax, [r9+8*r8]
 	; eax = initiative
 
-ED_String db 'initiative: '
+ED_String 'initiative: '
 ED_Int rax
-ED_String db 10
+ED_NewLine
 
 	      movsx   edx, si
 		xor   edx, r11d
@@ -1716,9 +1657,9 @@ ED_String db 10
 
 
 
-ED_String db ' evaluate_initiative: '
+ED_String ' evaluate_initiative: '
 ED_Score rsi
-ED_String db 'partial score: '
+ED_String 'partial score: '
 ED_Score rsi
 
 	; esi = score
@@ -1739,7 +1680,7 @@ ED_Score rsi
 	       test   ecx, ecx
 		jnz   .HaveScaleFunction	; 1.98%
 .HaveScaleFunctionReturn:
-ED_String db ' ei.me->scale_factor(pos, strongSide): '
+ED_String ' ei.me->scale_factor(pos, strongSide): '
 ED_Int rax
 		lea   ecx, [rax-48]
 		mov   r10, qword[rbp+Pos.typeBB+8*Bishop]
@@ -1816,15 +1757,14 @@ szcall PrintString, 'score: '
 mov ecx, esi
 shl ecx, 16
 add ecx, r12d
-call PrintScore
+ED_Score rcx
 szcall PrintString, ' sf: '
 movsxd rax, r15d
 call PrintSignedInteger
 szcall PrintString, ' phase: '
 movsxd rax, r14d
 call PrintSignedInteger
-mov al, 10
-stosb
+PrintNewLine
 call _WriteOut_Output
 pop r15 r14 rdx rcx rax rdi rsi
 }

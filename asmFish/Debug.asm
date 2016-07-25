@@ -142,7 +142,7 @@ macro GD_Hex x {
 	push  rdi rax rcx rdx r8 r9 r10 r11
 	lea  rdi, [VerboseOutput]
 	mov rcx, qword[rsp+8*8]
-	call PrintAddress
+	call PrintHex
 	lea  rcx, [VerboseOutput]
 	call _WriteOut
 	pop r11 r10 r9 r8 rdx rcx rax rdi

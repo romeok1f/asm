@@ -10,8 +10,13 @@
 ;    .GroupMask.Mask = 0 to bypass any affinity setting if used at all
 ;
 ;2. present:
-;  entries are as expected
-
+;  entries are as expected, that is for each detected node we have
+;   .nodeNumber  rd 1     the >=0 integer
+;   .coreCnt     rd 1     number of cores detected on this node
+;   .cmhTable    rq 1     our per-node cmh-table
+;   .groupMask (win) or .cpuMask (linux)
+;
+;
 
 ThreadPool_Create:
 	       push   rbx
@@ -62,6 +67,7 @@ ThreadPool_ReadOptions:
 .CheckDelete:
 		cmp   edi, esi
 		 ja   .Delete
+	       call   ThreadPool_DisplayThreadDistribution
 		pop   rdi rsi rbx
 		ret
 .Create:
@@ -87,6 +93,55 @@ ThreadPool_NodesSearched:
 		add   ecx, 1
 		cmp   ecx, dword[threadPool.size]
 		 jb   .next_thread
+		ret
+
+ThreadPool_DisplayThreadDistribution:
+	       push   rbx rsi rdi r14 r15
+		lea   rdi, [Output]
+		lea   rsi, [threadPool.nodeTable]
+	       imul   r15d, dword[threadPool.nodeCnt], sizeof.NumaNode
+		add   r15, rsi
+.NextNode:
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing node'
+	      stosq
+		mov   al, ' '
+	      stosb
+		mov   eax, dword[rsi+NumaNode.nodeNumber]
+		cmp   eax, -1		; if any node numbers are -1
+		 je   .Return		;  then threadPool.nodeCnt should be 1
+	       call   PrintUnsignedInteger
+		mov   rax, ' has thr'
+	      stosq
+		mov   rax, 'eads'
+	      stosd
+
+		 or   ebx, -1
+	.ThreadLoop:
+		add   ebx, 1
+		cmp   ebx, dword[threadPool.size]
+		jae   .ThreadLoopDone
+		mov   rax, qword[threadPool.threadTable+8*rbx]
+		cmp   rsi, qword[rax+Thread.numaNode]
+		jne   .ThreadLoop
+		mov   al, ' '
+	      stosb
+		mov   eax, ebx
+	       call   PrintUnsignedInteger
+		jmp   .ThreadLoop
+	.ThreadLoopDone:
+
+       PrintNewLine
+
+		add   rsi, sizeof.NumaNode
+		cmp   rsi, r15
+		 jb   .NextNode
+
+	       call   _WriteOut_Output
+
+.Return:
+		pop   r15 r14 rdi rsi rbx
 		ret
 
 

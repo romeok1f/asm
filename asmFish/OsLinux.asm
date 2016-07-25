@@ -881,13 +881,20 @@ GD_NewLine
 	      stosb
 		mov   eax, dword[rsi+NumaNode.nodeNumber]
 	       call   PrintUnsignedInteger
+
 		mov   rax, ': cores '
 	      stosq
 		mov   eax, dword[rsi+NumaNode.coreCnt]
 	       call   PrintUnsignedInteger
+
 		mov   rax, ' mask 0x'
 	      stosq
 		mov   r13d, 7
+	@@:	mov   rcx, qword[rsi+NumaNode.cpuMask+8*r13]
+	       test   rcx, rcx
+		jnz   .PrintMaskLoop
+		sub   r13d, 1
+		jns   @b
 	.PrintMaskLoop:
 		mov   rcx, qword[rsi+NumaNode.cpuMask+8*r13]
 	       test   rcx, rcx
@@ -896,15 +903,16 @@ GD_NewLine
 	      stosb
 		jmp   @f
 	.printfull:
-	       call   PrintAddress
-		add   rdi, 16
+	       call   PrintHex
 	@@:    test   r13d, r13d
 		 jz   @f
 		mov   al, '_'
 	      stosb
 	@@:	sub   r13d, 1
 		jns   .PrintMaskLoop
+
        PrintNewLine
+
 	       call   _WriteOut_Output
 
 		add   rsi, sizeof.NumaNode

@@ -1,5 +1,5 @@
-; this is the source for windows  see asmFish.asm for unix
-; this is included in asmFishW_popcnt.asm asmFishW_base.asm and asmFishW_bmi2.asm
+; this is the source for linux  see asmFishW.asm for windows
+; this is included in asmFish_popcnt.asm asmFish_base.asm and asmFish_bmi2.asm
 
 format ELF64 executable 3
 entry Start
@@ -111,7 +111,7 @@ ksquare_lookup:  db SQ_G1, SQ_C1, SQ_G8, SQ_C8
 
 szUciResponse:	db 'id name '
 szGreeting:
-		db 'asmFishW_'
+		db 'asmFish_'
 		create_build_time DAY, MONTH, YEAR
 		db '_'
 		db CPU_VERSION
@@ -127,7 +127,7 @@ if CPU_VERSION eq 'base'
 end if
 		db 'option name MoveOverhead type spin default 30 min 0 max 5000',10
 		db 'option name MinThinkTime type spin default 20 min 0 max 5000',10
-		db 'option name SlowMover type spin default 80 min 10 max 1000',10
+		db 'option name SlowMover type spin default 89 min 10 max 1000',10
 		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',10
 		db 'option name Syzygy50MoveRule type check default true',10
 		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',10
@@ -540,6 +540,14 @@ mov qword[VerboseTime1+8*1], rax
 	       call   Pawn_Init
 	       call   Endgame_Init
 
+	; write engine name
+match =0, VERBOSE {
+		lea   rdi, [szGreetingEnd]
+		lea   rcx, [szGreeting]
+	       call   _WriteOut
+}
+
+
 	; set up threads, hash, and tablebases
 		mov   ecx, dword[options.hash]
 	       call   MainHash_Allocate
@@ -573,13 +581,6 @@ mov eax, ' us' + (10 shl 24)
 stosd
 lea rcx, [VerboseOutput]
 call _WriteOut
-}
-
-	; write engine name
-match =0, VERBOSE {
-		lea   rdi, [szGreetingEnd]
-		lea   rcx, [szGreeting]
-	       call   _WriteOut
 }
 
 	; enter the main loop
