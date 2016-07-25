@@ -778,7 +778,7 @@ end virtual
 	;  r12d = N
 .TryNextCore:
 		add   r12d, 1
-		cmp   r12d, 30
+		cmp   r12d, 256
 		jae   .TryCoresDone
 
 GD_String 'trying core '
