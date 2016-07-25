@@ -430,8 +430,8 @@ match =1, DEBUG \{
 		add   eax, dword[rbx+State.staticEval]
 		mov   esi, dword[.beta]
 		mov   ecx, dword[rbp+Pos.sideToMove]
-		cmp   edx, 2*ONE_PLY
-		 jl   .8skip
+	      ;  cmp   edx, 2*ONE_PLY
+	      ;   jl   .8skip
 		cmp   esi, dword[.eval]
 		 jg   .8skip
 	      movzx   ecx, word[rbx+State.npMaterial+2*rcx]
@@ -650,7 +650,6 @@ lock inc qword[profile.moveUnpack]
 
 
 	; Step 10. Internal iterative deepening (skipped when in check)
-
 
 		mov   r8d, dword[.depth]
 		mov   ecx, dword[.ttMove]
@@ -1005,28 +1004,31 @@ lock inc qword[profile.moveUnpack]
 	      cmova   ecx, esi
 	       imul   eax, 64
 		add   eax, ecx
-		mov   edx, dword[.newDepth]
-		sub   edx, dword[Reductions+4*(rax+2*64*64*.PvNode)]
+		mov   edi, dword[.newDepth]
+		sub   edi, dword[Reductions+4*(rax+2*64*64*.PvNode)]
+	; edi = predictedDepth
+
 	; Futility pruning: parent node
-		cmp   edx, 7*ONE_PLY
-		jge   .13done
-		xor   eax, eax
-	       test   edx, edx
-	      cmovs   edx, eax
-	; edx = predictedDepth
-	       imul   eax, edx, 200
+		xor   edx, edx
+		cmp   edi, 7*ONE_PLY
+		 jg   .13done
+		 je   .13check_see
+	       test   edi, edi
+	      cmovs   edi, edx
+	       imul   eax, edi, 200
 		add   eax, 256
 		add   eax, dword[rbx+State.staticEval]
 		cmp   eax, dword[.alpha]
 		jle   .MovePickLoop
-
+.13check_see:
 	; Prune moves with negative SEE at low depths
 		mov   ecx, dword[.move]
-		cmp   edx, 4*ONE_PLY
-		jge   .13done
+		sub   edi, 3
+	      cmovs   edi, edx
+	       imul   edi, -2*PawnValueMg
 	    SeeSign   .13done
-	       test   eax, eax
-		 js   .MovePickLoop
+		cmp   eax, edi
+		 jl   .MovePickLoop
 .13done:
     end if
 

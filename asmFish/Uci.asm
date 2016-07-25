@@ -831,23 +831,23 @@ UciBench:
 		jmp   .parse_loop
 
 .parse_done:
-
 		lea   rdi, [Output]
 		mov   eax, '*** '
 	      stosd
-		mov   rax, 'bench wi'
+		mov   rax, 'bench ha'
 	      stosq
-		mov   rax, 'th hash='
-	      stosq
+		mov   eax, 'sh '
+	      stosd
+		sub   rdi, 1
 		mov   eax, r14d
 	       call   PrintUnsignedInteger
 		mov   rax, ' threads'
 	      stosq
-		mov   al, '='
+		mov   al, ' '
 	      stosb
 		mov   eax, r13d
 	       call   PrintUnsignedInteger
-		mov   rax, ' depth='
+		mov   rax, ' depth '
 	      stosq
 		sub   rdi, 1
 		mov   eax, r12d
