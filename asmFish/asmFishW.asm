@@ -192,6 +192,7 @@ sz_btime		db 'btime',0
 sz_winc 		db 'winc',0
 sz_binc 		db 'binc',0
 sz_fen			db 'fen',0
+sz_realtime		db 'realtime',0
 sz_startpos		db 'startpos',0
 sz_searchmoves		db 'searchmoves',0
 sz_infinite		db 'infinite',0

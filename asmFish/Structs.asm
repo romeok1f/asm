@@ -347,8 +347,6 @@ match =1, DEBUG {
  rootPos	 Pos
 ends
 
-print 'Thread.rootPos', Thread.rootPos
-
 
 
 

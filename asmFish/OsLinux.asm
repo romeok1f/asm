@@ -1,3 +1,5 @@
+; Thanks to locklessinc.com and HaHaAnonymous for most of these functions
+
 
 
 ;;;;;;;;;
@@ -344,7 +346,7 @@ _ExitProcess:
 	; rcx is exit code
 	       push   rdi
 		mov   rdi, rcx
-		mov   eax, sys_exit
+		mov   eax, sys_exit_group
 	    syscall
 
 
@@ -1023,17 +1025,10 @@ match =1, CPU_HAS_BMI2 {
 	       call   PrintString
 		mov   rcx, r15
 	       call   PrintString
-		xor   eax,eax
+		xor   eax, eax
 	      stosd
 		lea   rdi, [Output]
-	       call   _ErrorBox
-		xor   ecx, ecx
-	       call   _ExitProcess
-
-
-
-
-
+		jmp   Failed
 
 
 ;;;;;;;;;
@@ -1041,8 +1036,9 @@ match =1, CPU_HAS_BMI2 {
 ;;;;;;;;;
 
 Failed:
+	; rdi : null terminated string
 	       call   _ErrorBox
-		xor   ecx, ecx
+		mov   ecx, 1
 	       call   _ExitProcess
 
 

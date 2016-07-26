@@ -874,7 +874,7 @@ match =1, CPU_HAS_BMI2 {
 
 Failed:
 	       call   _ErrorBox
-		xor   ecx, ecx
+		mov   ecx, 1
 	       call   _ExitProcess
 
 

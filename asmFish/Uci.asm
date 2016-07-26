@@ -791,6 +791,7 @@ UciBench:
 		mov   r12d, 15	 ; depth
 		mov   r13d, 1	 ; threads
 		mov   r14d, 128  ; hash
+		xor   r15d, r15d
 
 .parse_loop:
 	       call   SkipSpaces
@@ -810,7 +811,14 @@ UciBench:
 		lea   rcx, [sz_hash]
 	       call   CmpString
 	       test   eax, eax
-		 jz   .parse_done
+		jnz   .parse_hash
+
+		lea   rcx, [sz_realtime]
+	       call   CmpString
+	       test   eax, eax
+		jnz   .parse_realtime
+		jmp   .parse_done
+
 .parse_hash:
 	       call   SkipSpaces
 	       call   ParseInteger
@@ -828,6 +836,13 @@ UciBench:
 	       call   ParseInteger
       ClampUnsigned   eax, 1, 40
 		mov   r12d, eax
+		jmp   .parse_loop
+.parse_realtime:
+	       call   SkipSpaces
+	       call   ParseInteger
+		xor   r15d, r15d
+		neg   eax
+		adc   r15d, r15d
 		jmp   .parse_loop
 
 .parse_done:
@@ -852,6 +867,12 @@ UciBench:
 		sub   rdi, 1
 		mov   eax, r12d
 	       call   PrintUnsignedInteger
+		mov   rax, ' realtim'
+	      stosq
+		mov   eax, 'e '
+	      stosw
+		mov   eax, r15d
+	       call   PrintUnsignedInteger
 		mov   eax, ' ***'
 	      stosd
        PrintNewLine
@@ -871,8 +892,10 @@ UciBench:
 		mov   qword[options.displayMoveFxn], rdx
 	       call   Search_Clear
 
+	       test   r15d, r15d
+		 jz   @f
 	       call   _SetRealtimePriority
-
+	@@:
 		xor   r13d, r13d
 		mov   qword[UciLoop.time], r13
 		mov   qword[UciLoop.nodes], r13
