@@ -276,7 +276,7 @@ match =1, OS_IS_WINDOWS {
   ends
 
   struct ConditionalVariable
-   handle rq 5
+   handle rq 1
   ends
 
 
@@ -314,9 +314,9 @@ struct Thread
  threadHandle	 ThreadHandle
  numaNode	 rq 1
  bestMoveChanges rq 1
- nodes		 rq 1
- idx		 rd 1
- rootDepth	 rd 1
+ nodes		  rq 1
+ idx		  rd 1
+ rootDepth	  rd 1
  PVIdx		 rd 1
  previousScore	 rd 1
  completedDepth  rd 1
@@ -347,7 +347,7 @@ match =1, DEBUG {
  rootPos	 Pos
 ends
 
-
+print 'Thread.rootPos', Thread.rootPos
 
 
 
