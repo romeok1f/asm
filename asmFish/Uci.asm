@@ -1077,8 +1077,7 @@ if PROFILE > 0
 	      stosb
 		mov   al, '%'
 	      stosb
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 		add   r15, 16
 		jmp   .CountLoop
@@ -1192,26 +1191,57 @@ match =1, PROFILE {
 UciProfile:
 		lea   rdi, [Output]
 
-	     szcall   PrintString, 'moveDo:        '
-		mov   rax, qword[profile.moveDo]
+	     szcall   PrintString, 'Move_Do:              '
+		mov   rax, qword[profile.Move_Do]
 	       call   PrintUnsignedInteger
-		mov   al, 10
-	      stosb
-	     szcall   PrintString, 'moveUnpack:    '
-		mov   rax, qword[profile.moveUnpack]
+       PrintNewLine
+
+	     szcall   PrintString, 'Move_DoNull:          '
+		mov   rax, qword[profile.Move_DoNull]
 	       call   PrintUnsignedInteger
-		mov   al, 10
-	      stosb
-	     szcall   PrintString, 'moveStore:     '
-		mov   rax, qword[profile.moveStore]
+       PrintNewLine
+
+
+	     szcall   PrintString, 'QSearch_PV_TRUE:      '
+		mov   rax, qword[profile.QSearch_PV_TRUE]
 	       call   PrintUnsignedInteger
-		mov   al, 10
-	      stosb
-	     szcall   PrintString, 'moveRetrieve:  '
-		mov   rax, qword[profile.moveRetrieve]
+       PrintNewLine
+
+	     szcall   PrintString, 'QSearch_PV_FALSE:     '
+		mov   rax, qword[profile.QSearch_PV_FALSE]
 	       call   PrintUnsignedInteger
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
+	     szcall   PrintString, 'QSearch_NONPV_TRUE:   '
+		mov   rax, qword[profile.QSearch_NONPV_TRUE]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'QSearch_NONPV_FALSE:  '
+		mov   rax, qword[profile.QSearch_NONPV_FALSE]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'Search_ROOT:          '
+		mov   rax, qword[profile.Search_ROOT]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'Search_NONPV:         '
+		mov   rax, qword[profile.Search_NONPV]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'Search_PV:            '
+		mov   rax, qword[profile.Search_PV]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'See:                  '
+		mov   rax, qword[profile.See]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
 
 
 	       push   rdi

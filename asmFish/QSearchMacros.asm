@@ -11,10 +11,24 @@ macro QSearch NT, InCheck {
 ;jmp _Evaluate
 
 match =_PV_NODE, NT \{
+ match =1, InCheck \\{
+   ProfileInc QSearch_PV_TRUE
+ \\}
+ match =0, InCheck \\{
+   ProfileInc QSearch_PV_FALSE
+ \\}
+
  .PvNode equ 1
  \}
 
 match =_NONPV_NODE, NT \{
+ match =1, InCheck \\{
+   ProfileInc QSearch_NONPV_TRUE
+ \\}
+ match =0, InCheck \\{
+   ProfileInc QSearch_NONPV_FALSE
+ \\}
+
  .PvNode equ 0
 \}
 

@@ -13,18 +13,21 @@ macro search NT {
 
 match =_ROOT_NODE, NT
 \{
+ProfileInc Search_ROOT
  .PvNode equ 1
  .RootNode equ 1
 \}
 
 match =_PV_NODE, NT
 \{
+ProfileInc Search_PV
  .PvNode equ 1
  .RootNode equ 0
 \}
 
 match =_NONPV_NODE, NT
 \{
+ProfileInc Search_NONPV
  .PvNode equ 0
  .RootNode equ 0
 \}

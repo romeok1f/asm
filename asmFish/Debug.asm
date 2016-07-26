@@ -1,3 +1,9 @@
+macro ProfileInc fxn {
+ match =1, PROFILE \{
+	   lock inc   qword[profile.#fxn]
+ \}
+}
+
 
 macro DebugStackUse m {
 local ..message, ..over

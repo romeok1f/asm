@@ -1,6 +1,9 @@
 	      align   16
 Move_DoNull:
 
+ProfileInc Move_DoNull
+
+
 match =1, DEBUG {
 push	rcx rdi
 lea	rdi, [DebugOutput]

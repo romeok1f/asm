@@ -201,10 +201,8 @@ add	dword[rbp+Pos.gamePly], 1	  ; gamePly is only used by search to init the tim
 		and   r9d, 63	; r9d = to
 		shr   ecx, 12
 
-match =1, PROFILE {
-lock inc qword[profile.moveDo]
-lock inc qword[profile.moveUnpack]
-}
+ProfileInc Move_Do
+ProfileInc moveUnpack
 
 	      movzx   r10d, byte[rbp+Pos.board+r8]     ; r10 = FROM PIECE
 	      movzx   r11d, byte[rbp+Pos.board+r9]     ; r11 = TO PIECE

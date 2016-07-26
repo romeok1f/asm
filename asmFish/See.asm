@@ -14,6 +14,9 @@ See:
 		mov   r9d, ecx
 		and   r9d, 63
 .HaveFromTo:
+
+ProfileInc See
+
 	       push   r12 r13 r14 r15 rcx rsi rdi
 	       push   rbx
 		mov   rbx, rsp

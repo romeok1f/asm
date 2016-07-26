@@ -39,8 +39,19 @@ section '.data' data readable writeable
 match =1, PROFILE {
   align 16
   profile:
-   .cjmpcounts rq 2*60
-   .moveDo     dq 0
+   .cjmpcounts rq 2*16
+
+   .Move_Do     dq 0
+   .Move_DoNull dq 0
+   .QSearch_PV_TRUE     dq 0
+   .QSearch_PV_FALSE    dq 0
+   .QSearch_NONPV_TRUE  dq 0
+   .QSearch_NONPV_FALSE dq 0
+   .Search_ROOT  dq 0
+   .Search_PV    dq 0
+   .Search_NONPV dq 0
+   .See         dq 0
+
    .moveUnpack dq 0
    .moveStore  dq 0
    .moveRetrieve dq 0
