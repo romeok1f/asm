@@ -66,6 +66,10 @@ A: There are currently four places. With these changes, asmFish should should pr
   
 
 ******** updates ********
+2016-07-25: "Allow null pruning at depth 1"
+  - several structures have been modified to accomodate the linux port.
+  - on start, asmfish now displays node information on numa systems
+
 2016-07-18: "Gradually relax the NMP staticEval check"
   - fixed broken ponder in 07-17
   - added gui spam with current move info when not using time management for gui's that do that
