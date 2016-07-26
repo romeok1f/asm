@@ -927,6 +927,11 @@ GD_NewLine
 
 
 .Absent:
+		lea   rdi, [Output]
+	     szcall   PrintString, 'info string numa not detected'
+       PrintNewLine
+	       call   _WriteOut_Output
+
 		mov   dword[threadPool.nodeCnt], 1
 		mov   dword[threadPool.coreCnt], 1
 		lea   rdi, [threadPool.nodeTable]

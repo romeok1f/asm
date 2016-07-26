@@ -762,6 +762,7 @@ end virtual
 .Absent:
 		lea   rdi, [Output]
 	     szcall   PrintString, 'info string numa not detected'
+       PrintNewLine
 	       call   _WriteOut_Output
 
 
