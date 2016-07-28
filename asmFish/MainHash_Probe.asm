@@ -13,6 +13,8 @@ SD_String 'tt probe key='
 SD_UInt64 rcx
 SD_String '|'
 
+ProfileInc MainHash_Probe
+
 		mov   rax, qword[mainHash.mask]
 		and   rax, rcx
 		shl   rax, 5

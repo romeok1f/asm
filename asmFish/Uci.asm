@@ -1191,6 +1191,16 @@ match =1, PROFILE {
 UciProfile:
 		lea   rdi, [Output]
 
+	     szcall   PrintString, 'MainHash_Probe:       '
+		mov   rax, qword[profile.MainHash_Probe]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'MainHash_Save:        '
+		mov   rax, qword[profile.MainHash_Save] 
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
 	     szcall   PrintString, 'Move_Do:              '
 		mov   rax, qword[profile.Move_Do]
 	       call   PrintUnsignedInteger
@@ -1201,6 +1211,20 @@ UciProfile:
 	       call   PrintUnsignedInteger
        PrintNewLine
 
+	     szcall   PrintString, 'Move_GivesCheck:      '
+		mov   rax, qword[profile.Move_GivesCheck]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'Move_IsLegal:         '
+		mov   rax, qword[profile.Move_IsLegal]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'Move_IsPseudoLegal:   '
+		mov   rax, qword[profile.Move_IsPseudoLegal]
+	       call   PrintUnsignedInteger
+       PrintNewLine
 
 	     szcall   PrintString, 'QSearch_PV_TRUE:      '
 		mov   rax, qword[profile.QSearch_PV_TRUE]

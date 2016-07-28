@@ -41,8 +41,13 @@ match =1, PROFILE {
   profile:
    .cjmpcounts rq 2*16
 
+   .MainHash_Probe dq 0
+   .MainHash_Save  dq 0
    .Move_Do     dq 0
    .Move_DoNull dq 0
+   .Move_GivesCheck    dq 0
+   .Move_IsLegal       dq 0
+   .Move_IsPseudoLegal dq 0
    .QSearch_PV_TRUE     dq 0
    .QSearch_PV_FALSE    dq 0
    .QSearch_NONPV_TRUE  dq 0

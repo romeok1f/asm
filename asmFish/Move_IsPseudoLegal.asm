@@ -12,6 +12,8 @@ Move_IsPseudoLegal:
 	;    epcapture
 	;  so we also require checkinfo to be set
 
+ProfileInc Move_IsPseudoLegal
+
 	       push   rsi rdi r12 r13 r14 r15
 
 		mov   eax, dword[rbp+Pos.sideToMove]

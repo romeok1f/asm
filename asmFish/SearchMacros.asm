@@ -340,7 +340,7 @@ match =1, DEBUG \{
 		mov   r9, qword [.posKey]
 		shr   r9, 48
 		mov   edx, VALUE_NONE
-     HashTable_Save   .ltte, r12, r9w, edx, BOUND_NONE, DEPTH_NONE, 0, r8w
+      MainHash_Save   .ltte, r12, r9w, edx, BOUND_NONE, DEPTH_NONE, 0, r8w
 		jmp   .StaticValueDone
 .StaticValueYesTTHit:
 		cmp   eax, VALUE_NONE
@@ -1559,7 +1559,7 @@ SD_String '|'
 		cmp   edi, dword[.beta]
 	     cmovge   esi, ecx
     end if
-     HashTable_Save   .ltte, r8, r9w, edx, sil, byte[.depth], eax, word[rbx+State.staticEval]
+      MainHash_Save   .ltte, r8, r9w, edx, sil, byte[.depth], eax, word[rbx+State.staticEval]
 		mov   eax, edi
 
 match =2, VERBOSE \{
@@ -1740,7 +1740,7 @@ end if
 		cmp   esi, eax
 	      cmovg   esi, eax
 		xor   eax, eax
-     HashTable_Save   .ltte, r8, r9w, edx, BOUND_EXACT, sil, eax, VALUE_NONE
+      MainHash_Save   .ltte, r8, r9w, edx, BOUND_EXACT, sil, eax, VALUE_NONE
 		mov   eax, edi
 		jmp   .Return
     end if

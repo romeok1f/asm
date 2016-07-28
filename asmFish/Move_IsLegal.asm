@@ -10,6 +10,8 @@ Move_IsLegal:
 	; out: eax =  0 if move is not legal
 	;      eax = -1 if move is legal
 
+ProfileInc Move_IsLegal
+
 	       push   r13 r14 r15
 
 		mov   edx, ecx

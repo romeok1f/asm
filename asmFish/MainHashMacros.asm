@@ -1,4 +1,4 @@
-macro HashTable_Save local, entr, key16, value, bounder, depth, move, ev {
+macro MainHash_Save local, entr, key16, value, bounder, depth, move, ev {
 local ..dont_write_move, ..write_everything, ..write_after_move, ..done
 
 
@@ -70,7 +70,7 @@ mov r15, qword[Verbr15]
 \}
 
 
-
+ProfileInc MainHash_Save
 
 	if value eq edx
 	else if value eq 0

@@ -1,80 +1,38 @@
-
-Exception Code: c0000005
-Exception Offset:     0000000000153e35
-
-
-
-setoption name UCI_Chess960 value true
-position fen qnbrknrb/pppppppp/8/8/8/8/PPPPPPPP/QNBRKNRB w GDgd - 0 1 moves a2a3 a7a6 b2b3 f8e6 c2c3
-show
-
-
-setoption name UCI_Chess960 value true
-position fen qnbrknrb/pppppppp/8/8/8/8/PPPPPPPP/QNBRKNRB w GDgd - 0 1
-
-
-
-setoption name UCI_Chess960 value true
-position fen qnbrknrb/pppppppp/8/8/8/8/PPPPPPPP/QNBRKNRB w GDgd - 0 1 moves
-perft 6
+call counts from PROFILE=1 and bench:
+Move_GivesCheck:      61810252
+See:                  23095277
+MainHash_Probe:       22442229
+Move_IsLegal:         22000335
+Move_Do:              20584032
+MainHash_Save:        19144164
+QSearch_NONPV_FALSE:  10784787
+Search_NONPV:         9520774
+Move_IsPseudoLegal:   4339120
+QSearch_NONPV_TRUE:   2062216
+Move_DoNull:          1078284
+Search_PV:            75496
+QSearch_PV_FALSE:     26089
+QSearch_PV_TRUE:      5226
+Search_ROOT:          1714
 
 
 
-
-
-Log window:
-Process created. ProcessId=00000428h ThreadId=00000430h BaseOfImage=0000000000400000-0000000000958000h ThreadLocalBase=000007FFFFFDD000h ThreadStartAddress=0000000000953C98h
-Software breakpoint No. 00000000h was set. ProcesId=00000428h Address=0000000000953C98h flag=temporary (will be removed after its trigger)
-Loaded dll. ProcessId=00000428h ThreadId=00000430h BaseOfDll=0000000077EC0000-0000000077FFC000h EntryPoint=0000000000000000h DllName=ntdll.dll
-Loaded dll. ProcessId=00000428h ThreadId=00000430h BaseOfDll=0000000077D40000-0000000077EB6000h EntryPoint=0000000077D6B140h DllName=KERNEL32.dll
-Loaded dll. ProcessId=00000428h ThreadId=00000430h BaseOfDll=000007FF7FC00000-000007FF7FC86000h EntryPoint=000007FF7FC103B0h DllName=msvcrt.dll
-Temporary software breakpoint No. 00000000h triggered.
-Software breakpoint No. 00000000h was removed from address=0000000000953C98h of the process PID=00000428h flag=temporary
-Thread created. ProcessId=00000428h ThreadId=0000051Ch ThreadLocalBase=000007FFFFFDB000h ThreadStartAddress=0000000077D6B890h
-Exception. ProcessId=00000428h ThreadId=0000051Ch Address=000000000094A562h ExceptionCode=C00000FDh=EXCEPTION_STACK_OVERFLOW first_chance
-
-Code 1st window:
-000000000094A562	    894C2444		mov [rsp+44],ecx ; [0000000000343C54]=00000000
-
-GPR window:
-rax	       0000000000000000
-rbx	       0000000000365120
-rcx	       0000000000000087
-rdx	       0000000000000088
-rsp	       0000000000343C10
-rbp	       00000000001A0070
-rsi	       000000000094A550
-rdi	       00000000FFFFFE23
- r8	       00000000FFFFFFFD
- r9	       0000000000001000
-r10	       0000000000001000
-r11	       0000000000000000
-r12	       00000000FFFFFEA3
-r13	       00000000FFFFFFFF
-r14	       0000000000001C00
-r15	       0000000000000C00
-
-
-cd C:\Users\pc\Dropbox\asm\masterFish\
+cd C:\Users\pc\Dropbox\asm\cppFish\
 make build ARCH=x86-64-modern COMP=mingw
 
-stockfish >"C:\Users\pc\Dropbox\asm\masterFish\dif1.txt"
+stockfish >"C:\Users\pc\Dropbox\asm\cppFish\dif1.txt"
 setoption name SyzygyPath value C:\syzygy
 position fen r1bq1r1k/b1p1npp1/p2p3p/1p6/3PP3/1B2NN2/PP3PPP/R2Q1RK1 w - - 1 16
-go depth 11
+go depth 14
 
 quit
-"C:\Users\pc\Dropbox\asm\asmFish\asmFishW_popcnt.exe" >"C:\Users\pc\Dropbox\asm\masterFish\dif2.txt"
+"C:\Users\pc\Dropbox\asm\asmFish\asmFishW_popcnt.exe" >"C:\Users\pc\Dropbox\asm\cppFish\dif2.txt"
 setoption name SyzygyPath value C:\syzygy
 position fen r1bq1r1k/b1p1npp1/p2p3p/1p6/3PP3/1B2NN2/PP3PPP/R2Q1RK1 w - - 1 16
-go depth 11
+go depth 14
 
 quit
-FC /l /n /lb2 "C:\Users\pc\Dropbox\asm\masterFish\dif1.txt" "C:\Users\pc\Dropbox\asm\masterFish\dif2.txt"
-
-
-
-
+FC /l /n /lb2 "C:\Users\pc\Dropbox\asm\cppFish\dif1.txt" "C:\Users\pc\Dropbox\asm\cppFish\dif2.txt"
 
 
 position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
@@ -119,8 +77,6 @@ position fen 1r6/8/8/2K5/1pR5/8/8/1k6 b - - 88 179
 position fen 8/1p2rk2/5p2/1PK5/4Q3/8/8/8 w - - 13 76
 position fen 1R6/1R6/5n2/8/8/kp1r2PP/8/6K1 w - - 0 62
 position fen 8/8/4k3/6R1/1p6/2r5/3K2p1/8 w - - 0 72
-
-
 
 
 

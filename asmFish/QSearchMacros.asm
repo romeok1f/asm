@@ -553,7 +553,7 @@ lock inc qword[profile.moveUnpack]
 		jae   .FailHighValueToTT
 .FailHighValueToTTRet:
 		mov   eax, dword[.move]
-     HashTable_Save   .ltte, r8, r9w, edx, BOUND_LOWER, byte[.ttDepth], eax, word[rbx+State.staticEval]
+      MainHash_Save   .ltte, r8, r9w, edx, BOUND_LOWER, byte[.ttDepth], eax, word[rbx+State.staticEval]
 		mov   eax, edi
 		jmp   .ReturnD
 
@@ -595,12 +595,12 @@ lock inc qword[profile.moveUnpack]
 
 	if .PvNode eq 0
 		mov   eax, dword[.bestMove]
-     HashTable_Save   .ltte, r8, r9w, edx, BOUND_UPPER, byte[.ttDepth], eax, word[rbx+State.staticEval]
+      MainHash_Save   .ltte, r8, r9w, edx, BOUND_UPPER, byte[.ttDepth], eax, word[rbx+State.staticEval]
 	else
 		mov   eax, dword[.bestMove]
 		and   esi, BOUND_EXACT-BOUND_UPPER
 		add   esi, BOUND_UPPER
-     HashTable_Save   .ltte, r8, r9w, edx, sil, byte[.ttDepth], eax, word[rbx+State.staticEval]
+      MainHash_Save   .ltte, r8, r9w, edx, sil, byte[.ttDepth], eax, word[rbx+State.staticEval]
 	end if
 		mov   eax, edi
 
@@ -774,7 +774,7 @@ pop r15 r14 r13 rax
 		cmp   eax, 2*VALUE_MATE_IN_MAX_PLY
 		jae   .ReturnStaticValue_ValueToTT
  .ReturnStaticValue_ValueToTTRet:
-     HashTable_Save   .ltte, r8, r9w, edx, BOUND_LOWER, DEPTH_NONE, 0, word[rbx+State.staticEval]
+      MainHash_Save   .ltte, r8, r9w, edx, BOUND_LOWER, DEPTH_NONE, 0, word[rbx+State.staticEval]
 		mov   eax, dword[.bestValue]
 		jmp   .ReturnC
 

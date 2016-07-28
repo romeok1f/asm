@@ -6,6 +6,8 @@ Move_GivesCheck:
 	; out: eax =  0 if does not give check
 	;      eax = -1 if does give check
 
+ProfileInc Move_GivesCheck
+
 	       push   rsi rdi
 		mov   esi, dword[rbp+Pos.sideToMove]
 
