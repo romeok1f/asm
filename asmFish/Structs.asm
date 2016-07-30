@@ -362,11 +362,11 @@ struct SplitPoint
   slavesMask rq 4       ; MAX_THREADS bits
   nodes rq 1
   alpha rd 1
-  volatile Value bestValue;
-  volatile Move bestMove;
-  volatile int moveCount;
-  volatile bool allSlavesSearching;
-  volatile bool cutoff;
+  bestValue rd 1
+  bestMove rd 1
+  moveCount rd 1
+  allSlavesSearching rd 1
+  cutoff rd 1
 ends
 
 
