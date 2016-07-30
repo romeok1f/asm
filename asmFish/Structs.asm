@@ -259,8 +259,6 @@ struct Time
 ends
 
 
-
-
 ;;;;;;;;;;;;;;;;;;;;
 ; thread structures
 ;;;;;;;;;;;;;;;;;;;;
@@ -346,6 +344,31 @@ match =1, DEBUG {
 
  rootPos	 Pos
 ends
+
+
+struct SplitPoint
+  pos rq 1
+  state rq 1
+  masterThread rq 1
+  depth rq 1
+  beta rd 1
+  nodeType rd 1
+  cutNode rd 1
+
+  movePicker rq 1
+  parentSplitPoint rq 1
+
+  mutex Mutex
+  slavesMask rq 4       ; MAX_THREADS bits
+  nodes rq 1
+  alpha rd 1
+  volatile Value bestValue;
+  volatile Move bestMove;
+  volatile int moveCount;
+  volatile bool allSlavesSearching;
+  volatile bool cutoff;
+ends
+
 
 
 
