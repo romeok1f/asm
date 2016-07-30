@@ -285,11 +285,11 @@ ProfileInc moveUnpack
 
 	; write remaining data to next state entry
 
-		pop   r9 r8 r10 rdx rcx
+		pop   r9 r8 r10 rax rcx
 	; r9 = to + from
 	; r8 = from
 	; r10 = from piece
-	; rdx = is check
+	; rax = is check
 	; ecx = move
 
 		xor   esi, 1
@@ -305,20 +305,6 @@ ProfileInc moveUnpack
 		mov   qword[rbx+State.materialKey], r13
 	      vmovq   qword[rbx+State.psq], xmm0
 
-	       test   rdx, rdx
-		jnz   .MoveIsCheck
-		mov   qword[rbx+State.checkersBB], rdx
-
-.Done:
-
-
-match =1, DEBUG {
-mov qword[rbp+Pos.state], rbx
-call Position_IsLegal
-test eax, eax
-jnz Move_Do_post_posill
-}
-
 match =2, VERBOSE {
 movsx eax, word[rbx+State.rule50]
 SD_Int rax
@@ -328,8 +314,32 @@ SD_Int rax
 SD_String '|'
 }
 
-		pop   r15 r14 r13 r12 rdi rsi
-		ret
+                mov   esi, dword[rbp+Pos.sideToMove]
+                mov   r15, qword[rbp+Pos.typeBB+8*rsi]
+                xor   esi, 1
+                mov   r14, qword[rbp+Pos.typeBB+8*rsi]
+                shl   esi, 6+3
+                mov   r13, r15		; r13 = our pieces
+                mov   r12, r14		; r12 = their pieces
+                mov   rdi, r15
+                 or   rdi, r14		; rdi = all pieces
+                and   r15, qword[rbp+Pos.typeBB+8*King]
+                and   r14, qword[rbp+Pos.typeBB+8*King]
+                bsf   r15, r15		; r15 = our king
+                bsf   r14, r14		; r14 = their king
+
+	       test   rax, rax
+		jnz   .MoveIsCheck
+.CheckersDone:
+		mov   qword[rbx+State.checkersBB], rax
+
+match =1, DEBUG {
+mov qword[rbp+Pos.state], rbx
+call Position_IsLegal
+test eax, eax
+jnz Move_Do_post_posill
+}
+                jmp   SetCheckInfo.go
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -374,24 +384,58 @@ je Move_Do_capking
 
 	      align   8
 .MoveIsCheck:
-		mov   rax, qword[rbx+State.dcCandidates-sizeof.State]
-		mov   r10, qword[rbx+State.checkSq-sizeof.State+8*r10]
+		mov   rdx, qword[rbx+State.dcCandidates-sizeof.State]
+		mov   rax, qword[rbx+State.checkSq-sizeof.State+8*r10]
 		cmp   ecx, 1 shl 12
 		jae   .DoFull
-		and   r10, r9
-	       test   rax, r8
+		and   rax, r9
+	       test   rdx, r8
 		jnz   .DoFull
-		mov   qword[rbx+State.checkersBB], r10
-		jmp   .Done
+		mov   qword[rbx+State.checkersBB], rax
+match =1, DEBUG {
+mov qword[rbp+Pos.state], rbx
+call Position_IsLegal
+test eax, eax
+jnz Move_Do_post_posill
+}
+                jmp   SetCheckInfo.go
+
 .DoFull:
 		mov   ecx, esi
-		mov   rdx, qword[rbp+Pos.typeBB+8*King]
-		and   rdx, qword[rbp+Pos.typeBB+8*rsi]
-		bsf   rdx, rdx
-	       call   AttackersTo_Side
-		mov   qword[rbx+State.checkersBB], rax
-		jmp   .Done
+                xor   ecx, 1 shl (6+3)
 
+                mov   rax, qword[KingAttacks+8*r15]
+                and   rax, qword[rbp+Pos.typeBB+8*King]
+
+                mov   r8, qword[KnightAttacks+8*r15]
+                and   r8, qword[rbp+Pos.typeBB+8*Knight]
+                 or   rax, r8
+
+                mov   r8, qword[WhitePawnAttacks+rcx+8*r15]
+                and   r8, qword[rbp+Pos.typeBB+8*Pawn]
+                 or   rax, r8
+
+        RookAttacks   r8, r15, rdi, r9
+                mov   r9, qword[rbp+Pos.typeBB+8*Rook]
+                 or   r9, qword[rbp+Pos.typeBB+8*Queen]
+                and   r8, r9
+                 or   rax, r8
+
+      BishopAttacks   r8, r15, rdi, r9
+                mov   r9, qword[rbp+Pos.typeBB+8*Bishop]
+                 or   r9, qword[rbp+Pos.typeBB+8*Queen]
+                and   r8, r9
+                 or   rax, r8
+
+                and   rax, r12
+		mov   qword[rbx+State.checkersBB], rax
+match =1, DEBUG {
+mov qword[rbp+Pos.state], rbx
+call Position_IsLegal
+test eax, eax
+jnz Move_Do_post_posill
+}
+                jmp   SetCheckInfo.go
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

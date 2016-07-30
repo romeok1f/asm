@@ -310,7 +310,7 @@ pop r15 r14 r13 r9 r8 rdx rcx
 
 
 
-	       call   SetCheckInfo
+;	       call   SetCheckInfo
 
 	; initialize move picker
 	;   Pick.endQuiets, Pick.endBadCaptures are not used in q search

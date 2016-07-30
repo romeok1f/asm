@@ -59,6 +59,7 @@ jnz	Move_DoNull_post_posill
 pop	rcx
 }
 
+call SetCheckInfo
 		ret
 
 	      align   8

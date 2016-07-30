@@ -1,54 +1,52 @@
-	    align   16
+	    align   16, SetCheckInfo.go
 SetCheckInfo:
         ; in: rbp  address of Pos
 	;     rbx  address of State
 
                push   rsi rdi r12 r13 r14 r15
 
-                mov   ecx, dword[rbp+Pos.sideToMove]
-                mov   rax, qword[rbp+Pos.typeBB+8*Queen]
-                mov   rdx, qword[rbp+Pos.typeBB+8*King]
-                mov   r15, qword[rbp+Pos.typeBB+8*rcx]
-                xor   ecx, 1
-                mov   r14, qword[rbp+Pos.typeBB+8*rcx]
-                shl   ecx, 6+3
-                mov   r11, r15		; r11 = our pieces
-                mov   r10, r14		; r10 = their pieces
+                mov   esi, dword[rbp+Pos.sideToMove]
+                mov   r15, qword[rbp+Pos.typeBB+8*rsi]
+                xor   esi, 1
+                mov   r14, qword[rbp+Pos.typeBB+8*rsi]
+                shl   esi, 6+3
+                mov   r13, r15		; r13 = our pieces
+                mov   r12, r14		; r12 = their pieces
                 mov   rdi, r15
                  or   rdi, r14		; rdi = all pieces
-                and   r15, rdx
-                and   r14, rdx
+                and   r15, qword[rbp+Pos.typeBB+8*King]
+                and   r14, qword[rbp+Pos.typeBB+8*King]
                 bsf   r15, r15		; r15 = our king
                 bsf   r14, r14		; r14 = their king
-
-                mov   r13, qword[rbp+Pos.typeBB+8*Rook]
-                mov   r12, qword[rbp+Pos.typeBB+8*Bishop]
-                 or   r13, rax
-                 or   r12, rax
+.go:
+                mov   r11, qword[rbp+Pos.typeBB+8*Rook]
+                mov   r10, qword[rbp+Pos.typeBB+8*Bishop]
+                 or   r11, qword[rbp+Pos.typeBB+8*Queen]
+                 or   r10, qword[rbp+Pos.typeBB+8*Queen]
                 mov   byte[rbx+State.ksq], r14l
 
-                mov   rax, qword[WhitePawnAttacks+rcx+8*r14]
+                mov   rax, qword[WhitePawnAttacks+rsi+8*r14]
                 mov   rdx, qword[KnightAttacks+8*r14]
                 mov   qword[rbx+State.checkSq+8*Pawn], rax
                 mov   qword[rbx+State.checkSq+8*Knight], rdx
 
                 mov   rax, qword[RookAttacksPDEP+8*r15]
-                and   rax, r13
+                and   rax, r11
                 mov   rcx, qword[BishopAttacksPDEP+8*r15]
-                and   rcx, r12
+                and   rcx, r10
                  or   rax, rcx
                 xor   esi, esi
-                and   rax, r10
+                and   rax, r12
                 jnz   .Pinned
                 mov   qword[rbx+State.pinned], rax
 .PinnedRet:
                 mov   rax, qword[RookAttacksPDEP+8*r14]
-                and   rax, r13
+                and   rax, r11
                 mov   rcx, qword[BishopAttacksPDEP+8*r14]
-                and   rcx, r12
+                and   rcx, r10
                  or   rax, rcx
                 xor   esi, esi
-                and   rax, r11
+                and   rax, r13
                 jnz   .dcCandidates
                 mov   qword[rbx+State.dcCandidates], rax
 .dcCandidatesRet:
@@ -81,7 +79,7 @@ SetCheckInfo:
                  or   rsi, rcx
                 bsf   rcx, rax
                 jnz   @b
-                and   rsi, r11
+                and   rsi, r13
                 mov   qword[rbx+State.pinned], rsi
                 jmp   .PinnedRet
 
@@ -101,7 +99,7 @@ SetCheckInfo:
                  or   rsi, rcx
                 bsf   rcx, rax
                 jnz   @b
-                and   rsi, r11
+                and   rsi, r13
                 mov   qword[rbx+State.dcCandidates], rsi
                 jmp   .dcCandidatesRet
 

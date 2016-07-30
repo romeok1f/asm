@@ -539,7 +539,7 @@ match =1, DEBUG \{
 	     Assert   ne, dword[rbx-1*sizeof.State+State.currentMove], MOVE_NULL, 'assertion dword[rbx-1*sizeof.State+State.currentMove] != MOVE_NULL failed in Search.Step9'
 
 
-	       call   SetCheckInfo
+;	       call   SetCheckInfo
 
 	; initialize movepick
 	     Assert   e, qword[rbx+State.checkersBB], 0, 'assertion qword[rbx+State.checkersBB] == 0 failed in Search.Step9'
@@ -707,7 +707,7 @@ lock inc qword[profile.moveUnpack]
 		mov   qword[.fmh], rcx
 		mov   qword[.fmh2], rdx
 
-	       call   SetCheckInfo
+;	       call   SetCheckInfo
 
 		lea   rsi, [.movepick]
 		mov   ecx, dword[.ttMove]

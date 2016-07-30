@@ -449,7 +449,6 @@ include 'Evaluate.asm'
 include 'MainHash_Probe.asm'
 
 include 'Move_IsPseudoLegal.asm'
-include 'SetCheckInfo.asm'
 include 'Move_GivesCheck.asm'
 
 
@@ -462,6 +461,7 @@ include 'Gen_Evasions.asm'
 include 'MovePick.asm'
 
 include 'Move_IsLegal.asm'
+include 'SetCheckInfo.asm'
 include 'Move_Do.asm'
 include 'Move_Undo.asm'
 include 'AttackersTo.asm'
