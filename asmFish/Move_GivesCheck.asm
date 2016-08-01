@@ -8,40 +8,37 @@ Move_GivesCheck:
 
 ProfileInc Move_GivesCheck
 
-	       push   rsi rdi
-		mov   esi, dword[rbp+Pos.sideToMove]
-
 		mov   r8d, ecx
 		shr   r8d, 6
 		and   r8d, 63	; r8d = from
 		mov   r9d, ecx
 		and   r9d, 63	; r9d = to
-
-	      movzx   r10d, byte[rbp+Pos.board+r8]     ; r10 = FROM PIECE
-	      movzx   edi, byte[rbx+State.ksq]
 		mov   r11, qword[rbx+State.dcCandidates]
+	      movzx   r10d, byte[rbp+Pos.board+r8]     ; r10 = FROM PIECE
+		and   r10d, 7
 
 		 or   eax, -1
 
-		and   r10d, 7
-
 		mov   rdx, qword[rbx+State.checkSq+8*r10]
 		 bt   rdx, r9
-		 jc   .Ret	; 8.95%
+		 jc   .Ret
 
 		 bt   r11, r8
-		 jc   .DiscoveredCheck	; 0.18%
-.DiscoveredCheckRet:
-		shr   ecx, 12
+		 jc   .DiscoveredCheck
+
 		xor   eax, eax
-		cmp   ecx, MOVE_TYPE_PROM
-		jae   .Special	; 0.82%
+		cmp   ecx, (MOVE_TYPE_PROM shl 12)
+		jae   .Special
 .Ret:
-		pop   rdi rsi
 		ret
 
 	      align   8
 .Special:
+	       push   rsi rdi
+.Special.AfterPrologue:
+		shr   ecx, 12	; ecx = move type
+		mov   esi, dword[rbp+Pos.sideToMove]
+	      movzx   edi, byte[rbx+State.ksq]
 		mov   rdx, qword[rbp+Pos.typeBB+8*White]
 		 or   rdx, qword[rbp+Pos.typeBB+8*Black]
 		btr   rdx, r8
@@ -136,11 +133,19 @@ ProfileInc Move_GivesCheck
 
 	      align   8
 .DiscoveredCheck:
+	       push   rsi rdi
+	      movzx   edi, byte[rbx+State.ksq]
 		mov   eax, ecx
 		and   eax, 64*64-1
 		mov   rax, qword[LineBB+8*rax]
 		 bt   rax, rdi
 		 jc  .DiscoveredCheckRet
 		 or   eax, -1
+		pop   rdi rsi
+		ret
+.DiscoveredCheckRet:
+		xor   eax, eax
+		cmp   ecx, (MOVE_TYPE_PROM shl 12)
+		jae   .Special.AfterPrologue
 		pop   rdi rsi
 		ret

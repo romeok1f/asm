@@ -20,19 +20,19 @@ match =1, PROFILE {
 
    .MainHash_Probe dq 0
    .MainHash_Save  dq 0
-   .Move_Do     dq 0
+   .Move_Do	dq 0
    .Move_DoNull dq 0
    .Move_GivesCheck    dq 0
    .Move_IsLegal       dq 0
    .Move_IsPseudoLegal dq 0
-   .QSearch_PV_TRUE     dq 0
-   .QSearch_PV_FALSE    dq 0
-   .QSearch_NONPV_TRUE  dq 0
+   .QSearch_PV_TRUE	dq 0
+   .QSearch_PV_FALSE	dq 0
+   .QSearch_NONPV_TRUE	dq 0
    .QSearch_NONPV_FALSE dq 0
    .Search_ROOT  dq 0
-   .Search_PV    dq 0
+   .Search_PV	 dq 0
    .Search_NONPV dq 0
-   .See         dq 0
+   .See 	dq 0
 
    .moveUnpack dq 0
    .moveStore  dq 0
@@ -449,6 +449,7 @@ include 'Evaluate.asm'
 include 'MainHash_Probe.asm'
 
 include 'Move_IsPseudoLegal.asm'
+include 'SetCheckInfo.asm'
 include 'Move_GivesCheck.asm'
 
 
@@ -461,10 +462,8 @@ include 'Gen_Evasions.asm'
 include 'MovePick.asm'
 
 include 'Move_IsLegal.asm'
-include 'SetCheckInfo.asm'
 include 'Move_Do.asm'
 include 'Move_Undo.asm'
-include 'AttackersTo.asm'
 
 	      align   16
 QSearch_NonPv_NoCheck:
@@ -498,11 +497,13 @@ Search_Root:
 	    search   _ROOT_NODE
 
 
+
 include 'Gen_NonEvasions.asm'
 include 'Gen_Legal.asm'
 include 'Perft.asm'
-include 'SetPinned.asm'
+;include 'SetPinned.asm'
 
+include 'AttackersTo.asm'
 
 include 'EasyMoveMng.asm'
 include 'Think.asm'

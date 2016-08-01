@@ -1266,6 +1266,15 @@ UciProfile:
 	       call   PrintUnsignedInteger
        PrintNewLine
 
+	     szcall   PrintString, 'SetCheckInfo:         '
+		mov   rax, qword[profile.SetCheckInfo]
+	       call   PrintUnsignedInteger
+       PrintNewLine
+
+	     szcall   PrintString, 'SetCheckInfo2:        '
+		mov   rax, qword[profile.SetCheckInfo2]
+	       call   PrintUnsignedInteger
+       PrintNewLine
 
 
 	       push   rdi

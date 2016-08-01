@@ -27,37 +27,7 @@ match =Black, Us
 
 	     Assert   e, rdi, qword[.ei.pi], 'assertion rdi = ei.pi failed in EvalInit'
 
-
-		mov   edx, dword[.ei.ksq+4*Us]
-
-		mov   rax, qword[RookAttacksPDEP+8*rdx]
-		and   rax, r13
-		mov   rcx, qword[BishopAttacksPDEP+8*rdx]
-		and   rcx, r12
-		 or   rax, rcx
-		xor   esi, esi
-		shl   edx, 6+3
-		lea   rdx, [BetweenBB+rdx]
-
-	      movzx   r11d, word[rbx+State.npMaterial+2*Us]
-		and   rax, qword[rbp+Pos.typeBB+8*Them]
-		 jz   ..NoPinned       ; 21.59%
-..YesPinned:
-		bsf   rcx, rax
-..PinnedLoop:
-		mov   rcx, qword[rdx+8*rcx]
-	       blsr   rax, rax, r9
-		and   rcx, r14
-	       blsr   r8, rcx, r9
-		neg   r8
-		sbb   r8, r8
-	       andn   rcx, r8, rcx
-		 or   rsi, rcx
-		bsf   rcx, rax
-		jnz   ..PinnedLoop
-		and   rsi, qword[rbp+Pos.typeBB+8*Us]
-..NoPinned:
-		mov   qword[.ei.pinnedPieces+8*Us], rsi
+	      movzx   ecx, word[rbx+State.npMaterial+2*Us]
 
 		mov   rdx, qword[.ei.attackedBy+8*(8*Them+King)]
 		 or   qword[.ei.attackedBy+8*(8*Them+0)], rdx
@@ -70,7 +40,7 @@ match =Black, Us
 
 		xor   r8, r8
 		xor   r9d, r9d
-		cmp   r11d, QueenValueMg
+		cmp   ecx, QueenValueMg
 		 jb   ..NotUsed 	; 10.49%
 		mov   r8, rdx
 	   shift_bb   Down, r8
@@ -100,6 +70,7 @@ macro EvalPieces Us, Pt {
 	;
 	; in: r13 all pieces
 	;     r12 pieces of type Pt ( qword[rbp+Pos.typeBB+8*Pt])
+	;     r15 should be zero  for dirty trick
 
 local ..NextPiece, ..NoPinned, ..NoKingRing, ..AllDone
 local ..OutpostElse, ..OutpostDone, ..NoBehindPawnBonus
@@ -1430,6 +1401,66 @@ ED_String 'psq score: '
 ED_Score qword[.ei.score]
 ED_NewLine
 
+
+
+		mov   r12, qword[rbp+Pos.typeBB+8*Queen]
+		mov   r13, qword[rbp+Pos.typeBB+8*Rook]
+		 or   r13, r12
+		mov   r14, qword[rbp+Pos.typeBB+8*White]
+		 or   r14, qword[rbp+Pos.typeBB+8*Black]
+		 or   r12, qword[rbp+Pos.typeBB+8*Bishop]
+		mov   esi, dword[rbp+Pos.sideToMove]
+		mov   rax, qword[rbp+Pos.typeBB+8*King]
+		and   rax, qword[rbp+Pos.typeBB+8*rsi]
+		bsf   rax, rax
+	      movzx   edx, byte[rbx+State.ksq]
+	; eax = our kings square
+	; edx = their king square
+		mov   dword[.ei.ksq+4*rsi], eax
+		mov   r8, qword[KingAttacks+8*rax]
+		lea   ecx, [8*rsi]
+		mov   qword[.ei.attackedBy+8*(rcx+King)], r8
+		mov   r10, qword[rbx+State.pinned]
+		mov   qword[.ei.pinnedPieces+8*rsi], r10
+		xor   esi, 1
+		mov   dword[.ei.ksq+4*rsi], edx
+		mov   r9, qword[KingAttacks+8*rdx]
+		lea   ecx, [8*rsi]
+		mov   qword[.ei.attackedBy+8*(rcx+King)], r9
+		mov   rax, qword[RookAttacksPDEP+8*rdx]
+		and   rax, r13
+		mov   rcx, qword[BishopAttacksPDEP+8*rdx]
+		and   rcx, r12
+		 or   rax, rcx
+		shl   edx, 6+3
+		lea   rdx, [BetweenBB+rdx]
+		mov   ecx, esi
+		xor   ecx, 1
+		xor   r10, r10
+		mov   qword[.ei.attackedBy+8*0], r10
+		mov   qword[.ei.attackedBy+8*8], r10
+		and   rax, qword[rbp+Pos.typeBB+8*rcx]
+		 jz   .NoPinned1       ; 21.59%
+.YesPinned1:
+		bsf   rcx, rax
+.PinnedLoop1:
+		mov   rcx, qword[rdx+8*rcx]
+	       blsr   rax, rax, r9
+		and   rcx, r14
+	       blsr   r8, rcx, r9
+		neg   r8
+		sbb   r8, r8
+	       andn   rcx, r8, rcx
+		 or   r10, rcx
+		bsf   rcx, rax
+		jnz   .PinnedLoop1
+		and   r10, qword[rbp+Pos.typeBB+8*rsi]
+.NoPinned1:
+		mov   qword[.ei.pinnedPieces+8*rsi], r10
+
+
+
+
 		mov   rsi, qword[rbx+State.materialKey]
 		and   esi, MATERIAL_HASH_ENTRY_COUNT-1
 	       imul   esi, sizeof.MaterialEntry
@@ -1438,20 +1469,6 @@ ED_NewLine
 	      movsx   eax, word[rsi+MaterialEntry.value]
 	      movzx   ecx, byte[rsi+MaterialEntry.evaluationFunction]
 		mov   qword[.ei.me], rsi
-
-		mov   r8, qword[rbp+Pos.typeBB+8*King]
-		and   r8, qword[rbp+Pos.typeBB+8*White]
-		bsf   r8, r8
-		mov   dword[.ei.ksq+4*White], r8d
-		mov   r8, qword[KingAttacks+8*r8]
-		mov   qword[.ei.attackedBy+8*(8*White+King)], r8
-
-		mov   r9, qword[rbp+Pos.typeBB+8*King]
-		and   r9, qword[rbp+Pos.typeBB+8*Black]
-		bsf   r9, r9
-		mov   dword[.ei.ksq+4*Black], r9d
-		mov   r9, qword[KingAttacks+8*r9]
-		mov   qword[.ei.attackedBy+8*(8*Black+King)], r9
 
 		cmp   rdx, qword[rbx+State.materialKey]
 		jne   DoMaterialEval	; 0.87%
@@ -1467,18 +1484,11 @@ ED_NewLine
 .DoPawnEvalReturn:
 		add   dword[.ei.score], eax
 
-		mov   r12, qword[rbp+Pos.typeBB+8*Bishop]
-		 or   r12, qword[rbp+Pos.typeBB+8*Queen]
-		mov   r13, qword[rbp+Pos.typeBB+8*Rook]
-		 or   r13, qword[rbp+Pos.typeBB+8*Queen]
-		mov   r14, qword[rbp+Pos.typeBB+8*White]
-		 or   r14, qword[rbp+Pos.typeBB+8*Black]
 
-		xor   eax, eax
-		mov   qword[.ei.attackedBy+8*0], rax
-		mov   qword[.ei.attackedBy+8*8], rax
 	   EvalInit   White
 	   EvalInit   Black
+
+
 		mov   r8, qword[rbp+Pos.typeBB+8*White]
 		mov   r9, qword[rbp+Pos.typeBB+8*Black]
 		mov   rcx, Rank2BB+Rank3BB
@@ -1507,6 +1517,7 @@ ED_NewLine
 		mov   qword[.ei.mobilityArea+8*White], rax
 		mov   qword[.ei.mobilityArea+8*Black], rdx
 
+
 		mov   esi, dword[.ei.score]
 		xor   r15, r15		; prepare for dirty trick
 		mov   r12, qword[rbp+Pos.typeBB+8*Knight]
@@ -1523,8 +1534,10 @@ ED_NewLine
 	 EvalPieces   Black, Queen
 		mov   dword[.ei.score], esi
 
+
 	   EvalKing   Black
 	   EvalKing   White
+
 
 		mov   rdi, qword[.ei.pi]
 		mov   esi, dword[.ei.score]
@@ -1536,6 +1549,7 @@ ED_NewLine
 		jnz   Evaluate_Cold2.EvalPassedPawns1
 .EvalPassedPawnsRet:
 
+
 		mov   r14, qword[rbp+Pos.typeBB+8*White]
 		mov   r15, qword[rbp+Pos.typeBB+8*Black]
 		mov   r12, qword[rbp+Pos.typeBB+8*Pawn]
@@ -1543,7 +1557,6 @@ ED_NewLine
 		 or   r13, r15
 		mov   r10, qword[.ei.attackedBy+8*(8*White+0)]
 		mov   r11, qword[.ei.attackedBy+8*(8*Black+0)]
-
 	EvalThreats   Black
 	EvalThreats   White
 
@@ -1567,6 +1580,7 @@ ED_NewLine
 	       imul   ecx, Unstoppable
 		add   esi, ecx
 .SkipUnstoppable:
+
 
 	      movzx   eax, word[rbx+State.npMaterial+2*0]
 	      movzx   ecx, word[rbx+State.npMaterial+2*1]

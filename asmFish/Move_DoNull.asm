@@ -1,5 +1,6 @@
 	      align   16
 Move_DoNull:
+	       push   rsi rdi r12 r13 r14 r15
 
 ProfileInc Move_DoNull
 
@@ -59,8 +60,7 @@ jnz	Move_DoNull_post_posill
 pop	rcx
 }
 
-call SetCheckInfo
-		ret
+		jmp   SetCheckInfo.AfterPrologue
 
 	      align   8
 .epsq:

@@ -308,9 +308,9 @@ pop r15 r14 r13 r9 r8 rdx rcx
     end if ; InCheck eq 1
 
 
+ProfileInc SetCheckInfo2
+;              call   SetCheckInfo
 
-
-;	       call   SetCheckInfo
 
 	; initialize move picker
 	;   Pick.endQuiets, Pick.endBadCaptures are not used in q search
@@ -377,6 +377,24 @@ SD_String '|'
 	; check for check and get address of search function
 		mov   ecx, eax
 	       call   Move_GivesCheck
+;                mov   r8d, ecx
+;                shr   r8d, 6
+;                and   r8d, 63   ; r8d = from
+;                mov   r9d, ecx
+;                and   r9d, 63   ; r9d = to
+;                mov   r11, qword[rbx+State.dcCandidates]
+;              movzx   r10d, byte[rbp+Pos.board+r8]     ; r10 = FROM PIECE
+;                and   r10d, 7
+;
+;                cmp   ecx, 1 shl 12
+;                jae   .gives_check
+;               test   r11, r11
+;                jnz   .gives_check
+;                mov   rax, qword[rbx+State.checkSq+8*r10]
+;                 bt   rax, r9
+;                sbb   eax, eax
+;.gives_check_ret:
+
 		mov   byte[.givesCheck], al
 	      movsx   r13d, al
 	if .PvNode eq 1
@@ -707,7 +725,9 @@ pop r15 r14 r13 rax
 		ret
 
 
-
+;.gives_check:
+;               call   Move_GivesCheck.have_data
+;                jmp   .gives_check_ret
 
 
     if InCheck eq 0

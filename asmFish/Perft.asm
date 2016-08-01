@@ -135,11 +135,10 @@ end virtual
 		cmp   ecx, 1
 		 ja   .DepthN
 .Depth1:
-	       call   SetPinned
 	       call   Gen_Legal
 		mov   rax, rdi
 		sub   rax, rsi
-		shr   rax, 3	      ; assume sizeof.ExtMove = 8
+		shr   eax, 3	      ; assume sizeof.ExtMove = 8
 		add   rsp, .localsize
 		pop   r15 r14 rsi
 		ret
@@ -147,7 +146,6 @@ end virtual
 
 	      align   8
 .DepthN:
-	       call   SetCheckInfo
 	       call   Gen_Legal
 		xor   eax, eax
 		mov   dword[rdi], eax

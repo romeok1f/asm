@@ -539,7 +539,8 @@ match =1, DEBUG \{
 	     Assert   ne, dword[rbx-1*sizeof.State+State.currentMove], MOVE_NULL, 'assertion dword[rbx-1*sizeof.State+State.currentMove] != MOVE_NULL failed in Search.Step9'
 
 
-;	       call   SetCheckInfo
+ProfileInc SetCheckInfo2
+;              call   SetCheckInfo
 
 	; initialize movepick
 	     Assert   e, qword[rbx+State.checkersBB], 0, 'assertion qword[rbx+State.checkersBB] == 0 failed in Search.Step9'
@@ -707,7 +708,8 @@ lock inc qword[profile.moveUnpack]
 		mov   qword[.fmh], rcx
 		mov   qword[.fmh2], rdx
 
-;	       call   SetCheckInfo
+ProfileInc SetCheckInfo2
+;              call   SetCheckInfo
 
 		lea   rsi, [.movepick]
 		mov   ecx, dword[.ttMove]
@@ -848,7 +850,30 @@ lock inc qword[profile.moveUnpack]
 		 or   al, byte[CaptureOrPromotion_or+rcx]
 		and   al, byte[CaptureOrPromotion_and+rcx]
 		mov   byte[.captureOrPromotion], al
+
+;      givesCheck =  type_of(move) == NORMAL && !ci.dcCandidates
+;                  ? ci.checkSq[type_of(pos.piece_on(from_sq(move)))] & to_sq(move)
+;                  : pos.gives_check(move, ci);
+
+
 		mov   ecx, dword[.move]
+;                mov   r8d, ecx
+;                shr   r8d, 6
+;                and   r8d, 63   ; r8d = from
+;                mov   r9d, ecx
+;                and   r9d, 63   ; r9d = to
+;                mov   r11, qword[rbx+State.dcCandidates]
+;              movzx   r10d, byte[rbp+Pos.board+r8]     ; r10 = FROM PIECE
+;                and   r10d, 7
+;
+;                cmp   ecx, 1 shl 12
+;                jae   .gives_check
+;               test   r11, r11
+;                jnz   .gives_check
+;                mov   rax, qword[rbx+State.checkSq+8*r10]
+;                 bt   rax, r9
+;                sbb   eax, eax
+;.gives_check_ret:
 	       call   Move_GivesCheck
 		mov   byte[.givesCheck], al
 
@@ -1605,6 +1630,10 @@ pop r15 r14 r13 r9 r8 rdx rcx rax rdi rsi
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
 
+
+;.gives_check:
+;               call   Move_GivesCheck.have_data
+;                jmp   .gives_check_ret
 
 .IllegalMove:
 		mov   eax, dword[.moveCount]
