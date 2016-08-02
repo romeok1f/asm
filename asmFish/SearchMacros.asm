@@ -411,7 +411,7 @@ match =1, DEBUG \{
 	      movzx   ecx, word[rbx+State.npMaterial+2*rcx]
 		cmp   edx, 7*ONE_PLY
 		jge   .7skip
-	       imul   edx, 200
+	       imul   edx, 150
 		mov   eax, dword[.eval]
 		cmp   eax, VALUE_KNOWN_WIN
 		jge   .7skip
