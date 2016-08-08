@@ -45,7 +45,7 @@ ThreadPool_Destroy:
 		add   rbx, rdi
 .NextNumaNode:
 		mov   rcx, qword[rdi+NumaNode.cmhTable]
-		mov   edx, 4*16*64*16*64
+		mov   edx, sizeof.CounterMoveHistoryStats
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[rdi+NumaNode.cmhTable], rax
@@ -67,7 +67,9 @@ ThreadPool_ReadOptions:
 .CheckDelete:
 		cmp   edi, esi
 		 ja   .Delete
+if VERBOSE eq 0
 	       call   ThreadPool_DisplayThreadDistribution
+end if
 		pop   rdi rsi rbx
 		ret
 .Create:

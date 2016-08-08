@@ -17,15 +17,18 @@ end virtual
 		mov   esi, ecx
 		mov   dword[.ply], edx
 
-		mov   rax, qword[limits+Limits.startTime]
+		mov   rax, qword[limits.startTime]
 		mov   qword[time.startTime], rax
 
-		mov   eax, dword[limits+Limits.time+4*rsi]
+		mov   eax, dword[limits.time+4*rsi]
 		mov   ecx, dword[options.minThinkTime]
 		cmp   eax, ecx
 	      cmovb   eax, ecx
 		mov   r12d, eax
 		mov   r13d, eax
+	; r12d = optimumTime]
+	; r13d = time.maximumTime
+
 
 		mov   eax, dword[limits.movestogo]
 		mov   ecx, MOVE_HORIZON
@@ -34,6 +37,7 @@ end virtual
 		cmp   eax, ecx
 	      cmova   eax, ecx
 		mov   r14d, eax
+	; r14d = MaxMTG
 
 		xor   edi, edi
 .loop:

@@ -246,6 +246,9 @@ local ..WhileLoop, ..Done
 	       imul   eax, eax, 200
 		sub   edx, eax
 		mov   dword[start-sizeof.ExtMove+ExtMove.score], edx
+SD_String 'sc:'
+SD_Int rdx
+SD_String '|'
 		cmp   start, ender
 		 jb   ..WhileLoop
 ..Done:
@@ -253,9 +256,8 @@ local ..WhileLoop, ..Done
 
 
 
-macro ScoreQuiets start, ender {
+macro ScoreQuiets start, ender, t {
 local ..Loop, ..Done
-
 		mov   r8, qword[rbp+Pos.history]
 		mov   r9, qword[rbx-1*sizeof.State+State.counterMoves]
 		mov   r10, qword[rbx-2*sizeof.State+State.counterMoves]
@@ -268,6 +270,10 @@ local ..Loop, ..Done
 	      cmovz   r10, rax
 	       test   r11, r11
 	      cmovz   r11, rax
+		mov   t#d, dword[rbp+Pos.sideToMove]
+		shl   t#d, 12+2
+		add   t, qword[rbp+Pos.fromTo]
+
 
 match = 1, DEBUG \{
 		mov   rax, r9
@@ -300,7 +306,10 @@ match = 1, DEBUG \{
 		jae   ..Done
 ..Loop:
 		mov   ecx, dword[start+ExtMove.move]
+		mov   eax, ecx
 		mov   edx, ecx
+		and   eax, 64*64-1
+		mov   eax, dword[t+4*rax]
 		shr   edx, 6
 		lea   start, [start+sizeof.ExtMove]
 		and   ecx, 63
@@ -308,11 +317,14 @@ match = 1, DEBUG \{
 	      movzx   edx, byte[rbp+Pos.board+rdx]
 		shl   edx, 6
 		add   edx, ecx
-		mov   eax, dword[r8+4*rdx]
+		add   eax, dword[r8+4*rdx]
 		add   eax, dword[r9+4*rdx]
 		add   eax, dword[r10+4*rdx]
 		add   eax, dword[r11+4*rdx]
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
+SD_String 'sq:'
+SD_Int rax
+SD_String '|'
 		cmp   start, ender
 		 jb   ..Loop
 ..Done:
@@ -320,10 +332,13 @@ match = 1, DEBUG \{
 }
 
 
-macro ScoreEvasions start, ender {
+macro ScoreEvasions start, ender, t {
 local ..WhileLoop, ..Normal, ..Special, ..Done, ..Positive, ..Capture, ..Negative
 
 		mov   rdi, qword[rbp+Pos.history]
+		mov   t#d, dword[rbp+Pos.sideToMove]
+		shl   t#d, 12+2
+		add   t, qword[rbp+Pos.fromTo]
 		cmp   start, ender
 		jae   ..Done
 ..WhileLoop:
@@ -333,22 +348,28 @@ local ..WhileLoop, ..Normal, ..Special, ..Done, ..Positive, ..Capture, ..Negativ
 	       test   eax, eax
 		 js   ..Negative
 ..Positive:
+		mov   r10d, ecx 	; r10d = move
 		mov   r8d, ecx
 		shr   r8d, 6
-		mov   r10d, ecx
 		and   r8d, 63
 		and   ecx, 63
-	      movzx   r11d, byte [rbp+Pos.board+rcx]	 ; r11 = to piece
-	      movzx   edx, byte [rbp+Pos.board+r8]	 ; edx = from piece
+	      movzx   r11d, byte[rbp+Pos.board+rcx]	; r11 = to piece
+	      movzx   edx, byte[rbp+Pos.board+r8]	; edx = from piece
 		lea   rcx, [rdi+4*rcx]
 		cmp   r10d, MOVE_TYPE_CASTLE shl 12
 		jae   ..Special
 	       test   r11d, r11d
 		jnz   ..Capture
 ..Normal:
+		and   r10d, 64*64-1
 		shl   edx, 6+2
-		mov   eax, dword[rdx+rcx]
+		mov   eax, dword[t+4*r10]
+		add   eax, dword[rdx+rcx]
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
+SD_String 'se:'
+SD_Int rax
+SD_String '|'
+
 		cmp   start, ender
 		 jb   ..WhileLoop
 		jmp   ..Done
@@ -356,8 +377,11 @@ local ..WhileLoop, ..Normal, ..Special, ..Done, ..Positive, ..Capture, ..Negativ
 		mov   eax, dword[PieceValue_MG+4*r11]
 		and   edx, 7
 		sub   eax, edx
-		add   eax, HistoryStats_Max-1	; match piece types of master
+		add   eax, HistoryStats_Max+1	; match piece types of master
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
+SD_String 'se:'
+SD_Int rax
+SD_String '|'
 		cmp   start, ender
 		 jb   ..WhileLoop
 		jmp   ..Done
@@ -370,6 +394,9 @@ local ..WhileLoop, ..Normal, ..Special, ..Done, ..Positive, ..Capture, ..Negativ
 ..Negative:
 		sub   eax, HistoryStats_Max
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
+SD_String 'se:'
+SD_Int rax
+SD_String '|'
 		cmp   start, ender
 		 jb   ..WhileLoop
 ..Done:

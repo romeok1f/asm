@@ -708,7 +708,7 @@ end virtual
 		 jb   .TryNextNode
 
 	; at this point, N is a valid node number
-		mov   ecx, 4*16*64*16*64
+		mov   ecx, sizeof.CounterMoveHistoryStats
 	       call   _VirtualAlloc
 		xor   edx, edx
 		mov   dword[rbx+NumaNode.nodeNumber], r12d
@@ -873,7 +873,7 @@ GD_NewLine
 		add   dword[threadPool.coreCnt], eax
 		sub   ecx, 1
 		jns   .CoreCountLoop
-
+if VERBOSE eq 0
 		lea   rdi, [Output]
 		mov   rax, 'info str'
 	      stosq
@@ -883,12 +883,10 @@ GD_NewLine
 	      stosb
 		mov   eax, dword[rsi+NumaNode.nodeNumber]
 	       call   PrintUnsignedInteger
-
 		mov   rax, ': cores '
 	      stosq
 		mov   eax, dword[rsi+NumaNode.coreCnt]
 	       call   PrintUnsignedInteger
-
 		mov   rax, ' mask 0x'
 	      stosq
 		mov   r13d, 7
@@ -912,11 +910,9 @@ GD_NewLine
 	      stosb
 	@@:	sub   r13d, 1
 		jns   .PrintMaskLoop
-
        PrintNewLine
-
 	       call   _WriteOut_Output
-
+end if
 		add   rsi, sizeof.NumaNode
 		cmp   rsi, rbx
 		 jb   .PrintNextNode
@@ -939,7 +935,7 @@ GD_NewLine
 		lea   rdi, [threadPool.nodeTable]
 		mov   dword[rdi+NumaNode.nodeNumber], -1
 		mov   qword[rdi+NumaNode.coreCnt], 1
-		mov   ecx, 4*16*64*16*64
+		mov   ecx, sizeof.CounterMoveHistoryStats
 	       call   _VirtualAlloc
 		mov   qword[rdi+NumaNode.cmhTable], rax
 		xor   eax, eax

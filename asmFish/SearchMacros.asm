@@ -1155,25 +1155,32 @@ SD_String 'r='
 SD_Int rdi
 SD_String '|'
 
-		mov   ecx, dword[.moved_piece_to_sq]
+		mov   ecx, dword[.move]
+		and   ecx, 64*64-1
+		mov   edx, dword[.moved_piece_to_sq]
 		mov   r8, qword[rbp+Pos.history]
 		mov   r9, qword[.cmh]
 		mov   r10, qword[.fmh]
 		mov   r11, qword[.fmh2]
-		mov   eax, dword[r8+4*rcx]
+		mov   eax, dword[rbp+Pos.sideToMove]
+		xor   eax, 1
+		shl   eax, 12+2
+		add   rax, qword[rbp+Pos.fromTo]
+		mov   eax, dword[rax+4*rcx]
+		add   eax, dword[r8+4*rdx]
 
 SD_String 'v='
 SD_Int rax
 
 	       test   r9, r9
 		 jz   @f
-		add   eax, dword[r9+4*rcx]
+		add   eax, dword[r9+4*rdx]
 	@@:    test   r10, r10
 		 jz   @f
-		add   eax, dword[r10+4*rcx]
+		add   eax, dword[r10+4*rdx]
 	@@:    test   r11, r11
 		 jz   @f
-		add   eax, dword[r11+4*rcx]
+		add   eax, dword[r11+4*rdx]
 	@@:
 
 SD_String 'val='

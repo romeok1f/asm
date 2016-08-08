@@ -102,8 +102,6 @@ _EventDestroy:
 
 
 
-
-
 ;;;;;;;;
 ; file ;
 ;;;;;;;;
@@ -657,7 +655,7 @@ end virtual
 		lea   rdi, [threadPool.nodeTable]
 		add   rbx, rsi
 .NextNumaNode:
-		mov   ecx, 4*16*64*16*64
+		mov   ecx, sizeof.CounterMoveHistoryStats
 		mov   edx, dword[rsi+WinNumaNode.NodeNumber+8*0]
 	       call   _VirtualAllocNuma
 		mov   edx, dword[rsi+WinNumaNode.NodeNumber+8*0]
@@ -719,6 +717,7 @@ end virtual
 	       call   _VirtualFree
 
 
+if VERBOSE eq 0
 		lea   rsi, [threadPool.nodeTable]
 	       imul   ebx, dword[threadPool.nodeCnt], sizeof.NumaNode
 		add   rbx, rsi
@@ -751,6 +750,7 @@ end virtual
 		add   rsi, sizeof.NumaNode
 		cmp   rsi, rbx
 		 jb   .NextNumaNode2
+end if
 
 
 .Return:
@@ -765,13 +765,12 @@ end virtual
        PrintNewLine
 	       call   _WriteOut_Output
 
-
 		mov   dword[threadPool.nodeCnt], 1
 		mov   dword[threadPool.coreCnt], 1
 		lea   rdi, [threadPool.nodeTable]
 		mov   dword[rdi+NumaNode.nodeNumber], -1
 		mov   qword[rdi+NumaNode.coreCnt], 1
-		mov   ecx, 4*16*64*16*64
+		mov   ecx, sizeof.CounterMoveHistoryStats
 	       call   _VirtualAlloc
 		mov   qword[rdi+NumaNode.cmhTable], rax
 		xor   eax, eax

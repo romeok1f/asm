@@ -10,7 +10,7 @@ Search_Clear:
 		add   rsi, rax
 .NextNumaNode:
 		mov   rdi, qword[rbx+NumaNode.cmhTable]
-		mov   ecx, 4*16*64*16*64/4
+		mov   ecx, (sizeof.CounterMoveHistoryStats)/4
 		xor   eax, eax
 	  rep stosd
 		add   rbx, sizeof.NumaNode
@@ -18,24 +18,18 @@ Search_Clear:
 		 jb   .NextNumaNode
 
 
-		mov   edx, VALUE_INFINITE
 		xor   esi, esi
 .nexthread:
 		mov   rbx, qword[threadPool.threadTable+8*rsi]
 
-		mov   rdi, qword[rbx+Thread.rootPos+Pos.history]
-		mov   ecx, 4*16*64/4
-		xor   eax, eax
-	  rep stosd
-
-		mov   rdi, qword[rbx+Thread.rootPos+Pos.counterMoves]
-		mov   ecx, 4*16*64/4
+		mov   rdi, qword[rbx+Thread.rootPos+Pos.fromTo]
+		mov   ecx, (sizeof.FromToStats + sizeof.HistoryStats + sizeof.MoveStats)/4
 		xor   eax, eax
 	  rep stosd
 
 	; mainThread.previousScore is used in the time management part of idloop
 	;  +VALUE_INFINITE causes us to think alot on the first move
-		mov   dword[rbx+Thread.previousScore], edx
+		mov   dword[rbx+Thread.previousScore], VALUE_INFINITE
 
 		add   esi, 1
 		cmp   esi, dword[threadPool.size]

@@ -130,6 +130,9 @@ ProfileInc See
 .Return:
 		pop   rbx
 		pop   rdi rsi rcx r15 r14 r13 r12
+SD_String 'see:'
+SD_Int rax
+SD_String '|'
 		ret
 
 
@@ -220,6 +223,9 @@ ProfileInc See
 		xor   eax, eax
 		pop   rbx
 		pop   rdi rsi rcx r15 r14 r13 r12
+SD_String 'see:'
+SD_Int rax
+SD_String '|'
 		ret
 
 

@@ -113,6 +113,15 @@ SD_String '|'
 		add   rsi, qword[.moveoff]
 	apply_bonus   rsi, dword[.bonus32], dword[.absbonus], 324
 
+		mov   eax, dword[.move]
+		and   eax, 64*64-1
+		mov   esi, dword[rbp+Pos.sideToMove]
+		shl   esi, 12+2
+		add   rsi, qword[rbp+Pos.fromTo]
+		lea   rsi, [rsi+4*rax]
+	apply_bonus   rsi, dword[.bonus32], dword[.absbonus], 324
+
+
 		mov   rsi, qword[rbx-1*sizeof.State+State.counterMoves]
 	       test   rsi, rsi
 		 jz   @f
@@ -162,6 +171,15 @@ SD_String '|'
 		mov   rsi, qword[rbp+Pos.history]
 		add   rsi, qword[.moveoff]
 	apply_bonus   rsi, dword[.bonus32], dword[.absbonus], 324
+
+		mov   eax, dword[r15+4*rdi]
+		and   eax, 64*64-1
+		mov   esi, dword[rbp+Pos.sideToMove]
+		shl   esi, 12+2
+		add   rsi, qword[rbp+Pos.fromTo]
+		lea   rsi, [rsi+4*rax]
+	apply_bonus   rsi, dword[.bonus32], dword[.absbonus], 324
+
 
 		mov   rsi, qword[rbx-1*sizeof.State+State.counterMoves]
 	       test   rsi, rsi

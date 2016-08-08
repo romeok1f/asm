@@ -180,7 +180,7 @@ GenNext_Quiets:
 	       call   Gen_Quiets
 		mov   qword[rsi+Pick.endMoves], rdi
 		mov   r15, rdi
-	ScoreQuiets   r12, rdi
+	ScoreQuiets   r12, rdi, r13
 		mov   r12, r14
 		mov   r13, r15
 		mov   eax, dword[rsi+Pick.depth]
@@ -282,7 +282,7 @@ GenNext_AllEvasions:
 		cmp   rdi, r14
 		 je   MovePick_AllEvasions_Only1
 		mov   r12, r14
-      ScoreEvasions   r12, r15
+      ScoreEvasions   r12, r15, r13
 
 MovePick_AllEvasions:
 		cmp   r14, r15

@@ -93,13 +93,15 @@ Thread_Create:
 		lea   rcx, [rbx+Thread.rootPos+Pos.rootMovesVec]
 	       call   RootMovesVec_Create
 
-	; allocate history and counterMoves
-		mov   ecx, 4*16*64*2
+	; allocate stats
+		mov   ecx, sizeof.FromToStats + sizeof.HistoryStats + sizeof.MoveStats
 		mov   edx, r15d
 	       call   _VirtualAllocNuma
-		lea   rdx, [rax+4*16*64]
+		mov   qword[rbx+Thread.rootPos+Pos.fromTo], rax
+		add   rax, sizeof.FromToStats
 		mov   qword[rbx+Thread.rootPos+Pos.history], rax
-		mov   qword[rbx+Thread.rootPos+Pos.counterMoves], rdx
+		add   rax, sizeof.HistoryStats
+		mov   qword[rbx+Thread.rootPos+Pos.counterMoves], rax
 
 	; allocate pawn hash
 		mov   ecx, PAWN_HASH_ENTRY_COUNT*sizeof.PawnEntry
@@ -172,11 +174,12 @@ Thread_Delete:
 		xor   eax, eax
 		mov   qword[rbx+Thread.rootPos+Pos.pawnTable], rax
 
-	; free history and counterMoves
-		mov   rcx, qword[rbx+Thread.rootPos+Pos.history]
-		mov   edx, 4*16*64*2
+	; free stats
+		mov   rcx, qword[rbx+Thread.rootPos+Pos.fromTo]
+		mov   edx, sizeof.FromToStats + sizeof.HistoryStats + sizeof.MoveStats
 	       call   _VirtualFree
 		xor   eax, eax
+		mov   qword[rbx+Thread.rootPos+Pos.fromTo], rax
 		mov   qword[rbx+Thread.rootPos+Pos.history], rax
 		mov   qword[rbx+Thread.rootPos+Pos.counterMoves], rax
 

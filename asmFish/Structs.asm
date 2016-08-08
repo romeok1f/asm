@@ -2,7 +2,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;
-; hash table structures
+; hash and table structures
 ;;;;;;;;;;;;;;;;;;;;
 
 
@@ -47,6 +47,22 @@ struct PawnEntry	; 80 bytes
  pawnSpan	rb 2  ; [0,7] each
  asymmetry	rb 1  ; [0,8]
  castlingRights rb 1
+ends
+
+struct FromToStats
+ rd 2*64*64
+ends
+
+struct HistoryStats
+ rd 16*64
+ends
+
+struct MoveStats
+ rd 16*64
+ends
+
+struct CounterMoveHistoryStats
+ rd 16*64*16*64
 ends
 
 
@@ -142,7 +158,8 @@ match =1, DEBUG {
  stateTable	rq 1 ; the beginning of the vector of State structs
  stateEnd	rq 1 ; the end of
  counterMoveHistory  rq 1	 ; these structs hold addresses
- history	rq 1		 ; of tables used by the search
+ fromTo 	rq 1		 ; of tables used by the search
+ history	rq 1		 ;
  counterMoves	rq 1		 ;
  materialTable	rq 1		 ;
  pawnTable	rq 1		 ;
