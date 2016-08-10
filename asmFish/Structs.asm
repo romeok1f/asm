@@ -142,18 +142,21 @@ ends
 struct Pos
  typeBB      rq 8
  board	     rb 64
+match =1, PEDANTIC {		; absolute index means not relative to the type of piece in piece list
+ pieceIdx    rb 64		; pieceIdx[Square s] gives the absolute index of the piece on square s in pieceList
+ pieceEnd    rb 16		; pieceEnd[Piece p] gives the absolute index of the SQ_NONE terminator in pieceList for type p
+ pieceList   rb 16*16		; pieceList[Piece p][16] is a SQ_NONE-terminated array of squares for piece p
+}
  sideToMove  rd 1
 	     rd 1
  gamePly     rd 1
  chess960    rd 1
-
  _copy_size rb 0
 match =1, DEBUG {
  debugPointer	rq 1
  debugMove	rd 1
 		rd 1
 }
-
  state		rq 1 ; the current state struct
  stateTable	rq 1 ; the beginning of the vector of State structs
  stateEnd	rq 1 ; the end of
@@ -179,27 +182,27 @@ struct State
  materialKey	rq 1
  psq		rw 2
  npMaterial	rw 2
- rule50 	rw 1  ; these should be together
- pliesFromNull	rw 1  ;
- epSquare	rb 1
- castlingRights rb 1
- capturedPiece	rb 1
+ rule50 	 rw 1  ; these should be together
+ pliesFromNull	 rw 1  ;
+ epSquare	 rb 1
+ castlingRights  rb 1
+ capturedPiece	 rb 1
 ; CheckInfo struct
- ksq		rb 1
+ ksq		 rb 1
  checkersBB	rq 1   ; this is actually not part of checkinfo
  dcCandidates	rq 1
  pinned 	rq 1
- checkSq	rq 8
+ checkSq	 rq 8
 ; Stack struct
 _stack_start rb 0
  pv		rq 1
  counterMoves	rq 1
- currentMove	rd 1
- excludedMove	rd 1
- killers	rd 2
- moveCount	rd 1
- staticEval	rd 1
- ply		rd 1
+ currentMove	 rd 1
+ excludedMove	 rd 1
+ killers	 rd 2
+ moveCount	  rd 1
+ staticEval	  rd 1
+ ply		  rd 1
  skipEarlyPruning rb 1
 		  rb 3
 _stack_end rb 0

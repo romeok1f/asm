@@ -67,9 +67,62 @@ Position_SetState:
 		add   rsp, 64
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
+if PEDANTIC
+Position_SetPieceLists:
+	; in: rbp Position
+	; out: set index, pieceCount, pieceList members in some fixed order
+	       push   rbx rsi rdi
+
+	; fill indices with invalid index 0
+		lea   rdi, [rbp+Pos.pieceIdx]
+		xor   eax, eax
+		mov   ecx, 64
+	  rep stosb
+
+	; fill piece counts with indices indicating no pieces on the board
+irps c, White Black {
+		mov   byte[rbp+Pos.pieceEnd+(8*c+0)]	 , 0
+		mov   byte[rbp+Pos.pieceEnd+(8*c+1)]	 , 0
+		mov   byte[rbp+Pos.pieceEnd+(8*c+Pawn)]  , 16*(8*c+Pawn)
+		mov   byte[rbp+Pos.pieceEnd+(8*c+Knight)], 16*(8*c+Knight)
+		mov   byte[rbp+Pos.pieceEnd+(8*c+Bishop)], 16*(8*c+Bishop)
+		mov   byte[rbp+Pos.pieceEnd+(8*c+Rook)]  , 16*(8*c+Rook)
+		mov   byte[rbp+Pos.pieceEnd+(8*c+Queen)] , 16*(8*c+Queen)
+		mov   byte[rbp+Pos.pieceEnd+(8*c+King)]  , 16*(8*c+King)
+}
+
+	; fill piece lists with SQ_NONE
+		lea   rdi, [rbp+Pos.pieceList]
+		mov   eax, 64
+		mov   ecx, 16*16
+	  rep stosb
+
+	; the order is A8 to H8, then A7 to H7, ect
+		xor   esi, esi
+.NextSquare:
+		xor   esi, 56
+	      movzx   eax, byte[rbp+Pos.board+rsi]
+	       test   eax, eax
+		 jz   .skip
+	      movzx   ecx, byte[rbp+Pos.pieceEnd+rax]
+		mov   byte[rbp+Pos.pieceIdx+rsi], cl
+		mov   byte[rbp+Pos.pieceList+rcx], sil
+		add   ecx, 1
+		mov   byte[rbp+Pos.pieceEnd+rax], cl
+.skip:
+		xor   esi, 56
+		add   esi, 1
+		cmp   esi, 64
+		 jb   .NextSquare
+.Done:
+
+		pop   rdi rsi rbx
+		ret
+
+end if
 
 
-if DEBUG > 0
+if DEBUG
 Position_VerifyState:
 	; in:  rbp  address of Pos
 	; out: eax =  0 if incrementally updated information is correct
@@ -151,20 +204,84 @@ Position_VerifyState:
 		add   rsp, 64
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
+
+ if PEDANTIC
+Position_VerifyPieceLists:
+	; in:  rbp  address of Pos
+	; out: eax =  0 if piece lists match bitboards, which are assumed to be correct
+	;      eax = -1 if not
+	       push   rbx rsi rdi
+		 or   ebx, -1
+.NextType:
+		add   ebx, 1
+		cmp   ebx, 16
+		jae   .Done
+	; ebx is the piece
+		mov   esi, ebx
+		mov   edi, ebx
+		and   esi, 8
+		and   edi, 7
+		cmp   edi, Pawn
+		 jb   .NextType
+
+	; r15 is the bitboard we are trying to represent in the piece list
+		mov   r8, qword[rbp+Pos.typeBB+rsi]
+		and   r8, qword[rbp+Pos.typeBB+8*rdi]
+
+	; esi is the index of the piece in the piece list
+	       imul   esi, ebx, 16
+    .NextPiece:
+	; eax is the square of piece ebx
+	      movzx   eax, byte[rbp+Pos.pieceList+rsi]
+		cmp   eax, 64
+		 je   .NextPieceDone
+	; we shouldn't have more pieces in the list than on the board
+		 bt   r8, rax
+		jnc   .Failed
+	; of course the piece should be on square eax
+		cmp   bl, byte[rbp+Pos.board+rax]
+		jne   .Failed
+	; index should match
+		cmp   sil, byte[rbp+Pos.pieceIdx+rax]
+		jne   .Failed
+	; mark the piece as checked
+		btr   r8, rax
+		add   esi, 1
+		jmp   .NextPiece
+    .NextPieceDone:
+	; we shouldn't have more pieces on the board than in the list
+	       test   r8, r8
+		jnz   .Failed
+	; the index of the terminator should match pieceEnd
+		cmp   sil, byte[rbp+Pos.pieceEnd+rbx]
+		jne   .Failed
+		jmp   .NextType
+.Done:
+		 or   eax, -1
+		pop   rdi rsi rbx
+		ret
+
+.Failed:
+		xor   eax, eax
+		pop   rdi rsi rbx
+		ret
+
+ end if
+
 end if
 
 
 
 
 Position_IsLegal:
-	; in: rbp position (POS)
-	; out: eax =  0 if position is legal
+	; in: rbp position
+	; out: eax =  0 if position is legal more checks are performed with DEBUG
 	;      eax = -1 if position is illegal
 	;      rdx address of string
 
 	       push   rbx rdi
 
-	; pieces shoyld not intersect
+	; pieces should not intersect
 		mov   rax, qword[rbp+Pos.typeBB+8*White]
 		mov   rcx, qword[rbp+Pos.typeBB+8*Black]
 	       test   rax, rcx
@@ -265,7 +382,6 @@ irps p, Pawn Knight Bishop Rook Queen {
 		 or   r8, qword[rbp+Pos.typeBB+8*7]
 		 bt   r8, rdx
 		 jc   .Failed
-
 .next:
 		add   edx, 1
 		cmp   edx, 64
@@ -295,7 +411,7 @@ irps p, Pawn Knight Bishop Rook Queen {
 		lea   eax, [rax+rcx-8]
 		 bt   rdx, rax
 		jnc   .Failed
-	; and opposing pawn can capture eqsquare
+	; and opposing pawn can capture ep square
 	      movzx   eax, byte[rbp+Pos.sideToMove]
 		mov   rdx, qword[rbp+Pos.typeBB+8*rax]
 		and   rdx, qword[rbp+Pos.typeBB+8*Pawn]
@@ -317,11 +433,17 @@ irps p, Pawn Knight Bishop Rook Queen {
 	       test   rax, rax
 		jnz   .Failed
 
-if DEBUG > 0
+if DEBUG
 	; make sure the state matches
 	       call   Position_VerifyState
 	       test   eax, eax
 		jz   .Failed
+ if PEDANTIC
+	; make sure piece lists are ok
+	       call   Position_VerifyPieceLists
+	       test   eax, eax
+		 jz   .Failed
+ end if
 end if
 
 		xor   eax, eax
@@ -332,24 +454,12 @@ end if
 		pop   rdi rbx
 		ret
 
-; .szOK    db 'ok',10,0
-; .szErrorDisjoint      db 'not disjoint',10,0
-; .szErrorKings         db 'king count',10,0
-; .szErrorPawns         db 'pawns on 1st or 8th',10,0
-; .szErrorCastling      db 'castling',10,0
-; .szErrorBoardMatch    db 'bitboards do not match',10,0
-; .szErrorEpSquare      db 'ep square',10,0
-; .szErrorPieces        db 'pieces',10,0
-; .szErrorPieces2       db 'pieces2',10,0
-; .szErrorKingCapture   db 'king capture',10,0
-; .szErrorState         db 'state',10,0
-
 
 
 
 ;;;;;;;;;;;;;; fen ;;;;;;;;;;;;;;;;;;
 
-if VERBOSE> 0
+if VERBOSE>0
 Position_Print:  ; in: rbp address of Pos
 		 ; io: rdi string
 
@@ -366,7 +476,7 @@ end virtual
 		mov   rbx, [rbp+Pos.state]
 
 		xor   ecx, ecx
-	@@:	xor   ecx, 0111000b
+	@@:	xor   ecx, 56
 	      movzx   eax, byte[rbp+Pos.board+rcx]
 		mov   edx, '  ' + (10 shl 16)
 		mov   dl, byte[PieceToChar+rax]
@@ -374,7 +484,7 @@ end virtual
 		cmp   cl, byte[rbx+State.epSquare]
 	     cmovne   eax, edx
 	      stosd
-		xor   ecx, 0111000b
+		xor   ecx, 56
 		lea   eax, [rcx+1]
 		and   eax, 7
 		neg   eax
@@ -389,39 +499,117 @@ end virtual
        PrintNewLine
 
 	     szcall   PrintString, 'black:     '
-		mov   rcx, qword [rbp+Pos.typeBB+8*1]
+		mov   rcx, qword[rbp+Pos.typeBB+8*1]
 	       call   PrintBitboardCompact
        PrintNewLine
 
 	     szcall   PrintString, 'pawn:      '
-		mov   rcx, qword [rbp+Pos.typeBB+8*2]
+		mov   rcx, qword[rbp+Pos.typeBB+8*2]
 	       call   PrintBitboardCompact
        PrintNewLine
 
 	     szcall   PrintString, 'knight:    '
-		mov   rcx, qword [rbp+Pos.typeBB+8*3]
+		mov   rcx, qword[rbp+Pos.typeBB+8*3]
 	       call   PrintBitboardCompact
        PrintNewLine
 
 	     szcall   PrintString, 'bishop:    '
-		mov   rcx, qword [rbp+Pos.typeBB+8*4]
+		mov   rcx, qword[rbp+Pos.typeBB+8*4]
 	       call   PrintBitboardCompact
        PrintNewLine
 
 	     szcall   PrintString, 'rook:      '
-		mov   rcx, qword [rbp+Pos.typeBB+8*5]
+		mov   rcx, qword[rbp+Pos.typeBB+8*5]
 	       call   PrintBitboardCompact
        PrintNewLine
 
 	     szcall   PrintString, 'queen:     '
-		mov   rcx, qword [rbp+Pos.typeBB+8*6]
+		mov   rcx, qword[rbp+Pos.typeBB+8*6]
 	       call   PrintBitboardCompact
        PrintNewLine
 
 	     szcall   PrintString, 'king:      '
-		mov   rcx, qword [rbp+Pos.typeBB+8*7]
+		mov   rcx, qword[rbp+Pos.typeBB+8*7]
 	       call   PrintBitboardCompact
        PrintNewLine
+
+if PEDANTIC
+	     szcall   PrintString, 'pieceIdx:  '
+		xor   esi, esi
+	.1:    test   esi, 7
+		jnz  @f
+       PrintNewLine
+		mov   eax, '    '
+	      stosd
+	@@:	xor   esi, 56
+		lea   rax, [rdi+6]
+	       push   rax
+	      movzx   eax, byte[rbp+Pos.pieceIdx+rsi]
+		shr   eax, 4
+	       call   PrintUnsignedInteger
+		mov   al, '.'
+	       stosb
+	      movzx   eax, byte[rbp+Pos.pieceIdx+rsi]
+		and   eax, 15
+	       call   PrintUnsignedInteger
+		pop   rcx
+		sub   rcx, rdi
+		mov   al, ' '
+	  rep stosb
+		xor   esi, 56
+		add   esi, 1
+		cmp   esi, 64
+		 jb   .1
+       PrintNewLine
+
+	     szcall   PrintString, 'pieceEnd:  '
+		xor   esi, esi
+	.2:    test   esi, 7
+		jnz   @f
+       PrintNewLine
+		mov   eax, '    '
+	      stosd
+	   @@:	lea   rax, [rdi+6]
+	       push   rax
+	      movzx   eax, byte[rbp+Pos.pieceEnd+rsi]
+		shr   eax, 4
+	       call   PrintUnsignedInteger
+		mov   al, '.'
+	       stosb
+	      movzx   eax, byte[rbp+Pos.pieceEnd+rsi]
+		and   eax, 15
+	       call   PrintUnsignedInteger
+		pop   rcx
+		sub   rcx, rdi
+		mov   al, ' '
+	  rep stosb
+		add   esi, 1
+		cmp   esi, 16
+		 jb   .2
+       PrintNewLine
+
+	     szcall   PrintString, 'pieceList: '
+		xor   esi, esi
+	.3:    test   esi, 15
+		jnz   @f
+       PrintNewLine
+		mov   eax, '    '
+	      stosd
+	   @@:	lea   rax, [rdi+3]
+	       push   rax
+	      movzx   ecx, byte[rbp+Pos.pieceList+rsi]
+	       call   PrintSquare
+		pop   rcx
+		sub   rcx, rdi
+		mov   al, ' '
+	  rep stosb
+		add   esi, 1
+		cmp   esi, 16*16
+		 jb   .3
+       PrintNewLine
+
+end if
+
 
 	     szcall   PrintString, 'checkers:  '
 		mov   rcx, qword[rbx+State.checkersBB]
@@ -447,7 +635,7 @@ end virtual
 	      stosd
 
 	     szcall   PrintString, 'sideToMove:     '
-		mov   eax, dword [rbp+Pos.sideToMove]
+		mov   eax, dword[rbp+Pos.sideToMove]
 		sub   eax, 1
 		and   eax, 'w' - 'b'
 		add   eax, 'b'
@@ -794,7 +982,9 @@ Position_ParseFEN:
 		mov   dword[rbp+Pos.gamePly], eax
 
 	       call   Position_SetState
-
+if PEDANTIC
+	       call   Position_SetPieceLists
+end if
 	       call   Position_IsLegal
 	       test   eax,eax
 		jnz   .Failed
@@ -817,6 +1007,7 @@ Position_ParseFEN:
 		add   rax, r15
 		mov   qword[rbp+Pos.stateEnd], rax
 		jmp   .alloc_ret
+
 
 
 

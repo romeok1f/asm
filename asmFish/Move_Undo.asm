@@ -1,4 +1,4 @@
-		      align  16
+	      align  16
 Move_Undo:
 	; in: rbp  address of Pos
 	;     rbx  address of State
@@ -41,9 +41,7 @@ pop rdi rsi rcx rax
 		and   r9d, 63	; r9d = to
 		shr   ecx, 12
 
-match =1, PROFILE {
-lock inc qword[profile.moveUnpack]
-}
+ProfileInc moveUnpack
 
 	      movzx   r11d, byte[rbx+State.capturedPiece]      ; r11 = TO PIECE
 	      movzx   r10d, byte[rbp+Pos.board+r9]	       ; r10 = FROM PIECE
@@ -63,14 +61,20 @@ lock inc qword[profile.moveUnpack]
 		xor   qword[rbp+Pos.typeBB+8*rax], rdx
 		xor   qword[rbp+Pos.typeBB+8*rsi], rdx
 
-
 		cmp   ecx, MOVE_TYPE_PROM
 		jae   .Special
+
+if PEDANTIC
+	      movzx   eax, byte[rbp+Pos.pieceIdx+r9]
+		mov   byte[rbp+Pos.pieceList+rax], r8l
+		mov   byte[rbp+Pos.pieceIdx+r8], al
+		mov   eax, r11d 		; save a copy of captured piece
+end if
 		and   r11d, 7
 		jnz   .Captured
 
 match =1, DEBUG {
-		jmp   Move_Undo_Check
+jmp   Move_Undo_Check
 }
 		pop   rsi
 		ret
@@ -82,8 +86,16 @@ match =1, DEBUG {
 		btr   rdx, r8
 		 or   qword[rbp+Pos.typeBB+8*r11], rdx
 		 or   qword[rbp+Pos.typeBB+8*rsi], rdx
+if PEDANTIC
+	      movzx   ecx, byte[rbp+Pos.pieceEnd+rax]
+		mov   byte[rbp+Pos.pieceIdx+r9], cl
+		mov   byte[rbp+Pos.pieceList+rcx], r9l
+		add   ecx, 1
+		mov   byte[rbp+Pos.pieceEnd+rax], cl
+end if
+
 match =1, DEBUG {
-		jmp   Move_Undo_Check
+jmp   Move_Undo_Check
 }
 		pop   rsi
 		ret
@@ -94,6 +106,12 @@ match =1, DEBUG {
 		xor   edx, edx
 		cmp   ecx, MOVE_TYPE_CASTLE
 		 je   .Castle
+if PEDANTIC
+	      movzx   eax, byte[rbp+Pos.pieceIdx+r9]
+		mov   byte[rbp+Pos.pieceList+rax], r8l
+		mov   byte[rbp+Pos.pieceIdx+r8], al
+		mov   eax, r11d 		; save a copy of captured piece
+end if
 		jae   .EpCapture
 
 .Prom:
@@ -105,27 +123,63 @@ match =1, DEBUG {
 		xor   qword[rbp+Pos.typeBB+8*rcx], rdx
 		mov   byte[rbp+Pos.board+r8], al
 		mov   byte[rbp+Pos.board+r9], r11l
+
+if PEDANTIC
+	       push   rdi
+		lea   ecx, [8*rsi+rcx]
+	      movzx   edi, byte[rbp+Pos.pieceEnd+rcx]
+		sub   edi, 1
+	      movzx   edx, byte[rbp+Pos.pieceList+rdi]
+	      movzx   eax, byte[rbp+Pos.pieceIdx+r8]
+		mov   byte[rbp+Pos.pieceEnd+rcx], dil
+		mov   byte[rbp+Pos.pieceIdx+rdx], al
+		mov   byte[rbp+Pos.pieceList+rax], dl
+		mov   byte[rbp+Pos.pieceList+rdi], 64
+
+	      movzx   edx, byte[rbp+Pos.pieceEnd+8*rsi+Pawn]
+		mov   byte[rbp+Pos.pieceIdx+r8], dl
+		mov   byte[rbp+Pos.pieceList+rdx], r8l
+		add   edx, 1
+		mov   byte[rbp+Pos.pieceEnd+8*rsi+Pawn], dl
+		mov   eax, r11d
+		pop   rdi
+end if
+
+
 		xor   edx, edx
 		and   r11d, 7
 		jnz   .PromCapture
 match =1, DEBUG {
-		jmp   Move_Undo_Check
-}
-		pop   rsi
-		ret
-    .PromCapture:
-		xor   esi, 1
-		bts   rdx, r9
-		 or   qword[rbp+Pos.typeBB+8*r11], rdx
-		 or   qword[rbp+Pos.typeBB+8*rsi], rdx
-match =1, DEBUG {
-		jmp   Move_Undo_Check
+jmp   Move_Undo_Check
 }
 		pop   rsi
 		ret
 
-		      align   8
+.PromCapture:
+		xor   esi, 1
+		bts   rdx, r9
+		 or   qword[rbp+Pos.typeBB+8*r11], rdx
+		 or   qword[rbp+Pos.typeBB+8*rsi], rdx
+
+if PEDANTIC
+	      movzx   ecx, byte[rbp+Pos.pieceEnd+rax]
+		mov   byte[rbp+Pos.pieceIdx+r9], cl
+		mov   byte[rbp+Pos.pieceList+rcx], r9l
+		add   ecx, 1
+		mov   byte[rbp+Pos.pieceEnd+rax], cl
+end if
+
+match =1, DEBUG {
+jmp   Move_Undo_Check
+}
+		pop   rsi
+		ret
+
+
+	      align   8
 .EpCapture:
+	; place 8*rsi+Pawn on square rcx
+
 		lea   ecx, [2*rsi-1]
 		lea   ecx, [r9+8*rcx]
 		xor   esi, 1
@@ -134,11 +188,20 @@ match =1, DEBUG {
 		 or   qword[rbp+Pos.typeBB+8*rsi], rdx
 		mov   byte[rbp+Pos.board+r9], 0
 		mov   byte[rbp+Pos.board+rcx], r11l
+if PEDANTIC
+	      movzx   eax, byte[rbp+Pos.pieceEnd+r11]
+		mov   byte[rbp+Pos.pieceIdx+rcx], al
+		mov   byte[rbp+Pos.pieceList+rax], cl
+		add   eax, 1
+		mov   byte[rbp+Pos.pieceEnd+r11], al
+end if
+
 match =1, DEBUG {
-		jmp   Move_Undo_Check
+jmp   Move_Undo_Check
 }
 		pop   rsi
 		ret
+
 
 	      align   8
 .Castle:
@@ -153,7 +216,6 @@ match =1, DEBUG {
 		xor   qword[rbp+Pos.typeBB+8*rax], rdx
 		xor   qword[rbp+Pos.typeBB+8*rsi], rdx
 
-
 		lea   r10d, [8*rsi+King]
 		lea   r11d, [8*rsi+Rook]
 		mov   edx, r8d
@@ -167,6 +229,17 @@ match =1, DEBUG {
 		mov   byte[rbp+Pos.board+rdx], 0
 		mov   byte[rbp+Pos.board+r8], r10l
 		mov   byte[rbp+Pos.board+r9], r11l
+
+if PEDANTIC
+	       push   rdi
+	      movzx   eax, byte[rbp+Pos.pieceIdx+rcx]
+	      movzx   edi, byte[rbp+Pos.pieceIdx+rdx]
+		mov   byte[rbp+Pos.pieceList+rax], r8l
+		mov   byte[rbp+Pos.pieceList+rdi], r9l
+		mov   byte[rbp+Pos.pieceIdx+r8], al
+		mov   byte[rbp+Pos.pieceIdx+r9], dil
+		pop   rdi
+end if
 
 		mov   rax, qword[rbp+Pos.typeBB+8*rsi]
 		mov   r10, qword[rbp+Pos.typeBB+8*King]
@@ -184,7 +257,7 @@ match =1, DEBUG {
 		mov   qword[rbp+Pos.typeBB+8*Rook], r11
 
 match =1, DEBUG {
-		jmp   Move_Undo_Check
+jmp   Move_Undo_Check
 }
 		pop   rsi
 		ret

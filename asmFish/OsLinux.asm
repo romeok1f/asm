@@ -883,8 +883,9 @@ if VERBOSE eq 0
 	      stosb
 		mov   eax, dword[rsi+NumaNode.nodeNumber]
 	       call   PrintUnsignedInteger
-		mov   rax, ': cores '
+		mov   rax, ' cores '
 	      stosq
+		sub   rdi, 1
 		mov   eax, dword[rsi+NumaNode.coreCnt]
 	       call   PrintUnsignedInteger
 		mov   rax, ' mask 0x'

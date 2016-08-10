@@ -167,7 +167,7 @@ if CPU_VERSION eq 'base'
 end if
 		db 'option name MoveOverhead type spin default 30 min 0 max 5000',13,10
 		db 'option name MinThinkTime type spin default 20 min 0 max 5000',13,10
-		db 'option name SlowMover type spin default 80 min 10 max 1000',13,10
+		db 'option name SlowMover type spin default 89 min 10 max 1000',13,10
 		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',13,10
 		db 'option name Syzygy50MoveRule type check default true',13,10
 		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',13,10

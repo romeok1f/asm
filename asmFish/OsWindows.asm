@@ -453,7 +453,7 @@ _WriteOut:
 		sub   rsp, 8*9
 		mov   r8, rdi
 		sub   r8, rcx
-	     Assert   b, r8, 2000, 'excessive write size in _WriteOut'
+	     Assert   b, r8, 3000, 'excessive write size in _WriteOut'
 		mov   rdx, rcx
 		mov   qword[rsp+8*4], 0
 		mov   rcx, qword[hStdOut]
@@ -731,8 +731,9 @@ if VERBOSE eq 0
 	      stosb
 		mov   eax, dword[rsi+NumaNode.nodeNumber]
 	       call   PrintUnsignedInteger
-		mov   rax, ': cores '
+		mov   rax, ' cores '
 	      stosq
+		sub   rdi, 1
 		mov   eax, dword[rsi+NumaNode.coreCnt]
 	       call   PrintUnsignedInteger
 		mov   rax, ' group '
