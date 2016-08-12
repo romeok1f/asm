@@ -231,7 +231,7 @@ jmp   Move_Undo_Check
 		mov   byte[rbp+Pos.board+r9], r11l
 
 if PEDANTIC
-	       push   r12 r13 rdi
+	       push   rdi
 	  ;    movzx   eax, byte[rbp+Pos.pieceIdx+rcx]
 	  ;    movzx   edi, byte[rbp+Pos.pieceIdx+rdx]
 	  ;      mov   byte[rbp+Pos.pieceList+rax], r8l
@@ -251,18 +251,18 @@ if PEDANTIC
 	; now move rook to the back of the list
 	      movzx   eax, byte[rbp+Pos.pieceEnd+r11]
 		sub   eax, 1
-	      movzx   r12d, byte[rbp+Pos.pieceList+rax]
+	      movzx   r10d, byte[rbp+Pos.pieceList+rax]
 	       ;;xchg   byte[rbp+Pos.pieceList+rdi], byte[rbp+Pos.pieceList+rax]
 	      movzx   r9d, byte[rbp+Pos.pieceList+rdi]
-	      movzx   r13d, byte[rbp+Pos.pieceList+rax]
-		mov   byte[rbp+Pos.pieceList+rdi], r13l
+	      movzx   r11d, byte[rbp+Pos.pieceList+rax]
+		mov   byte[rbp+Pos.pieceList+rdi], r11l
 		mov   byte[rbp+Pos.pieceList+rax], r9l
 	       ;;xchg   byte[rbp+Pos.pieceIdx+rdx], byte[rbp+Pos.pieceIdx+r12]
 	      movzx   edi, byte[rbp+Pos.pieceIdx+r9]
-	      movzx   r13d, byte[rbp+Pos.pieceIdx+r12]
-		mov   byte[rbp+Pos.pieceIdx+r9], r13l
-		mov   byte[rbp+Pos.pieceIdx+r12], dil
-		pop   rdi r13 r12
+	      movzx   r11d, byte[rbp+Pos.pieceIdx+r10]
+		mov   byte[rbp+Pos.pieceIdx+r9], r11l
+		mov   byte[rbp+Pos.pieceIdx+r10], dil
+		pop   rdi
 end if
 
 		mov   rax, qword[rbp+Pos.typeBB+8*rsi]
