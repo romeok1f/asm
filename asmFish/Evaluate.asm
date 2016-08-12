@@ -1304,15 +1304,12 @@ match =Black, Us
 		 or   rax, rcx
 	     popcnt   rax, rax, rdx
 
-		mov   rdx, qword[rbp+Pos.typeBB+8*Knight]
-		 or   rdx, qword[rbp+Pos.typeBB+8*Bishop]
-	     popcnt   rdx, rdx, rcx
+	     popcnt   rdx, qword[rbp+Pos.typeBB+8*Us], rcx
 	       imul   edx, edx
-		add   edx, edx
 
 	       imul   eax, edx
 		xor   edx, edx
-		mov   ecx, 11
+		mov   ecx, 22
 	       idiv   ecx
 		shl   eax, 16
 
