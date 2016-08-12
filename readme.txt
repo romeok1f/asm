@@ -37,9 +37,23 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
    
 
 ******** updates ********
+2016-08-12: "Simplify space formula"
+  - removed colon from info strings
+  - added PEDANTIC compile option, which makes asmFish match official stockfish in deterministic searches
+    Here are some search speeds in Mnps. Note that the first entry is not comparable to the last two because
+    it is searching a different tree (or in the case of perft, the same tree in a different order). The last
+    entry is http://abrok.eu/stockfish/builds/8abb98455f6fa78092f650b8bae9c166f1b5a315/win64bmi2/stockfish_16081012_x64_bmi2.exe
+                                 perft 7        bench 128 1 17   bench 128 1 18
+    asmFish_bmi2                 306.3+-0.098   2.731+-0.002     2.722+-0.003
+    pedanticFish_bmi2            299.7+-0.095   2.727+-0.003     2.741+-0.003   <--- these two have
+    stockfish_16081012_x64_bmi2  239.5+-0.087   2.194+-0.001     2.205+-0.001   <--- matching signatures
+    
+2016-08-08: "Use Color-From-To history stats to help sort moves"
+  - the 07-25 version changed the default value of SlowMover from 80 to 89
+    which probably accounts for some of the larger-than-expect Elo gain on http://spcc.beepworld.de/
 
 2016-07-25: "Allow null pruning at depth 1"
-  - several structures have been modified to accomodate the linux port.
+  - several structures have been modified to accomodate the linux port
   - on start, asmfish now displays node information on numa systems
 
 2016-07-18: "Gradually relax the NMP staticEval check"
