@@ -231,7 +231,7 @@ jmp   Move_Undo_Check
 		mov   byte[rbp+Pos.board+r9], r11l
 
 if PEDANTIC
-	       push   rdi
+	       push   r12 r13 rdi
 	  ;    movzx   eax, byte[rbp+Pos.pieceIdx+rcx]
 	  ;    movzx   edi, byte[rbp+Pos.pieceIdx+rdx]
 	  ;      mov   byte[rbp+Pos.pieceList+rax], r8l
@@ -262,10 +262,7 @@ if PEDANTIC
 	      movzx   r13d, byte[rbp+Pos.pieceIdx+r12]
 		mov   byte[rbp+Pos.pieceIdx+r9], r13l
 		mov   byte[rbp+Pos.pieceIdx+r12], dil
-
-
-
-		pop   rdi
+		pop   rdi r13 r12
 end if
 
 		mov   rax, qword[rbp+Pos.typeBB+8*rsi]
