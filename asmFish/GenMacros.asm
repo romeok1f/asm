@@ -449,30 +449,33 @@ end if
 
 
 ; generate moves Knight, Bishop, Rook, and Queen
-; the Queen moves are generated together with Rook and Bishop moves
-; (except in QUIET_CHECKS)
 
 macro generate_moves  Us, Pt, Checks
 {
 local  .Outer,.OuterDone,.Inner,.InnerDone
 
+
+; this is the head of the loop
+; we can either read from the piece lists
+;  or pop bits from the bitboards
+
+if PEDANTIC
+		lea   r11, [rbp+Pos.pieceList+16*(8*Us+Pt)]
+	      movzx   edx, byte[r11]
+		cmp   edx, 64
+		jae   .OuterDone
+.Outer:
+
+else
 		mov   r11, qword[rbp+Pos.typeBB+8*Pt]
-
-;if Checks eq QUIET_CHECKS
-;else
-;  if Pt in <Rook, Bishop>
-;                         or   r11, qword [rbp+Pos.typeBB+8*Queen]
-;  else if Pt eq Queen
-;          display 'Queen in generate_moves'
-;          display 13,10
-;          err
-;  end if
-;end if
-
 		and   r11, qword[rbp+Pos.typeBB+8*Us]
 		 jz   .OuterDone
 .Outer:
 		bsf   rdx, r11
+end if
+
+
+
 
 if Checks eq QUIET_CHECKS
 		mov   r10, qword[rbx+State.checkSq+8*Pt]
@@ -511,7 +514,7 @@ else
 
 
  if  Pt eq Knight
-		mov   rsi, qword [KnightAttacks+8*rdx]
+		mov   rsi, qword[KnightAttacks+8*rdx]
  else if Pt eq Bishop
       BishopAttacks   rsi, rdx, r14, rax
  else if Pt eq Rook
@@ -540,10 +543,25 @@ end if
 	       blsr   rsi, rsi, rax
 		jnz   .Inner
   .InnerDone:
+
+
+; this is the exit of the loop
+; we can either read from the piece lists
+;  or pop bits from the bitboards
+
+if PEDANTIC
+		add   r11, 1
+	      movzx   edx, byte[r11]
+		cmp   edx, 64
+		 jb   .Outer
+ .OuterDone:
+
+else
 	       blsr   r11, r11, rax
 		jnz   .Outer
  .OuterDone:
 
+end if
 
 
 }
