@@ -1,6 +1,3 @@
-*************** WARNING: DO NOT READ WHAT FOLLOWS ********************
-***************  AS IT IS SECRET INFORMATION !!!  ********************
-
 ******** introduction ********
 Welcome to the project of converting stockfish into x86-64!
 The executables can be found in the Windows folder.
@@ -32,40 +29,15 @@ A: With this approach the critical functions would still need to conform to the 
    Note that compiler output was used in the case of Ronald de Man's syzygy probing code, as this
    is not speed critical but cumbersome to write by hand.
 
-Q: asmFish doesn't work in my gui, what should I do?
-A: I told you not to read the introduction.
-
 Q: Is asmFish the same as official stockfish?
-A: It is extremely similar but there are some inconsequential functional differences.
-
-Q: How are you sure that there are not tiny bugs in asmFish?
-A: How are you sure that your compiler compiles cppFish correctly? Seriously though, the 37 bench positions
-   have been put though asmFish with VERBOSE=2 and checked for a byte-by-byte match with cppFish by a
-   "go depth 14" command. This is a match of around 100MB of data PER POSITION.
-
-Q: What are the exact functional changes?
-A: There are currently four places. With these changes, asmFish should should produce IDENTICAL output
-   to cppFish in deterministic searches. To make cppFish from official stockfish,
-    (1) In evaluate_scale_factor() function of evaluate.cpp, change
-                Color strongSide = eg > VALUE_DRAW ? WHITE : BLACK;
-        to
-                Color strongSide = eg >= VALUE_DRAW ? WHITE : BLACK;
-
-    (2) In evaluate_pieces() function of evaluate.cpp, change
-                    && !ei.pi->semiopen_side(Us, file_of(ksq), file_of(s) < file_of(ksq)))
-        to
-                    && !ei.pi->semiopen_side(Us, file_of(ksq), file_of(s) <= file_of(ksq)))
-
-    (3) Interpolation in evaluate() resembles a failed 'quantum' patch on fishtest.
-        The change is from a division that rounds towards zero
-          to a division that rounds towards the nearest integer with ties going towards 0,
-          which is easy to do at the machine code level. see [1] of appendix
-
-    (4) Piece lists have been removed. A minimaly-invasive way to enforce this functional change
-        in cppFish involves sorting the piece lists and is shown in [2] of the appendix
-  
+A: It is 99.9% official stockfish as there are some inconsequential functional differences in 
+   official that were deemed too silly to put into asmFish. Piece lists are the prime offender here.
+   You can get 100% official stockfish in deterministic searches by setting PEDANTIC equ 1 compile option.
+   The changes can be viewed at https://github.com/tthsqe12/asm/search?q=PEDANTIC
+   
 
 ******** updates ********
+
 2016-07-25: "Allow null pruning at depth 1"
   - several structures have been modified to accomodate the linux port.
   - on start, asmfish now displays node information on numa systems
@@ -136,57 +108,3 @@ A: There are currently four places. With these changes, asmFish should should pr
 
 2016-06-16:
   - first stable release
-
-
-******** appendix ********
-  [1] To get the more accurate division in evaluate() function of evaluate.cpp, change
-          Value v =  mg_value(score) * int(ei.me->game_phase())
-                   + eg_value(score) * int(PHASE_MIDGAME - ei.me->game_phase()) * sf / SCALE_FACTOR_NORMAL;
-          v /= int(PHASE_MIDGAME);
-      to
-          Value v =  mg_value(score) * int(ei.me->game_phase()) * SCALE_FACTOR_NORMAL
-                   + eg_value(score) * int(PHASE_MIDGAME - ei.me->game_phase()) * sf;
-
-          unsigned int rv = ((unsigned int)(abs(v)+PHASE_MIDGAME*SCALE_FACTOR_NORMAL/2-1))/((unsigned int)(PHASE_MIDGAME*SCALE_FACTOR_NORMAL));
-          if (v>=0) {v=Value(rv);} else {v=Value(-rv);}
-
-  [2] To functionally remove piece lists, changing the functions at the end of position.h:
-
-    inline void Position::put_piece(Color c, PieceType pt, Square s) {
-      board[s] = make_piece(c, pt);
-      byTypeBB[ALL_PIECES] |= s;
-      byTypeBB[pt] |= s;
-      byColorBB[c] |= s;
-      pieceCount[c][pt]++;
-      pieceCount[c][ALL_PIECES]++;
-      Bitboard b = byColorBB[c] & byTypeBB[pt];
-      for (int i=0; i<pieceCount[c][pt]; i++)
-        pieceList[c][pt][i] = pop_lsb(&b);
-      pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
-    }
-
-    inline void Position::remove_piece(Color c, PieceType pt, Square s) {
-      byTypeBB[ALL_PIECES] ^= s;
-      byTypeBB[pt] ^= s;
-      byColorBB[c] ^= s;
-      pieceCount[c][pt]--;
-      pieceCount[c][ALL_PIECES]--;
-      Bitboard b = byColorBB[c] & byTypeBB[pt];
-      for (int i=0; i<pieceCount[c][pt]; i++)
-        pieceList[c][pt][i] = pop_lsb(&b);
-      pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
-    }
-
-    inline void Position::move_piece(Color c, PieceType pt, Square from, Square to) {
-      Bitboard from_to_bb = SquareBB[from] ^ SquareBB[to];
-      byTypeBB[ALL_PIECES] ^= from_to_bb;
-      byTypeBB[pt] ^= from_to_bb;
-      byColorBB[c] ^= from_to_bb;
-      board[from] = NO_PIECE;
-      board[to] = make_piece(c, pt);
-      Bitboard b = byColorBB[c] & byTypeBB[pt];
-      for (int i=0; i<pieceCount[c][pt]; i++)
-        pieceList[c][pt][i] = pop_lsb(&b);
-      pieceList[c][pt][pieceCount[c][pt]] = SQ_NONE;
-    }
-
