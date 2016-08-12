@@ -641,12 +641,36 @@ jne Move_Do_badcas
 		mov   byte[rbp+Pos.board+rdx], r11l
 
 if PEDANTIC
+	  ;    movzx   eax, byte[rbp+Pos.pieceIdx+r8]
+	  ;    movzx   edi, byte[rbp+Pos.pieceIdx+r9]
+	  ;      mov   byte[rbp+Pos.pieceList+rax], cl
+	  ;      mov   byte[rbp+Pos.pieceList+rdi], dl
+	  ;      mov   byte[rbp+Pos.pieceIdx+rcx], al
+	  ;      mov   byte[rbp+Pos.pieceIdx+rdx], dil
+	  ; no! above not enough instructions! official stockfish has
+	  ;  castling rook moved to the back of the list
+	  ;  of course this for absolutely no good reason
 	      movzx   eax, byte[rbp+Pos.pieceIdx+r8]
 	      movzx   edi, byte[rbp+Pos.pieceIdx+r9]
 		mov   byte[rbp+Pos.pieceList+rax], cl
 		mov   byte[rbp+Pos.pieceList+rdi], dl
 		mov   byte[rbp+Pos.pieceIdx+rcx], al
 		mov   byte[rbp+Pos.pieceIdx+rdx], dil
+	; now move rook to the back of the list
+	      movzx   eax, byte[rbp+Pos.pieceEnd+r11]
+		sub   eax, 1
+	      movzx   r12d, byte[rbp+Pos.pieceList+rax]
+	       ;;xchg   byte[rbp+Pos.pieceList+rdi], byte[rbp+Pos.pieceList+rax]
+	      movzx   edx, byte[rbp+Pos.pieceList+rdi]
+	      movzx   r13d, byte[rbp+Pos.pieceList+rax]
+		mov   byte[rbp+Pos.pieceList+rdi], r13l
+		mov   byte[rbp+Pos.pieceList+rax], dl
+	       ;;xchg   byte[rbp+Pos.pieceIdx+rdx], byte[rbp+Pos.pieceIdx+r12]
+	      movzx   edi, byte[rbp+Pos.pieceIdx+rdx]
+	      movzx   r13d, byte[rbp+Pos.pieceIdx+r12]
+		mov   byte[rbp+Pos.pieceIdx+rdx], r13l
+		mov   byte[rbp+Pos.pieceIdx+r12], dil
+
 end if
 
 		shl   r10d, 6+3
