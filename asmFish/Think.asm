@@ -198,7 +198,7 @@ match =0, VERBOSE {
 		mov   r8d, dword[.beta]
 		mov   r9, rax
 		mov   r10d, dword[.multiPV]
-	       call   qword[options.displayInfoFxn]
+	       call   DisplayInfo_Uci
 	.dont_print_pv:
 
 	; In case of failing low/high increase aspiration window and re-search, otherwise exit the loop.
@@ -270,7 +270,7 @@ match =0, VERBOSE {
 		mov   edx, dword[.alpha]
 		mov   r8d, dword[.beta]
 		mov   r10d, dword[.multiPV]
-	       call   qword[options.displayInfoFxn]
+	       call   DisplayInfo_Uci
 
 		jmp   .multipv_loop
 
@@ -540,7 +540,7 @@ end if
 
 .display_move:
 		mov   rcx, qword[threadPool.threadTable+8*rsi]
-	       call   qword[options.displayMoveFxn]
+	       call   DisplayMove_Uci
 
 .return:
 
@@ -604,6 +604,10 @@ end virtual
 	 _chkstk_ms   rsp, .localsize
 		sub   rsp, .localsize
 		mov   rsi, rcx
+
+		mov   al, byte[options.displayInfoMove]
+	       test   al, al
+		 jz   .return
 
 	; print best move and ponder move
 		lea   rdi, [.output]
@@ -691,6 +695,7 @@ end virtual
 		mov   ecx, dword[r15+RootMove.pv+4*0]
 	       call   Move_Undo
 		mov   eax, r14d
+
 		add   rsp, .localsize
 		pop   r15 r14 r13 rdi rsi rbx rbp
 		ret
@@ -726,6 +731,10 @@ end virtual
 		mov   dword[.beta], r8d
 		mov   qword[.elapsed], r9
 		mov   dword[.multiPV], r10d
+
+		mov   al, byte[options.displayInfoMove]
+	       test   al, al
+		 jz   .return
 
 	     Assert   ne, r10d, 0, 'assertion dword[.multiPV]!=0 in Position_WriteOutUciInfo failed'
 
@@ -860,7 +869,7 @@ end if
 		cmp   r15d, dword[.multiPV]
 		 jb   .multipv_loop
 
-
+.return:
 		add   rsp, .localsize
 		pop   r15 r14 r13 r12 rdi rsi rbx
 

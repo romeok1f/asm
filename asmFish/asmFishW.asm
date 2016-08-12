@@ -638,8 +638,10 @@ xchg rax, r8
 mul rcx
 lea rax, [r8+rdx]
 call PrintUnsignedInteger
-mov eax, ' us' + (10 shl 24)
+mov eax, ' us'
 stosd
+sub rdi, 1
+PrintNewLine
 lea rcx, [VerboseOutput]
 call _WriteOut
 }

@@ -1,9 +1,6 @@
 Options_Init:
 		lea   rdx, [options]
-		lea   rcx, [DisplayInfo_Uci]
-		mov   qword[rdx+Options.displayInfoFxn], rcx
-		lea   rcx, [DisplayMove_Uci]
-		mov   qword[rdx+Options.displayMoveFxn], rcx
+		mov   byte[rdx+Options.displayInfoMove], -1
 		mov   dword[rdx+Options.contempt], 0
 		mov   dword[rdx+Options.threads], 1
 		mov   dword[rdx+Options.hash], 16
@@ -38,10 +35,7 @@ end virtual
 	 _chkstk_ms   rsp, UciLoop.localsize
 		sub   rsp, UciLoop.localsize
 
-		lea   rcx, [DisplayInfo_Uci]
-		lea   rdx, [DisplayMove_Uci]
-		mov   qword[options.displayInfoFxn], rcx
-		mov   qword[options.displayMoveFxn], rdx
+		mov   byte[options.displayInfoMove], -1
 
 		xor   eax, eax
 		mov   qword[UciLoop.th1.rootPos.stateTable], rax
@@ -487,15 +481,13 @@ UciPosition:
 	     szcall   PrintString, 'error: illegal move '
 		mov   ecx, 6
 	       call   ParseToken
-		mov   al, 10
-	      stosb
+       PrintNewLine
 		lea   rbp, [UciLoop.th1.rootPos]
 		jmp   UciWriteOut
 .illegal:
 		lea   rdi, [Output]
 	     szcall   PrintString, 'error: illegal fen'
-		mov   al, 10
-	      stosb
+       PrintNewLine
 		lea   rbp, [UciLoop.th1.rootPos]
 		jmp   UciWriteOut
 .BadCmd:
@@ -781,22 +773,33 @@ UciPerft:
 	     szcall   PrintString, 'error: bad depth '
 		mov   ecx, 8
 	       call   ParseToken
-		mov   al, 10
-	      stosb
+       PrintNewLine
 		jmp   UciWriteOut
 
 
 
 UciBench:
-		mov   r12d, 15	 ; depth
-		mov   r13d, 1	 ; threads
-		mov   r14d, 128  ; hash
-		xor   r15d, r15d
 
+		mov   r12d, 13	 ; depth
+		mov   r13d, 1	 ; threads
+		mov   r14d, 16	 ; hash
+		xor   r15d, r15d ; realtime
+
+		lea   rdi, [.parse_hash]
 .parse_loop:
 	       call   SkipSpaces
 		cmp   byte[rsi], ' '
 		 jb   .parse_done
+
+	      movzx   eax, byte[rsi]
+		cmp   eax, '1'
+		 jb   @f
+		cmp   eax, '9'
+		 ja   @f
+	       test   rdi, rdi
+		 jz   @f
+		jmp   rdi	; we have a number without preceding depth, threads, hash, or realtime token
+		@@:
 
 		lea   rcx, [sz_threads]
 	       call   CmpString
@@ -820,24 +823,28 @@ UciBench:
 		jmp   .parse_done
 
 .parse_hash:
+		lea   rdi, [.parse_threads]
 	       call   SkipSpaces
 	       call   ParseInteger
       ClampUnsigned   eax, 1, 1 shl MAX_HASH_LOG2MB
 		mov   r14d, eax
 		jmp   .parse_loop
 .parse_threads:
+		lea   rdi, [.parse_depth]
 	       call   SkipSpaces
 	       call   ParseInteger
       ClampUnsigned   eax, 1, MAX_THREADS
 		mov   r13d, eax
 		jmp   .parse_loop
 .parse_depth:
+		lea   rdi, [.parse_realtime]
 	       call   SkipSpaces
 	       call   ParseInteger
       ClampUnsigned   eax, 1, 40
 		mov   r12d, eax
 		jmp   .parse_loop
 .parse_realtime:
+		xor   edi, edi
 	       call   SkipSpaces
 	       call   ParseInteger
 		xor   r15d, r15d
@@ -886,10 +893,7 @@ UciBench:
 
 		xor   eax, eax
 		mov   qword[UciLoop.nodes], rax
-		lea   rcx, [DisplayInfo_None]
-		lea   rdx, [DisplayMove_None]
-		mov   qword[options.displayInfoFxn], rcx
-		mov   qword[options.displayMoveFxn], rdx
+		mov   byte[options.displayInfoMove], al
 	       call   Search_Clear
 
 	       test   r15d, r15d
@@ -1015,10 +1019,7 @@ UciBench:
 
 	       call   _WriteOut_Output
 
-		lea   rcx, [DisplayInfo_Uci]
-		lea   rdx, [DisplayMove_Uci]
-		mov   qword[options.displayInfoFxn], rcx
-		mov   qword[options.displayMoveFxn], rdx
+		mov   byte[options.displayInfoMove], -1
 
 
 if PROFILE > 0
@@ -1036,20 +1037,18 @@ if PROFILE > 0
 	       call   PrintUnsignedInteger
 		mov   al, ':'
 	      stosb
-		mov   al, 10
-	      stosb
+       PrintNewLine
+
 
 	     szcall   PrintString, '  jmp not taken: '
 		mov   rax, qword[r15+8*0]
 	       call   PrintUnsignedInteger
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, '  jmp taken:     '
 		mov   rax, qword[r15+8*1]
 	       call   PrintUnsignedInteger
-		mov   al, 10
-	      stosb
+       PrintNewLine
 
 	     szcall   PrintString, '  jmp percent:   '
 	  vcvtsi2sd   xmm0, xmm0, qword[r15+8*0]
@@ -1180,8 +1179,7 @@ UciEval:
 	      stosd
 		mov   ecx, r15d
 	       call   PrintScore_Uci
-		mov   al, 10
-	      stosb
+       PrintNewLine
 		jmp   UciWriteOut
 
 end if

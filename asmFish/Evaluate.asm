@@ -1,9 +1,4 @@
 
-
-
-
-
-
 macro EvalInit Us {
 ; in:  r13 rook + queen
 ;      r12 bishop+queen
@@ -322,6 +317,9 @@ else if Pt eq Rook
 		mov   eax, r14d
 		and   eax, 7
 		sub   ecx, eax
+if PEDANTIC
+		sub   ecx, 1
+end if
 		sar   ecx, 31
 		sub   edx, ecx
 		xor   eax, eax
@@ -1327,8 +1325,6 @@ ED_Score rsi
 ED_NewLine
 
 
-
-
 restore PiecesPawn
 restore PiecesAll
 restore PiecesUs
@@ -1682,13 +1678,20 @@ ED_Score rsi
 
 		mov   r14, qword[.ei.pi]
 		mov   r15, qword[.ei.me]
+if PEDANTIC
+	      movsx   r12d, si
+		lea   r13d, [r12-1]
+		sar   r13d, 31
+		and   r13d, 1
+else
 		xor   r13d, r13d
 		 bt   esi, 15
 		adc   r13d, r13d
+	      movsx   r12d, si
+end if
 	      movzx   ecx, byte[r15+MaterialEntry.scalingFunction+r13]
 	      movzx   eax, byte[r15+MaterialEntry.factor+r13]
 	      movzx   edx, byte[r15+MaterialEntry.gamePhase]
-	      movsx   r12d, si
 		add   esi, 0x08000
 		sar   esi, 16
 	       test   ecx, ecx
@@ -1761,7 +1764,6 @@ ED_Int rax
 	; r12d = eg_value(score)
 	; adjust score for side to move
 
-
 match =3, VERBOSE {
 push rsi rdi rax rcx rdx r14 r15
 mov r15, rax
@@ -1783,6 +1785,31 @@ call _WriteOut_Output
 pop r15 r14 rdx rcx rax rdi rsi
 }
 
+if PEDANTIC
+  ;// Interpolate between a middlegame and a (scaled by 'sf') endgame score
+  ;Value v =  mg_value(score) * int(ei.me->game_phase())
+  ;         + eg_value(score) * int(PHASE_MIDGAME - ei.me->game_phase()) * sf / SCALE_FACTOR_NORMAL;
+  ;v /= int(PHASE_MIDGAME);
+		mov   ecx, dword[rbp+Pos.sideToMove]
+		mov   edi, 128
+		sub   edi, edx
+	       imul   edi, r12d
+		mov   r11d, ecx
+	       imul   edi, eax
+		lea   r14d, [rdi+3FH]
+	       test   edi, edi
+	      cmovs   edi, r14d
+	       imul   esi, edx
+		sar   edi, 6
+		lea   edx, [rdi+rsi]
+		lea   eax, [rdx+7FH]
+	       test   edx, edx
+	      cmovs   edx, eax
+		neg   r11d
+		sar   edx, 7
+		xor   edx, r11d
+		lea   eax, [rcx+rdx+Eval_Tempo]
+else
 	; the evaluation should be exactly symmetric
 	;  hence the signed division by PHASE_MIDGAME*SCALE_FACTOR_NORMAL
 	;  requires some care
@@ -1798,14 +1825,13 @@ pop r15 r14 rdx rcx rax rdi rsi
 	       imul   edx, r12d
 	       imul   eax, edx
 		add   eax, esi
-
 		cdq
 		add   eax, (1 shl 12) - 1
 		sub   eax, edx
 		sar   eax, 13
 		xor   eax, ecx
 		lea   eax, [rax+rdi+Eval_Tempo]
-
+end if
 
 SD_String 'eval:'
 SD_Int rax
@@ -2161,7 +2187,4 @@ match =Black, Us \{
 		add   rsp, 8*16
 		pop   r15 r14 r13 r12
 		jmp   Evaluate.DoMaterialEvalReturn
-
-
-
 

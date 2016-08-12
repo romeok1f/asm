@@ -187,8 +187,13 @@ GenNext_Quiets:
 		cmp   eax, 3
 		jge   .JustSort
 
+; todo: is Partition1 better than Partition2 ?
+if PEDANTIC
+	 Partition2   r12, r13
+else
 	 Partition1   r12, r13
 		mov   r13, r12
+end if
 	; r13 = good quiet
 
 .JustSort:

@@ -236,8 +236,6 @@ ends
 
 
 struct Options
- displayInfoFxn rq 1	  ; function for printing pv
- displayMoveFxn rq 1
  hash	       rd 1
  multiPV       rd 1
  threads       rd 1
@@ -248,8 +246,9 @@ struct Options
  moveOverhead	rd 1
  contempt	  rd 1
  ponder 	  rb 1
+ displayInfoMove  rb 1	    ; should we display pv info and best move?
+		  rb 1
  syzygy50MoveRule rb 1	    ; bool 0 or -1
-		  rb 2
  syzygyProbeDepth rd 1
  syzygyProbeLimit rd 1
 ends

@@ -306,6 +306,8 @@ match = 1, DEBUG \{
 		jae   ..Done
 ..Loop:
 		mov   ecx, dword[start+ExtMove.move]
+SD_String 'sq:'
+SD_Move rcx
 		mov   eax, ecx
 		mov   edx, ecx
 		and   eax, 64*64-1
@@ -322,7 +324,6 @@ match = 1, DEBUG \{
 		add   eax, dword[r10+4*rdx]
 		add   eax, dword[r11+4*rdx]
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
-SD_String 'sq:'
 SD_Int rax
 SD_String '|'
 		cmp   start, ender
