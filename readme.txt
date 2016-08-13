@@ -9,6 +9,10 @@ Run make.bat to automatically assemble the windows/linux sources for the three c
   - base: should run on any 64bit x86 cpu
   - popcnt: generate popcnt instruction
   - bmi2: use instructions introduced in haswell
+Besides the three cpu capabilities, this project now comes in two flavours
+  - asmFish: trim off the cruft in official stockfish and make a lean and mean chess engine
+  - pedantFish: match bench signature of official stockfish to catch search/eval bugs more easily
+More flavors are planned for the future, including mateFish and hybridFish.
   
 If you observe a crash/misbehaviour in asmFish, please raise an issue here and give me the following information:
   - name of the executable that crashed/misbehaved
