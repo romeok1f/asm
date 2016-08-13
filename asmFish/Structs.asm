@@ -432,15 +432,3 @@ ends
 if sizeof.ExtMove <> 8
  err
 end if
-
-
-
-
-
-
-
-
-
-
-
-

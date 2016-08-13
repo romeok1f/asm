@@ -859,7 +859,6 @@ GD_NewLine
 
 	; finally loop through nodes
 	;   and add up cores
-	;   and print node/core data
 		lea   rsi, [threadPool.nodeTable]
 	       imul   ebx, sizeof.NumaNode
 		add   rbx, rsi
@@ -873,7 +872,45 @@ GD_NewLine
 		add   dword[threadPool.coreCnt], eax
 		sub   ecx, 1
 		jns   .CoreCountLoop
-if VERBOSE eq 0
+		add   rsi, sizeof.NumaNode
+		cmp   rsi, rbx
+		 jb   .PrintNextNode
+
+.Return:
+		add   rsp, .localsize
+		pop   r15 r14 r13 r12 rbx rdi rsi
+		ret
+
+.Absent:
+		mov   dword[threadPool.nodeCnt], 1
+		mov   dword[threadPool.coreCnt], 1
+		lea   rdi, [threadPool.nodeTable]
+		mov   dword[rdi+NumaNode.nodeNumber], -1
+		mov   qword[rdi+NumaNode.coreCnt], 1
+		mov   ecx, sizeof.CounterMoveHistoryStats
+	       call   _VirtualAlloc
+		mov   qword[rdi+NumaNode.cmhTable], rax
+		xor   eax, eax
+		mov   qword[rdi+NumaNode.cpuMask+8*0], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*1], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*2], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*3], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*4], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*5], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*6], rax
+		mov   qword[rdi+NumaNode.cpuMask+8*7], rax
+		jmp   .Return
+
+
+
+_DisplayThreadPoolInfo:
+	       push   rbx rsi rdi
+		lea   rsi, [threadPool.nodeTable]
+	       imul   ebx, sizeof.NumaNode
+		add   rbx, rsi
+		cmp   dword[rsi+NumaNode.nodeNumber], -1
+		 je   .Return
+.PrintNextNode:
 		lea   rdi, [Output]
 		mov   rax, 'info str'
 	      stosq
@@ -913,44 +950,12 @@ if VERBOSE eq 0
 		jns   .PrintMaskLoop
        PrintNewLine
 	       call   _WriteOut_Output
-end if
 		add   rsi, sizeof.NumaNode
 		cmp   rsi, rbx
 		 jb   .PrintNextNode
-
-
 .Return:
-		add   rsp, .localsize
-		pop   r15 r14 r13 r12 rbx rdi rsi
+		pop  rdi rsi rbx
 		ret
-
-
-.Absent:
-		lea   rdi, [Output]
-	     szcall   PrintString, 'info string numa not detected'
-       PrintNewLine
-	       call   _WriteOut_Output
-
-		mov   dword[threadPool.nodeCnt], 1
-		mov   dword[threadPool.coreCnt], 1
-		lea   rdi, [threadPool.nodeTable]
-		mov   dword[rdi+NumaNode.nodeNumber], -1
-		mov   qword[rdi+NumaNode.coreCnt], 1
-		mov   ecx, sizeof.CounterMoveHistoryStats
-	       call   _VirtualAlloc
-		mov   qword[rdi+NumaNode.cmhTable], rax
-		xor   eax, eax
-		mov   qword[rdi+NumaNode.cpuMask+8*0], rax
-		mov   qword[rdi+NumaNode.cpuMask+8*1], rax
-		mov   qword[rdi+NumaNode.cpuMask+8*2], rax
-		mov   qword[rdi+NumaNode.cpuMask+8*3], rax
-		mov   qword[rdi+NumaNode.cpuMask+8*4], rax
-		mov   qword[rdi+NumaNode.cpuMask+8*5], rax
-		mov   qword[rdi+NumaNode.cpuMask+8*6], rax
-		mov   qword[rdi+NumaNode.cpuMask+8*7], rax
-		jmp   .Return
-
-
 
 
 

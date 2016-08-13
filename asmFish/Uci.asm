@@ -679,6 +679,8 @@ end if
       ClampUnsigned   eax, 1, MAX_THREADS
 		mov   dword[options.threads], eax
 	       call   ThreadPool_ReadOptions
+	       call   _DisplayThreadPoolInfo
+	       call   ThreadPool_DisplayThreadDistribution
 		jmp   UciGetInput
 .MultiPv:
 	       call   ParseInteger

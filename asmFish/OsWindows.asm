@@ -715,12 +715,38 @@ end virtual
 		mov   rcx, r15
 		mov   edx, dword[.size]
 	       call   _VirtualFree
+.Return:
+		add   rsp, .localsize
+		pop   r15 r14 r13 r12 rbx rdi rsi
+		ret
 
 
-if VERBOSE eq 0
+.Absent:
+		mov   dword[threadPool.nodeCnt], 1
+		mov   dword[threadPool.coreCnt], 1
+		lea   rdi, [threadPool.nodeTable]
+		mov   dword[rdi+NumaNode.nodeNumber], -1
+		mov   qword[rdi+NumaNode.coreCnt], 1
+		mov   ecx, sizeof.CounterMoveHistoryStats
+	       call   _VirtualAlloc
+		mov   qword[rdi+NumaNode.cmhTable], rax
+		xor   eax, eax
+		mov   qword[rdi+NumaNode.groupMask.Mask], rax
+		mov   word[rdi+NumaNode.groupMask.Group], ax
+
+		mov   qword[__imp_GetLogicalProcessorInformationEx], rax
+		mov   qword[__imp_SetThreadGroupAffinity], rax
+		mov   qword[__imp_VirtualAllocExNuma], rax
+		jmp   .Return
+
+
+_DisplayThreadPoolInfo:
+	       push   rbx rsi rdi
 		lea   rsi, [threadPool.nodeTable]
 	       imul   ebx, dword[threadPool.nodeCnt], sizeof.NumaNode
 		add   rbx, rsi
+		cmp   dword[rsi+NumaNode.nodeNumber], -1
+		 je   .Return
 .NextNumaNode2:
 		lea   rdi, [Output]
 		mov   rax, 'info str'
@@ -751,38 +777,9 @@ if VERBOSE eq 0
 		add   rsi, sizeof.NumaNode
 		cmp   rsi, rbx
 		 jb   .NextNumaNode2
-end if
-
-
 .Return:
-		add   rsp, .localsize
-		pop   r15 r14 r13 r12 rbx rdi rsi
+		pop   rdi rsi rbx
 		ret
-
-
-.Absent:
-		lea   rdi, [Output]
-	     szcall   PrintString, 'info string numa not detected'
-       PrintNewLine
-	       call   _WriteOut_Output
-
-		mov   dword[threadPool.nodeCnt], 1
-		mov   dword[threadPool.coreCnt], 1
-		lea   rdi, [threadPool.nodeTable]
-		mov   dword[rdi+NumaNode.nodeNumber], -1
-		mov   qword[rdi+NumaNode.coreCnt], 1
-		mov   ecx, sizeof.CounterMoveHistoryStats
-	       call   _VirtualAlloc
-		mov   qword[rdi+NumaNode.cmhTable], rax
-		xor   eax, eax
-		mov   qword[rdi+NumaNode.groupMask.Mask], rax
-		mov   word[rdi+NumaNode.groupMask.Group], ax
-
-		mov   qword[__imp_GetLogicalProcessorInformationEx], rax
-		mov   qword[__imp_SetThreadGroupAffinity], rax
-		mov   qword[__imp_VirtualAllocExNuma], rax
-		jmp   .Return
-
 
 
 

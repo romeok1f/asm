@@ -1,6 +1,24 @@
 ; this is the source for linux  see asmFishW.asm for windows
 ; this is included in asmFish_popcnt.asm asmFish_base.asm and asmFish_bmi2.asm
 
+; sanity check on compile options
+if (not CPU_HAS_POPCNT) and (CPU_HAS_AVX1 or CPU_HAS_AVX2 or CPU_HAS_BMI1 or CPU_HAS_BMI2)
+	  display 'WARNING: if cpu does not have POPCNT, it probably does not have higher capabilities'
+	  display 10
+end if
+
+if (not CPU_HAS_AVX1) and CPU_HAS_AVX2
+	  display 'ERROR: if cpu does not have AVX1, it definitely does not have AVX2'
+	  display 10
+	  err
+end if
+
+if (not CPU_HAS_BMI1) and CPU_HAS_BMI2
+	  display 'ERROR: if cpu does not have BMI1, it definitely does not have BMI2'
+	  display 10
+	  err
+end if
+
 format ELF64 executable 3
 entry Start
 
@@ -127,10 +145,11 @@ ksquare_lookup:  db SQ_G1, SQ_C1, SQ_G8, SQ_C8
 
 szUciResponse:	db 'id name '
 szGreeting:
-		db 'asmFish_'
+		db VERSION_PRE
+		db '_'
 		create_build_time DAY, MONTH, YEAR
 		db '_'
-		db CPU_VERSION
+		db VERSION_POST
 		db 10
 szGreetingEnd:
 		db 'id author TypingALot',10
@@ -288,8 +307,7 @@ align 16
 
 
 ; this section is only read from after initialization
-; the castling data is filled in when parsing the fen
-; castling data should be moved to Pos struct in future versions
+;  except for DrawValue
 segment readable writeable
 
 ;;;;;;;;;;;;;;;;;;;;;;;; data for move generation  ;;;;;;;;;;;;;;;;;;;;;;;;;;

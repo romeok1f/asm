@@ -151,10 +151,11 @@ ksquare_lookup:  db SQ_G1, SQ_C1, SQ_G8, SQ_C8
 
 szUciResponse:	db 'id name '
 szGreeting:
-		db 'asmFishW_'
+		db VERSION_PRE
+		db '_'
 		create_build_time DAY, MONTH, YEAR
 		db '_'
-		db CPU_VERSION
+		db VERSION_POST
 		db 13,10
 szGreetingEnd:
 		db 'id author TypingALot',13,10
@@ -324,8 +325,7 @@ align 16
 
 
 ; this section is only read from after initialization
-; the castling data is filled in when parsing the fen
-; castling data should be moved to Pos struct in future versions
+;  except for DrawValue
 section '.bss' data readable writeable
 
 ;;;;;;;;;;;;;;;;;;;;;;;; data for move generation  ;;;;;;;;;;;;;;;;;;;;;;;;;;
