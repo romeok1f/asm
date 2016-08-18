@@ -52,8 +52,8 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
         Build Tester: 1.4.6.0
         Windows 8.1 (Version 6.3, Build 0, 64-bit Edition)
         Intel(R) Core(TM) i7-4771 CPU @ 3.50GHz
-    Note that the first entry is not comparable to the last two because it is searching a different
-    tree, or in the case of perft the same tree in a different order. The last entry is
+    Note that the first entry is not comparable to the last two because it is searching a
+    different tree, or in the case of perft the same tree in a different order. The last is
     http://abrok.eu/stockfish/builds/8abb98455f6fa78092f650b8bae9c166f1b5a315/win64bmi2/stockfish_16081012_x64_bmi2.exe
                                  perft 7        bench 128 1 17   bench 128 1 18
     asmFish_bmi2                 306.3+-0.098   2.731+-0.002     2.722+-0.003
