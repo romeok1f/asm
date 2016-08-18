@@ -41,6 +41,9 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
    
 
 ******** updates ********
+2016-08-17: "Use predicted depth for history pruning"
+  - fixed some silly bugs in Linux version. futexes are trickey
+
 2016-08-12: "Simplify space formula"
   - removed colon from info strings
   - added PEDANTIC compile option, which makes asmFish match official stockfish in deterministic searches
