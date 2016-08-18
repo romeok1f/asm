@@ -24,8 +24,8 @@ Any help with this issue would be appreciated.
 
 
 ******** FAQ ********
-Q: Why not just start with the compiler output and speed up the critical functions? or write critical
-   function in asm and include them in cpp code?
+Q: Why not just start with the compiler output and speed up the critical functions?
+   or write critical functions in asm and include them in cpp code?
 A: With this approach the critical functions would still need to conform to the standards
    set in place by the ABI. All of the critical functions in asmFish do not conform to these
    standards. Plus, asmFish would be dependent on a compiler in this case, which introduces many
