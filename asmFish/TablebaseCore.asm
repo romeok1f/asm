@@ -238,6 +238,12 @@ strcpy:
 	       test   al, al
 		jne   strcpy
 		ret
+strlen:
+		 or   eax, -1
+   @@:		inc   eax
+		cmp   byte[rcx+rax], 0
+		jne   @b
+		ret
 
 
 

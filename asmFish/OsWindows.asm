@@ -843,7 +843,7 @@ match =1, CPU_HAS_BMI2 {
 		jne   .Failed
 }
 
-		pop  r15 rbx rbp
+		pop   r15 rbx rbp
 		ret
 
 .Failed:
@@ -852,7 +852,7 @@ match =1, CPU_HAS_BMI2 {
 	       call   PrintString
 		mov   rcx, r15
 	       call   PrintString
-		xor   eax,eax
+		xor   eax, eax
 	      stosd
 		lea   rdi, [Output]
 	       call   _ErrorBox

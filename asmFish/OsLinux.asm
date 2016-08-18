@@ -47,6 +47,10 @@ _MutexLock:
 	; Wait loop
 .2:		mov   eax, sys_futex
 	    syscall
+	   ; can this syscall fail in some cases?
+	   ;  it has not been observed doing so
+	   ;    test   eax, eax
+	   ;      js   Failed_sys_futex_MutexLock
 .3:		mov   eax, edx
 	       xchg   eax, dword[rdi]
 	       test   eax, 1
@@ -79,8 +83,8 @@ _MutexUnlock:
 		mov   edx, 1
 		mov   eax, sys_futex
 	    syscall
-	       test   eax, eax
-		 js   Failed_sys_futex
+	       test   eax, eax				; existed before
+		 js   Failed_sys_futex_MutexUnlock	;
 
 .3:		xor   eax, eax
 		pop   rdi rsi rbx
@@ -95,20 +99,11 @@ _MutexUnlock:
 
 _EventCreate:
 	; rcx: address of ConditionalVariable
-	       push   rbx rsi rdi
-		mov   rdi, rcx
-		xor   eax, eax
-		mov   qword[rdi], rax
-		mov   qword[rdi+8], rax
-		pop   rdi rsi rbx
-		ret
-
 _EventDestroy:
 	; rcx: address of ConditionalVariable
-	       push   rbx rsi rdi
-		mov   rdi, rcx
 		xor   eax, eax
-		pop   rdi rsi rbx
+		mov   qword[rcx], rax
+		mov   qword[rcx+8], rax
 		ret
 
 _EventSignal:
@@ -121,7 +116,7 @@ _EventSignal:
 		mov   edx, 1
 	    syscall
 	       test   eax, eax
-		 js   Failed_sys_futex
+		 js   Failed_sys_futex_EventSignal
 		xor   eax, eax
 		pop   rdi rsi rbx
 		ret
@@ -149,6 +144,9 @@ _EventWait:
 		mov   esi, FUTEX_WAIT_PRIVATE
 		mov   eax, sys_futex
 	    syscall
+	   ; this syscall can and should fail in some cases
+	   ;    test   eax, eax                    ; did not exist before
+	   ;      js   Failed_sys_futex_EventWait  ;
 	; Set up for wait on mutex
 		mov   rdi, r15
 		mov   edx, LOCK_CONTEND
@@ -156,6 +154,9 @@ _EventWait:
 	; Wait loop
 .2:		mov   eax, sys_futex
 	    syscall
+	   ; this syscall can and should fail in some cases
+	   ;    test   eax, eax                    ; did not exist before
+	   ;      js   Failed_sys_futex_EventWait  ;
 .3:		mov   eax, edx
 	       xchg   eax, dword[rdi]
 	       test   eax, 1
@@ -187,11 +188,10 @@ _FileOpen:
 		mov   esi, O_RDONLY
 		mov   eax, sys_open
 	    syscall
-		mov   edx, eax
-		sar   edx, 31
-		 or   eax, edx
-	     movsxd   rax, eax
-		pop   rdi rsi rbx 
+	       test   eax, eax
+		jns   @f
+		 or   rax, -1
+	@@:	pop   rdi rsi rbx
 		ret
 
 _FileClose:
@@ -305,14 +305,14 @@ _ThreadCreate:
 		mov   rcx, r15
 	       call   r14
 	; signal that we are done
-		mov   dword[r13+ThreadHandle.mutex], 1
 		lea   rdi, [r13+ThreadHandle.mutex]
-		mov   esi, FUTEX_WAKE
+		mov   esi, FUTEX_WAKE_PRIVATE
 		mov   edx, 1
+		mov   dword[rdi], edx
 		mov   eax, sys_futex
 	    syscall
-	       test   eax, eax
-		 js   Failed_sys_futex
+	       test   eax, eax			      ; existed before
+		 js   Failed_sys_futex_ThreadCreate   ;
 	; exit
 		xor   edi, edi
 		mov   eax, sys_exit
@@ -323,15 +323,18 @@ _ThreadJoin:
 	; rcx:  address of ThreadHandle struct
 	       push   rbx rsi rdi
 		mov   rbx, rcx
+
 	; wait for the thread to return
 		lea   rdi, [rbx+ThreadHandle.mutex]
-		mov   esi, FUTEX_WAIT
+		mov   esi, FUTEX_WAIT_PRIVATE
 		xor   edx, edx
 		xor   r10d, r10d
 		mov   eax, sys_futex
 	    syscall
-	       test   eax, eax
-		 js   Failed_sys_futex
+	   ; this syscall can and should fail in some cases
+	   ;    test   eax, eax                        ; existed before
+	   ;      js   Failed_sys_futex_ThreadJoin     ;
+
 	; free its stack
 		mov   rdi, qword[rbx+ThreadHandle.stackAddress]
 		mov   rsi, THREAD_STACK_SIZE
@@ -363,7 +366,7 @@ _ExitThread:
 
 _GetTime:
 	; out: rax + rdx/2^64 = time in ms
-	       push   rsi rdi rbx
+	       push   rbx rsi rdi
 		sub   rsp, 8*2
 		mov   edi, CLOCK_MONOTONIC
 		mov   rsi, rsp
@@ -376,7 +379,7 @@ _GetTime:
 		add   rdx, rcx
 	       xchg   rax, rdx
 		add   rsp, 8*2
-		pop   rbx rdi rsi
+		pop   rdi rsi rbx
 		ret
 
 _SetFrequency:
@@ -385,7 +388,7 @@ _SetFrequency:
 
 _Sleep:
 	; ecx  ms
-	       push   rsi rdi rbx
+	       push   rbx rsi rdi
 		sub   rsp, 8*2
 		mov   eax, ecx
 		xor   edx, edx
@@ -399,7 +402,7 @@ _Sleep:
 		mov   eax, sys_nanosleep
 	    syscall
 		add   rsp, 8*2
-		pop   rbx rdi rsi
+		pop   rdi rsi rbx
 		ret
 
 
@@ -641,7 +644,7 @@ _SetNormalPriority:
 _SetThreadPoolInfo:
 	; see ThreadPool.asm for what this is supposed to do
 
-	       push   rdi rsi rbx r12 r13 r14 r15
+	       push   rbx rsi rdi r12 r13 r14 r15
 virtual at rsp
  .coremask rq 8
  .buffer   rb 512
@@ -857,10 +860,11 @@ GD_NewLine
 		jmp   .TryNextCore
 .TryCoresDone:
 
+
 	; finally loop through nodes
 	;   and add up cores
 		lea   rsi, [threadPool.nodeTable]
-	       imul   ebx, sizeof.NumaNode
+	       imul   ebx, dword[threadPool.nodeCnt], sizeof.NumaNode
 		add   rbx, rsi
 .PrintNextNode:
 		mov   ecx, 7
@@ -878,7 +882,7 @@ GD_NewLine
 
 .Return:
 		add   rsp, .localsize
-		pop   r15 r14 r13 r12 rbx rdi rsi
+		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
 
 .Absent:
@@ -904,9 +908,9 @@ GD_NewLine
 
 
 _DisplayThreadPoolInfo:
-	       push   rbx rsi rdi
+	       push   rbx rsi rdi r14 r15
 		lea   rsi, [threadPool.nodeTable]
-	       imul   ebx, sizeof.NumaNode
+	       imul   ebx, dword[threadPool.nodeCnt], sizeof.NumaNode
 		add   rbx, rsi
 		cmp   dword[rsi+NumaNode.nodeNumber], -1
 		 je   .Return
@@ -927,26 +931,20 @@ _DisplayThreadPoolInfo:
 	       call   PrintUnsignedInteger
 		mov   rax, ' mask 0x'
 	      stosq
-		mov   r13d, 7
-	@@:	mov   rcx, qword[rsi+NumaNode.cpuMask+8*r13]
+		mov   r15d, 7
+	@@:	mov   rcx, qword[rsi+NumaNode.cpuMask+8*r15]
 	       test   rcx, rcx
 		jnz   .PrintMaskLoop
-		sub   r13d, 1
+		sub   r15d, 1
 		jns   @b
 	.PrintMaskLoop:
-		mov   rcx, qword[rsi+NumaNode.cpuMask+8*r13]
-	       test   rcx, rcx
-		jnz   .printfull
-		mov   al, '0'
-	      stosb
-		jmp   @f
-	.printfull:
+		mov   rcx, qword[rsi+NumaNode.cpuMask+8*r15]
 	       call   PrintHex
-	@@:    test   r13d, r13d
+	@@:    test   r15d, r15d
 		 jz   @f
 		mov   al, '_'
 	      stosb
-	@@:	sub   r13d, 1
+	@@:	sub   r15d, 1
 		jns   .PrintMaskLoop
        PrintNewLine
 	       call   _WriteOut_Output
@@ -954,7 +952,7 @@ _DisplayThreadPoolInfo:
 		cmp   rsi, rbx
 		 jb   .PrintNextNode
 .Return:
-		pop  rdi rsi rbx
+		pop  r15 r14 rdi rsi rbx
 		ret
 
 
@@ -1039,6 +1037,17 @@ match =1, CPU_HAS_BMI2 {
 
 Failed:
 	; rdi : null terminated string
+	       push   rax
+		mov   rcx, rdi
+		lea   rdi, [Output]
+	       call   PrintString
+		mov   rax, ' rax: 0x'
+	      stosq
+		pop   rcx
+	       call   PrintHex
+		xor   eax, eax
+	      stosb
+		lea   rdi, [Output]
 	       call   _ErrorBox
 		mov   ecx, 1
 	       call   _ExitProcess
@@ -1085,10 +1094,39 @@ Failed_stub_clone:
 		lea   rdi, [@f]
 		jmp   Failed
 		@@: db 'stub_clone failed',0
+
 Failed_sys_futex:
 		lea   rdi, [@f]
 		jmp   Failed
 		@@: db 'sys_futex failed',0
+Failed_sys_futex_MutexUnlock:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'sys_futex in _MutexUnlock failed',0
+Failed_sys_futex_EventSignal:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'sys_futex in _EventSignal failed',0
+;Failed_sys_futex_EventWait:
+;                lea   rdi, [@f]
+;                jmp   Failed
+;                @@: db 'sys_futex in _EventWait failed',0
+Failed_sys_futex_ThreadCreate:
+		lea   rdi, [@f]
+		jmp   Failed
+		@@: db 'sys_futex in _ThreadCreate failed',0
+;Failed_sys_futex_ThreadJoin:
+;                lea   rdi, [@f]
+;                jmp   Failed
+;                @@: db 'sys_futex in _ThreadJoin failed',0
+;Failed_sys_futex_MutexLock:
+;                lea   rdi, [@f]
+;                jmp   Failed
+;                @@: db 'sys_futex in _MutexLock failed',0
+
+
+
+
 Failed_sys_sched_setaffinity:
 		lea   rdi, [@f]
 		jmp   Failed
@@ -1110,11 +1148,12 @@ Failed_MatchingCore:
 
 
 
-_ErrorBox:
+_ErrorBox:    int3
 	; rdi points to null terminated string to write to message box 
 	; this may be called from a leaf with no stack allignment 
 	; one purpose is a hard exit on failure
-	       call   strlen 
+		mov   rcx, rdi
+	       call   strlen
 	       push   rdi rsi rbx 
 		mov   rsi, rdi 
 		mov   edi, stderr 
@@ -1127,27 +1166,4 @@ _ErrorBox:
 		mov   eax, sys_write 
 	    syscall
 		pop   rbx rsi rdi 
-		ret
-
-
-strlen:
-		xor   rax, rax 
-   @@: 
-		cmp   byte [rdi+rax], $00 
-		 je   @f 
-		inc   rax 
-		cmp   byte [rdi+rax], $00 
-		 je   @f 
-		inc   rax 
-		cmp   byte [rdi+rax], $00 
-		 je   @f 
-		inc   rax 
-		cmp   byte [rdi+rax], $00 
-		 je   @f 
-		inc   rax 
-		cmp   byte [rdi+rax], $00 
-		 je   @f 
-		inc   rax 
-		jmp   @b 
-   @@: 
 		ret

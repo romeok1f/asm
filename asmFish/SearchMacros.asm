@@ -991,12 +991,28 @@ lock inc qword[profile.moveUnpack]
 	       test   al, al
 		jnz   .MovePickLoop
 
+		mov   esi, 63
+	      movzx   eax, byte[.improving]
+		mov   ecx, dword[.depth]
+		cmp   ecx, esi
+	      cmova   ecx, esi
+	       imul   eax, 64
+		add   eax, ecx
+		mov   ecx, dword[.moveCount]
+		cmp   ecx, esi
+	      cmova   ecx, esi
+	       imul   eax, 64
+		add   eax, ecx
+		mov   edi, dword[.newDepth]
+		sub   edi, dword[Reductions+4*(rax+2*64*64*.PvNode)]
+	; edi = predictedDepth
+
 	; Countermoves based pruning
 		mov   r8, qword[.cmh]
 		mov   r9, qword[.fmh]
 		mov   r10, qword[.fmh2]
-		cmp   edx, 4*ONE_PLY
-		 jg   .13DontSkip2
+		cmp   edi, 3*ONE_PLY
+		jge   .13DontSkip2
 		mov   ecx, dword[.move]
 		cmp   ecx, dword[rbx+State.killers+4*0]
 		 je   .13DontSkip2
@@ -1019,22 +1035,6 @@ lock inc qword[profile.moveUnpack]
 	       test   r9, r9
 		jnz   .MovePickLoop
 	.13DontSkip2:
-
-		mov   esi, 63
-	      movzx   eax, byte[.improving]
-		mov   ecx, dword[.depth]
-		cmp   ecx, esi
-	      cmova   ecx, esi
-	       imul   eax, 64
-		add   eax, ecx
-		mov   ecx, dword[.moveCount]
-		cmp   ecx, esi
-	      cmova   ecx, esi
-	       imul   eax, 64
-		add   eax, ecx
-		mov   edi, dword[.newDepth]
-		sub   edi, dword[Reductions+4*(rax+2*64*64*.PvNode)]
-	; edi = predictedDepth
 
 	; Futility pruning: parent node
 		xor   edx, edx
@@ -1785,6 +1785,8 @@ end if
     if .RootNode eq 1
 	      align   8
 .PrintCurrentMove:
+		cmp   byte[options.displayInfoMove], 0
+		 je   .PrintCurrentMoveRet
 		sub   rsp, 128
 		mov   rdi, rsp
 		mov   rax, 'info dep'

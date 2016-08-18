@@ -307,7 +307,7 @@ match = 1, DEBUG \{
 ..Loop:
 		mov   ecx, dword[start+ExtMove.move]
 SD_String 'sq:'
-SD_Move rcx
+;SD_Move rcx
 		mov   eax, ecx
 		mov   edx, ecx
 		and   eax, 64*64-1

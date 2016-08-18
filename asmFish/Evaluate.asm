@@ -1303,6 +1303,9 @@ match =Black, Us
 	end if
 		 or   rax, rcx
 	     popcnt   rax, rax, rdx
+		mov   ecx, 16
+		cmp   eax, ecx
+	      cmova   eax, ecx
 
 	     popcnt   rdx, qword[rbp+Pos.typeBB+8*Us], rcx
 	       imul   edx, edx
