@@ -28,16 +28,16 @@ Q: Why not just start with the compiler output and speed up the critical functio
    or write critical functions in asm and include them in cpp code?
 A: With this approach the critical functions would still need to conform to the standards
    set in place by the ABI. All of the critical functions in asmFish do not conform to these
-   standards. Plus, asmFish would be dependent on a compiler in this case, which introduces many
-   unnecessary compilcations. Both asmFish and its compiler are around 100KB; lets keep it simple.
-   Note that compiler output was used in the case of Ronald de Man's syzygy probing code, as this
-   is not speed critical but cumbersome to write by hand.
+   standards. Plus, asmFish would be dependent on a compiler in this case, which introduces
+   many unnecessary compilcations. Both asmFish and its compiler are around 100KB; lets keep
+   it simple. Note that compiler output was used in the case of Ronald de Man's syzygy
+   probing code, as this is not speed critical but cumbersome to write by hand.
 
 Q: Is asmFish the same as official stockfish?
 A: It is 99.9% official stockfish as there are some inconsequential functional differences in 
-   official that were deemed too silly to put into asmFish. Piece lists are the prime offender here.
-   You can get 100% official stockfish in deterministic searches by setting PEDANTIC equ 1 compile option.
-   The changes can be viewed at https://github.com/tthsqe12/asm/search?q=PEDANTIC
+   official that were deemed too silly to put into asmFish. Piece lists are the prime offender
+   here. You can get 100% official stockfish in deterministic searches by setting PEDANTIC equ 1
+   compile option. The changes can be viewed at https://github.com/tthsqe12/asm/search?q=PEDANTIC
    
 
 ******** updates ********
