@@ -49,7 +49,6 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
     bmi2   | 23.6 | 24.3 | 24.3 | 24.5 | bench no longer matches
     popcnt | 25.3 | 25.3 | 25.4 | 25.8 | at depth 19
     
-
 2016-08-17: "Use predicted depth for history pruning"
   - fixed some silly bugs in Linux version. futexes are trickey
 
