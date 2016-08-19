@@ -42,6 +42,14 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
 
 
 ******** updates ********
+2016-08-18: "Remove a stale assignment"
+  - searching for bug in pedantic version
+    - bench speedup % over abrok.eu builds with hash=128 and depth=15,...,20
+    depth  |  15  |  16  |  17  |  18  |  19  |  20  |
+    bmi2   | 23.6 | 24.3 | 24.3 | 24.5 | bench no longer matches
+    popcnt | 25.3 | 25.3 | 25.4 | 25.8 | at depth 19
+    
+
 2016-08-17: "Use predicted depth for history pruning"
   - fixed some silly bugs in Linux version. futexes are trickey
 
