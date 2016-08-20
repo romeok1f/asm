@@ -19,8 +19,8 @@ If you observe a crash/misbehaviour in asmFish, please raise an issue here and g
   - exception code and exception offset in the case of a crash
   - a log of the commands that were sent to asmFish by your gui before the crash
 Simply stating that asmFish crashed in your gui is useless information by itself.
-asmFish is known to have problems in the fritz15 gui, while it plays much better in the fritz11 gui.
-Any help with this issue would be appreciated.
+asmFish is known to have problems in the fritz15 gui, while it plays much better in the
+fritz11 gui. Any help with this issue would be appreciated.
 
 
 ******** FAQ ********
@@ -68,18 +68,7 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
 
 2016-08-12: "Simplify space formula"
   - removed colon from info strings
-  - added PEDANTIC compile option, which makes asmFish match official stockfish in deterministic
-    searches. Here are some search speeds in Mnps from
-        Build Tester: 1.4.6.0
-        Windows 8.1 (Version 6.3, Build 0, 64-bit Edition)
-        Intel(R) Core(TM) i7-4771 CPU @ 3.50GHz
-    Note that the first entry is not comparable to the last two because it is searching a
-    different tree, or in the case of perft the same tree in a different order. Last entry:
-    http://abrok.eu/stockfish/builds/8abb98455f6fa78092f650b8bae9c166f1b5a315/win64bmi2/stockfish_16081012_x64_bmi2.exe
-                                 perft 7        bench 128 1 17   bench 128 1 18
-    asmFish_bmi2                 306.3+-0.098   2.731+-0.002     2.722+-0.003
-    pedanticFish_bmi2            299.7+-0.095   2.727+-0.003     2.741+-0.003   <--- matching
-    stockfish_16081012_x64_bmi2  239.5+-0.087   2.194+-0.001     2.205+-0.001   <--- signatures
+  - added PEDANTIC compile option, which makes asmFish match official stockfish in deterministic searches.
     
 2016-08-08: "Use Color-From-To history stats to help sort moves"
   - the 07-25 version changed the default value of SlowMover from 80 to 89
