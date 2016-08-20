@@ -126,12 +126,12 @@ macro popcnt a,x,t {
 local .start,.skip,.done
  match =1, CPU_HAS_POPCNT \{
 
-	if a eq x
+	;if a eq x
 	     popcnt   a, x
-	else
-		xor   a, a
-	     popcnt   a, x
-	end if
+	;else
+	;        xor   a, a
+	;     popcnt   a, x
+	;end if
 
  \}
  match =0, CPU_HAS_POPCNT \{
