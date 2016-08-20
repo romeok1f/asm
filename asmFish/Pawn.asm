@@ -203,16 +203,6 @@ match =Black, Us
 	       test   r15 ,r15
 		jnz   ..NextPiece
 ..AllDone:
-	      movzx   eax, byte[rdi+PawnEntry.semiopenFiles+1*Us]
-		xor   eax, 0x0FF
-		 jz   ..WritePawnSpan
-		bsf   ecx, eax
-		bsr   eax, eax
-		sub   eax, ecx
-..WritePawnSpan:
-		mov   byte[rdi+PawnEntry.pawnSpan+1*Us], al
-
-
 
 restore Them
 restore Up

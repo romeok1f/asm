@@ -544,7 +544,10 @@ SD_Int rax
 		cmp   eax, RANK_7
 		jne   .ReturnNone
 
+		xor   ecx, 1
 		lea   eax, [2*rcx-1]
+		xor   ecx, 1
+
 		lea   eax, [r8+8*rax]
 		mov   rdx, qword[rbp+Pos.typeBB+8*Pawn]
 		and   rdx, r9

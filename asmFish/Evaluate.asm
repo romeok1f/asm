@@ -1036,9 +1036,9 @@ match =Black, Us
 	end if
 		 or   rax, rdx
 	     popcnt   rax, rax, rcx
-SD_String 'pct:'
-SD_Int rax
-SD_String '|'
+;SD_String 'pct:'
+;SD_Int rax
+;SD_String '|'
 	       imul   eax, (7 shl 16) + 0
 	     addsub   esi, eax
 
@@ -1695,7 +1695,7 @@ end if
 		add   esi, 0x08000
 		sar   esi, 16
 	       test   ecx, ecx
-		jnz   .HaveScaleFunction	; 1.98%
+		jnz   Evaluate_Cold2.HaveScaleFunction	      ; 1.98%
 .HaveScaleFunctionReturn:
 ED_String ' ei.me->scale_factor(pos, strongSide): '
 ED_Int rax
@@ -1712,16 +1712,16 @@ ED_Int rax
 		jnz   .ScaleFactorDone
 	       blsr   r8, r8, rcx
 	       blsr   r9, r9, rcx
+		mov   r11, qword[rbp+Pos.typeBB+8*Pawn]
 		mov   rcx, DarkSquares
 	       test   rcx, r10
 		 jz   .NotOppBishop
 		mov   rcx, LightSquares
 	       test   rcx, r10
 		 jz   .NotOppBishop
-		mov   rcx, qword[rbp+Pos.typeBB+8*Pawn]
 		 or   r8, r9
 		jnz   .NotOppBishop
-	       blsr   rcx, rcx, r8
+	       blsr   rcx, r11, r8
 		mov   eax, 46
 		neg   rcx
 		sbb   ecx, ecx
@@ -1730,33 +1730,22 @@ ED_Int rax
 		cmp   edi, (BishopValueMg shl 16) + BishopValueMg
 	      cmove   eax, ecx
 		jmp   .ScaleFactorDone
-.HaveScaleFunction:
-		mov   eax, ecx
-		shr   eax, 1
-		mov   eax, dword[EndgameScale_FxnTable+4*rax]
-		and   ecx, 1
-	       call   rax
-		cmp   eax, SCALE_FACTOR_NONE
-	      movzx   edx, byte[r15+MaterialEntry.gamePhase]
-	      movzx   ecx, byte[r15+MaterialEntry.factor+r13]
-	      cmove   eax, ecx
-		jmp   .HaveScaleFunctionReturn
 .NotOppBishop:
-	      movzx   ecx, byte[r14+PawnEntry.pawnSpan+r13]
-		lea   r8d, [r12+BishopValueEg]
-		cmp   r8d, 2*BishopValueEg
-		 ja   .ScaleFactorDone
-		sub   ecx, 1
-		 ja   .ScaleFactorDone
-		mov   r8, qword[rbp+Pos.typeBB+8*Pawn]
-		and   r8, qword[rbp+Pos.typeBB+8*r13]
+		lea   r9d, [r12+BishopValueEg]
+		and   r11, qword[rbp+Pos.typeBB+8*r13]
 		xor   r13d, 1
+		cmp   r9d, 2*BishopValueEg+1
+		jae   .ScaleFactorDone
 		mov   r9d, dword[.ei.ksq+4*r13]
 		shl   r13, 6+3
-		and   ecx, 37-51
-		add   ecx, 51
-	       test   r8, qword[PassedPawnMask+r13+8*r9]
-	     cmovnz   eax, ecx
+	       test   r11, qword[PassedPawnMask+r13+8*r9]
+		 jz   .ScaleFactorDone
+	     popcnt   rcx, r11, r9
+		cmp   ecx, 3
+		jae   .ScaleFactorDone
+	       imul   ecx, 7
+		add   ecx, 37
+		mov   eax, ecx
 .ScaleFactorDone:
 	; eax = scale factor
 	; edx = phase
@@ -1764,26 +1753,9 @@ ED_Int rax
 	; r12d = eg_value(score)
 	; adjust score for side to move
 
-match =3, VERBOSE {
-push rsi rdi rax rcx rdx r14 r15
-mov r15, rax
-mov r14, rdx
-lea rdi, [Output]
-szcall PrintString, 'score: '
-mov ecx, esi
-shl ecx, 16
-add ecx, r12d
-ED_Score rcx
-szcall PrintString, ' sf: '
-movsxd rax, r15d
-call PrintSignedInteger
-szcall PrintString, ' phase: '
-movsxd rax, r14d
-call PrintSignedInteger
-PrintNewLine
-call _WriteOut_Output
-pop r15 r14 rdx rcx rax rdi rsi
-}
+;SD_String 'sf:'
+;SD_Int rax
+;SD_String '|'
 
 if PEDANTIC
   ;// Interpolate between a middlegame and a (scaled by 'sf') endgame score
@@ -1849,6 +1821,18 @@ Evaluate_Cold2:
 virtual at rsp
  .ei EvalInfo
 end virtual
+
+.HaveScaleFunction:
+		mov   eax, ecx
+		shr   eax, 1
+		mov   eax, dword[EndgameScale_FxnTable+4*rax]
+		and   ecx, 1
+	       call   rax
+		cmp   eax, SCALE_FACTOR_NONE
+	      movzx   edx, byte[r15+MaterialEntry.gamePhase]
+	      movzx   ecx, byte[r15+MaterialEntry.factor+r13]
+	      cmove   eax, ecx
+		jmp   Evaluate.HaveScaleFunctionReturn
 
 	      align   16
 .EvalPassedPawns0:

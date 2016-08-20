@@ -124,11 +124,11 @@ GenNext_Killers:
 		cmp   edx, ecx
 	      cmove   r15, r13
 
-SD_String 'kil012:'
-SD_Move qword[rsi+Pick.killers+0*sizeof.ExtMove]
-SD_Move qword[rsi+Pick.killers+1*sizeof.ExtMove]
-SD_Move qword[rsi+Pick.killers+2*sizeof.ExtMove]
-SD_String '|'
+;SD_String 'kil012:'
+;SD_Move qword[rsi+Pick.killers+0*sizeof.ExtMove]
+;SD_Move qword[rsi+Pick.killers+1*sizeof.ExtMove]
+;SD_Move qword[rsi+Pick.killers+2*sizeof.ExtMove]
+;SD_String '|'
 
 
 MovePick_Killers:
@@ -153,9 +153,9 @@ MovePick_Killers:
 		 jz   MovePick_Killers
 		mov   eax, edi
 		lea   rdx, [MovePick_Killers]
-SD_String 'kil:'
-SD_Move rax
-SD_String '|'
+;SD_String 'kil:'
+;SD_Move rax
+;SD_String '|'
 		ret
 .special:
 		cmp   edi, MOVE_TYPE_EPCAP shl 12
@@ -165,9 +165,9 @@ SD_String '|'
 		 jz   MovePick_Killers
 		mov   eax, edi
 		lea   rdx, [MovePick_Killers]
-SD_String 'kil:'
-SD_Move rax
-SD_String '|'
+;SD_String 'kil:'
+;SD_Move rax
+;SD_String '|'
 		ret
 
 
@@ -199,31 +199,31 @@ end if
 .JustSort:
       InsertionSort   r14, r13, r11, r12
 
-match =2, VERBOSE {
-lea rdi, [VerboseOutput]
-szcall PrintString, 'quiets:'
-mov  r12, r14
-.1c:
-cmp r12, r15
-jae .2c
-mov al, '('
-stosb
-mov ecx, dword[r12+ExtMove.move]
-xor  edx, edx
-call PrintUciMove
-mov al, ','
-stosb
-movsxd rax, dword[r12+ExtMove.score]
-call PrintSignedInteger
-mov  al, ')'
-stosb
-add  r12, 8
-jmp  .1c
-.2c:
-PrintNewLine
-lea rcx, [VerboseOutput]
-call _WriteOut
-}
+;match =2, VERBOSE {
+;lea rdi, [VerboseOutput]
+;szcall PrintString, 'quiets:'
+;mov  r12, r14
+;.1c:
+;cmp r12, r15
+;jae .2c
+;mov al, '('
+;stosb
+;mov ecx, dword[r12+ExtMove.move]
+;xor  edx, edx
+;call PrintUciMove
+;mov al, ','
+;stosb
+;movsxd rax, dword[r12+ExtMove.score]
+;call PrintSignedInteger
+;mov  al, ')'
+;stosb
+;add  r12, 8
+;jmp  .1c
+;.2c:
+;PrintNewLine
+;lea rcx, [VerboseOutput]
+;call _WriteOut
+;}
 
 
 MovePick_Quiets:

@@ -1148,7 +1148,7 @@ Failed_MatchingCore:
 
 
 
-_ErrorBox:    int3
+_ErrorBox:
 	; rdi points to null terminated string to write to message box 
 	; this may be called from a leaf with no stack allignment 
 	; one purpose is a hard exit on failure

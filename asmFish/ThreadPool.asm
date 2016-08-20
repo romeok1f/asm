@@ -172,6 +172,14 @@ end virtual
 	       call   Limits_Copy
 
 	; copy to mainThread
+
+if PEDANTIC
+	; position is passed to threads by first converting to a fen
+	;   and then parsing this fen string
+	; the net effect is a fixed order on piece lists
+	       call   Position_SetPieceLists
+end if
+
 		lea   rcx, [r14+Thread.rootPos]
 	       call   Position_CopyToSearch
 		xor   eax, eax

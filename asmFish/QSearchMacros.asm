@@ -121,8 +121,9 @@ mov r15, rcx
 mov r14, rdx
 mov r13, r8
 lea rdi, [VerboseOutput]
-mov rax,'qsearch<'
-stosq
+mov eax,'qs<'
+stosd
+sub rdi, 1
 match =1, InCheck \\{
 mov al, 't'
 \\}
@@ -695,8 +696,9 @@ match =2, VERBOSE \{
 push rax r13 r14 r15
 mov r15, rax
 lea rdi, [VerboseOutput]
-mov rax,'qsearch<'
-stosq
+mov eax,'qs<'
+stosd
+sub rdi, 1
 match =1, InCheck \\{
 mov al, 't'
 \\}
@@ -704,16 +706,10 @@ match =0, InCheck \\{
 mov al, 'f'
 \\}
 stosb
-szcall PrintString, '> return: '
+szcall PrintString, '>r'
 movsxd rax, r15d
 call PrintSignedInteger
-match =1, OS_IS_WINDOWS \\{
- mov al, 13
- stosb
-\\}
-
-mov al, 10
-stosb
+PrintNewLine
 lea rcx, [VerboseOutput]
 call _WriteOut
 pop r15 r14 r13 rax

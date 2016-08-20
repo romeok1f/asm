@@ -174,9 +174,8 @@ match=2, VERBOSE {
 push	rax rcx rsi rdi
 mov	esi, ecx
 lea	rdi, [VerboseOutput]
-mov	rax, 'domove'
-stosq
-sub	rdi,2
+mov	eax, 'dm'
+stosw
 movsxd	rax, dword[rbp+Pos.gamePly]
 call	PrintSignedInteger
 mov	al, ':'
@@ -315,14 +314,14 @@ end if
 	      vmovq   qword[rbx+State.materialKey], xmm3
 	      vmovq   qword[rbx+State.psq], xmm6
 
-match =2, VERBOSE {
-movsx eax, word[rbx+State.rule50]
-SD_Int rax
-SD_String ','
-movsx eax, word[rbx+State.pliesFromNull]
-SD_Int rax
-SD_String '|'
-}
+;match =2, VERBOSE {
+;movsx eax, word[rbx+State.rule50]
+;SD_Int rax
+;SD_String ','
+;movsx eax, word[rbx+State.pliesFromNull]
+;SD_Int rax
+;SD_String '|'
+;}
 
 		mov   r15, qword[rbp+Pos.typeBB+8*rsi]
 		xor   esi, 1

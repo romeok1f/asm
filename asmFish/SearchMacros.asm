@@ -40,7 +40,7 @@ virtual at rsp
   .cmh	     rq 1    ;24
   .fmh	     rq 1    ;32
   .fmh2      rq 1    ; 40
-  .r		  rd 1	  ; 48
+		  rd 1	  ; 48
   .ttMove	  rd 1
   .ttValue	  rd 1
   .move 	  rd 1
@@ -116,9 +116,8 @@ mov r15, rcx
 mov r14, rdx
 mov r13, r8
 lea rdi, [VerboseOutput]
-mov rax,'search<'
-stosq
-sub rdi, 1
+mov eax,'s<'
+stosw
 match =_ROOT_NODE, NT
 \\{
 mov al, '2'
@@ -146,12 +145,7 @@ stosd
 sub rdi, 1
 movsxd rax, r13d
 call PrintSignedInteger
-match =1, OS_IS_WINDOWS \\{
- mov al, 13
- stosb
-\\}
-mov al, 10
-stosb
+PrintNewLine
 lea rcx, [VerboseOutput]
 call _WriteOut
 pop r15 r14 r13 r9 r8 rdx rcx
@@ -315,6 +309,7 @@ match =1, DEBUG \{
 .CheckTablebaseReturn:
     end if
 
+
 	; step 5. evaluate the position statically
 		mov   eax, VALUE_NONE
 		mov   dword [.eval], eax
@@ -364,7 +359,6 @@ match =1, DEBUG \{
 		jnz   .moves_loop
 
 
-
 	; Step 6. Razoring (skipped when in check)
     if .PvNode eq 0
 		mov   edx, dword[.depth]
@@ -404,6 +398,7 @@ match =1, DEBUG \{
     end if
 
 
+
 	; Step 7. Futility pruning: child node (skipped when in check)
     if .RootNode eq 0
 		mov   edx, dword[.depth]
@@ -425,7 +420,6 @@ match =1, DEBUG \{
 
 
 
-
 	; Step 8. Null move search with verification search (is omitted in PV nodes)
     if .PvNode eq 0
 		mov   edx, dword[.depth]
@@ -433,8 +427,6 @@ match =1, DEBUG \{
 		add   eax, dword[rbx+State.staticEval]
 		mov   esi, dword[.beta]
 		mov   ecx, dword[rbp+Pos.sideToMove]
-	      ;  cmp   edx, 2*ONE_PLY
-	      ;   jl   .8skip
 		cmp   esi, dword[.eval]
 		 jg   .8skip
 	      movzx   ecx, word[rbx+State.npMaterial+2*rcx]
@@ -659,26 +651,22 @@ lock inc qword[profile.moveUnpack]
 		mov   ecx, dword[.ttMove]
 	       test   ecx, ecx
 		jnz   .10skip
-	if .PvNode eq 1
-		cmp   r8d, 5*ONE_PLY
+		cmp   r8d, 6*ONE_PLY
 		 jl   .10skip
+		lea   r8d, [3*r8]
+		sar   r8d, 2
 		sub   r8d, 2*ONE_PLY
+	if .PvNode eq 1
 		mov   ecx, dword[.alpha]
 		mov   edx, dword[.beta]
 		mov   r9l, byte[.cutNode]
 		mov   byte[rbx+State.skipEarlyPruning], -1
 	       call   Search_Pv
 	else
-		cmp   r8d, 8*ONE_PLY
-		 jl   .10skip
 		mov   eax, dword[rbx+State.staticEval]
 		add   eax, 256
 		cmp   eax, dword[.beta]
 		 jl   .10skip
-		mov   eax, r8d
-		sar   eax, 2
-		sub   r8d, 2*ONE_PLY
-		sub   r8d, eax
 		mov   ecx, dword[.alpha]
 		mov   edx, dword[.beta]
 		mov   r9l, byte[.cutNode]
@@ -696,9 +684,29 @@ lock inc qword[profile.moveUnpack]
 .10skip:
 
 
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .moves_loop:	    ; this is actually not the head of the loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+if PEDANTIC
+	; The data at tte could have been changed by
+	;   Step 6. Razoring
+	;   Step 9. ProbCut
+	; Note that after
+	;   Step 10. Internal iterative deepening
+	; the data is reloaded
+	; Also, in the case of a tt miss, tte points to junk but must be used anyways.
+	; We reload the data in .ltte for its use in .singularExtensionNode.
+		mov   rax, qword[.tte]
+		mov   rax, qword[rax]
+		mov   qword[.ltte], rax
+end if
+
 
 	; not sure if these need to be stored on the fxn stack as well
 		mov   rax, qword[rbx-1*sizeof.State+State.counterMoves]
@@ -733,6 +741,8 @@ ProfileInc SetCheckInfo2
 	     Assert   b, al, 2, 'assertion al<2 in Search failed'
 		mov   byte[.improving], al   ; should be 0 or 1
 
+
+
     if .RootNode eq 1
 		mov   byte[.singularExtensionNode], 0
     else
@@ -759,7 +769,7 @@ ProfileInc SetCheckInfo2
 	      setnz   cl
 		and   al, cl
 	      movsx   edx, byte[.ltte+MainHashEntry.depth]
-		add   edx, 3
+		add   edx, 3*ONE_PLY
 		cmp   edx, dword[.depth]
 	      setge   cl
 		and   al, cl
@@ -851,29 +861,8 @@ lock inc qword[profile.moveUnpack]
 		and   al, byte[CaptureOrPromotion_and+rcx]
 		mov   byte[.captureOrPromotion], al
 
-;      givesCheck =  type_of(move) == NORMAL && !ci.dcCandidates
-;                  ? ci.checkSq[type_of(pos.piece_on(from_sq(move)))] & to_sq(move)
-;                  : pos.gives_check(move, ci);
-
 
 		mov   ecx, dword[.move]
-;                mov   r8d, ecx
-;                shr   r8d, 6
-;                and   r8d, 63   ; r8d = from
-;                mov   r9d, ecx
-;                and   r9d, 63   ; r9d = to
-;                mov   r11, qword[rbx+State.dcCandidates]
-;              movzx   r10d, byte[rbp+Pos.board+r8]     ; r10 = FROM PIECE
-;                and   r10d, 7
-;
-;                cmp   ecx, 1 shl 12
-;                jae   .gives_check
-;               test   r11, r11
-;                jnz   .gives_check
-;                mov   rax, qword[rbx+State.checkSq+8*r10]
-;                 bt   rax, r9
-;                sbb   eax, eax
-;.gives_check_ret:
 	       call   Move_GivesCheck
 		mov   byte[.givesCheck], al
 
@@ -908,6 +897,16 @@ SD_NewLine
 		mov   dword[.extension], 1
 .12dont_extend:
 
+
+;SD_String 'sen'
+;SD_Bool8  qword[.singularExtensionNode]
+;SD_String '|ttM'
+;SD_Move qword[.ttMove]
+;SD_String '|ex'
+;SD_Int qword[.extension]
+;SD_NewLine
+
+
 		mov   al, byte[.singularExtensionNode]
 	       test   al, al
 		 jz   .12done
@@ -923,6 +922,7 @@ SD_NewLine
 		mov   r9l, byte[.cutNode]
 	       test   eax, eax
 		 jz   .12done
+
 		sub   edx, r8d
 		sub   edx, r8d
 		lea   ecx, [rdx-1]
@@ -1094,35 +1094,45 @@ lock inc qword[profile.moveUnpack]
 
 
 	; Step 15. Reduced depth search (LMR)
-		mov   eax, dword[.depth]
-		cmp   eax, 3*ONE_PLY
+		mov   edx, dword[.depth]
+		mov   ecx, dword[.moveCount]
+		cmp   edx, 3*ONE_PLY
 		 jl   .15skip
-		mov   eax, dword[.moveCount]
-		cmp   eax, 1
+		cmp   ecx, 1
 		jbe   .15skip
-		mov   al, byte[.captureOrPromotion]
+		mov   r8l, byte[.captureOrPromotion]
+	       test   r8l, r8l
+		 jz   @f
+		mov   al, byte[.moveCountPruning]
 	       test   al, al
-		jnz   .15skip
+		 jz   .15skip
+	@@:
 
 		mov   esi, 63
 	      movzx   eax, byte[.improving]
-		mov   ecx, dword[.depth]
-		cmp   ecx, esi
-	      cmova   ecx, esi
+		;mov   edx, dword[.depth]
+		cmp   edx, esi
+	      cmova   edx, esi
 	       imul   eax, 64
-		add   eax, ecx
-		mov   ecx, dword[.moveCount]
+		add   eax, edx
+		;mov   ecx, dword[.moveCount]
 		cmp   ecx, esi
 	      cmova   ecx, esi
 	       imul   eax, 64
 		add   eax, ecx
 		mov   eax, dword[Reductions+4*(rax+2*64*64*.PvNode)]
-		mov   dword[.r], eax
 		mov   edi, eax
 
-SD_String 'r='
-SD_Int rdi
-SD_String '|'
+	       test   r8l, r8l
+		 jz   .15NotCaptureOrPromotion
+		xor   eax, eax
+	       test   edi, edi
+	      setnz   al
+		sub   edi, eax
+		jmp   .15ReadyToSearch
+
+.15NotCaptureOrPromotion:
+
 
 		mov   r12d, dword[.move]
 		shr   r12d, 6
@@ -1151,10 +1161,6 @@ SD_String '|'
 		sub   edi, 2*ONE_PLY
 .15skipA:
 
-SD_String 'r='
-SD_Int rdi
-SD_String '|'
-
 		mov   ecx, dword[.move]
 		and   ecx, 64*64-1
 		mov   edx, dword[.moved_piece_to_sq]
@@ -1169,9 +1175,6 @@ SD_String '|'
 		mov   eax, dword[rax+4*rcx]
 		add   eax, dword[r8+4*rdx]
 
-SD_String 'v='
-SD_Int rax
-
 	       test   r9, r9
 		 jz   @f
 		add   eax, dword[r9+4*rdx]
@@ -1183,10 +1186,6 @@ SD_Int rax
 		add   eax, dword[r11+4*rdx]
 	@@:
 
-SD_String 'val='
-SD_Int rax
-SD_String '|'
-
 		sub   eax, 10000
 		cdq
 		mov   ecx, 20000
@@ -1194,19 +1193,14 @@ SD_String '|'
 		xor   ecx, ecx
 		sub   edi, eax
 	      cmovs   edi, ecx
-		mov   dword[.r], edi
 
-
+.15ReadyToSearch:
 		mov   eax, 1
 		mov   r8d, dword[.newDepth]
 		sub   r8d, edi
 		cmp   r8d, eax
 	      cmovl   r8d, eax
-
-
-SD_String '_d='
-SD_Int r8
-SD_String '|'
+		mov   edi, r8d
 
 		mov   edx, dword[.alpha]
 		neg   edx
@@ -1218,9 +1212,8 @@ SD_String '|'
 
 		cmp   eax, dword[.alpha]
 		jle   .17entry
-		mov   edi, dword[.r]
-	       test   edi, edi
-		 jz   .15dontdofulldepthsearch
+		cmp   edi, dword[.newDepth]
+		 je   .15dontdofulldepthsearch
 
 		xor   r9, r9
 		mov   r8d, dword[.newDepth]
@@ -1598,9 +1591,8 @@ match =2, VERBOSE \{
 push rsi rdi rax rcx rdx r8 r9 r13 r14 r15
 mov r15, rax
 lea rdi, [VerboseOutput]
-mov rax,'search<'
-stosq
-sub rdi, 1
+mov eax,'s<'
+stosw
 match =_ROOT_NODE, NT
 \\{
 mov al, '2'
@@ -1614,18 +1606,11 @@ match =_NONPV_NODE, NT
 mov al, '0'
 \\}
 stosb
-mov eax, '> '
+mov eax, '>r'
 stosw
-mov rax, 'return: '
-stosq
 movsxd rax, r15d
 call PrintSignedInteger
-match =1, OS_IS_WINDOWS \\{
- mov al, 13
- stosb
-\\}
-mov al, 10
-stosb
+PrintNewLine
 lea rcx, [VerboseOutput]
 call _WriteOut
 pop r15 r14 r13 r9 r8 rdx rcx rax rdi rsi
@@ -1812,7 +1797,9 @@ end if
 	       call   PrintUnsignedInteger
 		mov   rcx, rsp
        PrintNewLine
+if VERBOSE = 0
 	       call   _WriteOut
+end if
 		add   rsp, 128
 		jmp   .PrintCurrentMoveRet
     end if

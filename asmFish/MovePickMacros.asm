@@ -246,9 +246,9 @@ local ..WhileLoop, ..Done
 	       imul   eax, eax, 200
 		sub   edx, eax
 		mov   dword[start-sizeof.ExtMove+ExtMove.score], edx
-SD_String 'sc:'
-SD_Int rdx
-SD_String '|'
+;SD_String 'sc:'
+;SD_Int rdx
+;SD_String '|'
 		cmp   start, ender
 		 jb   ..WhileLoop
 ..Done:
@@ -306,7 +306,7 @@ match = 1, DEBUG \{
 		jae   ..Done
 ..Loop:
 		mov   ecx, dword[start+ExtMove.move]
-SD_String 'sq:'
+;SD_String 'sq:'
 ;SD_Move rcx
 		mov   eax, ecx
 		mov   edx, ecx
@@ -324,8 +324,8 @@ SD_String 'sq:'
 		add   eax, dword[r10+4*rdx]
 		add   eax, dword[r11+4*rdx]
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
-SD_Int rax
-SD_String '|'
+;SD_Int rax
+;SD_String '|'
 		cmp   start, ender
 		 jb   ..Loop
 ..Done:
@@ -367,9 +367,9 @@ local ..WhileLoop, ..Normal, ..Special, ..Done, ..Positive, ..Capture, ..Negativ
 		mov   eax, dword[t+4*r10]
 		add   eax, dword[rdx+rcx]
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
-SD_String 'se:'
-SD_Int rax
-SD_String '|'
+;SD_String 'se:'
+;SD_Int rax
+;SD_String '|'
 
 		cmp   start, ender
 		 jb   ..WhileLoop
@@ -380,9 +380,9 @@ SD_String '|'
 		sub   eax, edx
 		add   eax, HistoryStats_Max+1	; match piece types of master
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
-SD_String 'se:'
-SD_Int rax
-SD_String '|'
+;SD_String 'se:'
+;SD_Int rax
+;SD_String '|'
 		cmp   start, ender
 		 jb   ..WhileLoop
 		jmp   ..Done
@@ -395,9 +395,9 @@ SD_String '|'
 ..Negative:
 		sub   eax, HistoryStats_Max
 		mov   dword[start-1*sizeof.ExtMove+ExtMove.score], eax
-SD_String 'se:'
-SD_Int rax
-SD_String '|'
+;SD_String 'se:'
+;SD_Int rax
+;SD_String '|'
 		cmp   start, ender
 		 jb   ..WhileLoop
 ..Done:

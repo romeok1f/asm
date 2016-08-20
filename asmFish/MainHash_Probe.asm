@@ -9,9 +9,9 @@ MainHash_Probe:
 	;            edx == 0  if not found
 	;       rcx  entry (8 bytes)
 
-SD_String 'tt probe key='
-SD_UInt64 rcx
-SD_String '|'
+;SD_String 'tt probe key='
+;SD_UInt64 rcx
+;SD_String '|'
 
 ProfileInc MainHash_Probe
 
@@ -22,8 +22,6 @@ ProfileInc MainHash_Probe
 		shr   rcx, 48
 		add   rax, qword[mainHash.table]
 	      movzx   r11d, byte[mainHash.date]
-
-;                jmp   .Found
 
 		mov   rdx, qword[rax+8*3]
 	      movsx   r8d, word[rax]
@@ -88,7 +86,13 @@ ProfileInc MainHash_Probe
 
 	      align   8
 .FoundRefresh:
+		mov   rcx, qword[rax]
+		and   rcx, 0xFFFFFFFFFFFFFF03
+		 or   rcx, r11
+		mov   byte[rax+MainHashEntry.genBound], cl
 
+
+if 0
 match =2, VERBOSE {
 push rax rcx rdx r8 r9 r10 r11 r15 r14 rdi
 mov r15, rax
@@ -110,21 +114,19 @@ call PrintSignedInteger
 szcall PrintString, ' depth='
 movsx rax, byte[r15+MainHashEntry.depth]
 call PrintSignedInteger
+szcall PrintString, ' bound='
+movzx  eax, byte[r15+MainHashEntry.genBound]
+and eax, 3
+call PrintSignedInteger
 mov al, '|'
 stosb
 lea rcx, [VerboseOutput]
 call _WriteOut
 pop rdi r14 r15 r11 r10 r9 r8 rdx rcx rax
 }
+end if
 
-match =1, PROFILE {
-lock inc qword[profile.moveRetrieve]
-}
-
-		mov   rcx, qword[rax]
-		and   rcx, 0xFFFFFFFFFFFFFF03
 		 or   edx, -1
-		 or   rcx, r11
-		mov   byte[rax+MainHashEntry.genBound], cl
+
 		ret
 

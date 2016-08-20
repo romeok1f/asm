@@ -88,6 +88,11 @@ SD_String 'pm:'
 SD_Move rax
 SD_String '|'
 
+SD_String 'mc'
+SD_Int qword[rbx-1*sizeof.State+State.moveCount]
+SD_String '|'
+
+
 
 		and   eax, 63
 	      movzx   ecx, byte[rbp+Pos.board+rax]
@@ -205,10 +210,6 @@ SD_String '|'
 .quiets_done:
 
 		mov   eax, dword[rbx-1*sizeof.State+State.moveCount]
-SD_String 'mc'
-SD_Int rax
-SD_String '|'
-
 		cmp   eax, 1
 		jne   .done
 		mov   al, byte[rbx+State.capturedPiece]

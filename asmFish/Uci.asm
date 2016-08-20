@@ -885,8 +885,9 @@ UciBench:
 		mov   eax, ' ***'
 	      stosd
        PrintNewLine
+if VERBOSE = 0
 	       call   _WriteOut_Output
-
+end if
 		mov   ecx, r14d
 		mov   dword[options.hash], r14d
 	       call   MainHash_Allocate
@@ -895,7 +896,9 @@ UciBench:
 
 		xor   eax, eax
 		mov   qword[UciLoop.nodes], rax
+if VERBOSE = 0
 		mov   byte[options.displayInfoMove], al
+end if
 	       call   Search_Clear
 
 	       test   r15d, r15d
@@ -967,8 +970,12 @@ UciBench:
 		mov   eax, 'knps'
 	      stosd
        PrintNewLine
-
+if VERBOSE = 0
 	       call   _WriteOut_Output
+else
+		lea   rcx, [Output]
+	       call   _WriteError
+end if
 
 		cmp   rsi, BenchFensEnd
 		 jb   .nextpos
@@ -1018,9 +1025,12 @@ UciBench:
 		div   rcx
 	       call   PrintUnsignedInteger
        PrintNewLine
-
+if VERBOSE = 0
 	       call   _WriteOut_Output
-
+else
+		lea   rcx, [Output]
+	       call   _WriteError
+end if
 		mov   byte[options.displayInfoMove], -1
 
 

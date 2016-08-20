@@ -44,9 +44,9 @@ struct PawnEntry	; 80 bytes
  kingSquares	rb 2  ; [0,63] each
  semiopenFiles	rb 2
  pawnsOnSquares rb 4  ; [0,4] each
- pawnSpan	rb 2  ; [0,7] each
  asymmetry	rb 1  ; [0,8]
  castlingRights rb 1
+		rb 2
 ends
 
 struct FromToStats

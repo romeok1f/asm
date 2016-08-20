@@ -12,23 +12,23 @@ match =1, DEBUG {
 
 match=2, VERBOSE {
 		sub   dword[rbp+Pos.gamePly], 1
-push rax rcx rsi rdi
-mov esi, ecx
-lea rdi, [VerboseOutput]
-mov rax, 'undomove'
-stosq
-movsxd rax, dword[rbp+Pos.gamePly]
-call PrintSignedInteger
-mov al, ':'
-stosb
-mov ecx, esi
-xor edx, edx
-call PrintUciMove
-mov al, '|'
-stosb
-lea rcx, [VerboseOutput]
-call _WriteOut
-pop rdi rsi rcx rax
+;push rax rcx rsi rdi
+;mov esi, ecx
+;lea rdi, [VerboseOutput]
+;mov rax, 'undomove'
+;stosq
+;movsxd rax, dword[rbp+Pos.gamePly]
+;call PrintSignedInteger
+;mov al, ':'
+;stosb
+;mov ecx, esi
+;xor edx, edx
+;call PrintUciMove
+;mov al, '|'
+;stosb
+;lea rcx, [VerboseOutput]
+;call _WriteOut
+;pop rdi rsi rcx rax
 }
 
 		mov   esi, dword[rbp+Pos.sideToMove]

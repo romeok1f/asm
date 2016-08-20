@@ -1,37 +1,35 @@
 macro MainHash_Save local, entr, key16, value, bounder, depth, move, ev {
 local ..dont_write_move, ..write_everything, ..write_after_move, ..done
 
-
+if 0
 match =2, VERBOSE \{
 mov qword[Verbr15], r15
-mov r15w, key16
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea  rdi, [Output]
-szcall PrintString, 'tt save key='
+mov qword[Verbrdi], rdi
+lea rdi, [Output]
 
+mov r15w, key16
+push rsi rax rcx rdx r8 r9 r10 r11
+szcall PrintString, 'tsk'
 movzx rax, r15w
 call PrintUnsignedInteger
-call _WriteOut_Output
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
+pop r11 r10 r9 r8 rdx rcx rax rsi
+
 
 mov r15d, move
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea  rdi, [Output]
-szcall PrintString, ' move='
+push rsi rax rcx rdx r8 r9 r10 r11
+szcall PrintString, 'm'
 mov ecx, r15d
 xor edx, edx
 call PrintUciMove
-call _WriteOut_Output
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
+pop r11 r10 r9 r8 rdx rcx rax rsi
+
 
 mov r15d, value
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea  rdi, [Output]
-szcall PrintString, ' value='
+push rsi rax rcx rdx r8 r9 r10 r11
+szcall PrintString, 'v'
 movsxd rax, r15d
 call PrintSignedInteger
-call _WriteOut_Output
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
+pop r11 r10 r9 r8 rdx rcx rax rsi
 
 
     if ev eqtype 0
@@ -39,36 +37,41 @@ pop r11 r10 r9 r8 rdx rcx rax rsi rdi
     else
 	      movsx   r15d, ev
     end if
-
-
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea  rdi, [Output]
-szcall PrintString, ' eval='
+push rsi rax rcx rdx r8 r9 r10 r11
+szcall PrintString, 'e'
 movsxd rax, r15d
 call PrintSignedInteger
-call _WriteOut_Output
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
+pop r11 r10 r9 r8 rdx rcx rax rsi
 
     if depth eqtype 0
 		mov   r15d, depth
     else
 	      movsx   r15d, depth
     end if
+push rsi rax rcx rdx r8 r9 r10 r11
+szcall PrintString, 'd'
+movsxd rax, r15d
+call PrintSignedInteger
+pop r11 r10 r9 r8 rdx rcx rax rsi
 
-push rdi rsi rax rcx rdx r8 r9 r10 r11
-lea  rdi, [Output]
-szcall PrintString, ' depth='
+
+xor r15, r15
+mov r15l, bounder
+push rsi rax rcx rdx r8 r9 r10 r11
+szcall PrintString, 'b'
 movsxd rax, r15d
 call PrintSignedInteger
 mov al, '|'
 stosb
 call _WriteOut_Output
-pop r11 r10 r9 r8 rdx rcx rax rsi rdi
+pop r11 r10 r9 r8 rdx rcx rax rsi
+
 
 mov r15, qword[Verbr15]
+mov rdi, qword[Verbrdi]
 
 \}
-
+end if
 
 ProfileInc MainHash_Save
 
@@ -157,7 +160,6 @@ end if
 ..done:
 		mov   rax, qword[local]
 		mov   qword[entr], rax
-
 
 }
 

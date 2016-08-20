@@ -72,6 +72,7 @@ if VERBOSE > 0
   VerboseTime1 rq 2
   VerboseTime2 rq 2
   Verbr15 rq 1
+  Verbrdi rq 1
 end if
 
 
@@ -280,6 +281,7 @@ BenchFens: ;fens must be separated by one or more space char
 .bench_fen35 db "8/8/3P3k/8/1p6/8/1P6/1K3n2 b - - 0 1",' '  ; Nd2 - draw
   ; 7-man positions
 .bench_fen36 db "8/R7/2q5/8/6k1/8/1P5p/K6R w - - 0 124"  ; Draw
+
 BenchFensEnd: db 0
 
 
