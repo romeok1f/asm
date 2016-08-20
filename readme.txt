@@ -42,6 +42,20 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
 
 
 ******** updates ********
+
+2016-08-20: "Simplify IID"
+  - fixed bug in tt for pedantic version
+  - fixed bug in KBPsK scale
+  - testing pedantic against ultimaiq builds
+    speedup % from bench 128 1 n:
+      n      16    17    18    19    20    21    
+      bmi2   16.4  16.9  16.7  16.7  17.0  16.8  
+      popcnt 16.3  16.1  15.5  15.9  16.0  16.1
+    speedup % from bench 128 4 n:
+      n      17    18    19    20    21    22    
+      bmi2   15.0  15.9  17.1  0     0     0     
+      popcnt 15.4  15.9  16.2  0     0     0
+
 2016-08-18: "Remove a stale assignment"
   - searching for bug in pedantic version
     - bench speedup % over abrok.eu builds with hash=128 and depth=15,...,20
