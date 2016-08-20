@@ -574,9 +574,8 @@ UciSetOption:
 
 		lea   rcx, [sz_clearhash]
 	       call   CmpStringCaseless
-		lea   rbx, [.ClearHash]
 	       test   eax, eax
-		jnz   .CheckValue
+		jnz   .ClearHash
 
 		lea   rcx, [sz_ponder]
 	       call   CmpStringCaseless

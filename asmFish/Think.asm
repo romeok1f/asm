@@ -720,6 +720,8 @@ virtual at rsp
  .alpha      rd 1
  .beta	     rd 1
  .multiPV    rd 1
+ .hashfull   rd 1
+	     rd 1
  .output     rb 8*MAX_PLY
  .lend rb 0
 end virtual
@@ -737,6 +739,12 @@ end virtual
 		 jz   .return
 
 	     Assert   ne, r10d, 0, 'assertion dword[.multiPV]!=0 in Position_WriteOutUciInfo failed'
+
+		xor   eax, eax
+		cmp   r9, 1000
+		 jb   @f
+	       call   MainHash_HashFull
+	@@:	mov   dword[.hashfull], eax
 
 	       call   ThreadPool_NodesSearched
 		mov   qword[.nodes], rax
@@ -842,6 +850,16 @@ end if
 		mov   rax, qword[Tablebase_Hits]
 	       call   PrintUnsignedInteger
 
+		mov   ecx, dword[.hashfull]
+	       test   ecx, ecx
+		 jz   @f
+		mov   rax, ' hashful'
+	      stosq
+		mov   ax, 'l '
+	      stosw
+		mov   eax, ecx
+	       call   PrintUnsignedInteger
+	@@:
 		mov   eax, ' pv'
 	      stosd
 		sub   rdi, 1

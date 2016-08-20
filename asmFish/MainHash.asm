@@ -31,6 +31,26 @@ MainHash_Allocate:
 
 
 
+MainHash_HashFull:
+	; out: eax hash usage per thousand
+		xor   eax, eax
+		mov   r8, qword[mainHash.table]
+	      movzx   edx, byte[mainHash.date]
+		lea   r9, [r8+32*(1000/3)]	; three entires per cluster
+.NextCluster:
+	irps i, 0 1 2 {
+	      movzx   ecx, byte[r8+8*i+MainHashEntry.genBound]
+		xor   ecx, edx
+		and   ecx, 0xFFFFFFFC
+		cmp   ecx, 1
+		adc   eax, 0
+	}
+		add   r8, 32
+		cmp   r8, r9
+		 jb   .NextCluster
+		ret
+
+
 MainHash_Clear:
 	; hmmm, not sure if we want calling thread to touch each hash page
 	       push   rdi

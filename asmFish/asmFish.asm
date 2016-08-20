@@ -65,6 +65,7 @@ if VERBOSE > 0
   VerboseTime1 rq 2
   VerboseTime2 rq 2
   Verbr15 rq 1
+  Verbrdi rq 1
 end if
 
 
