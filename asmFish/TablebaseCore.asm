@@ -2255,7 +2255,7 @@ _ZN13TablebaseCore4initEPKc:
 	lea	rdi, [Output]
 	mov	rax, 'info str'
 	stosq
-	mov	rax, 'ing Foun'
+	mov	rax, 'ing foun'
 	stosq
 	mov	eax, 'd '
 	stosw
@@ -2264,8 +2264,9 @@ _ZN13TablebaseCore4initEPKc:
 	call	PrintUnsignedInteger
 	mov	rax, ' tableba'
 	stosq
-	mov	eax, 'ses.'
+	mov	eax, 'ses'
 	stosd
+	sub	rdi, 1
 	PrintNewLine
 	call	_WriteOut_Output
 

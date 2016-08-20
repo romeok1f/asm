@@ -572,6 +572,10 @@ UciSetOption:
 	       test   eax, eax
 		jnz   .CheckValue
 
+		lea   rcx, [sz_clear_hash]  ; arena may send Clear Hash
+	       call   CmpStringCaseless     ;  instead of ClearHash
+	       test   eax, eax		    ;
+		jnz   .ClearHash	    ;
 		lea   rcx, [sz_clearhash]
 	       call   CmpStringCaseless
 	       test   eax, eax
@@ -672,6 +676,19 @@ end if
 		mov   ecx, eax
 		mov   dword[options.hash], eax
 	       call   MainHash_Allocate
+		lea   rdi, [Output]
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing hash'
+	      stosq
+		mov   rax, ' set to '
+	      stosq
+		mov   eax, dword[mainHash.sizeMB]
+	       call   PrintUnsignedInteger
+		mov   eax, ' MiB'
+	      stosd
+       PrintNewLine
+	       call   _WriteOut_Output
 		jmp   UciGetInput
 .Threads:
 	       call   ParseInteger
@@ -723,6 +740,15 @@ end if
 		jmp   UciGetInput
 .ClearHash:
 	       call   Search_Clear
+		lea   rdi, [Output]
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing hash'
+	      stosq
+		mov   rax, ' cleared'
+	      stosq
+       PrintNewLine
+	       call   _WriteOut_Output
 		jmp   UciGetInput
 .SyzygyProbeDepth:
 	       call   ParseInteger

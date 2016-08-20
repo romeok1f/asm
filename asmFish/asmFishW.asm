@@ -228,6 +228,7 @@ sz_ponder		db 'ponder',0
 sz_threads		db 'threads',0
 sz_contempt		db 'contempt',0
 sz_clearhash		db 'clearhash',0
+sz_clear_hash		db 'clear hash',0
 sz_multipv		db 'multipv',0
 sz_weakness		db 'weakness',0
 sz_moveoverhead 	db 'moveoverhead',0
