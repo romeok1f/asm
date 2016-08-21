@@ -1,3 +1,20 @@
+if the lptest.exe is able to use large pages you should see something
+like this upon setting the hash
+
+asmFishW_2016-08-21_base
+setoption name hash value 16
+info string hash set to 16 MiB large page min 2048 KiB
+
+
+if the lptest.exe is not able large pages you should see something
+like this upon setting the hash
+
+asmFishW_2016-08-21_base
+setoption name hash value 16
+info string hash set to 16 MiB no large pages
+
+
+
 In an effort to reduce size, previous versions of asmFish are now in my asmFishBuilds repo.
 
 If you observe a crash in asmFish, please raise an issue here and give me the following information:
