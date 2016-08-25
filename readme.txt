@@ -43,24 +43,53 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
 
 ******** updates ********
 
+2016-08-23:
+  - added support for large pages
+    - gui's can send the 'LargePages', 'Hash', and 'Threads' options in whatever random order
+      they like. Since the engine should take care with these options, the processing of
+      these options has been delayed until the 'isready' command is received. They are also
+      processed after the 'go' command so that cmd line interation is not too cumbersome
+      - if you have working LP, the interation could go like this
+	 < asmFishW_2016-08-24_bmi2
+	 > setoption name Threads value 4
+	 > setoption name LargePages value true
+	 > setoption name Hash value 256
+	 > isready
+	 < info string hash set to 256 MiB page size 2048 KiB
+	 < info string node 0 cores 4 group 0 mask 0x000000000000000f
+	 < info string node 0 has threads 0 1 2 3
+	 < readyok
+      - if you don't have working LP, the same interation is
+	 < asmFishW_2016-08-24_bmi2
+	 > setoption name Threads value 4
+	 > setoption name LargePages value true
+	 > setoption name Hash value 256
+	 > isready
+	 < info string hash set to 256 MiB
+	 < info string node 0 cores 4 group 0 mask 0x000000000000000f
+	 < info string node 0 has threads 0 1 2 3
+	 < readyok
+    - the engine still starts 1 search thread and allocates 16MiB of non-LP hash at startup
+    - The 'LargePages' option does nothing on Linux, which may change in the future
+
 2016-08-20: "Simplify IID"
   - fixed bug in tt for pedantic version
   - fixed bug in KBPsK scale
   - added hash usage
   - testing pedantic against ultimaiq builds
       speedup % from bench 128 1 n:
-        n      16    17    18    19    20    21    
-        bmi2   16.4  16.9  16.7  16.7  17.0  16.8  
-        popcnt 16.3  16.1  15.5  15.9  16.0  16.1
+	n      16    17    18	 19    20    21    
+	bmi2   16.4  16.9  16.7  16.7  17.0  16.8  
+	popcnt 16.3  16.1  15.5  15.9  16.0  16.1
       speedup % from bench 128 4 n:
-        n      17    18    19    20    21    22    
-        bmi2   15.0  15.9  17.1  16.9  15.7  17.5  
-        popcnt 15.4  15.9  16.2  14.7  16.2  15.7
+	n      17    18    19	 20    21    22    
+	bmi2   15.0  15.9  17.1  16.9  15.7  17.5  
+	popcnt 15.4  15.9  16.2  14.7  16.2  15.7
 
 2016-08-18: "Remove a stale assignment"
   - searching for bug in pedantic version
     - bench speedup % over abrok.eu builds with hash=128 and depth=15,...,20
-    depth  |  15  |  16  |  17  |  18  |  19  |  20  |
+    depth  |  15  |  16  |  17	|  18  |  19  |  20  |
     bmi2   | 23.6 | 24.3 | 24.3 | 24.5 | bench no longer matches
     popcnt | 25.3 | 25.3 | 25.4 | 25.8 | at depth 19
     
