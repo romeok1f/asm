@@ -289,6 +289,7 @@ BenchFensEnd: db 0
 
 
 sz_kernel32    db 'kernel32',0
+sz_Advapi32dll		 db 'Advapi32.dll',0
 sz_VirtualAllocExNuma db 'VirtualAllocExNuma',0
 sz_SetThreadGroupAffinity db 'SetThreadGroupAffinity',0
 sz_GetLogicalProcessorInformationEx db 'GetLogicalProcessorInformationEx',0
@@ -302,6 +303,7 @@ align 8
  hStdOut     dq ?
  hStdIn      dq ?
  hStdError   dq ?
+ hAdvapi32   dq ?
  LargePageMinSize dq ?
  __imp_MessageBoxA dq ?
  __imp_VirtualAllocExNuma dq ?

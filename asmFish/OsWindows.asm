@@ -433,7 +433,7 @@ _VirtualAlloc_LargePages:
 virtual at rsp
 	  rq 8
   .hToken    rq 1
-  .hAdvapi32 rq 1
+	     rq 1
   .__imp_OpenProcessToken      rq 1
   .__imp_LookupPrivilegeValueA rq 1
   .__imp_AdjustTokenPrivileges rq 1
@@ -493,28 +493,31 @@ end virtual
 		mov   qword[LargePageMinSize], rax
 
 
-		lea   rcx, [.sz_Advapi32dll]
+		mov   rax, qword[hAdvapi32]
+	       test   rax, rax
+		jnz   @f
+		lea   rcx, [sz_Advapi32dll]
 	       call   qword[__imp_LoadLibrary]
 	       test   rax, rax
 		 jz   .Fail
-		mov   qword[.hAdvapi32], rax
+		mov   qword[hAdvapi32], rax
+	@@:
 
-
-		mov   rcx, qword[.hAdvapi32]
+		mov   rcx, qword[hAdvapi32]
 		lea   rdx, [.sz_OpenProcessToken]
 	       call   qword[__imp_GetProcAddress]
 		mov   qword[.__imp_OpenProcessToken], rax
 	       test   rax, rax
 		 jz   .Fail
 
-		mov   rcx, qword[.hAdvapi32]
+		mov   rcx, qword[hAdvapi32]
 		lea   rdx, [.sz_LookupPrivilegeValueA]
 	       call   qword[__imp_GetProcAddress]
 		mov   qword[.__imp_LookupPrivilegeValueA], rax
 	       test   rax, rax
 		 jz   .Fail
 
-		mov   rcx, qword[.hAdvapi32]
+		mov   rcx, qword[hAdvapi32]
 		lea   rdx, [.sz_AdjustTokenPrivileges]
 	       call   qword[__imp_GetProcAddress]
 		mov   qword[.__imp_AdjustTokenPrivileges], rax
@@ -552,8 +555,8 @@ end virtual
 		mov   rcx, qword[.hToken]
 	       call   qword[__imp_CloseHandle]
 
-		mov   rcx, qword[.hAdvapi32]
-	       call   qword[__imp_FreeLibrary]
+	    ;    mov   rcx, qword[hAdvapi32]
+	    ;   call   qword[__imp_FreeLibrary]
 
 		jmp   .TryRet
 
@@ -563,7 +566,6 @@ end virtual
 .sz_LookupPrivilegeValueA db 'LookupPrivilegeValueA',0
 .sz_AdjustTokenPrivileges db 'AdjustTokenPrivileges',0
 .sz_SeLockMemoryPrivilege db 'SeLockMemoryPrivilege',0
-.sz_Advapi32dll 	  db 'Advapi32.dll',0
 
 
 
