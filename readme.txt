@@ -43,7 +43,12 @@ A: It is 99.9% official stockfish as there are some inconsequential functional d
 
 ******** updates ********
 
-2016-08-23:
+2016-08-23: "Refutation penalty on captures"
+  - some speed gain over last relative to ultimaiq builds
+  	speedup % from bench 128 1 n:
+          n      16    17    18    19    20    21    
+          bmi2   16.8  17.1  17.0  17.2  16.9  17.3  
+          popcnt 16.5  17.1  16.5  16.5  16.6  16.6
   - added support for large pages
     - gui's can send the 'LargePages', 'Hash', and 'Threads' options in whatever random order
       they like. Since the engine should take care with these options, the processing of
