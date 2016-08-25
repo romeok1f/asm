@@ -156,7 +156,7 @@ szGreetingEnd:
 		db 'id author TypingALot',10
 		db 'option name Threads type spin default 1 min 1 max 256',10
 		db 'option name Hash type spin default 16 min 1 max 1048576',10
-		db 'option name LargePages check default false',10
+		db 'option name LargePages type check default false',10
 		db 'option name Clear Hash type button',10
 		db 'option name Ponder type check default false',10
 		db 'option name UCI_Chess960 type check default false',10
