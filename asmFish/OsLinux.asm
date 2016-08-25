@@ -494,6 +494,30 @@ _VirtualFree:
 
 
 
+_VirtualAlloc_LargePages:
+	; rcx is size
+	;  if this fails, we want to return 0
+	;  so that _VirtualAlloc can be called
+	;
+	;  global var LargePageMinSize could be
+	;    <0 : tried to use large pages and failed
+	;    =0 : haven't tried to use larges yet
+	;    >0 : succesfully used large pages
+	;
+	; out:
+	;  rax address of base
+	;  rdx size allocated
+	;        should be multiple of qword[LargePageMinSize]
+
+		xor   eax, eax
+		xor   edx, edx
+		ret
+
+
+
+
+
+
 ;;;;;;;;;;;;;;;;
 ; input/output ;
 ;;;;;;;;;;;;;;;;

@@ -9,7 +9,7 @@
 struct MainHash
  table	rq 1
  mask	rq 1
-	rq 1
+ lpSize rq 1	; 0 if large pages are not in use, otherwise the allocation size
  sizeMB rd 1
  date	rb 1
 	rb 3
@@ -236,10 +236,12 @@ ends
 
 
 struct Options
- hash	       rd 1
- multiPV       rd 1
- threads       rd 1
- weakness      rd 1
+ hash	    rd 1
+ threads    rd 1
+ largePages rb 1     ; bool 0 or -1
+ changed    rb 1     ; have hash or threads changed?
+	    rb 2
+ multiPV    rd 1
  chess960	rd 1
  minThinkTime	rd 1
  slowMover	rd 1

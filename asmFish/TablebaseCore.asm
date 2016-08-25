@@ -2252,24 +2252,6 @@ _ZN13TablebaseCore4initEPKc:
 	cmp	rbx, 5					
 	jnz	?_229
 
-	lea	rdi, [Output]
-	mov	rax, 'info str'
-	stosq
-	mov	rax, 'ing foun'
-	stosq
-	mov	eax, 'd '
-	stosw
-	mov	eax, dword[_ZL10TBnum_pawn]
-	add	eax, dword[_ZL11TBnum_piece]
-	call	PrintUnsignedInteger
-	mov	rax, ' tableba'
-	stosq
-	mov	eax, 'ses'
-	stosd
-	sub	rdi, 1
-	PrintNewLine
-	call	_WriteOut_Output
-
 ?_233:	add	rsp, 72 				
 	pop	rbx					
 	pop	rsi					

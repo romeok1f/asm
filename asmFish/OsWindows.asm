@@ -415,6 +415,158 @@ GD_NewLine
 
 
 
+_VirtualAlloc_LargePages:
+	; rcx is size
+	;  if this fails, we want to return 0
+	;  so that _VirtualAlloc can be called
+	;
+	;  global var LargePageMinSize could be
+	;    <0 : tried to use large pages and failed
+	;    =0 : haven't tried to use larges yet
+	;    >0 : succesfully used large pages
+	;
+	; out:
+	;  rax address of base
+	;  rdx size allocated
+	;        should be multiple of qword[LargePageMinSize]
+
+virtual at rsp
+	  rq 8
+  .hToken    rq 1
+  .hAdvapi32 rq 1
+  .__imp_OpenProcessToken      rq 1
+  .__imp_LookupPrivilegeValueA rq 1
+  .__imp_AdjustTokenPrivileges rq 1
+
+  .tp			    rb 0
+  .tp.PrivilegeCount	    rd 1
+  .tp.Privileges.Luid	    rq 1
+  .tp.Privileges.Attributes rd 1
+			    rd 1
+			    rd 1
+  .localend rb 0
+end virtual
+.localsize = ((.localend-rsp+15) and (-16))
+
+	       push   rbx rsi rdi
+		sub   rsp, .localsize
+
+		mov   rdi, rcx	; rdi is requested size
+
+		mov   rsi, qword[LargePageMinSize]
+	       test   rsi, rsi	; rsi is min size
+		 js   .Fail
+		 jz   .Try
+.TryRet:
+		lea   rax, [rdi+rsi-1]
+		div   rsi
+		mul   rsi
+		mov   rdx, rax
+		mov   rbx, rax	; save size in rbx
+		xor   ecx, ecx
+		mov   r8d, MEM_RESERVE or MEM_COMMIT or MEM_LARGE_PAGES
+		mov   r9d, PAGE_READWRITE
+	       call   qword[__imp_VirtualAlloc]
+		mov   rdx, rbx
+		add   rsp, .localsize
+		pop   rdi rsi rbx
+		ret
+.Fail:
+		 or   rsi, -1
+		mov   qword[LargePageMinSize], rsi
+		xor   eax, eax
+		xor   edx, edx
+		add   rsp, .localsize
+		pop   rdi rsi rbx
+		ret
+
+.Try:
+		lea   rcx, [sz_kernel32]
+	       call   qword[__imp_GetModuleHandle]
+		mov   rcx, rax
+		lea   rdx, [.sz_GetLargePageMinimum]
+	       call   qword[__imp_GetProcAddress]
+	       test   rax, rax
+		 jz   .Fail
+	       call   rax
+		mov   rsi, rax
+		mov   qword[LargePageMinSize], rax
+
+
+		lea   rcx, [.sz_Advapi32dll]
+	       call   qword[__imp_LoadLibrary]
+	       test   rax, rax
+		 jz   .Fail
+		mov   qword[.hAdvapi32], rax
+
+
+		mov   rcx, qword[.hAdvapi32]
+		lea   rdx, [.sz_OpenProcessToken]
+	       call   qword[__imp_GetProcAddress]
+		mov   qword[.__imp_OpenProcessToken], rax
+	       test   rax, rax
+		 jz   .Fail
+
+		mov   rcx, qword[.hAdvapi32]
+		lea   rdx, [.sz_LookupPrivilegeValueA]
+	       call   qword[__imp_GetProcAddress]
+		mov   qword[.__imp_LookupPrivilegeValueA], rax
+	       test   rax, rax
+		 jz   .Fail
+
+		mov   rcx, qword[.hAdvapi32]
+		lea   rdx, [.sz_AdjustTokenPrivileges]
+	       call   qword[__imp_GetProcAddress]
+		mov   qword[.__imp_AdjustTokenPrivileges], rax
+	       test   rax, rax
+		 jz   .Fail
+
+
+		mov   rcx, qword[hProcess]
+		mov   rdx, TOKEN_ADJUST_PRIVILEGES or TOKEN_QUERY
+		lea   r8, [.hToken]
+	       call   qword[.__imp_OpenProcessToken]
+	       test   eax, eax
+		 jz   .Fail
+
+		xor   ecx, ecx
+		lea   rdx, [.sz_SeLockMemoryPrivilege]
+		lea   r8, [.tp.Privileges.Luid]
+	       call   qword[.__imp_LookupPrivilegeValueA]
+	       test   eax, eax
+		 jz   .Fail
+
+		mov   dword[.tp.PrivilegeCount], 1
+		mov   dword[.tp.Privileges.Attributes], SE_PRIVILEGE_ENABLED
+
+		mov   rcx, qword[.hToken]
+		xor   edx, edx
+		lea   r8, [.tp]
+		xor   r9d, r9d
+		mov   qword[rsp+8*4], rdx
+		mov   qword[rsp+8*5], rdx
+	       call   qword[.__imp_AdjustTokenPrivileges]
+	       test   eax, eax
+		 jz   .Fail
+
+		mov   rcx, qword[.hToken]
+	       call   qword[__imp_CloseHandle]
+
+		mov   rcx, qword[.hAdvapi32]
+	       call   qword[__imp_FreeLibrary]
+
+		jmp   .TryRet
+
+
+.sz_GetLargePageMinimum   db 'GetLargePageMinimum',0
+.sz_OpenProcessToken	  db 'OpenProcessToken',0
+.sz_LookupPrivilegeValueA db 'LookupPrivilegeValueA',0
+.sz_AdjustTokenPrivileges db 'AdjustTokenPrivileges',0
+.sz_SeLockMemoryPrivilege db 'SeLockMemoryPrivilege',0
+.sz_Advapi32dll 	  db 'Advapi32.dll',0
+
+
+
 ;;;;;;;;;;;;;;;;
 ; input/output ;
 ;;;;;;;;;;;;;;;;
@@ -771,7 +923,6 @@ _DisplayThreadPoolInfo:
 	      stosq
 		mov   rcx, qword[rsi+NumaNode.groupMask.Mask]
 	       call   PrintHex
-		add   rdi, 16
        PrintNewLine
 	       call   _WriteOut_Output
 		add   rsi, sizeof.NumaNode

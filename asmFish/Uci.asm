@@ -13,7 +13,8 @@ Options_Init:
 		mov   dword[rdx+Options.syzygyProbeDepth], 1
 		mov   byte[rdx+Options.syzygy50MoveRule], -1
 		mov   dword[rdx+Options.syzygyProbeLimit], 6
-		mov   dword[rdx+Options.weakness], 0
+;                mov   dword[rdx+Options.weakness], 0
+		mov   byte[rdx+Options.largePages], 0
 		ret
 
 
@@ -144,15 +145,15 @@ mov qword[VerboseTime1+8*1], rax
 UciChoose:
 	       call   SkipSpaces
 
-		lea   rcx, [sz_position]
-	       call   CmpString
-	       test   eax, eax
-		jnz   UciPosition
-
 		lea   rcx, [sz_go]
 	       call   CmpString
 	       test   eax, eax
 		jnz   UciGo
+
+		lea   rcx, [sz_position]
+	       call   CmpString
+	       test   eax, eax
+		jnz   UciPosition
 
 		lea   rcx, [sz_stop]
 	       call   CmpString
@@ -266,12 +267,19 @@ UciUci:
 ;;;;;;;;;;;;
 
 UciIsReady:
+		mov   al, byte[options.changed]
+	       test   al, al
+		 jz   .ok
+	       call   UciSync
+.ok:
 		lea   rdi, [Output]
 		mov   rax, 'readyok'
 	      stosq
 		sub   rdi, 1
        PrintNewLine
 		jmp   UciWriteOut
+
+
 
 ;;;;;;;;;;;;;
 ; ponderhit
@@ -300,12 +308,25 @@ UciStop:
 	       call   Thread_WaitForSearchFinished
 		jmp   UciGetInput
 
+
+UciSync:
+	       push   rbx
+	       call   MainHash_ReadOptions
+	       call   ThreadPool_ReadOptions
+		mov   byte[options.changed], 0
+		pop   rbx
+		ret
+
 ;;;;;;;
 ; go
 ;;;;;;;
 
 UciGo:
-		xor   r15, r15			; not reading searchmoves
+		mov   al, byte[options.changed]
+	       test   al, al
+		 jz   .ok
+	       call   UciSync
+.ok:
 		lea   rcx, [UciLoop.limits]
 	       call   Limits_Init
 .ReadLoop:
@@ -572,14 +593,16 @@ UciSetOption:
 	       test   eax, eax
 		jnz   .CheckValue
 
+		lea   rcx, [sz_largepages]
+	       call   CmpStringCaseless
+		lea   rbx, [.LargePages]
+	       test   eax, eax
+		jnz   .CheckValue
+
 		lea   rcx, [sz_clear_hash]  ; arena may send Clear Hash
 	       call   CmpStringCaseless     ;  instead of ClearHash
 	       test   eax, eax		    ;
 		jnz   .ClearHash	    ;
-		lea   rcx, [sz_clearhash]
-	       call   CmpStringCaseless
-	       test   eax, eax
-		jnz   .ClearHash
 
 		lea   rcx, [sz_ponder]
 	       call   CmpStringCaseless
@@ -599,13 +622,13 @@ UciSetOption:
 	       test   eax, eax
 		jnz   .CheckValue
 
-if CPU_VERSION eq 'base'
-		lea   rcx, [sz_weakness]
-	       call   CmpStringCaseless
-		lea   rbx, [.Weakness]
-	       test   eax, eax
-		jnz   .CheckValue
-end if
+;if CPU_VERSION eq 'base'
+;                lea   rcx, [sz_weakness]
+;               call   CmpStringCaseless
+;                lea   rbx, [.Weakness]
+;               test   eax, eax
+;                jnz   .CheckValue
+;end if
 		lea   rcx, [sz_moveoverhead]
 	       call   CmpStringCaseless
 		lea   rbx, [.MoveOverhead]
@@ -670,46 +693,74 @@ end if
 	       call   SkipSpaces
 		jmp   rbx
 
+; these options require further careful processing in UciSync and set changed = true
+.LargePages:
+	       call   ParseBoole
+		mov   byte[options.largePages], al
+		mov   byte[options.changed], -1
+		jmp   UciGetInput
 .Hash:
 	       call   ParseInteger
       ClampUnsigned   eax, 1, 1 shl MAX_HASH_LOG2MB
 		mov   ecx, eax
 		mov   dword[options.hash], eax
-	       call   MainHash_Allocate
-		lea   rdi, [Output]
-		mov   rax, 'info str'
-	      stosq
-		mov   rax, 'ing hash'
-	      stosq
-		mov   rax, ' set to '
-	      stosq
-		mov   eax, dword[mainHash.sizeMB]
-	       call   PrintUnsignedInteger
-		mov   eax, ' MiB'
-	      stosd
-       PrintNewLine
-	       call   _WriteOut_Output
+		mov   byte[options.changed], -1
 		jmp   UciGetInput
 .Threads:
 	       call   ParseInteger
       ClampUnsigned   eax, 1, MAX_THREADS
 		mov   dword[options.threads], eax
-	       call   ThreadPool_ReadOptions
-	       call   _DisplayThreadPoolInfo
-	       call   ThreadPool_DisplayThreadDistribution
+		mov   byte[options.changed], -1
 		jmp   UciGetInput
+
+
+; these options are processed right away
+.ClearHash:
+	       call   Search_Clear
+		lea   rdi, [Output]
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing hash'
+	      stosq
+		mov   rax, ' cleared'
+	      stosq
+       PrintNewLine
+	       call   _WriteOut_Output
+		jmp   UciGetInput
+.SyzygyPath:
+	; find terminator and replace it with zero
+		mov   rcx, rsi
+	@@:	add   rsi, 1
+		cmp   byte[rsi], ' '
+		jae   @b
+		mov   byte[rsi], 0
+	       call   TableBase_Init
+		lea   rdi, [Output]
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing foun'
+	      stosq
+		mov   eax, 'd '
+	      stosw
+		mov   eax, dword[_ZL10TBnum_pawn]
+		add   eax, dword[_ZL11TBnum_piece]
+	       call   PrintUnsignedInteger
+		mov   rax, ' tableba'
+	      stosq
+		mov   eax, 'ses'
+	      stosd
+		sub   rdi, 1
+       PrintNewLine
+	       call   _WriteOut_Output
+		jmp   UciGetInput
+
+
+; these options don't require any processing
 .MultiPv:
 	       call   ParseInteger
       ClampUnsigned   eax, 1, MAX_MOVES
 		mov   dword[options.multiPV], eax
 		jmp   UciGetInput
-if CPU_VERSION eq 'base'
-.Weakness:
-	       call   ParseInteger
-      ClampUnsigned   eax, 0, 200
-		mov   dword[options.weakness], eax
-		jmp   UciGetInput
-end if
 .Chess960:
 	       call   ParseBoole
 		mov   byte[options.chess960], al
@@ -738,18 +789,7 @@ end if
       ClampUnsigned   eax, 0, 1000
 		mov   dword[options.slowMover], eax
 		jmp   UciGetInput
-.ClearHash:
-	       call   Search_Clear
-		lea   rdi, [Output]
-		mov   rax, 'info str'
-	      stosq
-		mov   rax, 'ing hash'
-	      stosq
-		mov   rax, ' cleared'
-	      stosq
-       PrintNewLine
-	       call   _WriteOut_Output
-		jmp   UciGetInput
+
 .SyzygyProbeDepth:
 	       call   ParseInteger
       ClampUnsigned   eax, 1, 100
@@ -764,15 +804,13 @@ end if
       ClampUnsigned   eax, 0, 6
 		mov   dword[options.syzygyProbeLimit], eax
 		jmp   UciGetInput
-.SyzygyPath:
-	; find terminator and replace it with zero
-		mov   rcx, rsi
-	@@:	add   rsi, 1
-		cmp   byte[rsi], ' '
-		jae   @b
-		mov   byte[rsi], 0
-	       call   TableBase_Init
-		jmp   UciGetInput
+;if CPU_VERSION eq 'base'
+;.Weakness:
+;               call   ParseInteger
+;      ClampUnsigned   eax, 0, 200
+;                mov   dword[options.weakness], eax
+;                jmp   UciGetInput
+;end if
 
 
 
@@ -785,7 +823,7 @@ UciPerft:
 	       call   ParseInteger
 	       test   eax, eax
 		 jz   .bad_depth
-		cmp   eax, 9
+		cmp   eax, 10		; probably will take a long time
 		 ja   .bad_depth
 		mov   esi, eax
 		mov   ecx, eax
@@ -913,9 +951,8 @@ UciBench:
 if VERBOSE = 0
 	       call   _WriteOut_Output
 end if
-		mov   ecx, r14d
 		mov   dword[options.hash], r14d
-	       call   MainHash_Allocate
+	       call   MainHash_ReadOptions
 		mov   dword[options.threads], r13d
 	       call   ThreadPool_ReadOptions
 

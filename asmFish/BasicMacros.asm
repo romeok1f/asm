@@ -27,6 +27,15 @@ else
 end if
 }
 
+
+macro NewLineData {
+if OS_IS_WINDOWS
+	db 13,10
+else
+	db 10
+end if
+}
+
 macro PrintNewLine {
 if OS_IS_WINDOWS
 		mov   al, 13

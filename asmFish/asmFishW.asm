@@ -160,23 +160,25 @@ szGreeting:
 		db 13,10
 szGreetingEnd:
 		db 'id author TypingALot',13,10
-		db 'option name Contempt type spin default 0 min -100 max 100',13,10
 		db 'option name Threads type spin default 1 min 1 max 256',13,10
 		db 'option name Hash type spin default 16 min 1 max 1048576',13,10
+		db 'option name LargePages check default false',13,10
+		db 'option name ClearHash type button',13,10
+		db 'option name Ponder type check default false',13,10
+		db 'option name UCI_Chess960 type check default false',13,10
+
 		db 'option name MultiPV type spin default 1 min 1 max 224',13,10
-if CPU_VERSION eq 'base'
-		db 'option name Weakness type spin default 0 min 0 max 200',13,10
-end if
+		db 'option name Contempt type spin default 0 min -100 max 100',13,10
 		db 'option name MoveOverhead type spin default 30 min 0 max 5000',13,10
 		db 'option name MinThinkTime type spin default 20 min 0 max 5000',13,10
 		db 'option name SlowMover type spin default 89 min 10 max 1000',13,10
+;if CPU_VERSION eq 'base'
+;                db 'option name Weakness type spin default 0 min 0 max 200',13,10
+;end if
 		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',13,10
 		db 'option name Syzygy50MoveRule type check default true',13,10
 		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',13,10
 		db 'option name SyzygyPath type string default <empty>',13,10
-		db 'option name ClearHash type button',13,10
-		db 'option name Ponder type check default false',13,10
-		db 'option name UCI_Chess960 type check default false',13,10
 		db 'uciok'
 sz_NewLine:
 		db 13,10
@@ -227,7 +229,7 @@ sz_value		db 'value',0
 sz_ponder		db 'ponder',0
 sz_threads		db 'threads',0
 sz_contempt		db 'contempt',0
-sz_clearhash		db 'clearhash',0
+sz_largepages		db 'largepages',0
 sz_clear_hash		db 'clear hash',0
 sz_multipv		db 'multipv',0
 sz_weakness		db 'weakness',0
@@ -286,10 +288,12 @@ BenchFens: ;fens must be separated by one or more space char
 BenchFensEnd: db 0
 
 
-sz_kernel32 db 'kernel32',0
+sz_kernel32    db 'kernel32',0
 sz_VirtualAllocExNuma db 'VirtualAllocExNuma',0
 sz_SetThreadGroupAffinity db 'SetThreadGroupAffinity',0
 sz_GetLogicalProcessorInformationEx db 'GetLogicalProcessorInformationEx',0
+
+
 
 align 8
  Frequency   dq ?
@@ -298,6 +302,7 @@ align 8
  hStdOut     dq ?
  hStdIn      dq ?
  hStdError   dq ?
+ LargePageMinSize dq ?
  __imp_MessageBoxA dq ?
  __imp_VirtualAllocExNuma dq ?
  __imp_SetThreadGroupAffinity dq ?
@@ -570,9 +575,9 @@ include 'Search_Clear.asm'
 
 include 'PrintParse.asm'
 include 'Math.asm'
-if CPU_VERSION eq 'base'
- include 'Weakness.asm'
-end if
+;if CPU_VERSION eq 'base'
+; include 'Weakness.asm'
+;end if
 
 include 'OsWindows.asm'
 
@@ -583,6 +588,8 @@ Start:
 	       call   _SetStdHandles
 	       call   _SetFrequency
 	       call   _CheckCPU
+
+
 
 GD_String ' *** General Verbosity ON !! ***'
 GD_NewLine
@@ -613,8 +620,7 @@ match =0, VERBOSE {
 }
 
 	; set up threads, hash, and tablebases
-		mov   ecx, dword[options.hash]
-	       call   MainHash_Allocate
+	       call   MainHash_Create
 	       call   ThreadPool_Create
 		lea   rcx, [?_345]     ; this is the <empty> string
 	       call   TableBase_Init
@@ -657,7 +663,7 @@ call _WriteOut
 		lea   rcx, [?_345]
 	       call   TableBase_Init
 	       call   ThreadPool_Destroy
-	       call   MainHash_Free
+	       call   MainHash_Destroy
 
 	; clean up input buffer
 		mov   rcx, qword[InputBuffer]
@@ -706,6 +712,7 @@ import kernel,\
 	__imp_EnterCriticalSection,'EnterCriticalSection',\
 	__imp_ExitProcess,'ExitProcess',\
 	__imp_ExitThread,'ExitThread',\
+	__imp_FreeLibrary,'FreeLibrary',\
 	__imp_GetCommandLine,'GetCommandLineA',\
 	__imp_GetCurrentProcess,'GetCurrentProcess',\
 	__imp_GetFileSize,'GetFileSize',\

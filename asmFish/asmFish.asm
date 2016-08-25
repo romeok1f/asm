@@ -154,23 +154,25 @@ szGreeting:
 		db 10
 szGreetingEnd:
 		db 'id author TypingALot',10
-		db 'option name Contempt type spin default 0 min -100 max 100',10
 		db 'option name Threads type spin default 1 min 1 max 256',10
 		db 'option name Hash type spin default 16 min 1 max 1048576',10
+		db 'option name LargePages check default false',10
+		db 'option name Clear Hash type button',10
+		db 'option name Ponder type check default false',10
+		db 'option name UCI_Chess960 type check default false',10
+
 		db 'option name MultiPV type spin default 1 min 1 max 224',10
-if CPU_VERSION eq 'base'
-		db 'option name Weakness type spin default 0 min 0 max 200',10
-end if
+		db 'option name Contempt type spin default 0 min -100 max 100',10
 		db 'option name MoveOverhead type spin default 30 min 0 max 5000',10
 		db 'option name MinThinkTime type spin default 20 min 0 max 5000',10
 		db 'option name SlowMover type spin default 89 min 10 max 1000',10
+;if CPU_VERSION eq 'base'
+;                db 'option name Weakness type spin default 0 min 0 max 200',10
+;end if
 		db 'option name SyzygyProbeDepth type spin default 1 min 1 max 100',10
 		db 'option name Syzygy50MoveRule type check default true',10
 		db 'option name SyzygyProbeLimit type spin default 6 min 0 max 6',10
 		db 'option name SyzygyPath type string default <empty>',10
-		db 'option name ClearHash type button',10
-		db 'option name Ponder type check default false',10
-		db 'option name UCI_Chess960 type check default false',10
 		db 'uciok'
 sz_NewLine:
 		db 10
@@ -221,7 +223,7 @@ sz_value		db 'value',0
 sz_ponder		db 'ponder',0
 sz_threads		db 'threads',0
 sz_contempt		db 'contempt',0
-sz_clearhash		db 'clearhash',0
+sz_largepages		db 'largepages',0
 sz_clear_hash		db 'clear hash',0
 sz_multipv		db 'multipv',0
 sz_weakness		db 'weakness',0
@@ -283,6 +285,7 @@ BenchFensEnd: db 0
 align 8
  Frequency   dq ?
  Period      dq ?
+ LargePageMinSize dq ?
  CmdLineStart	  dq ?
  InputBuffer	  dq ?	   ; input buffer has dynamic allocation
  InputBufferSizeB dq ?
@@ -543,9 +546,9 @@ include 'Search_Clear.asm'
 
 include 'PrintParse.asm'
 include 'Math.asm'
-if CPU_VERSION eq 'base'
- include 'Weakness.asm'
-end if
+;if CPU_VERSION eq 'base'
+; include 'Weakness.asm'
+;end if
 
 include 'OsLinux.asm'
 
@@ -587,8 +590,7 @@ match =0, VERBOSE {
 
 
 	; set up threads, hash, and tablebases
-		mov   ecx, dword[options.hash]
-	       call   MainHash_Allocate
+	       call   MainHash_Create
 	       call   ThreadPool_Create
 		lea   rcx, [?_345]     ; this is the <empty> string
 	       call   TableBase_Init
@@ -628,7 +630,7 @@ call _WriteOut
 		lea   rcx, [?_345]
 	       call   TableBase_Init
 	       call   ThreadPool_Destroy
-	       call   MainHash_Free
+	       call   MainHash_Destroy
 
 	; clean up input buffer
 		mov   rcx, qword[InputBuffer]

@@ -1,33 +1,115 @@
-MainHash_Allocate:
-	; in:   ecx  size in MB
+MainHash_Create:
+	; allocate some hash on startup
+	       push   rbx rsi rdi
+		lea   rsi, [mainHash]
+		mov   esi, 16
+		mov   dword[mainHash.sizeMB], esi
+		shl   rsi, 20
+		mov   rcx, rsi
+	       call   _VirtualAlloc
+		xor   edx, edx
+		shr   rsi, 5	; cluster size is 32 bytes
+		sub   rsi, 1
+		mov   qword[mainHash.table], rax
+		mov   qword[mainHash.mask], rsi
+		mov   qword[mainHash.lpSize], rdx
+		mov   byte[mainHash.date], dl
+		pop   rdi rsi rbx
+		ret
+
+
+MainHash_ReadOptions:
 	       push   rbx rsi rdi
 		lea   rsi, [mainHash]
 
+		mov   ecx, dword[options.hash]
 		mov   edx, MAX_HASH_LOG2MB
 		xor   eax, eax
 		bsr   eax, ecx
 		cmp   eax, edx
 	      cmova   eax, edx
-		xor   ebx, ebx
-		bts   rbx, rax
+		xor   esi, esi
+		bts   esi, eax
+	; esi is requested size in MB
 
-		mov   rcx, qword[rsi+MainHash.table]
-		mov   edx, dword[rsi+MainHash.sizeMB]
-		shl   rdx, 20
-	       call   _VirtualFree
+		mov   rdi, qword[mainHash.lpSize]
+	      movzx   ebx, byte[options.largePages]
 
-		mov   dword[rsi+MainHash.sizeMB], ebx
-		shl   rbx, 20	; rbx = # of bytes in HashTable
-		mov   rcx, rbx
+	; if requested matches current, then don't do anything
+		cmp   esi, dword[mainHash.sizeMB]
+		jne   @f
+		cmp   rdi, 1
+		sbb   eax, eax
+		xor   al, bl
+		jnz   .Skip
+	@@:
+
+	; free current
+	       call   MainHash_Free
+
+		mov   dword[mainHash.sizeMB], esi
+		shl   rsi, 20
+	; rsi = # of bytes in HashTable
+
+	       test   bl, bl
+		 jz   .NoLP
+.LP:
+		mov   rcx, rsi
+	       call   _VirtualAlloc_LargePages
+	       test   rax, rax
+		jnz   .Done
+.NoLP:
+		mov   rcx, rsi
 	       call   _VirtualAlloc
-		shr   rbx, 5	; cluster size is 32 bytes
-		sub   rbx, 1
-		mov   qword[rsi+MainHash.table], rax
-		mov   qword[rsi+MainHash.mask], rbx
-		mov   byte[rsi+MainHash.date], 0
+		xor   edx, edx
+.Done:
+		shr   rsi, 5	; cluster size is 32 bytes
+		sub   rsi, 1
+		mov   qword[mainHash.table], rax
+		mov   qword[mainHash.mask], rsi
+		mov   qword[mainHash.lpSize], rdx
+		mov   byte[mainHash.date], 0
+	       call   MainHash_DisplayInfo
+.Skip:
+		pop   rdi rsi rbx
+		ret
+
+
+
+MainHash_DisplayInfo:
+	       push   rbx rsi rdi
+		lea   rdi, [Output]
+		mov   rax, 'info str'
+	      stosq
+		mov   rax, 'ing hash'
+	      stosq
+		mov   rax, ' set to '
+	      stosq
+		mov   eax, dword[mainHash.sizeMB]
+	       call   PrintUnsignedInteger
+		mov   rax, ' MiB'
+	      stosd
+
+		mov   rcx, qword[mainHash.lpSize]
+	       test   rcx, rcx
+		 jz   @f
+		mov   rax, ' page si'
+	      stosq
+		mov   eax, 'ze '
+	      stosd
+		sub   rdi, 1
+		mov   rax, qword[LargePageMinSize]
+		shr   rax, 10
+	       call   PrintUnsignedInteger
+		mov   rax, ' KiB'
+	      stosd
+@@:
+       PrintNewLine
+	       call   _WriteOut_Output
 
 		pop   rdi rsi rbx
 		ret
+
 
 
 
@@ -63,14 +145,19 @@ MainHash_Clear:
 		ret
 
 
+MainHash_Destroy:
 MainHash_Free:
 	       push   rbp
 		mov   rcx, qword[mainHash.table]
+		mov   rax, qword[mainHash.lpSize]
 		mov   edx, dword[mainHash.sizeMB]
 		shl   rdx, 20
+	       test   rax, rax
+	     cmovnz   rdx, rax
 	       call   _VirtualFree
 		xor   eax, eax
 		mov   qword[mainHash.table], rax
+		mov   qword[mainHash.lpSize], rax
 		mov   qword[mainHash.sizeMB], rax
 		pop   rbp
 		ret

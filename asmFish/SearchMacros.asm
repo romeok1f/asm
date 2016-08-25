@@ -1186,7 +1186,7 @@ lock inc qword[profile.moveUnpack]
 		add   eax, dword[r11+4*rdx]
 	@@:
 
-		sub   eax, 10000
+		sub   eax, 8000
 		cdq
 		mov   ecx, 20000
 	       idiv   ecx
@@ -1481,19 +1481,19 @@ lock inc qword[profile.moveUnpack]
 
 
 		mov   edx, dword[.bestMove]
-		mov   ecx, edx
-		mov   eax, edx
-		and   eax, 63
-		shr   ecx, 12
-	      movzx   eax, byte[rbp+Pos.board+rax]
-		 or   al, byte[CaptureOrPromotion_or+rcx]
-		and   al, byte[CaptureOrPromotion_and+rcx]
+	  ;      mov   ecx, edx
+	  ;      mov   eax, edx
+	  ;      and   eax, 63
+	  ;      shr   ecx, 12
+	  ;    movzx   eax, byte[rbp+Pos.board+rax]
+	  ;       or   al, byte[CaptureOrPromotion_or+rcx]
+	  ;      and   al, byte[CaptureOrPromotion_and+rcx]
 		cmp   dword[.moveCount], 0
 		 je   .20Mate
 	       test   edx, edx
 		 jz   .20CheckBonus
-	       test   al, al
-		jnz   .20TTStore
+	    ;   test   al, al
+	    ;    jnz   .20TTStore
 .20Quiet:
 		mov   ecx, dword[.bestMove]
 		mov   edx, dword[.depth]
@@ -1663,16 +1663,16 @@ end if
 		mov   dword[rbx+State.currentMove], ecx
 		cmp   edi, dword[.beta]
 		 jl   .Return
-		and   ecx, 0x07FFF
+	       test   ecx, ecx
 		 jz   .Return
-		mov   edx, ecx
-		and   edx, 63
-		shr   ecx, 12
-	      movzx   edx, byte[rbp+Pos.board+rdx]
-		 or   dl, byte[CaptureOrPromotion_or+rcx]
-		and   dl, byte[CaptureOrPromotion_and+rcx]
-		jnz   .Return
-		mov   ecx, dword[rbx+State.currentMove]
+	 ;       mov   edx, ecx
+	 ;       and   edx, 63
+	 ;       shr   ecx, 12
+	 ;     movzx   edx, byte[rbp+Pos.board+rdx]
+	 ;        or   dl, byte[CaptureOrPromotion_or+rcx]
+	 ;       and   dl, byte[CaptureOrPromotion_and+rcx]
+	 ;       jnz   .Return
+	 ;       mov   ecx, dword[rbx+State.currentMove]
 		mov   edx, dword[.depth]
 		xor   r8, r8
 		xor   r9d, r9d

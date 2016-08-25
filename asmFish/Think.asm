@@ -426,21 +426,21 @@ GD_NewLine
 		mov   dword[DrawValue+4*rax], ecx
 		add   byte[mainHash.date], 4
 
-if CPU_VERSION eq 'base'
-	; when weakness is not 0, set multipv and change maximumTime
-		mov   ecx, dword[options.weakness]
-	       test   ecx, ecx
-		 jz   .no_weakness
-		shr   ecx, 4
-		add   ecx, 2
-		mov   dword[options.multiPV], ecx
-		lea   eax, [rcx-1]
-		mul   dword[time.optimumTime]
-		add   eax, dword[time.maximumTime]
-		div   ecx
-		mov   dword[time.maximumTime], eax
-.no_weakness:
-end if
+;if CPU_VERSION eq 'base'
+;        ; when weakness is not 0, set multipv and change maximumTime
+;                mov   ecx, dword[options.weakness]
+;               test   ecx, ecx
+;                 jz   .no_weakness
+;                shr   ecx, 4
+;                add   ecx, 2
+;                mov   dword[options.multiPV], ecx
+;                lea   eax, [rcx-1]
+;                mul   dword[time.optimumTime]
+;                add   eax, dword[time.maximumTime]
+;                div   ecx
+;                mov   dword[time.maximumTime], eax
+;.no_weakness:
+;end if
 
 	; check for mate
 		mov   r8, qword[rbp+Pos.rootMovesVec+RootMovesVec.ender]
@@ -496,11 +496,11 @@ end if
 		cmp   r8, qword[rbp+Pos.rootMovesVec+RootMovesVec.table]
 		 je   .mate_bestmove
 
-if CPU_VERSION eq 'base'
-		mov   ecx, dword[options.weakness]
-	       test   ecx, ecx
-		jnz   .pick_weak_move
-end if
+;if CPU_VERSION eq 'base'
+;                mov   ecx, dword[options.weakness]
+;               test   ecx, ecx
+;                jnz   .pick_weak_move
+;end if
 
 	; find best thread  index esi
 		xor   esi, esi
@@ -550,12 +550,12 @@ GD_NewLine
 		pop   r15 rdi rsi rbx rbp
 		ret
 
-if CPU_VERSION eq 'base'
-.pick_weak_move:
-	       call   Weakness_PickMove
-		xor   esi, esi
-		jmp   .display_move
-end if
+;if CPU_VERSION eq 'base'
+;.pick_weak_move:
+;               call   Weakness_PickMove
+;                xor   esi, esi
+;                jmp   .display_move
+;end if
 
 
 .mate:

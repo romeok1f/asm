@@ -24,7 +24,6 @@ ThreadPool_Create:
 		xor   ecx, ecx
 	       call   Thread_Create
 		mov   dword[threadPool.size], 1
-	       call   ThreadPool_ReadOptions
 		pop   rbx
 		ret
 
@@ -61,12 +60,18 @@ ThreadPool_ReadOptions:
 	       push   rbx rsi rdi
 		mov   esi, dword[options.threads]
 		mov   edi, dword[threadPool.size]
+		cmp   edi, esi
+		 je   .Skip
 .CheckCreate:
 		cmp   edi, esi
 		 jb   .Create
 .CheckDelete:
 		cmp   edi, esi
 		 ja   .Delete
+
+	       call   _DisplayThreadPoolInfo
+	       call   ThreadPool_DisplayThreadDistribution
+.Skip:
 		pop   rdi rsi rbx
 		ret
 .Create:
