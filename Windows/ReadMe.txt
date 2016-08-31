@@ -1,17 +1,19 @@
-if the lptest.exe is able to use large pages you should see something
-like this upon setting the hash
+The H.. version is special made for bulldozer, which puts two nodes in the same cpu.
+Odd indexed nodes now use the same chm table as its even index partner. 01, 23, 45, 67
 
-asmFishW_2016-08-21_base
-setoption name hash value 16
-info string hash set to 16 MiB large page min 2048 KiB
+Ouput from windows version on 1 node box
+
+asmFishW_2016-08-31_bmi2
+setoption name threads value 4
+isready
+info string node 0 cores 4 cmh 0x0000000001560000 group 0 mask 0x000000000000000f
+info string node 0 has threads 0 1 2 3
+readyok
+
+if this is working correctly, node 1 should have the same cmh as node 0, node3 same as node2, ...
 
 
-if the lptest.exe is not able large pages you should see something
-like this upon setting the hash
 
-asmFishW_2016-08-21_base
-setoption name hash value 16
-info string hash set to 16 MiB no large pages
 
 
 
