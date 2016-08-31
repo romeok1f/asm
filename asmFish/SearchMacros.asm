@@ -34,53 +34,45 @@ ProfileInc Search_NONPV
 
 
 virtual at rsp
-  .tte	     rq 1    ;0
-  .ltte      rq 1    ;8
-  .posKey    rq 1    ;16
-  .cmh	     rq 1    ;24
-  .fmh	     rq 1    ;32
-  .fmh2      rq 1    ; 40
-		  rd 1	  ; 48
-  .ttMove	  rd 1
-  .ttValue	  rd 1
-  .move 	  rd 1
-  .excludedMove   rd 1
+  .tte	      rq 1    ;0
+  .ltte       rq 1    ;8
+  .posKey	rq 1	;16
+  .cmh		rq 1	;24
+  .fmh		  rq 1	  ;32
+  .fmh2 	  rq 1	  ; 40
+  .ttMove	    rd 1    ; 48
+  .ttValue	    rd 1
+  .move 	    rd 1
+  .excludedMove     rd 1
   .bestMove	  rd 1
   .ext		  rd 1
   .newDepth	  rd 1
   .predictedDepth rd 1
-  .moveCount	  rd 1
-  .quietCount	  rd 1
-  .alpha	  rd 1
-  .beta 	  rd 1
+  .moveCount	    rd 1
+  .quietCount	    rd 1
+  .alpha	    rd 1
+  .beta 	    rd 1
   .depth	  rd 1
   .bestValue	  rd 1
   .value	  rd 1
   .eval 	  rd 1
-  .nullValue	  rd 1
-  .futilityValue  rd 1
-  .extension	  rd 1
-  .success	  rd 1	 ; for tb
-  .moved_piece_to_sq rd 1
-  .givesCheck		   rb 1  ; 144
-  .singularExtensionNode   rb 1
-  .improving		   rb 1
-  .captureOrPromotion	   rb 1  ; nonzero for true
-  .doFullDepthSearch	   rb 1
-  .cutNode		   rb 1  ; -1 for true
-  .ttHit		   rb 1
-  .moveCountPruning	   rb 1
-			   rb 1
-			   rb 1
-			   rb 1
-			   rb 1
-			   rb 1
-			   rb 1
-			   rb 1
-			   rb 1
+  .nullValue	    rd 1
+  .futilityValue    rd 1
+  .extension	    rd 1
+  .success	    rd 1   ; for tb
+  .rbeta		  rd 1
+  .moved_piece_to_sq	  rd 1
+  .givesCheck		  rb 1	; 144
+  .singularExtensionNode  rb 1
+  .improving		  rb 1
+  .captureOrPromotion	  rb 1	; nonzero for true
+  .doFullDepthSearch	  rb 1
+  .cutNode		  rb 1	; -1 for true
+  .ttHit		  rb 1
+  .moveCountPruning	  rb 1
 
-  .movepick	  rb sizeof.Pick       ; 116
   .quietsSearched rd 64
+  .movepick	  rb sizeof.Pick       ; 116
 
 if .PvNode eq 1
   .pv  rd MAX_PLY+1
@@ -531,22 +523,27 @@ match =1, DEBUG \{
 	     Assert   ne, dword[rbx-1*sizeof.State+State.currentMove], MOVE_NULL, 'assertion dword[rbx-1*sizeof.State+State.currentMove] != MOVE_NULL failed in Search.Step9'
 
 
-ProfileInc SetCheckInfo2
-;              call   SetCheckInfo
+		mov   edi, dword[.beta]
+		add   edi, 200
+		mov   eax, VALUE_INFINITE
+		cmp   edi, eax
+	      cmovg   edi, eax
+	; edi = rbeta
+		mov   dword[.rbeta], edi
+		sub   edi, dword[rbx+State.staticEval]
+
 
 	; initialize movepick
 	     Assert   e, qword[rbx+State.checkersBB], 0, 'assertion qword[rbx+State.checkersBB] == 0 failed in Search.Step9'
 		lea   rsi, [.movepick]
-	      movzx   eax, byte[rbx+State.capturedPiece]
-		mov   eax, dword[PieceValue_MG+4*rax]
-		mov   dword[rsi+Pick.threshold], eax
 		lea   r11, [rsi+Pick.moves]
 		lea   rax, [r11+8*(MAX_MOVES-1)]
 		lea   r8, [MovePick_Probcut]
 		mov   qword[rsi+Pick.cur], r11
+		mov   qword[rsi+Pick.endMoves], r11
 		mov   qword[rsi+Pick.endBadCaptures], rax
 		mov   qword[rsi+Pick.stage], r8
-		mov   qword[rsi+Pick.endMoves], r11
+		mov   dword[rsi+Pick.threshold], edi
 		mov   ecx, dword[.ttMove]
 		mov   eax, ecx
 		mov   edx, ecx
@@ -577,18 +574,9 @@ ProfileInc SetCheckInfo2
 	; movepick struct is now initialized
 
 
-		mov   edi, dword[.beta]
-		add   edi, 200
-		mov   eax, VALUE_INFINITE
-		cmp   edi, eax
-	      cmovg   edi, eax
-	; edi = rbeta
-
 .9moveloop:
 		lea   rsi, [.movepick]
-	       push   rdi
 	GetNextMove
-		pop   rdi
 		mov   dword[.move], eax
 	       test   eax, eax
 		 jz   .9moveloop_done
@@ -603,15 +591,9 @@ ProfileInc SetCheckInfo2
 		shr   eax, 6
 		and   eax, 63
 		and   ecx, 63
-
-match =1, PROFILE \{
-lock inc qword[profile.moveUnpack]
-\}
-
 	      movzx   eax, byte[rbp+Pos.board+rax]
 		shl   eax, 6
 		add   eax, ecx
-	     Assert   b, eax, 64*16, 'oops2'
 	       imul   eax, 4*16*64
 		add   rax, qword[rbp+Pos.counterMoveHistory]
 		mov   qword[rbx+State.counterMoves], rax
@@ -621,12 +603,12 @@ lock inc qword[profile.moveUnpack]
 		mov   ecx, dword[.move]
 		mov   edx, eax
 	       call   Move_Do__ProbCut
-		mov   ecx, edi
+		mov   ecx, dword[.rbeta]
+		mov   edi, ecx
 		neg   ecx
 		lea   edx, [rcx+1]
 		mov   r8d, dword[.depth]
 		sub   r8d, 4*ONE_PLY
-	     Assert   ge, r8d, ONE_PLY, 'assertion dword[.depth] - 4*ONE_PLY >= ONE_PLY failed in Search.9moveloop'
 		mov   r9l, byte[.cutNode]
 		xor   r9l, -1
 	       call   Search_NonPv
@@ -1013,9 +995,9 @@ lock inc qword[profile.moveUnpack]
 		mov   r10, qword[.fmh2]
 		cmp   edi, 3*ONE_PLY
 		jge   .13DontSkip2
-		mov   ecx, dword[.move]
-		cmp   ecx, dword[rbx+State.killers+4*0]
-		 je   .13DontSkip2
+		;mov   ecx, dword[.move]
+		;cmp   ecx, dword[rbx+State.killers+4*0]
+		; je   .13DontSkip2
 	       imul   eax, r14d, 64
 		add   eax, r13d
 	       test   r8, r8
