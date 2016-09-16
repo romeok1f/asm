@@ -165,7 +165,7 @@ match =1, DEBUG \{
 	.dontreset:
 		add   edx, 1
 		mov   dword[rbp-Thread.rootPos+Thread.callsCnt], edx
-		cmp   eax, 4096+1
+		cmp   edx, 4096+1
 		 jb   .dontchecktime
 		mov   ecx, dword[threadPool.size]
 	@@:	sub   ecx, 1
