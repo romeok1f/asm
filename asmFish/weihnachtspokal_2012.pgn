@@ -1,0 +1,3790 @@
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.21"]
+[Round "1"]
+[White "Resurrection Deep Sjeng 1.8"]
+[Black "Par Excellence 16 MHz, Fidelity"]
+[Result "0-1"]
+[ECO "D49"]
+[PlyCount "132"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. Nc3 c6 5. e3 Nbd7 6. Bd3 dxc4 7. Bxc4 b5 8. Bd3
+a6 9. e4 c5 10. e5 cxd4 11. Nxb5 axb5 12. exf6 {Buchende} Qb6 13. Be4 Bb7 14.
+Bxb7 Qxb7 15. O-O Nxf6 16. Nxd4 Be7 17. Qd3 b4 18. a4 bxa3 19. bxa3 O-O 20. Be3
+Qd5 21. Rfd1 Rfd8 22. Qe2 Ne4 23. Nb5 Qe5 24. Bd4 Qf4 25. a4 Bb4 26. f3 Nd2 27.
+Qe3 Qxe3+ 28. Bxe3 Nc4 29. Rxd8+ Rxd8 30. Bf4 Rd5 31. Rb1 Bc5+ 32. Kf1 Nd2+ 33.
+Bxd2 Rxd2 34. Rc1 Bb4 35. Rc8+ Bf8 36. Nc3 e5 37. a5 Rd6 38. Ra8 Rd3 39. Ne4
+Rd1+ 40. Ke2 Rg1 41. Nc5 Rxg2+ 42. Ke3 g5 43. Nd7 Kg7 44. Rxf8 Rxh2 45. Re8 Ra2
+46. Rxe5 Kg6 47. Rb5 h5 48. Rb6+ Kg7 49. a6 h4 50. Nc5 h3 51. Rb1 f5 52. Rb7+
+Kg6 53. Rb6+ Kh5 54. Rb8 Ra3+ 55. Kd4 Kg6 56. Rg8+ Kf6 57. Kd5 Ra1 58. Rh8 g4
+59. Rh5 gxf3 60. Rh6+ Kg5 61. Rh7 f2 62. Ne6+ Kg4 63. Rg7+ Kh4 64. Rh7+ Kg3 65.
+Rg7+ Kh2 66. a7 f1=Q 0-1
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.21"]
+[Round "1"]
+[White "Milano, Mephisto"]
+[Black "Mystery 32 MHz, Mephisto"]
+[Result "0-1"]
+[ECO "C84"]
+[PlyCount "72"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. d4 exd4 6. O-O Be7 7. e5 Ne4 8.
+Nxd4 Nxd4 9. Qxd4 Nc5 10. Be3 O-O 11. f4 d6 12. Rd1 Bf5 13. Nc3 b5 14. Bb3 Nxb3
+15. cxb3 Bg4 16. Rd2 dxe5 17. Qe4 Qc8 18. Nd5 Bd6 19. Nb6 cxb6 20. Rxd6 exf4
+21. Qxf4 Re8 22. Bxb6 Qf5 23. Qxf5 Bxf5 24. Rf1 Be6 25. Rfd1 Rac8 26. Ba5 Rc2
+27. Bc3 h6 28. Rxa6 Bg4 29. Rf1 Ree2 30. Rf4 Rxg2+ 31. Kf1 Bh3 32. Ra8+ Kh7 33.
+Bd2 Rcxd2 34. Rh8+ Kxh8 35. Re4 Rge2+ 36. Kg1 Rd1# 0-1
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.22"]
+[Round "1"]
+[White "Vancouver 68020, Mephisto"]
+[Black "Magellan, Mephisto"]
+[Result "0-1"]
+[ECO "C14"]
+[PlyCount "76"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Be7 5. e5 Nfd7 6. Bxe7 Qxe7 7. f4 O-O 8.
+Nf3 c5 {Buchende} 9. dxc5 {Buchende} Nxc5 10. Be2 Ne4 11. Nxe4 dxe4 12. Nd2 Rd8
+13. Qc1 b6 14. Nc4 Ba6 15. Nd6 Bxe2 16. Kxe2 Qc7 17. c4 Na6 18. Rd1 Qc6 19. b3
+Nc5 20. Qe3 a6 21. Kf1 Rd7 22. a4 Rad8 23. Re1 f5 24. a5 bxa5 25. Rxa5 Nb7 26.
+Nxb7 Qxb7 27. Qc5 Rd2 28. Re3 Rd1+ 29. Kf2 g5 30. fxg5 f4 31. Re2 e3+ 32. Qxe3
+fxe3+ 33. Kg3 Qe4 34. Rd5 R8xd5 35. Rxe3 Qxe3+ 36. Kh4 R1d4+ 37. Kh5 Qe2+ 38.
+Kh6 Rh4# 0-1
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.22"]
+[Round "1"]
+[White "Lyon 68000, Mephisto"]
+[Black "Designer 2325 Master, Fidelity"]
+[Result "0-1"]
+[ECO "A09"]
+[PlyCount "106"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. Nf3 d5 2. c4 d4 3. e3 Nc6 4. exd4 Nxd4 5. Nxd4 Qxd4 6. Nc3 e5 7. d3 Ne7 8.
+Qe2 Bd7 9. Be3 Qd6 10. O-O-O O-O-O 11. Bxa7 b6 12. c5 Qd4 13. Qe4 Nc6 14. cxb6
+cxb6 15. Qxd4 exd4 16. Bxb6 dxc3 17. Bxd8 cxb2+ 18. Kxb2 Kxd8 19. d4 Bd6 20.
+Bc4 Re8 21. d5 Na5 22. Bd3 Re5 23. Bf1 Bf5 24. f3 Re3 25. h4 Be5+ 26. Kc1 Rc3+
+27. Kd2 Ra3 28. Be2 Bf4+ 29. Ke1 Bc2 30. Rd4 Be3 31. Rb4 Rxa2 32. Bb5 Bb3 33.
+Re4 Ra1+ 34. Ke2 Rxh1 35. d6 Bc4+ 36. Bxc4 f5 37. Rxe3 Nxc4 38. Re7 Nxd6 39.
+Rxg7 Rxh4 40. g3 Rh2+ 41. Ke3 h5 42. Kf4 h4 43. Rg6 Kc7 44. gxh4 Rxh4+ 45. Ke5
+Rh2 46. Re6 Re2+ 47. Kf6 Rxe6+ 48. Kxe6 Kc6 49. Ke5 Kc5 50. f4 Kc4 51. Ke6 Kd4
+52. Kf6 Ke4 53. Kg5 Nc4 0-1
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.23"]
+[Round "1"]
+[White "Chess Explorer 32 MHz, Mephisto"]
+[Black "Portorose 68020, Mephisto"]
+[Result "1-0"]
+[ECO "D35"]
+[PlyCount "89"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 e6 2. c4 d5 3. cxd5 exd5 4. Nf3 Nf6 5. Nc3 c6 6. e3 Bd6 7. Bd3 Bg4 8. O-O
+O-O 9. h3 Bh5 10. g4 Bg6 11. Bxg6 hxg6 12. b3 Nbd7 13. Bb2 Ne4 14. Nxe4 dxe4
+15. Nd2 Qe7 16. Nc4 Rfe8 17. Nxd6 Qxd6 18. Qc2 Nf6 19. Rfd1 Nd5 20. a3 Nxe3 21.
+fxe3 Qg3+ 22. Qg2 Qxe3+ 23. Kh2 Qxb3 24. Rab1 Re7 25. d5 cxd5 26. Bf6 Qxb1 27.
+Rxb1 gxf6 28. Qd2 Rd8 29. Qd4 b6 30. Qxf6 Rdd7 31. Qd4 Re8 32. h4 Rd6 33. h5
+gxh5 34. gxh5 Kh7 35. Rc1 Re7 36. Rc8 f6 37. Qd2 Red7 38. Qf4 Rd8 39. Rc7+ R8d7
+40. Rxd7+ Rxd7 41. Qf5+ Kg7 42. Qxd7+ Kh6 43. Qf7 Kg5 44. Kg3 d4 45. Qg6# 1-0
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.23"]
+[Round "1.1"]
+[White "Milano Pro, Mephisto"]
+[Black "Elite V9, Fidelity"]
+[Result "1/2-1/2"]
+[ECO "E74"]
+[PlyCount "134"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 Nf6 2. c4 c5 3. d5 d6 4. Nc3 g6 5. e4 Bg7 6. Be2 O-O 7. Bg5 b5 8. cxb5 a6
+9. bxa6 Bxa6 10. Bxa6 Nxa6 11. Nge2 Qb6 12. Rb1 e6 13. O-O Nc7 14. Qd3 exd5 15.
+exd5 Rfe8 16. Rfd1 Ng4 17. Qg3 Nh6 18. Re1 Nf5 19. Qd3 Rab8 20. Bf4 Qb4 21. a3
+Qb3 22. Ng3 c4 23. Qf1 Bxc3 24. bxc3 Rxe1 25. Rxe1 Nxg3 26. Bxg3 Nxd5 27. Bxd6
+Rc8 28. Be5 Qxa3 29. Bd4 Nf4 30. g3 Ne6 31. Ra1 Qd6 32. Bf6 Nc7 33. Qh3 Rb8 34.
+Qh4 Rb2 35. Bd4 Re2 36. Qg4 Re8 37. Ra7 Qc6 38. Ra1 Nb5 39. f3 Nxd4 40. Qxd4
+Qxf3 41. Qxc4 Re2 42. Ra8+ Qxa8 43. Qxe2 Qa1+ 44. Kf2 Qxc3 45. h3 Kg7 46. Qe3
+Qf6+ 47. Kg2 Qb2+ 48. Kf3 h5 49. Qf4 Qc3+ 50. Ke2 f5 51. Kf2 Qc2+ 52. Kf3 Qd3+
+53. Kf2 Kf6 54. Qh6 Qc2+ 55. Kf3 Qe4+ 56. Kf2 Qd4+ 57. Kf3 Qc3+ 58. Ke2 Qe5+
+59. Kf2 Qb2+ 60. Kf3 Qb3+ 61. Kf2 Qb6+ 62. Kf3 Qc6+ 63. Kf2 Qc5+ 64. Kf3 Qd5+
+65. Kf2 Qa2+ 66. Kf3 Qa8+ 67. Kf2 Qa7+ 1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Runde 1 - Blitz"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.23"]
+[Round "1.2"]
+[White "Elite V9, Fidelity"]
+[Black "Milano Pro, Mephisto"]
+[Result "1-0"]
+[ECO "B44"]
+[PlyCount "125"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. c4 c5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 cxd4 5. Nxd4 e6 6. Nxc6 bxc6 7. e4 Bb4 8.
+e5 Bxc3+ 9. bxc3 Ne4 10. Qd4 Qa5 11. Bd3 Qxc3+ 12. Qxc3 Nxc3 13. Bc2 Ba6 14.
+Bd2 Nxa2 15. Bb3 O-O 16. Bxa2 Rfd8 17. Kd1 h6 18. Bb3 Bb7 19. c5 Rdb8 20. Kc2
+Kf8 21. Bc4 Bc8 22. Ra5 Rb7 23. Rha1 Rc7 24. g4 g5 25. f4 gxf4 26. Bxf4 Kg7 27.
+R1a3 Rb7 28. Bd2 f5 29. exf6+ Kxf6 30. Bxh6 Ke5 31. h4 d5 32. cxd6+ Kxd6 33.
+Bf4+ Ke7 34. Be3 Ke8 35. Bxa7 Rg7 36. Be2 Re7 37. Bf3 Bb7 38. g5 e5 39. Be4 Kf7
+40. h5 Ke6 41. h6 Rh8 42. Bc5 Rd7 43. Rf3 Rd5 44. Bf5+ Kf7 45. Bc8+ Kg6 46.
+Bxb7 Rd7 47. Bxc6 Rc7 48. Ra6 Kxg5 49. Be3+ Kg4 50. Ra4+ Kh5 51. Rc4 e4 52.
+Rc5+ Kg4 53. Rf4+ Kg3 54. Rxe4 Rf8 55. Rcc4 Rxc6 56. Rxc6 Rf7 57. Rg6+ Kf3 58.
+Kd3 Rf8 59. h7 Rd8+ 60. Rd4 Rd5 61. h8=Q Rxd4+ 62. Bxd4 Kf4 63. Qf6# 1-0
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.24"]
+[Round "1"]
+[White "Sapphire, Novag"]
+[Black "Star Diamond, Novag"]
+[Result "1/2-1/2"]
+[ECO "A29"]
+[PlyCount "143"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. c4 e5 2. Nc3 Nc6 3. Nf3 Nf6 4. g3 Bb4 5. Bg2 O-O 6. O-O e4 7. Ng5 Bxc3 8.
+bxc3 Re8 9. Qc2 d5 10. cxd5 Qxd5 11. d3 Bf5 12. Qb2 b6 13. Qb3 Qxb3 14. axb3 h6
+15. Nxe4 Nxe4 16. dxe4 Bxe4 17. Bh3 Rad8 18. Bf4 Re7 19. b4 g5 20. Be3 a5 21.
+bxa5 Nxa5 22. Rfd1 Ree8 23. Rxd8 Rxd8 24. f3 Bh7 25. Bd4 f5 26. Be5 Rd7 27. e4
+Nc6 28. Bf6 Kf7 29. e5 Ke6 30. f4 gxf4 31. gxf4 Rd3 32. Bg2 Rxc3 33. Rd1 Ne7
+34. Rd8 Bg6 35. Bg7 h5 36. Bf6 Rc2 37. Bf3 Bf7 38. Bd1 Rb2 39. Bf3 b5 40. Ra8
+Rb4 41. Ra7 Rc4 42. Ra6+ c6 43. Bxe7 Kxe7 44. Bxc6 Rxf4 45. Ra7+ Ke6 46. Bxb5
+Rb4 47. Bd3 h4 48. Rc7 Bg8 49. Rc5 f4 50. Ba6 Rd4 51. Bc8+ Ke7 52. Kf2 Be6 53.
+Bb7 Rb4 54. Ba6 Bg4 55. Rc7+ Kd8 56. Rc2 Re4 57. Rc4 Re2+ 58. Kf1 Rxe5 59. Rxf4
+Rg5 60. Kf2 Ke7 61. Bf1 Kd6 62. Bc4 h3 63. Ke3 Kc5 64. Bf7 Bd7 65. Rc4+ Kd6 66.
+Rd4+ Ke7 67. Bd5 Bf5 68. Rf4 Kf6 69. Be4 Kg6 70. Bxf5+ Rxf5 71. Rxf5 Kxf5 72.
+Kf3 1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Runde 1 - Blitz"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.24"]
+[Round "1.2"]
+[White "Star Diamond, Novag"]
+[Black "Sapphire, Novag"]
+[Result "1-0"]
+[ECO "C82"]
+[PlyCount "155"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Nxe4 6. d4 b5 7. Bb3 d5 8. dxe5
+Be6 9. c3 Bc5 10. Nbd2 O-O 11. Bc2 Nxf2 12. Rxf2 f6 13. exf6 Bxf2+ 14. Kxf2
+Qxf6 15. Nf1 Ne5 16. Be3 Rae8 17. Bc5 Rf7 18. N1d2 Bf5 19. Kg1 Nxf3+ 20. Nxf3
+Be4 21. Bd3 Bxf3 22. gxf3 Qxf3 23. Qxf3 Rxf3 24. Rd1 Rf4 25. Kg2 h5 26. Kg3 g5
+27. Bg6 h4+ 28. Kh3 Re5 29. Bh5 a5 30. Bd4 Ree4 31. Rg1 Rf5 32. Bd1 Kf8 33. Bg4
+Rf7 34. Rd1 Rff4 35. Bd7 Re2 36. Bxb5 Rxb2 37. Bc6 Rxa2 38. Bxd5 Rb2 39. Be3 a4
+40. Bxf4 gxf4 41. Rd4 a3 42. Rxf4+ Ke7 43. Ra4 c6 44. Bc4 Kd6 45. Rxa3 Rf2 46.
+Bg8 Rf8 47. Bh7 Rf7 48. Be4 Rf4 49. Ra4 c5 50. Ra6+ Ke5 51. Bc6 Rc4 52. Ra3 Rf4
+53. Ra4 c4 54. Ra5+ Kd6 55. Bg2 Kc7 56. Rh5 Rf2 57. Rxh4 Rc2 58. Rxc4+ Kb6 59.
+Rc6+ Kb5 60. Bd5 Rd2 61. c4+ Kb4 62. Kg3 Kc3 63. h4 Kd4 64. h5 Ke5 65. h6 Rd3+
+66. Kg4 Rd4+ 67. Kg5 Rd3 68. h7 Rh3 69. Re6+ Kd4 70. Rh6 Rxh6 71. Kxh6 Kc5 72.
+h8=Q Kd6 73. Qd4 Ke7 74. Qe5+ Kd7 75. Qb8 Ke7 76. Qc7+ Kf6 77. Qg7+ Kf5 78.
+Qg5# 1-0
+
+[Event "Weihnachtspokal 2012 - Runde 1 - Blitz"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.24"]
+[Round "1.1"]
+[White "Almeria 68020, Mephisto"]
+[Black "CM 32 MHz King 0.5, Tasc"]
+[Result "1/2-1/2"]
+[ECO "D30"]
+[PlyCount "129"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 Nf6 2. Nf3 d5 3. c4 e6 4. Bg5 dxc4 5. e4 {Tasc CM 32 MHz King 0.5 out of
+book} b5 {Mephisto Almeria 68020 out of book} 6. Nc3 Ba6 7. e5 h6 8. Bh4 g5 9.
+Bg3 Nh5 10. Be2 Nxg3 11. hxg3 Be7 12. O-O b4 13. Nb1 g4 14. Nh2 h5 15. a3 b3
+16. Qd2 Nc6 17. Rd1 Qd7 18. d5 Nxe5 19. dxe6 Qxe6 20. Qd4 Bf6 21. Qe4 Nc6 22.
+Qxe6+ fxe6 23. Nc3 Bxc3 24. bxc3 Ke7 25. Rd2 Rab8 26. Rb1 Ne5 27. Nf1 Bb7 28.
+Rbb2 Be4 29. Rd4 Bd3 30. Bxd3 Nxd3 31. Rb1 c5 32. Rxc4 b2 33. Nd2 Rhf8 34. Ne4
+Rb5 35. Ra4 Ra8 36. Ra6 Rb6 37. Ra5 Rc6 38. Rb5 Rd8 39. Nd2 Rb6 40. Rxb6 axb6
+41. Nc4 Rf8 42. Nxb2 Nxf2 43. Re1 c4 44. Nxc4 Nd3 45. Re3 b5 46. Na5 Nc5 47. c4
+bxc4 48. Nxc4 Rf5 49. Rc3 Rd5 50. Nb6 Rd1+ 51. Kh2 Kd6 52. Nc4+ Kc6 53. Rc2 Rd4
+54. Na5+ Kd5 55. Rxc5+ Kxc5 56. Nb3+ Kc4 57. Nxd4 Kxd4 58. Kg1 Kd3 59. a4 e5
+60. a5 e4 61. a6 e3 62. a7 e2 63. a8=Q e1=Q+ 64. Kh2 Qe5 65. Qa1 1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Runde 1 - Blitz"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.24"]
+[Round "1.2"]
+[White "CM 32 MHz King 0.5, Tasc"]
+[Black "Almeria 68020, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "D21"]
+[PlyCount "154"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 d5 2. c4 dxc4 3. Nf3 a6 4. e4 b5 5. a4 Bb7 6. axb5 axb5 7. Rxa8 Bxa8 8.
+Nc3 c6 9. Bg5 {Mephisto Almeria 68020 out of book} Nf6 {Tasc CM 32 MHz King 0.
+5 out of book} 10. Bf4 e6 11. Qa1 Nbd7 12. Be2 b4 13. e5 bxc3 14. exf6 cxb2 15.
+Qxb2 Qxf6 16. Bg5 Qf5 17. Qa2 Bb4+ 18. Bd2 Bxd2+ 19. Kxd2 O-O 20. Qxc4 Qf4+ 21.
+Kc2 c5 22. dxc5 Qxc4+ 23. Bxc4 Bxf3 24. gxf3 Rc8 25. Rd1 Ne5 26. Kb3 Nxf3 27.
+Ba6 Rb8+ 28. Kc3 g6 29. c6 Rb6 30. Bb7 Rb5 31. Kc4 Rb2 32. c7 Rc2+ 33. Kb3 Rxc7
+34. Bxf3 Kg7 35. Bg2 Kf6 36. Rd4 Ke5 37. Rc4 Rd7 38. Kc3 Ra7 39. Re4+ Kf5 40.
+Rd4 h5 41. Be4+ Ke5 42. Bc6 Ra3+ 43. Kc4 Rh3 44. Rd2 g5 45. f3 g4 46. Rf2 Kd6
+47. Kb5 gxf3 48. Bxf3 f5 49. Rd2+ Ke5 50. Bc6 Rc3 51. Bg2 Kf6 52. Kb4 Re3 53.
+Kc4 e5 54. Rd6+ Kg5 55. Rd3 Re2 56. Rg3+ Kf6 57. h4 Rf2 58. Kd3 Rf4 59. Rh3 Ra4
+60. Kc3 e4 61. Kb3 Ra5 62. Re3 Rb5+ 63. Kc4 Rb1 64. Bxe4 fxe4 65. Rxe4 Kf5 66.
+Rd4 Rf1 67. Kd5 Rf4 68. Rxf4+ Kxf4 69. Kd4 Kg4 70. Ke5 Kxh4 71. Kf4 Kh3 72. Kf3
+h4 73. Kf2 Kg4 74. Kg1 Kg3 75. Kh1 h3 76. Kg1 Kf4 77. Kh2 Kg4 1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Runde 1 - Blitz"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.24"]
+[Round "1.3"]
+[White "Almeria 68020, Mephisto"]
+[Black "CM 32 MHz King 0.5, Tasc"]
+[Result "0-1"]
+[ECO "C63"]
+[PlyCount "144"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. d3 fxe4 5. dxe4 Nf6 6. Bg5 Bc5 7. Nc3 d6 8.
+Qd2 {Tasc CM 32 MHz King 0.5 out of book} Bg4 9. Be2 O-O {Mephisto Almeria
+68020 out of book} 10. O-O a6 11. Rad1 Be6 12. b3 Bb4 13. Bh4 h6 14. Qe3 g5 15.
+Bg3 Bxc3 16. Qxc3 Nxe4 17. Qd3 Bf5 18. Qc4+ Kh7 19. b4 Qe7 20. a3 Nxg3 21. hxg3
+Be6 22. Qe4+ Kh8 23. c3 Bf5 24. Qc4 h5 25. Rd2 Be6 26. Qd3 Qf6 27. Qe3 Rg8 28.
+Bd3 d5 29. Be2 g4 30. Nh4 Rgf8 31. Bd3 e4 32. Be2 Rae8 33. Qf4 Qg7 34. Qe3 Rd8
+35. Rfd1 Qf6 36. a4 a5 37. Bb5 Ne7 38. bxa5 c6 39. Be2 Ra8 40. Rb2 Bc8 41. Qc5
+Kg7 42. Rdb1 Kf7 43. Rb6 Rh8 44. R1b2 Rd8 45. Rb1 Qd6 46. Qb4 Ra7 47. Rb2 Qxb4
+48. cxb4 d4 49. Rd2 d3 50. Bd1 Rd6 51. Bb3+ Be6 52. a6 bxa6 53. Bxe6+ Kxe6 54.
+a5 Rd8 55. Rd1 Kf7 56. Kf1 Kf6 57. Re1 Kg7 58. Rd1 Kf7 59. Kg1 Ke6 60. Re1 d2
+61. Rd1 Raa8 62. Kf1 Rd3 63. Ke2 Rad8 64. Rxa6 R8d6 65. b5 Nd5 66. Rxc6 Rxc6
+67. Rxd2 Nc3+ 68. Ke1 Rcd6 69. Rxd3 Rxd3 70. f4 e3 71. f5+ Kd6 72. b6 Rd1# 0-1
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.25"]
+[Round "1.1"]
+[White "Citrine 30 MHz, Novag"]
+[Black "Sparc, Saitek"]
+[Result "1/2-1/2"]
+[ECO "B14"]
+[PlyCount "41"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. c4 Nf6 5. Nc3 g6 6. Qb3 Bg7 7. cxd5 O-O 8.
+Be2 Nbd7 9. Bf3 Nb6 10. Nge2 Bf5 11. Nf4 g5 12. Nfe2 g4 13. Ng3 Bg6 14. Be2
+Nbxd5 15. Qxb7 Rb8 16. Qxa7 Nb4 17. O-O Nc2 18. Rb1 Nb4 19. Ra1 Nc2 20. Rb1 Nb4
+21. Ra1 1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Runde 1 - Blitz"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.25"]
+[Round "1.2"]
+[White "Sparc, Saitek"]
+[Black "Citrine 30 MHz, Novag"]
+[Result "0-1"]
+[ECO "A04"]
+[PlyCount "138"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. Nf3 f5 2. e3 Nc6 3. d4 e6 4. Be2 Bb4+ 5. Bd2 Bxd2+ 6. Nbxd2 d6 7. O-O Nf6 8.
+c3 O-O 9. a4 e5 10. Qb3+ Kh8 11. dxe5 dxe5 12. Rfd1 a6 13. Ng5 Qe7 14. Ndf3 h6
+15. Nh4 Qe8 16. Nh3 g5 17. Nxg5 hxg5 18. Nf3 Ne4 19. a5 Be6 20. c4 g4 21. Nh4
+Rd8 22. Rxd8 Nxd8 23. Rd1 Qh5 24. Qa3 Nd6 25. g3 Rg8 26. Qc3 Nc6 27. h3 Ne4 28.
+Qe1 Qf7 29. hxg4 fxg4 30. b3 Qf6 31. Bd3 Nc5 32. Bc2 e4 33. Qd2 Rd8 34. Qe1
+Rxd1 35. Bxd1 Nd3 36. Qe2 Nxa5 37. Qd2 Qa1 38. Kh2 Nc6 39. Ng6+ Kg7 40. Nf4 Bf5
+41. Nd5 Qe5 42. Kg1 Kf8 43. Nc3 Qc5 44. Nd5 Nce5 45. Qa2 Be6 46. Nf4 Bf7 47.
+Kf1 Qd6 48. Qa1 Qh6 49. Kg1 Qd6 50. Kf1 Nf3 51. Qh8+ Ke7 52. Bxf3 gxf3 53. Qc3
+Nxf4 54. exf4 Qd3+ 55. Qxd3 exd3 56. Ke1 Kd6 57. Kd2 Bg6 58. g4 Be4 59. Kc3 a5
+60. Kd2 Kc5 61. Kc3 Kd6 62. Kd2 Kc5 63. Kc3 c6 64. f5 b6 65. f6 Bg6 66. f7 Bxf7
+67. Kxd3 Kb4 68. Kc2 a4 69. bxa4 Kxc4 0-1
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.25"]
+[Round "1"]
+[White "London 68020, Mephisto"]
+[Black "CM 16 MHz 128K Gideon 2.1, Tasc"]
+[Result "1-0"]
+[ECO "A43"]
+[PlyCount "103"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 c5 2. dxc5 Qa5+ {Mephisto London 68020 out of book} 3. Nc3 e6 4. e4 {
+Tasc CM16 128K Gideon 2.1 out of book} Bxc5 5. Bb5 Bb4 6. Bd2 Nf6 7. Bd3 d6 8.
+a3 Bxc3 9. Bxc3 Qb6 10. Nf3 Nc6 11. O-O e5 12. Qe2 O-O 13. Rad1 Bg4 14. Bc4 Bh5
+15. Qd3 Rfd8 16. Bb3 Rac8 17. h3 Bg6 18. Rfe1 d5 19. Nxe5 Nxe4 20. Qf3 Nxc3 21.
+bxc3 Nxe5 22. Rxe5 Be4 23. Qf4 Qg6 24. Rg5 Qh6 25. f3 Qb6+ 26. Kh1 h6 27. Re5
+Bg6 28. Rexd5 Rxd5 29. Rxd5 Re8 30. Rd7 Re1+ 31. Kh2 Qg1+ 32. Kg3 Kh7 33. Bxf7
+Qb6 34. Rd6 Qxd6 35. Qxd6 Bxf7 36. Qd7 Bg6 37. Qxb7 Re3 38. Qc7 Bxc2 39. Qc5
+Rd3 40. c4 Rd7 41. Qa5 Rd6 42. Qxa7 Rg6+ 43. Kf2 Rc6 44. Qd4 Bg6 45. a4 h5 46.
+a5 Rc8 47. a6 Rb8 48. a7 Ra8 49. Qb6 Bd3 50. Qb7 Rxa7 51. Qxa7 Bxc4 52. Qb7 1-0
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.27"]
+[Round "1"]
+[White "Risc 2500, Saitek"]
+[Black "Master Chess 24 MHz, Pewatronic"]
+[Result "0-1"]
+[ECO "C11"]
+[PlyCount "142"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. e5 Nfd7 5. f4 c5 6. Nf3 Nc6 7. Be3 Qb6 8. Na4
+Qa5+ 9. c3 c4 10. Be2 b5 11. Nc5 Nxc5 12. dxc5 b4 13. Nd4 Nd8 14. a3 b3 15. c6
+Bc5 16. c7 Nb7 17. O-O Qxc7 18. Qd2 O-O 19. Bg4 a6 20. Rae1 Bb6 21. f5 Nc5 22.
+fxe6 Bxe6 23. Nxe6 fxe6 24. Bd4 Rae8 25. Rxf8+ Rxf8 26. Qe3 Rb8 27. Rf1 Re8 28.
+Bh5 g6 29. Bg4 Qc8 30. Qf2 Re7 31. Be2 a5 32. Qf4 Ba7 33. Kh1 Rc7 34. Be3 Qe8
+35. Rf3 Na4 36. Bc1 Rf7 37. Qh4 Bb6 38. Bd1 Bd8 39. Qd4 Bc7 40. Be2 Rxf3 41.
+Bxf3 Qc6 42. Be2 Nc5 43. Be3 Nd3 44. Bxd3 cxd3 45. Bh6 a4 46. Qxd3 Bxe5 47. Qf1
+Qe8 48. Qa6 Bf6 49. Be3 Bg7 50. Qb7 Kh8 51. Kg1 h6 52. Bd4 e5 53. Bc5 d4 54.
+Qb4 d3 55. Be3 Qd7 56. Bd2 Qc6 57. Qh4 Kh7 58. Qf2 e4 59. Be3 Qf6 60. Qd2 Qh4
+61. Qc1 Be5 62. g3 Bxg3 63. hxg3 Qxg3+ 64. Kf1 Qf3+ 65. Kg1 g5 66. Qd2 g4 67.
+Bf4 h5 68. c4 h4 69. c5 g3 70. Qe3 h3 71. Qxf3 exf3 0-1
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.28"]
+[Round "1"]
+[White "Revelation Polgar"]
+[Black "Scorpio 68000, Novag"]
+[Result "1-0"]
+[ECO "C81"]
+[PlyCount "101"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Nxe4 6. d4 b5 7. Bb3 d5 8. dxe5
+Be6 9. Qe2 Be7 10. Rd1 O-O 11. c4 bxc4 12. Bxc4 Bc5 13. Be3 Bxe3 14. Qxe3 Qb8
+15. Bb3 Na5 16. Nbd2 Qa7 17. Qxa7 {Out of Book} Rxa7 18. Bc2 Nxd2 {Out of Book}
+19. Nxd2 Rb7 20. b3 c5 21. Rac1 Nc6 22. Nf3 Rb5 23. Ng5 h6 24. Bh7+ Kh8 25.
+Nxe6 fxe6 26. Bb1 d4 27. Rd2 g5 28. Bd3 Ra5 29. Re1 Kg7 30. Bc4 Kf7 31. a4 Ke7
+32. f3 h5 33. Kf2 g4 34. Kg3 gxf3 35. gxf3 h4+ 36. Kxh4 Rxf3 37. Rg2 Kf7 38.
+Kg4 Rf5 39. Rge2 Ke7 40. h4 Nb4 41. h5 d3 42. Rh2 Nc6 43. h6 Nxe5+ $2 44. Rxe5
+Rxe5 45. h7 Re4+ 46. Kg3 Re3+ 47. Kf4 d2 48. h8=Q Rf3+ 49. Kxf3 d1=Q+ 50. Re2
+Qf1+ 51. Rf2 1-0
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.29"]
+[Round "1"]
+[White "Sapphire II, Novag"]
+[Black "TM Roma, Mephisto"]
+[Result "1-0"]
+[ECO "D46"]
+[PlyCount "49"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. c4 e6 2. d4 d5 3. Nc3 c6 4. e3 Nf6 5. Nf3 Bd6 6. Bd3 Nbd7 7. e4 dxe4 8. Nxe4
+Nxe4 9. Bxe4 O-O 10. O-O h6 11. Bc2 Nf6 12. Be3 Qc7 13. c5 Bf4 14. g3 Bxe3 15.
+fxe3 b6 16. Qd3 Bb7 17. Ne5 Rfd8 18. Rxf6 gxf6 19. Qh7+ Kf8 20. Rf1 f5 21. Bxf5
+exf5 22. Rxf5 f6 23. Rxf6+ Ke8 24. Re6+ Kf8 25. Qh8# 1-0
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.29"]
+[Round "1.1"]
+[White "Excell Mach III 20 MHz, Fidelity"]
+[Black "Advanced Travel Chess 36 MHz, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "C89"]
+[PlyCount "105"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 O-O 8. c3
+d5 9. exd5 Nxd5 10. Nxe5 Nxe5 11. Rxe5 c6 12. d4 Bf6 13. Re2 Bg4 14. f3 Bf5 15.
+Bc2 Bxc2 16. Qxc2 c5 17. dxc5 Qc7 18. Kh1 Rae8 19. Rxe8 Rxe8 20. Qf2 Be5 21. g3
+Rc8 22. a4 Qc6 23. axb5 axb5 24. Nd2 h6 25. Nb3 Rc7 26. Ra5 Re7 27. Qf1 Nc7 28.
+Nd4 Qxc5 29. Nxb5 Qb6 30. b4 Bd6 31. Nxd6 Qxd6 32. Bf4 Qb6 33. Ra1 g5 34. Bd2
+Rd7 35. Rd1 Nd5 36. Re1 Qb7 37. Re4 Kg7 38. Qf2 f5 39. Re6 Nc7 40. Re5 Kf6 41.
+Re3 Qc6 42. Qe2 Qd6 43. Be1 Nd5 44. Rd3 Qa6 45. c4 Qxc4 46. Bc3+ Kf7 47. Kg1
+Rb7 48. f4 g4 49. Qd2 Ke6 50. Qe1+ Kf7 51. Qd2 Ke6 52. Qe1+ Kf7 53. Qd2 1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Runde 1 - Blitz"]
+[Site "Schachcomputer.info"]
+[Date "2012.11.29"]
+[Round "1.2"]
+[White "Advanced Travel Chess 36 MHz, Mephisto"]
+[Black "Excell Mach III 20 MHz, Fidelity"]
+[Result "1/2-1/2"]
+[ECO "C97"]
+[PlyCount "189"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 O-O 8. c3
+d6 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. d5 Bd7 13. Nbd2 c4 14. Re3 Qb6 15. b3
+Rac8 16. Ba3 Rfe8 17. Bb4 Nb7 18. bxc4 bxc4 19. Rb1 Qc7 20. Qe2 Nd8 21. Ne1 Nb7
+22. Ba3 Bb5 23. Rb4 Qa5 24. Nb1 Nc5 25. Rb2 Qc7 26. Nd2 Rb8 27. Bxc5 Qxc5 28.
+a4 Bd7 29. Rxb8 Rxb8 30. Qxc4 Qa5 31. Nd3 Rc8 32. Qb4 Bd8 33. Ne1 Bb6 34. Rd3
+Bc7 35. Bd1 h6 36. Nef3 Rb8 37. Qxa5 Bxa5 38. Nc4 Rb1 39. Kh2 Bc7 40. Bc2 Ra1
+41. Nfd2 Bxa4 42. Ne3 Bxc2 43. Nxc2 Rc1 44. Ne3 a5 45. c4 a4 46. Ra3 Ba5 47.
+Ndf1 Nxe4 48. Rxa4 Bb6 49. Ra8+ Kh7 50. f3 Nf6 51. Ra3 Kg6 52. Rb3 Nd7 53. Kg3
+f5 54. f4 exf4+ 55. Kxf4 Bd4 56. Nd2 Nc5 57. Ra3 Bc3 58. Nef1 Nd3+ 59. Ke3 Nb2
+60. g4 fxg4 61. hxg4 Bb4 62. Ra8 Nxc4+ 63. Nxc4 Rxf1 64. Ke4 Bc5 65. Rd8 Kg5
+66. Rd7 Rf4+ 67. Kd3 Rd4+ 68. Kc3 Kxg4 69. Rxg7+ Kf5 70. Ne3+ Kf4 71. Re7 h5
+72. Re6 h4 73. Ng2+ Kg3 74. Ne3 Rf4 75. Nc4 h3 76. Rh6 h2 77. Nd2 Kg2 78. Rg6+
+Kh1 79. Nb3 Bb4+ 80. Kd3 Rf3+ 81. Kc4 Ba3 82. Nd4 Rf4 83. Kd3 Bc5 84. Ne6 Rf5
+85. Nxc5 Rxd5+ 86. Ke4 Rxc5 87. Rxd6 Rc7 88. Kf3 Rg7 89. Rd1+ Rg1 90. Rd2 Ra1
+91. Kg3 Ra3+ 92. Kf2 Ra1 93. Kg3 Rg1+ 94. Kh3 Rg2 95. Rxg2 1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.01"]
+[Round "1"]
+[White "Brute Force, Saitek"]
+[Black "Dallas 68020, Mephisto"]
+[Result "1-0"]
+[ECO "B18"]
+[PlyCount "75"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 c6 2. e4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. Bc4 e6 7. N1e2 Nf6 8.
+h4 h6 9. Nf4 Bh7 10. Qe2 Bd6 11. Be3 Bxf4 {Out of Book} 12. Bxf4 b5 13. Bb3 {
+Out of Book} Qxd4 14. Be5 Qb4+ 15. c3 Qc5 16. O-O-O Bg8 17. Nf5 Rh7 18. Nxg7+
+Kf8 19. Rd8+ Ke7 20. Rxg8 Nxg8 21. Bd4 Qxd4 22. Nf5+ Ke8 23. Nxd4 a6 24. Bc2
+Rg7 25. Nf5 Rg6 26. Nd6+ Kd7 27. Bxg6 fxg6 28. Rd1 Ke7 29. Qe5 Nf6 30. Nc8+ Kf7
+31. Qc7+ Nbd7 32. Nb6 Re8 33. Nxd7 Nd5 {Brute Force meldet Matt in 5} 34. Ne5+
+Kf6 35. Ng4+ Kf5 36. Qe5+ Kxg4 37. Rd4+ Nf4 38. Rxf4# 1-0
+
+[Event "Weihnachtspokal 2012 - Runde 1"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.02"]
+[Round "1"]
+[White "Super Expert C, Novag"]
+[Black "Atlanta 30 MHz - brute force, Mephisto"]
+[Result "0-1"]
+[ECO "A22"]
+[PlyCount "101"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. c4 e5 2. Nc3 Nf6 3. a3 Be7 4. e3 O-O 5. Be2 c6 6. d4 exd4 7. exd4 d5 8. Nf3
+Bg4 9. cxd5 cxd5 10. Qb3 Nc6 11. Be3 Na5 12. Qa4 a6 13. O-O b5 14. Qc2 Re8 15.
+Rfe1 Nc4 16. Bg5 Qd7 17. Rac1 Rac8 18. Bf4 Qa7 19. Ne5 Nxa3 20. bxa3 Bxe2 21.
+Rxe2 Bxa3 22. Rce1 Bb4 23. Bd2 Qxd4 24. Nf3 Qc4 25. Rxe8+ Nxe8 26. Ne5 Qc7 27.
+Nf3 Nf6 28. Rc1 Ne4 29. Nxe4 Qxc2 30. Nf6+ gxf6 31. Rxc2 Rxc2 32. Bxb4 Rc4 33.
+Be1 b4 34. Nd2 Rc2 35. Kf1 a5 36. Ke2 a4 37. Kd1 b3 38. Nb1 Ra2 39. g4 d4 40.
+Kc1 d3 41. Bc3 Rxf2 42. Bd2 Rxh2 43. Kb2 Rg2 44. Kc3 Rxg4 45. Na3 h5 46. Kxd3
+h4 47. Ba5 Rg3+ 48. Kd2 h3 49. Bc7 h2 50. Bxg3 h1=Q 51. Ke2 0-1
+
+[Event "Weihnachtspokal 2012 - Achtelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.03"]
+[Round "2"]
+[White "Sapphire II, Novag"]
+[Black "Magellan, Mephisto"]
+[Result "1-0"]
+[ECO "D67"]
+[PlyCount "31"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 e6 2. c4 d5 3. Nc3 Nf6 4. Bg5 Nbd7 5. e3 Be7 6. Nf3 O-O 7. Rc1 c6 8. Bd3
+dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 e5 12. dxe5 Nxe5 13. Nxe5 {Buchende
+Sapphire II} Qxe5 14. Nc3 Be6 15. Qb3 Qf4 {Buchfehler Magellan} 16. exf4 1-0
+
+[Event "Weihnachtspokal 2012 - Achtelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.06"]
+[Round "2"]
+[White "Par Excellence 16 MHz, Fidelity"]
+[Black "Mystery 32 MHz, Mephisto"]
+[Result "1-0"]
+[ECO "E30"]
+[PlyCount "134"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Bg5 h6 5. Bh4 c5 6. d5 Bxc3+ 7. bxc3 e5 8. Nf3
+d6 9. Bxf6 Qxf6 10. e4 Qf4 11. Bd3 f5 12. g3 Qg4 13. h3 Qh5 14. exf5 O-O 15.
+Nh4 Qxd1+ 16. Rxd1 Kf7 17. Rb1 b6 18. Ng6 Re8 19. f3 Kf6 20. Nh4 Ba6 21. Kf2
+Nd7 22. Kg2 Rf8 23. Ng6 Rf7 24. a4 Re8 25. Rhe1 Nf8 26. Nf4 Bb7 27. Ne6 h5 28.
+h4 Rfe7 29. Ng5 Rc7 30. Rh1 Bc8 31. Ne6 Rf7 32. Bc2 Ba6 33. Ng5 Rc7 34. Ne4+
+Ke7 35. Bd3 Nd7 36. Ng5 Rcc8 37. Ra1 Kf6 38. Ne6 Bb7 39. Rhb1 Re7 40. a5 Rb8
+41. axb6 axb6 42. Ra7 Ree8 43. Nc7 Rec8 44. Na6 Bxa6 45. Rxd7 Rd8 46. Rxd8 Rxd8
+47. Rxb6 Bc8 48. Rb8 Rf8 49. Kf2 Ke7 50. Ke3 Kd7 51. Ra8 Kc7 52. Ra7+ Bb7 53.
+Ke4 Kb8 54. Ra2 Bc8 55. g4 Kc7 56. Ra7+ Bb7 57. Ra1 hxg4 58. fxg4 Bc8 59. h5
+Rh8 60. Ke3 Rf8 61. Ra7+ Bb7 62. Ra2 Rh8 63. Be4 Ra8 64. Rxa8 Bxa8 65. g5 Bb7
+66. h6 gxh6 67. gxh6 Kd7 1-0
+
+[Event "Weihnachtspokal 2012 - Achtelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.08"]
+[Round "2"]
+[White "Elite V9, Fidelity"]
+[Black "Chess Explorer 32 MHz, Mephisto"]
+[Result "1-0"]
+[ECO "A22"]
+[PlyCount "151"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 e4 4. Ng5 b5 5. d3 Bb7 6. Nxb5 Bb4+ 7. Bd2 Bxd2+ 8.
+Qxd2 O-O 9. Nxe4 Nxe4 10. dxe4 a6 11. Nc3 Re8 12. e3 Nc6 13. Be2 d6 14. O-O Ne5
+15. Nd5 Ng6 16. f3 c6 17. Nf4 Nxf4 18. exf4 d5 19. Qb4 Rb8 20. cxd5 cxd5 21.
+Rfd1 Qe7 22. Qxe7 Rxe7 23. Bd3 dxe4 24. fxe4 Bxe4 25. Bxa6 g5 26. Rd2 Ra8 27.
+Bc4 gxf4 28. Rf1 Kg7 29. Rxf4 f5 30. Rff2 Kf6 31. Rd6+ Ke5 32. Rfd2 Rc7 33. b3
+Ra3 34. g3 Re7 35. Rh6 Bf3 36. Kf2 Ba8 37. Bg8 Raa7 38. a4 Be4 39. Bc4 Ba8 40.
+h3 Be4 41. Ke3 Re8 42. Rd8 Rae7 43. Rxe8 Rxe8 44. Rxh7 Kd6 45. Kd4 Bg2 46. Rh6+
+Kc7 47. a5 Re4+ 48. Kc5 Re5+ 49. Kb4 Re3 50. h4 Rxg3 51. Rh7+ Kd6 52. Rf7 Rh3
+53. Rxf5 Rxh4 54. a6 Rh7 55. Rf6+ Ke5 56. Re6+ Kd4 57. Rd6+ Ke5 58. Rd8 Be4 59.
+Kb5 Kf6 60. b4 Rc7 61. Rd1 Ke5 62. Bb3 Bf3 63. Rd8 Rc3 64. Bc4 Rxc4 65. Kxc4
+Be2+ 66. Rd3 Bf1 67. b5 Ke4 68. a7 Bxd3+ 69. Kc5 Kf5 70. a8=Q Be4 71. Qc8+ Kf6
+72. b6 Ke5 73. Qg4 Ba8 74. Qg5+ Ke6 75. Qg8+ Ke5 76. Qxa8 1-0
+
+[Event "Weihnachtspokal 2012 - Achtelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.08"]
+[Round "2"]
+[White "Citrine 30 MHz, Novag"]
+[Black "Designer 2325 Master, Fidelity"]
+[Result "0-1"]
+[ECO "D67"]
+[PlyCount "103"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3
+dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 N7b6 12. Be2 e5 13. O-O Rd8 14. Nc5 e4
+15. Nd2 Bf5 16. Qb3 a5 17. Qa3 Nb4 18. Bd1 N6d5 19. f3 exf3 20. e4 Qg5 21. Bxf3
+Qxd2 22. exf5 Ne3 23. Nb3 Qd3 24. Rf2 Nec2 25. Rcxc2 Nxc2 26. Qe7 Nxd4 27. Nxd4
+Re8 28. Qxe8+ Rxe8 29. Nc2 a4 30. g4 Qc4 31. a3 Qb3 32. Nb4 Rd8 33. h4 f6 34.
+Kg2 c5 35. Nc2 Re8 36. Na1 Qa2 37. Nc2 Qxb2 38. Bd5+ Kf8 39. Bf3 Re5 40. Ne3
+Qb3 41. Nd1 Qxa3 42. Bxb7 Qb3 43. Bf3 a3 44. Rd2 a2 45. Bc6 a1=Q 46. Rd8+ Kf7
+47. Nf2 c4 48. Rd7+ Re7 49. Rd8 Ra7 50. Rd2 Qe5 51. Bf3 Ra3 52. Bd5+ 0-1
+
+[Event "Weihnachtspokal 2012 - Achtelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.08"]
+[Round "2"]
+[White "London 68020, Mephisto"]
+[Black "Revelation Polgar"]
+[Result "0-1"]
+[ECO "B22"]
+[PlyCount "104"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 d6 6. Nf3 Nc6 7. Bc4 e6 8. O-O
+Be7 9. Qe2 O-O 10. Qe4 Ndb4 {Out of Book} 11. exd6 {Out of Book} Bxd6 12. Ng5
+g6 13. a3 Nd5 14. Bxd5 exd5 15. Qh4 h5 16. Nc3 Bf5 17. Be3 f6 18. Nf3 Bg4 19.
+Nxd5 g5 20. Nxf6+ Qxf6 21. Qxg5+ Qxg5 22. Nxg5 Rae8 23. d5 Na5 24. Rac1 b5 25.
+h3 Bd7 26. Bc5 Rf6 27. Ne6 Bxe6 28. dxe6 Be5 29. e7 Bxb2 30. Rc2 Rc6 31. Rxb2
+Rxc5 32. Rfb1 a6 33. Re2 Kf7 34. Rbe1 Nc6 35. f4 Rc3 36. Re3 Rxe3 37. Rxe3 Rxe7
+38. Rxe7+ Nxe7 39. Kf2 a5 40. Ke2 Nd5 41. g3 Nc3+ 42. Kd3 Nb1 43. a4 b4 44. g4
+hxg4 45. hxg4 Nc3 46. Kc2 Nd5 47. Kb2 Nxf4 48. Kb3 Nd3 49. Kc4 Nc5 50. Kd4 Kg6
+51. Kc4 Kg5 52. Kd4 Kxg4 {London gibt auf} 0-1
+
+[Event "Weihnachtspokal 2012 - Achtelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.09"]
+[Round "2"]
+[White "CM 32 MHz King 0.5, Tasc"]
+[Black "Atlanta 30 MHz - brute force, Mephisto"]
+[Result "1-0"]
+[ECO "C32"]
+[PlyCount "73"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. f4 d5 3. exd5 e4 4. d3 Nf6 5. dxe4 Nxe4 6. Nf3 Bc5 7. Qe2 Bf5 8.
+Nc3 Qe7 9. Be3 Bxe3 10. Qxe3 Nxc3 11. Qxe7+ Kxe7 12. bxc3 {Mephisto Atlanta 30
+MHz - Brute out of book} Bxc2 13. Kd2 Bg6 14. Re1+ Kd6 {Tasc CM 32 MHz King 0.
+5 out of book} 15. Nd4 c6 16. g4 h5 17. f5 Bh7 18. g5 g6 19. Rb1 Kxd5 20. Bg2+
+Kd6 21. Rxb7 Rf8 22. f6 a5 23. Re1 Bg8 24. Rbe7 Rd8 25. Re8 Nd7 26. Rxd8 Rxd8
+27. Nxc6 Ra8 28. Re4 Nb6 29. Rd4+ Kc7 30. c4 Nd7 31. Nb4 Rf8 32. Na6+ Kb6 33.
+Rd6+ Ka7 34. Kc3 Ne5 35. Nc5 Kb8 36. Rd5 Nxc4 37. Nd7+ 1-0
+
+[Event "Weihnachtspokal 2012 - Achtelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.09"]
+[Round "2"]
+[White "Excell Mach III 20 MHz, Fidelity"]
+[Black "Star Diamond, Novag"]
+[Result "1-0"]
+[ECO "A43"]
+[PlyCount "88"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 c5 2. d5 d6 3. e4 Nf6 4. Nc3 g6 5. Nf3 Nbd7 6. Bb5 a6 7. Bd3 b5 8. O-O
+Bg7 9. Bf4 c4 10. Be2 b4 11. Na4 Qa5 12. c3 Nxe4 13. cxb4 Qxb4 14. Rc1 c3 15.
+a3 Qb7 16. bxc3 O-O 17. Re1 Ndf6 18. Bd3 Bf5 19. g4 Nxf2 20. Kxf2 Nxg4+ 21. Kg3
+Bxd3 22. Qxd3 Nf6 23. Bg5 Nxd5 24. Qe4 f5 25. Qe6+ Rf7 26. Rb1 Qc6 27. Nd4 Qc4
+28. Rb7 Be5+ 29. Kg2 Bxd4 30. Rxe7 Qa2+ 31. Re2 Ne3+ 32. Kh3 Qxe6 33. Rxe6 Bxc3
+34. Nxc3 Nc4 35. Nd5 Rb7 36. Bh6 Ne5 37. Rxd6 Nc4 38. Rde6 Rb3+ 39. Kh4 Rb7 40.
+Nf6+ Kf7 41. Nxh7 Kg8 42. Ng5 Nd6 43. Rxd6 Kh8 44. Rde6 Rg7 1-0
+
+[Event "Weihnachtspokal 2012 - Achtelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.10"]
+[Round "2"]
+[White "Master Chess 24 MHz, Pewatronic"]
+[Black "Brute Force, Saitek"]
+[Result "0-1"]
+[ECO "D26"]
+[PlyCount "72"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 d5 2. c4 dxc4 3. Nf3 Nf6 4. e3 e6 5. Bxc4 c5 6. O-O cxd4 7. exd4 Nc6 8.
+Nc3 Be7 9. Qe2 O-O 10. Rd1 Nb4 11. Bg5 Nbd5 12. Rac1 Nxc3 13. bxc3 Bd7 14. Ne5
+Rc8 15. Bb3 h6 16. Bh4 Bc6 17. Nxf7 Rxf7 18. Bxe6 Bd5 19. Bxf7+ Bxf7 20. c4 Bd6
+21. c5 Bf4 22. Rb1 g5 23. Rxb7 gxh4 24. Rxa7 Ra8 25. Ra6 Rxa6 26. Qxa6 Bh5 27.
+Qc4+ Kg7 28. Rb1 Bf7 29. Rb7 Bc7 30. Qc3 Ne4 31. Qb2 Qe7 32. h3 Bd5 33. Rb4 Ng3
+34. Qb1 Ne2+ 35. Kf1 Nf4 36. Kg1 Qg5 0-1
+
+[Event "Weihnachtspokal 2012 - Viertelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.12"]
+[Round "3"]
+[White "Brute Force, Saitek"]
+[Black "Designer 2325 Master, Fidelity"]
+[Result "1-0"]
+[ECO "C38"]
+[PlyCount "85"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. O-O h6 6. d4 {Out of Book} d6 7. c3
+Nc6 8. g3 g4 9. Nh4 f3 10. Nd2 Nf6 11. b3 Qe7 {Out of Book} 12. Re1 Bd7 13. Nf5
+Qf8 14. Nxg7+ Qxg7 15. e5 dxe5 16. d5 Nb8 17. Rxe5+ Kd8 18. Qe1 Re8 19. a4 Kc8
+20. Ba3 Rxe5 21. Qxe5 Qg5 22. Qxg5 hxg5 23. Be7 Nh7 24. h3 f2+ 25. Kxf2 gxh3
+26. Bd3 f5 27. g4 b5 28. axb5 Kb7 29. gxf5 g4 30. Kg3 a6 31. Ne4 Kb6 32. bxa6
+Nxa6 33. Bxa6 c6 34. Bc5+ Kc7 35. d6+ Kb8 36. Bb6 Rxa6 37. Rxa6 Ng5 38. Nc5
+Ne4+ 39. Nxe4 {[%emt 0:00:05] der brute meldet matt in} c5 40. Bc7+ Kc8 41.
+Nxc5 Bc6 42. Rxc6 h2 43. d7# 1-0
+
+[Event "Weihnachtspokal 2012 - Viertelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.12"]
+[Round "3"]
+[White "Par Excellence 16 MHz, Fidelity"]
+[Black "Elite V9, Fidelity"]
+[Result "0-1"]
+[ECO "C46"]
+[PlyCount "146"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 d6 7. Nxc6 bxc6 8.
+Qd3 Ne7 9. Be2 O-O 10. Bd4 f6 11. O-O-O Be6 12. Qa6 Qc8 13. Qxc8 Rfxc8 14. g3
+Bh6+ 15. f4 Bg7 16. g4 c5 17. Be3 Re8 18. h4 Rab8 19. f5 Bf7 20. fxg6 hxg6 21.
+Bb5 Rf8 22. a4 Be6 23. Be2 Nc6 24. h5 Nd4 25. Bxd4 cxd4 26. Nb5 d3 27. Rxd3
+gxh5 28. gxh5 Bc4 29. h6 Bxd3 30. cxd3 Bh8 31. Bg4 Kf7 32. Nxa7 Ra8 33. Nb5
+Rxa4 34. Kb1 Rb8 35. Nxc7 f5 36. Bh5+ Ke7 37. Nd5+ Kd7 38. Rh2 fxe4 39. Bg4+
+Kc6 40. Ne7+ Kc5 41. Rc2+ Kb6 42. Nd5+ Ka5 43. dxe4 Rxe4 44. Bd7 Re1+ 45. Ka2
+Rh1 46. Ne7 Rf8 47. Nf5 Kb4 48. Bc8 Be5 49. Rc7 d5 50. Rb7+ Kc5 51. Bd7 Ra8+
+52. Kb3 Ra5 53. Kc2 Rh2+ 54. Kb1 Kc4 55. Ne3+ Kd4 56. Ng4 Rh1+ 57. Kc2 Rc5+ 58.
+Kb3 Bf4 59. Rb4+ Rc4 60. Rb6 Rh3+ 61. Ka2 Rh5 62. Ra6 Bc1 63. b3 Rc2+ 64. Kb1
+Rg2 65. Ra4+ Kc3 66. Nf6 Ba3 67. Ne4+ Kxb3 68. Rxa3+ Kxa3 69. Nd2 Rxd2 70. Kc1
+Re2 71. Kd1 Rg2 72. Bh3 Rxh3 73. Ke1 Rh1# 0-1
+
+[Event "Weihnachtspokal 2012 - Viertelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.14"]
+[Round "3"]
+[White "Revelation Polgar"]
+[Black "Sapphire II, Novag"]
+[Result "0-1"]
+[ECO "C54"]
+[PlyCount "160"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Bd2 Bxd2+
+8. Nbxd2 d5 9. exd5 Nxd5 10. Qb3 Nce7 11. O-O O-O 12. Rfe1 c6 13. Ne4 Qc7 14.
+Rac1 Rd8 15. Neg5 Qb6 16. Ne5 Qxb3 17. Bxb3 f6 18. Nef3 Nf5 19. Ne6 Bxe6 20.
+Rxe6 Re8 21. Ree1 Kh8 22. h4 Nf4 23. Bc2 Nd6 24. Kf1 Rad8 25. g3 Nd5 26. h5 Kg8
+27. Kg2 h6 28. Bg6 Re7 29. Nh4 Kf8 30. b3 Kg8 31. a4 Rc8 32. Kf3 Rcc7 33. Nf5
+Nxf5 34. Bxf5 Kf7 35. Be4 Ke6 36. a5 Kd6 37. g4 b6 38. axb6 axb6 39. Re2 Re6
+40. Rec2 Re8 41. Ra1 Rce7 42. Bg6 Rb8 43. Rc4 Rd8 44. Rca4 Nc7 45. Kg3 Ne6 46.
+Be4 b5 47. Rb4 Nc7 48. Bf3 Rde8 49. Ra7 Nd5 50. Rxe7 Rxe7 51. Bxd5 Kxd5 52. Kf4
+Re2 53. f3 Rd2 54. Kf5 Ra2 55. Kg6 Ra7 56. Kf5 Re7 57. Kf4 Rc7 58. Ke3 Ra7 59.
+Kf4 Re7 60. Kf5 Kd6 61. Kg6 Kc7 62. d5 cxd5 63. Rxb5 d4 64. Rc5+ Kd6 65. Rc2
+Kd5 66. Ra2 d3 67. Ra1 Kd4 68. b4 d2 69. b5 Re1 70. Ra7 d1=Q 71. Rd7+ Ke3 72.
+Rxd1 Rxd1 73. Kxg7 Kxf3 74. b6 Kxg4 75. Kxf6 Rd6+ 76. Ke5 Rxb6 77. Ke4 Rb5 78.
+Ke3 Re5+ 79. Kd4 Rxh5 80. Ke3 Re5+ 0-1
+
+[Event "Weihnachtspokal 2012 - Viertelfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.15"]
+[Round "3.1"]
+[White "CM 32 MHz King 0.5, Tasc"]
+[Black "Excell Mach III 20 MHz, Fidelity"]
+[Result "1/2-1/2"]
+[ECO "E35"]
+[PlyCount "101"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Qc2 d5 5. cxd5 exd5 6. Bg5 h6 7. Bh4 Nc6 8. e3
+O-O 9. Bd3 Ba5 10. a3 Re8 11. Nge2 Re6 12. O-O Ne7 13. Nf4 Rc6 14. Bxf6 Rxf6
+15. Nh5 Rc6 16. b4 Bb6 17. Nf4 a6 18. Rfe1 Bg4 19. f3 Bd7 20. Qb3 Be6 21. Nxe6
+Rxe6 22. Qc2 a5 23. b5 c5 24. bxc6 Rxc6 25. Bb5 Rc7 26. Rab1 Rac8 27. Rb3 a4
+28. Bxa4 Ba5 29. Qd1 Bxc3 30. Re2 Nf5 31. Rb1 Qg5 32. Qd3 g6 33. Rb5 Re7 34.
+Rxd5 Rxe3 35. Rxe3 Qxe3+ 36. Qxe3 Nxe3 37. Rd7 Nf5 38. Bb3 Bxd4+ 39. Kf1 Rc1+
+40. Ke2 Bc5 41. Bxf7+ Kg7 42. Bb3+ Kf6 43. Rxb7 Nd4+ 44. Kd3 Nxb3 45. Rxb3 Ra1
+46. f4 Rxa3 47. Rxa3 Bxa3 48. Ke4 Ke6 49. g4 Be7 50. f5+ gxf5+ 51. gxf5+
+1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Viertelfinale - "]
+[Site "Schachcomputer.info"]
+[Date "2012.12.16"]
+[Round "3.2"]
+[White "Excell Mach III 20 MHz, Fidelity"]
+[Black "CM 32 MHz King 0.5, Tasc"]
+[Result "0-1"]
+[ECO "C63"]
+[PlyCount "93"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 f5 4. Nc3 fxe4 5. Nxe4 Nf6 6. Nxf6+ Qxf6 7. Qe2 Be7
+8. Bxc6 dxc6 9. Qxe5 Bg4 10. d3 Bxf3 11. Qxf6 Bxf6 12. gxf3 O-O-O 13. Rb1 Rhe8+
+14. Kf1 Re5 15. Be3 Rb5 16. Rg1 Rxb2 17. Rxb2 Bxb2 18. Bxa7 b6 19. Rg4 Kb7 20.
+Bxb6 cxb6 21. Rh4 h6 22. Re4 Bf6 23. Kg2 Kc7 24. Kg3 b5 25. a4 Kd6 26. axb5
+cxb5 27. f4 Rc8 28. Re2 g6 29. Kg4 Rc5 30. Kg3 b4 31. Kf3 Rh5 32. Kg2 Bg7 33.
+Re3 Rc5 34. Rg3 Bd4 35. Rxg6+ Kc7 36. Rxh6 Rxc2 37. Rh7+ Kd6 38. Rb7 Rxf2+ 39.
+Kg3 Rb2 40. h4 Kc6 41. Rb8 Kc7 42. Rb5 b3 43. Kg4 Kc6 44. Rb8 Rg2+ 45. Kh3 b2
+46. Kxg2 Bb6 47. Rg8 0-1
+
+[Event "Weihnachtspokal 2012 - Halbfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.19"]
+[Round "4.1"]
+[White "Brute Force, Saitek"]
+[Black "Sapphire II, Novag"]
+[Result "1/2-1/2"]
+[ECO "A20"]
+[PlyCount "141"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. c4 e5 2. Nf3 e4 {Buchende BF} 3. Nd4 Nc6 4. Nxc6 {Buchende Sapphire II} dxc6
+5. Nc3 Nf6 6. d4 Bb4 7. Qb3 Qd6 8. Bg5 h6 9. Bxf6 Bxc3+ 10. Qxc3 Qxf6 11. e3
+O-O 12. Be2 c5 13. Rd1 Rd8 14. O-O cxd4 15. Rxd4 Rxd4 16. Qxd4 Qxd4 17. exd4
+Kf8 18. f4 Bf5 19. g4 Bd7 20. Kf2 Re8 21. Ke3 f5 22. Rg1 Kf7 23. gxf5 Bxf5 24.
+Bf1 g6 25. Bg2 Ke6 26. b4 Kd6 27. a4 Re6 28. d5 Re7 29. Kd4 e3 30. Re1 e2 31.
+Bf3 Bc2 32. a5 Rf7 33. c5+ Kd7 34. Ke3 Re7+ 35. Kf2 Bf5 36. Rxe2 Rxe2+ 37. Kxe2
+b6 38. Ke3 bxc5 39. bxc5 g5 40. Kd4 gxf4 41. Ke5 Bd3 42. Bg4+ Ke8 43. Kxf4 Bc4
+44. Ke5 Ke7 45. d6+ cxd6+ 46. cxd6+ Ke8 47. Kf6 Bb5 48. h4 Bd7 49. Be2 Kd8 50.
+Ke5 Kc8 51. a6 Ba4 52. Bc4 Kd8 53. Bf1 Bc6 54. Be2 Bd7 55. Bd3 Ke8 56. Bc4 Kd8
+57. Kd5 Ke8 58. Be2 Kd8 59. Ke5 Ke8 60. h5 Bc6 61. Ke6 Kd8 62. Bd3 Be8 63. Kf6
+Bxh5 64. Ke5 Bg4 65. Bc4 h5 66. Bf1 h4 67. Kf4 Be6 68. Ke5 Bg4 69. Kf4 Be6 70.
+Ke5 Bg4 71. Kf4 1/2-1/2
+
+[Event "Weihnachtspokal 2012 - Halbfinale - Blitz"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.20"]
+[Round "4.2"]
+[White "Sapphire II, Novag"]
+[Black "Brute Force, Saitek"]
+[Result "1-0"]
+[ECO "B76"]
+[PlyCount "133"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2
+b6 9. Bh6 Bxh6 10. Qxh6 Bb7 11. O-O-O Nc6 12. Nxc6 Bxc6 13. e5 Ne8 14. exd6
+Nxd6 15. Rd4 Nf5 16. Rxd8 Nxh6 17. Rd2 Rad8 18. Bd3 Kg7 19. Rhd1 Kf6 20. Be4
+Rxd2 21. Rxd2 Rc8 22. Bxc6 Rxc6 23. Ne4+ Ke5 24. Rd7 Nf5 25. Rxa7 h5 26. Kd2
+Ke6 27. Kd3 Rc8 28. Rb7 Rd8+ 29. Ke2 Nd4+ 30. Kf2 Nxc2 31. Rxb6+ Kd5 32. a4 Nd4
+33. a5 Rc8 34. Nc3+ Kc5 35. Rb7 Ra8 36. b4+ Kc4 37. Na4 Rd8 38. a6 Nb5 39. Nb6+
+Kxb4 40. a7 Nxa7 41. Rxa7 Kc5 42. Na4+ Kb4 43. Ke2 e5 44. Nb2 f6 45. Ra6 Rf8
+46. Nd3+ Kb5 47. Rd6 Kc4 48. Ke3 Rf7 49. Ke4 g5 50. Kf5 Rf8 51. Ne1 Kc3 52. h3
+h4 53. Kg6 e4 54. fxe4 Re8 55. Kxf6 Rxe4 56. Rd1 g4 57. Kf5 Re8 58. hxg4 Rf8+
+59. Kg5 Rh8 60. Kf6 Rf8+ 61. Kg7 Rf4 62. g5 Rf1 63. Rb1 h3 64. gxh3 Kd2 65. g6
+Rxe1 66. Rxe1 Kxe1 67. h4 1-0
+
+[Event "Weihnachtspokal 2012 - Halbfinale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.22"]
+[Round "4"]
+[White "Elite V9, Fidelity"]
+[Black "CM 32 MHz King 0.5, Tasc"]
+[Result "0-1"]
+[ECO "C50"]
+[PlyCount "96"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Bc5 5. d3 O-O {Fidelity Elite V9 out of
+book} 6. Bg5 {Tasc CM 32 MHz King 0.5 out of book} h6 7. Bh4 d6 8. Nd5 g5 9.
+Nxf6+ Qxf6 10. Bg3 Na5 11. Bd5 c6 12. Qd2 Bb6 13. b4 cxd5 14. bxa5 Bc5 15. Rb1
+dxe4 16. dxe4 g4 17. Nh4 Rb8 18. O-O Be6 19. c3 Qg5 20. Rfd1 Kg7 21. Rb5 Qxd2
+22. Rxd2 Rfc8 23. Rb1 Ba3 24. Rd3 Kf6 25. f4 Bxa2 26. fxe5+ dxe5 27. Rf1+ Ke6
+28. Rd2 Bc4 29. Rf5 Rc5 30. Rh5 Rxa5 31. Rd4 Rc8 32. Rd1 Bc5+ 33. Kh1 Bf8 34.
+Nf5 f6 35. Nxh6 Be2 36. Re1 Rxc3 37. Rh4 Bb4 38. Rg1 Bc5 39. Rb1 Rca3 40. Re1
+Ra1 41. h3 Rxe1+ 42. Bxe1 Ra1 43. Nxg4 Rxe1+ 44. Kh2 Bd1 45. Rh7 Bxg4 46. hxg4
+Bg1+ 47. Kg3 b5 48. Rb7 Bb6 0-1
+
+[Event "Weihnachtspokal 2012 - Finale"]
+[Site "Schachcomputer.info"]
+[Date "2012.12.23"]
+[Round "5"]
+[White "CM 32 MHz King 0.5, Tasc"]
+[Black "Sapphire II, Novag"]
+[Result "1-0"]
+[ECO "E39"]
+[PlyCount "68"]
+[EventDate "2012.??.??"]
+[SourceDate "2012.11.21"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Qc2 c5 5. dxc5 O-O 6. Bg5 Na6 7. Nf3 Nxc5 8.
+Nd2 Qa5 9. Bxf6 gxf6 10. Ndb1 b5 11. cxb5 d5 12. e3 e5 13. a3 {Novag Sapphire
+II out of book} Ne6 {Tasc CM 32 MHz King 0.5 out of book} 14. Bd3 e4 15. Be2
+Bb7 16. O-O Rac8 17. axb4 Qxa1 18. Na3 Rxc3 19. Qxc3 Qa2 20. Qxf6 d4 21. Bc4
+Qxb2 22. Bxe6 fxe6 23. Qxe6+ Rf7 24. Nc4 Qa2 25. exd4 Qb3 26. h3 Qa2 27. Qg4+
+Rg7 28. Qh5 Rg6 29. Rc1 e3 30. Nxe3 Qf7 31. Qe5 Re6 32. Qg3+ Kf8 33. Rc7 Re7
+34. Qd6 Ke8 1-0
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "30 Minuten / Spiel"]
+[Date "2011.09.03"]
+[Round "1"]
+[White "Amsterdam, Mephisto"]
+[Black "Academy, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "D32"]
+[PlyCount "108"]
+[EventDate "2011.09.03"]
+
+{D32: Damengambit (Tarrasch-Verteidigung)} 1. Nf3 d5 2. d4 e6 3. c4 Nf6 4. Nc3
+c5 5. e3 Nc6 6. cxd5 exd5 7. Be2 Bf5 8. O-O (8. dxc5 Bxc5 9. Nb5 O-O 10. O-O
+Ne4 11. a3 a6 12. Nbd4 Bg6 13. b4 Bb6 14. Bb2 Qd6 15. Qb3 Bh5 16. Rfd1 Bxf3 17.
+Bxf3 Bc7 18. g3 Ne5 19. Bg2 Rfd8 20. h3 h5 21. Rac1 Rac8 22. Bxe4 dxe4 {
+Kretner,G (1852)-Henrich,F (1612) Bad Homburg 2006 1-0 (37)}) 8... Ne4 {Weiß
+hat eine gedrückte Stellung} 9. Qb3 $146 (9. dxc5 Nxc3 10. bxc3 Bxc5 11. Nd4
+Bxd4 12. cxd4 O-O 13. Bd2 Re8 14. Re1 Qd7 15. Qb3 Re6 16. Bf1 Rae8 17. Rac1 Be4
+18. f3 Bf5 19. Red1 Rd8 20. Rc5 Rg6 21. Be1 Be6 22. Rdc1 Rc8 23. Bg3 f5 {Olsen,
+H (2329)-Poulsen,M (2319) Klaksvik 2004 1-0 (52)}) 9... Nxc3 10. bxc3 Na5 11.
+Qb5+ Bd7 {Schwarz droht Materialgewinn: Ld7xb5} 12. Qb1 Be7 13. Bd3 h6 {
+Verhindert das Eindringen auf g5} 14. Ne5 O-O 15. Bh7+ Kh8 16. Bf5 {Weiß droht
+Materialgewinn: Lf5xd7} Ba4 17. Bg4 (17. e4 cxd4 18. cxd4 Nc6 19. Qxb7 Nxd4 $14
+) 17... Bd6 18. Qf5 Bxe5 19. Qxe5 {Weiß hat das Läuferpaar} Bb5 20. Rd1 Nc4 {
+Schönes Feld c4!} 21. Qf5 Ba4 {Schwarz droht Materialgewinn: La4xd1} 22. Rf1 ({
+Nicht} 22. dxc5 Bxd1 23. Bxd1 Qc8 $17) 22... b6 (22... cxd4 23. exd4 Qa5 24.
+Be2 $11) 23. Bf3 {Weiß droht Materialgewinn: Lf3xd5} (23. dxc5 bxc5 24. Be2 Kg8
+$11) 23... Bc6 $11 24. Rb1 Rc8 25. dxc5 bxc5 26. Rd1 {Ist der Bauer d5
+hinreichend gedeckt?} (26. h3 Rc7 $11) 26... Nb6 (26... Qa5 27. Be2 Nd6 28. Qd3
+$15) 27. Be4 {Weiß droht Matt} g6 {Schwarz droht Materialgewinn: g6xf5} 28. Qf4
+Qg5 29. Qxg5 hxg5 30. Bf3 f5 31. Be2 Kg7 32. Bb2 Na4 33. c4+ Nxb2 34. Rxb2 Rcd8
+35. cxd5 Rxd5 {Schwarz hat einen neuen Freibauern: c5.} 36. Rc1 Rfd8 37. f3 Rd2
+38. Rxd2 Rxd2 39. Rxc5 Rxe2 40. Rxc6 Rxa2 41. e4 a5 42. Ra6 a4 43. g4 fxe4 44.
+fxe4 {Weiß hat einen neuen Freibauern: e4.} Kf7 45. h3 Ra1+ 46. Kf2 a3 {Auf
+den muss Weiß aufpassen} 47. e5 a2 48. Kg2 Ke7 49. Kh2 Kd7 50. e6+ {Weiß
+spielt seinen Trumpf aus} Ke7 51. Kg2 Kf6 52. Kh2 Ke7 53. Kg2 Kf6 {Zweifache
+Stellungswiederholung} 54. Kh2 Ke7 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Runde 1 Blitz"]
+[Site "5 Minuten Blitz"]
+[Date "2011.09.03"]
+[Round "1"]
+[White "Academy, Mephisto"]
+[Black "Amsterdam, Mephisto"]
+[Result "0-1"]
+[ECO "C45"]
+[PlyCount "160"]
+[EventDate "2011.09.03"]
+
+{C45: Schottische Partie} 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6
+bxc6 6. e5 Qe7 7. Qe2 Nd5 8. c4 Ba6 9. Nd2 Nb6 10. b3 Qg5 (10... O-O-O 11. Bb2
+Re8 (11... d5 12. exd6 Qxe2+ 13. Bxe2 cxd6 14. O-O-O h5 15. Bf3 d5 16. cxd5
+cxd5 17. Kb1 f6 18. Nf1 Kb8 19. Ne3 Bc5 20. Bd4 Bxd4 21. Rxd4 Bb7 22. Rhd1 Rd7
+23. h4 g6 24. g3 Rhd8 25. Ng2 Nc8 26. Nf4 {Yildiz,B (2214)-Zhukova,N (2490)
+Konya 2009 1-0 (59)}) 12. O-O-O d5 13. Qg4+ Kb8 14. cxd5 Bc8 15. d6 cxd6 16.
+exd6 Bxg4 17. dxe7 Rxe7 18. f3 Bf5 19. g4 Bc8 20. Nc4 f6 21. h4 h6 22. Bd4 Nd5
+23. h5 Re8 24. Rh2 Bb7 25. Bd3 {Meulders,R (2345)-Rivas Pastor,M (2470)
+Marbella 1982 1/2-1/2 (41)}) 11. a3 $146 {Es geht um b4} (11. Qe4 Bb4 12. f4
+Qh4+ 13. g3 Qe7 14. Bg2 Bb7 15. Bb2 a5 16. a4 O-O 17. O-O-O Rad8 18. f5 Ba3 19.
+Rhe1 f6 20. e6 d5 21. Qc2 Rb8 22. Kb1 Bxb2 23. Kxb2 Qb4 24. Ka2 c5 25. Bf1 Bc6
+{Hernandez Estevez,Y (2231)-Koskela,N (2237) Batumi 1999 1-0 (50)}) 11... Be7
+12. Nf3 {Weiß droht Materialgewinn: Sf3xg5} Qg6 13. Be3 (13. Qe3 O-O $14) 13...
+d5 14. exd6 cxd6 15. Bg5 {Weiß droht Matt} Nd5 (15... f6 16. Be3 $11) 16. Rd1 (
+16. O-O-O f6 17. Bd2 f5 $16) 16... f6 {Schwarz droht Materialgewinn: f6xg5} (
+16... O-O $142 $5 {sieht gut aus} 17. Bxe7 Nxe7 $15) 17. Bd2 $14 Qg4 18. h3 Qd7
+19. Nd4 Nc7 20. b4 c5 21. Nb5 Bxb5 22. cxb5 Qe6 (22... cxb4 $5 {ist eine
+Alternative} 23. Bxb4 O-O $14) 23. bxc5 $16 dxc5 24. Qxe6 (24. Ba5 Rd8 $16)
+24... Nxe6 25. Bc4 Nd4 26. O-O h5 (26... O-O-O 27. a4 $16) 27. Bc3 (27. Rfe1
+Kf8 $16) 27... O-O-O 28. Rfe1 {Weiß droht Materialgewinn: Te1xe7} (28. a4 Bd6
+$16) 28... Nc2 $14 {Schwarz droht Materialgewinn: Sc2xe1} 29. Be6+ (29. Rxd8+
+$5 {ist zu erwägen} Bxd8 30. Rc1 Nxa3 31. Be2 $14) 29... Kb8 $11 30. Ba5 Rd4 (
+30... Nxe1 $5 {ist zu prüfen} 31. Bxd8 Nf3+ 32. gxf3 Rxd8 $11) 31. Rxd4 $14
+cxd4 32. Rc1 d3 {Schwarz hat einen starken Freibauern} 33. a4 (33. Bc4 Bxa3 34.
+Rb1 d2 35. Bxd2 Bc5 $14) 33... Bd8 (33... Bb4 $142 $5 {ist bedenkenswert} 34.
+Bxb4 Nxb4 $11) 34. Bd2 Bb6 (34... Bc7 $5 35. Bf7 h4 $16) 35. Bf5 $18 {Plant
+Le6-f5-e4-c6} Rd8 36. a5 {Weiß droht Materialgewinn: a5xb6} (36. Rd1 $142 $5
+$18) 36... Bc7 $14 37. Be4 Na3 {Schwarz droht Materialgewinn: Sa3xb5} (37...
+Nd4 38. Rb1 $11) 38. Bc6 {Ein schönes Feld für den Läufer} (38. Bg6 h4 $14)
+38... h4 (38... Rd4 39. Bf3 Nc4 40. Bc3 $15) 39. Kf1 $14 g5 40. Ke1 Nc2+ 41.
+Kd1 Nd4 42. Rb1 Be5 (42... Nxc6 $142 43. bxc6+ Kc8 $11) 43. f4 $4 {vergibt den
+Vorteil} (43. Be4 $142 $5 $16) 43... Bxf4 (43... gxf4 $5 {ist interessant} 44.
+Rb4 Nxc6 45. bxc6+ Kc7 46. Bxf4 Kxc6 $15) 44. Bxf4+ gxf4 {Weiß hat einen neuen
+rückständigen Bauern: g2} 45. Kd2 f5 46. Rb4 Rd6 47. Rb2 Kc7 48. b6+ axb6 49.
+axb6+ Kb8 50. Ba4 (50. Bf3 $5 $11 {ist vielleicht stärker}) 50... f3 51. gxf3
+Nxf3+ 52. Kc3 $2 (52. Ke3 $142 Ng1 53. Rf2 $17) 52... Ng5 $19 53. Bd1 $6 {fügt
+sich in sein Schicksal} (53. Rb5 Ne4+ 54. Kb2 Rf6 $19) 53... Kb7 (53... Ne4+ {
+ginge schneller} 54. Kc4 d2 55. Rb5 $19) 54. Rb4 $2 (54. Kc4 $19) 54... Ne4+
+55. Kb3 (55. Kc4 {ist noch eine Idee} d2 56. Rb3 $19) 55... Rxb6 56. Bf3 (56.
+Rxb6+ {verlängert das Leiden} Kxb6 57. Kc4 $19) 56... Rxb4+ 57. Kxb4 Kc7 58.
+Bh5 d2 59. Kb3 Nf6 (59... Nf2 60. Ka4 d1=Q+ 61. Bxd1 Nxd1 62. Kb4 Nf2 63. Kc4
+Nxh3 64. Kd3 Nf4+ 65. Ke3 h3 66. Kd4 Ng6 67. Kd5 h2 68. Ke6 h1=Q 69. Kf6 Qh5
+70. Ke6 f4 71. Kf6 Kd6 72. Kf7 Ne5+ 73. Kg7 Qg6+ 74. Kh8 Nf7#) 60. Bd1 (60. Be2
+$19 {bietet noch letzte Rettungschancen}) 60... Kd6 61. Kc2 Ne4 62. Bf3 Nf2 (
+62... Ke5 $142 {entschiede die Partie sofort} 63. Be2 Kd4 $19) 63. Kxd2 Nxh3
+64. Ke3 Ke5 65. Bc6 Ng5 66. Bh1 (66. Bg2 {hilft allerdings auch nicht} f4+ 67.
+Kf2 h3 $19) 66... h3 (66... f4+ 67. Kf2 Ne4+ 68. Kg1 Kd4 $19) 67. Ke2 (67. Bb7
+$19 {lenkt vielleicht noch ab}) 67... Ne4 68. Ke3 (68. Kf3 {ändert den Lauf
+der Dinge nicht} f4 69. Bg2 hxg2 70. Kxg2 Ng5 71. Kf2 Ke4 72. Ke2 f3+ 73. Kd2
+Ne6 74. Kd1 Kd3 75. Ke1 Ke3 76. Kf1 f2 77. Kg2 Ke2 78. Kh3 f1=Q+ 79. Kg3 Qg1+
+80. Kh3 Kf3 81. Kh4 Qh2#) 68... f4+ 69. Kf3 Kf5 70. Bg2 hxg2 71. Kxg2 Kg4 72.
+Kh2 (72. Kf1 {hilft auch nicht mehr} f3 73. Ke1 Kf4 74. Kd1 Ke3 75. Kc2 f2 76.
+Kb3 f1=Q 77. Ka4 Qb1 78. Ka3 Kd3 79. Ka4 Kc4 80. Ka3 Qa1#) 72... f3 73. Kg1 Kf4
+74. Kh2 (74. Kf1 {macht keinen großen Unterschied} Ke3 75. Kg1 Ke2 76. Kh2 f2
+77. Kh3 f1=Q+ 78. Kg4 Qf3+ 79. Kh4 Qg2 80. Kh5 Qg5#) 74... f2 75. Kg2 Ke3 76.
+Kf1 Nd2+ (76... Ng3+ 77. Kg2 f1=Q+ 78. Kxg3 Qg1+ 79. Kh4 Kf4 80. Kh3 Qh1#) 77.
+Kg2 f1=Q+ 78. Kg3 (78. Kh2 {ändert nichts am Ausgang der Partie} Qf5 79. Kg1
+Nf3+ 80. Kg2 Qg4+ 81. Kf1 Qh3#) 78... Ne4+ 79. Kg4 (79. Kh4 {wäre
+gleichermaßen fruchtlos} Qg2 80. Kh5 Qg5#) 79... Qf4+ 80. Kh5 (80. Kh3 {nützt
+auch nichts mehr} Qg3#) 80... Qg5# 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1 "]
+[Site "iSchach"]
+[Date "2011.09.04"]
+[Round "1"]
+[White "Premiere Mach III, Fidelity"]
+[Black "Scorpio 68000, Novag"]
+[Result "0-1"]
+[ECO "C77"]
+[PlyCount "160"]
+[EventDate "2011.09.04"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. d4 Nxe4 {Fidelity Premiere Mach
+III - out of book} 6. dxe5 {Novag Scorpio - out of book} Bc5 7. O-O d5 8. exd6
+cxd6 9. Qd5 Nf6 10. Re1+ Be6 11. Bxc6+ Kf8 12. Qd3 bxc6 13. Ng5 Bg4 14. Qc4 Qd7
+15. b4 Bb6 16. Bf4 d5 17. Qd3 h6 18. Nf3 Qa7 19. Re2 Ne4 20. Be3 Bxf3 21. gxf3
+Nf6 22. Na3 Qb7 23. Bf4 Kg8 24. Rae1 Qc8 25. Be5 Nd7 26. Bc3 Nf8 27. Bd4 Bxd4
+28. Qxd4 Ne6 29. Qe5 Ng5 30. Re3 a5 31. bxa5 Qd7 32. Qc3 d4 33. Qd2 Qh3 34.
+Qxd4 Nxf3+ 35. Rxf3 Qxf3 36. Nc4 Kh7 37. Re3 Qf5 38. Qd3 Qxd3 39. cxd3 Rhe8 40.
+Kf1 Rxe3 41. fxe3 Ra6 42. Ke2 Kg6 43. Kd2 Kg5 44. Kc3 f6 45. Kb4 Kg4 46. d4 Kh3
+47. Kc5 Kxh2 48. Kd6 g5 49. Kc7 g4 50. Kb7 g3 51. Kxa6 g2 52. Nd2 Kg3 53. Kb7
+g1=Q 54. a6 Kf2 55. a7 Qg7+ 56. Kb8 Qf8+ 57. Kb7 Qf7+ 58. Kb8 Qe8+ 59. Kb7 Qe7+
+60. Ka6 Qa3+ 61. Kb7 Qb4+ 62. Kxc6 Qa4+ 63. Kb7 Qb5+ 64. Kc7 Qa6 65. Ne4+ Kxe3
+66. a8=Q Qxa8 67. Nxf6 Kxd4 68. Kd7 Ke5 69. Ng4+ Kf5 70. Nxh6+ Kf6 71. a3 Qd5+
+72. Kc7 Ke5 73. a4 Qd6+ 74. Kb7 Qxh6 75. a5 Kd5 76. Kc7 Qc6+ 77. Kb8 Qa6 78.
+Kc7 Qa7+ 79. Kc8 Kd6 80. a6 Qc7# 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.04"]
+[Round "1"]
+[White "Amber, Novag"]
+[Black "MM V, Mephisto"]
+[Result "0-1"]
+[ECO "A37"]
+[PlyCount "58"]
+
+1. c4 c5 2. Nc3 Nc6 3. g3 g6 4. Bg2 Bg7 5. Nf3 e5 6. O-O Nge7 {Buchende MM V}
+7. d3 {Buchende Amber} f5 8. h3 O-O 9. Bg5 d6 10. Qd2 Be6 11. Nd5 Qd7 12. e4
+Rae8 13. exf5 Nxf5 14. Qe1 Nfd4 15. Nxd4 Nxd4 16. Qe4 Bf5 17. Qh4 Bxd3 18. Rfe1
+Nc2 19. Ne7+ Kh8 20. Red1 Nxa1 21. Rxd3 Rf7 22. Nxg6+ Kg8 23. Rd1 hxg6 24. Rxa1
+e4 25. Bxe4 Bxb2 26. Rb1 Bd4 27. Bxg6 Rxf2 28. Bxe8 Qf5 29. Bf7+ Qxf7 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.05"]
+[Round "1"]
+[White "Super Forte A, Novag"]
+[Black "Obsidian, Novag"]
+[Result "0-1"]
+[ECO "C82"]
+[PlyCount "60"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Nxe4 6. d4 b5 7. Bb3 d5 8. dxe5
+Be6 9. c3 Bc5 10. Nbd2 O-O 11. Bc2 Nxf2 12. Rxf2 f6 13. exf6 Bxf2+ 14. Kxf2
+Qxf6 15. Nf1 Ne5 16. Be3 Rae8 17. Bc5 Rf7 18. N1d2 Bg4 19. Qh1 Qh4+ 20. Kg1
+Nxf3+ 21. Nxf3 Rxf3 22. g3 Qh3 23. a4 Re2 24. Bb3 Rd2 25. Bd6 cxd6 26. Bxd5+
+Rxd5 27. axb5 Rd2 28. bxa6 Rxg3+ 29. hxg3 Qxg3+ 30. Qg2 Qxg2# 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.05"]
+[Round "1"]
+[White "Schach-Trainer, Saitek"]
+[Black "Mega IV, Mephisto"]
+[Result "1-0"]
+[ECO "D30"]
+[PlyCount "85"]
+[EventDate "2011.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. Bg5 Be7 5. cxd5 {Buchende Schwarz} exd5 6. e3
+O-O {Buchende Weiss} 7. Bd3 h6 8. Bh4 Bg4 9. h3 Bh5 10. g4 Bg6 11. Bxg6 Bb4+
+12. Nc3 fxg6 13. O-O Qd6 14. Bg3 Qe7 15. Ne5 Kh7 16. Qc2 Qe8 17. Qb3 Bxc3 18.
+bxc3 b6 19. Nd3 Qe4 20. Ne5 a5 21. Rab1 a4 22. Qb4 Re8 23. Rfe1 Ra5 24. f3 Nc6
+25. Qb2 Nxe5 26. fxe4 Nf3+ 27. Kf1 Nxe1 28. Rxe1 a3 29. Qb4 Ra7 30. e5 Ne4 31.
+Kg2 Re6 32. Rf1 c5 33. Qb3 Nxg3 34. Kxg3 Rc7 35. Qxd5 Rce7 36. Qb3 g5 37. e4
+Rg6 38. Qxa3 Rge6 39. Qb3 Kg8 40. d5 c4 41. Qxc4 Rxe5 42. d6+ Kh7 43. dxe7 1-0
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.05"]
+[Round "1"]
+[White "Roma II, Mephisto"]
+[Black "Polgar, Mephisto"]
+[Result "0-1"]
+[ECO "D20"]
+[PlyCount "130"]
+[EventDate "2011.??.??"]
+
+1. d4 d5 2. c4 dxc4 3. e3 e5 4. Bxc4 exd4 5. exd4 Nf6 6. Nc3 Be7 7. Nf3 O-O 8.
+Ne5 Nbd7 9. O-O Nb6 10. Bb3 Nfd5 11. Re1 Be6 12. Nxd5 Bxd5 13. Bxd5 Nxd5 14.
+Qg4 Nf6 15. Qf4 Bb4 16. Re2 Nd5 17. Qf5 Ne7 18. Qd3 Qd5 19. a3 Bd6 20. Nf3 Rae8
+21. Bg5 f6 22. Bd2 Nc6 23. Rae1 Rxe2 24. Rxe2 a6 25. Qe4 Qxe4 26. Rxe4 Rd8 27.
+g4 Kf7 28. Kg2 Rd7 29. h3 Re7 30. Re3 g6 31. d5 Ne5 32. Bc3 Nc4 33. Rxe7+ Kxe7
+34. Bd4 a5 35. a4 Bb4 36. Kg3 Kd6 37. Bxf6 Kxd5 38. Kg2 Nb6 39. b3 Nd7 40. Bd4
+Nc5 41. Bxc5 Kxc5 42. Ng1 Bc3 43. Ne2 Kb4 44. Nf4 Kxb3 45. Ne6 Kxa4 46. Nxc7 b5
+47. f4 b4 48. Nd5 Kb5 49. f5 gxf5 50. gxf5 Kc5 51. Nf4 b3 52. Ne2 Be5 53. f6
+Bxf6 54. Ng3 Kb4 55. Ne4 Bc3 56. Nf2 b2 57. Nd3+ Kc4 58. Nxb2+ Bxb2 59. Kf3 a4
+60. Kg4 a3 61. Kg5 a2 62. Kh6 a1=Q 63. Kxh7 Qa6 64. h4 Qf6 65. h5 Qg7# 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.05"]
+[Round "1"]
+[White "Analyst D+ 6 MHz, Saitek"]
+[Black "Par Excellence 10 MHz, Fidelity"]
+[Result "0-1"]
+[ECO "D52"]
+[PlyCount "150"]
+[EventDate "2011.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 5. Nf3 c6 6. e3 Qa5 7. Nd2 Bb4 8. Qc2
+O-O 9. Be2 dxc4 10. Bxf6 Nxf6 11. Nxc4 Qc7 12. O-O Rd8 13. a3 Be7 14. b4 Bd7
+15. Bd3 b6 16. e4 Qf4 17. Ne5 Ng4 18. g3 Qg5 19. f4 Qh5 20. Qe2 Nf6 21. Qxh5
+Nxh5 22. g4 Nf6 23. g5 Ne8 24. Kg2 Nc7 25. Rac1 Be8 26. Ne2 Nb5 27. Bxb5 cxb5
+28. Nc6 Bxc6 29. Rxc6 Rac8 30. Rfc1 Rxc6 31. Rxc6 Kf8 32. Rc7 a5 33. Rb7 axb4
+34. axb4 Rd6 35. Kf3 Ke8 36. Rb8+ Bd8 37. f5 exf5 38. exf5 Rc6 39. Nf4 Rc4 40.
+Ke3 Rxb4 41. Nd5 Rb2 42. f6 g6 43. h4 Rh2 44. Nxb6 Rh3+ 45. Kf2 Rxh4 46. Nd5
+Rxd4 47. Rxb5 h6 48. gxh6 Rh4 49. Kf3 Rxh6 50. Rb7 Rh1 51. Kg4 Rf1 52. Ra7 Bxf6
+53. Rb7 Bd8 54. Kg3 f5 55. Rg7 g5 56. Nc7+ Bxc7+ 57. Rxc7 f4+ 58. Kg2 Rd1 59.
+Rg7 Rd5 60. Kf3 Kf8 61. Rb7 Rd3+ 62. Ke4 Re3+ 63. Kf5 Rg3 64. Kf6 Ke8 65. Ke6
+Kd8 66. Rd7+ Kc8 67. Rg7 f3 68. Ke5 Rg1 69. Rf7 g4 70. Ke4 Rg2 71. Ke3 Kd8 72.
+Ra7 Re2+ 73. Kf4 f2 74. Ra8+ Kc7 75. Ra1 Re1 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.05"]
+[Round "1"]
+[White "Monte Carlo IV LE, Mephisto"]
+[Black "Super Expert C 6 MHz, Novag"]
+[Result "0-1"]
+[ECO "C45"]
+[PlyCount "122"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. Be3 Qf6 6. c3 Nge7 7. g3 d5 {
+buchende MC IV LE} 8. Bg2 dxe4 9. Nb5 Bxe3 10. Nxc7+ Kf8 11. O-O Rb8 12. fxe3
+Qe5 13. Qb3 Bf5 14. Nb5 Be6 15. Qa4 Nf5 16. Rf4 {buchende SEC} Nxe3 17. Qa3+
+Kg8 18. Rxe4 Qg5 19. Nd4 Nxg2 20. Nxe6 Qc1+ 21. Kxg2 Qc2+ 22. Kf3 Qd3+ 23. Re3
+Ne5+ 24. Kf4 Ng6+ 25. Kf3 Qf1+ 26. Ke4 fxe6 27. Qd6 Re8 28. Kd4 Qg1 29. Qc7 Ne7
+30. Qc5 Nf5+ 31. Kd3 Qf1+ 32. Kc2 Qf2+ 33. Kb3 Nxe3 34. Na3 a6 35. Qb6 e5 36.
+Qxb7 Qxh2 37. Ka4 Qh3 38. Qxa6 Qxg3 39. Qb7 Qh4+ 40. c4 Qe7 41. Qxe7 Rxe7 42.
+Re1 Nf5 43. Nb5 e4 44. Nc3 e3 45. b4 e2 46. Nxe2 Nd4 47. Nxd4 Rxe1 48. Kb5 Rd1
+49. Nc6 Ra1 50. a4 h5 51. a5 h4 52. Nd4 h3 53. Nf3 g5 54. Nh2 Kg7 55. Kb6 Rb8+
+56. Kc5 Ra4 57. b5 Rxa5 58. Ng4 Ra2 59. Kd4 Rf8 60. Ke3 Rf4 61. Nh2 Rxh2 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.06"]
+[Round "1"]
+[White "Turbo King II, SciSys"]
+[Black "Milano, Mephisto"]
+[Result "0-1"]
+[ECO "C06"]
+[PlyCount "94"]
+[EventDate "2011.??.??"]
+
+1. e4 e6 2. d4 d5 3. Nd2 Nf6 4. e5 Nfd7 5. Bd3 c5 6. c3 Nc6 7. Ne2 cxd4 8. cxd4
+Qb6 9. Nf3 f6 10. exf6 Nxf6 11. O-O {Buchende Turbo King II} Bd6 12. Nc3 O-O {
+Buchende Milano} 13. Nb5 Bb8 14. Be3 a6 15. Qa4 Bd7 16. Qa3 axb5 17. Qb3 Na5
+18. Qc3 Rc8 19. Qb4 Bd6 20. Qd2 Nc4 21. Qe2 Nxe3 22. fxe3 Qa5 23. e4 Nxe4 24.
+Bxe4 dxe4 25. Qxe4 b4 26. Ne5 Bxe5 27. Qxe5 Qxe5 28. dxe5 Bb5 29. Rf4 Rc2 30.
+b3 Re2 31. Rxb4 Bc6 32. Rg4 Raxa2 33. Rxa2 Rxa2 34. Kf1 Ra5 35. Rg5 Rb5 36. Rg3
+Rxe5 37. Rc3 Ra5 38. g4 Ra2 39. h3 Kf7 40. Ke1 e5 41. Rc5 Ke6 42. Rc3 Kd5 43.
+Rd3+ Ke4 44. Rd2 Rxd2 45. Kxd2 Kf4 46. Ke2 Bg2 47. h4 Kxg4 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.06.17"]
+[Round "1"]
+[White "Super Mondial II, Mephisto"]
+[Black "Travel Champion 2100, Saitek"]
+[Result "1/2-1/2"]
+[ECO "B45"]
+[PlyCount "119"]
+[EventDate "2011.??.??"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 {*} e6 {*} 6. Nxc6 bxc6 7. e5
+Nd5 8. Nxd5 exd5 9. Bf4 Rb8 10. Qd4 Qa5+ 11. Bd2 Bb4 12. b3 O-O 13. Be2 {+0,18}
+f6 {-0,5} 14. exf6 {+0,02} Bxd2+ {-0,4} 15. Qxd2 Qxd2+ 16. Kxd2 Rxf6 17. f3 d6
+18. Bd3 Bf5 19. Rae1 Kf7 20. c3 g6 21. Re3 Re6 22. Bxf5 gxf5 23. Rxe6 Kxe6 24.
+Re1+ Kf7 25. Kd3 c5 26. f4 Re8 {+0,3} 27. Rxe8 {+0,24} Kxe8 28. b4 Kd7 29. a4 {
++0,25} Kc7 {-0,1} 30. h3 h5 31. b5 Kb6 {-1,2} 32. Ke3 {+0,40} Ka5 {--1,6} 33.
+g4 {+2,26} hxg4 34. hxg4 fxg4 {-1,7} 35. f5 {+2,25} d4+ {-1,2} 36. cxd4 cxd4+
+37. Kxd4 g3 38. Ke3 {+1,89} d5 {-1,2 (der TC2100 zeigte bei 38...d5 fast bis
+zum Schluß Bewertungen mit ca. +5,6, d. h. er wusste gar nicht, dass ihn
+dieser Zug retten würde)} 39. Kf3 d4 {+0,1} 40. Kxg3 {+3,76} Kxa4 41. f6 {+5,43
+} d3 {0,0} 42. b6 {+2,67} axb6 {-1,1} 43. Kf3 {-0,61} Kb3 44. Ke3 Kc2 45. f7 d2
+46. f8=Q d1=Q 47. Qf5+ Kc1 48. Qb5 Qe1+ 49. Kd4 Qa5 50. Kc4 Qa2+ 51. Kc3 Qd2+
+52. Kb3 Qb2+ 53. Kc4 Qe2+ 54. Kb4 Qe6 55. Qd3 Qc6 56. Qc3+ Qxc3+ 57. Kxc3 Kd1
+58. Kc4 Kd2 59. Kb5 Kc3 60. Kxb6 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Runde 1 Blitz"]
+[Site "?"]
+[Date "2011.09.06"]
+[Round "1"]
+[White "Travel Champion 2100, Saitek"]
+[Black "Super Mondial II, Mephisto"]
+[Result "0-1"]
+[ECO "C01"]
+[PlyCount "175"]
+[EventDate "2011.??.??"]
+
+1. e4 e6 2. d4 d5 3. exd5 exd5 4. Bd3 Nc6 {*} 5. c3 Bd6 6. Qf3 {*} Nf6 7. Bg5
+Be7 8. Ne2 Bg4 9. Qf4 Be6 10. O-O Nh5 11. Bxe7 Nxf4 12. Bxd8 Nxd3 13. Bxc7 Nxb2
+14. Nd2 Rc8 15. Bd6 Kd7 16. Rfb1 Kxd6 17. Rxb2 b6 18. Re1 Rhe8 19. Rb5 f5 20.
+f4 h5 21. Nf3 Kc7 22. g3 {-0,5} Kb7 {+0,20} 23. Ne5 Na5 24. Rb4 Ka8 25. Kf2 Nb7
+26. h3 Nd6 27. Ke3 Bf7 28. Kd3 Bg8 29. a4 Ne4 30. h4 Be6 31. c4 dxc4+ 32. Kc2
+Kb7 33. a5 Bd5 34. Reb1 Re6 35. Nc3 Nxc3 36. Kxc3 g6 37. axb6 axb6 38. Nxc4
+Rcc6 39. R1b3 Re3+ 40. Kd2 Rxb3 41. Na5+ Kc7 42. Nxb3 Be4 43. Na1 Kb7 44. Rb2
+Rc4 45. Nb3 Ka6 46. Ra2+ Kb5 47. Rb2 Ka4 48. Nc1 Rxd4+ 49. Kc3 Rd6 50. Rb4+ Ka5
+51. Nb3+ Ka6 52. Nd4 Rd8 53. Ra4+ Kb7 54. Ra3 Rd5 55. Rb3 Ra5 56. Kb4 Kc7 57.
+Ne6+ Kb8 58. Nf8 Kb7 59. Nxg6 Ka6 60. Re3 Rb5+ 61. Kc4 Rb1 62. Ra3+ Kb7 63. Ne5
+b5+ 64. Kc5 b4 65. Re3 Kc7 66. g4 hxg4 67. Nxg4 b3 68. Kb4 b2 69. Kc3 Rg1 70.
+Kxb2 Rxg4 71. h5 Rh4 72. Kc3 Rxh5 73. Kd4 Kd6 74. Rg3 Rh6 75. Rg8 Ke7 76. Ke5
+Re6+ 77. Kd4 Bf3 78. Rh8 Re4+ 79. Kd5 Kf7 80. Rh3 Rxf4+ 81. Ke5 Bg4 82. Rh7+
+Kg6 83. Rg7+ Kxg7 84. Kxf4 Kf6 85. Ke3 Ke5 86. Kd2 Ke4 87. Kc3 Ke3 88. Kb4 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.07"]
+[Round "1"]
+[White "Modena, Mephisto"]
+[Black "D++ 16 MHz, Saitek"]
+[Result "1-0"]
+[ECO "E12"]
+[PlyCount "89"]
+[EventDate "2011.??.??"]
+
+1. d4 Nf6 2. c4 e6 3. Nf3 b6 4. Nc3 Bb7 5. Bg5 Be7 6. e3 c5 7. Bd3 O-O 8. O-O
+cxd4 9. exd4 d5 10. Bxf6 Bxf6 11. cxd5 Bxd5 12. Nxd5 Qxd5 13. Qc2 Qc6 14. Qe2
+Nd7 15. Be4 Qd6 16. Bxa8 Rxa8 17. Rfe1 Rc8 18. Rac1 Rxc1 19. Rxc1 Qf4 20. Rc8+
+Nf8 21. Qe3 Qf5 22. a3 a6 23. Ne5 Bxe5 24. dxe5 Qb1+ 25. Qc1 Qe4 26. f4 Qd5 27.
+Kf2 Qd4+ 28. Kf3 a5 29. Kg4 Qf2 30. Rc2 f5+ 31. exf6 h5+ 32. Kxh5 Qd4 33. fxg7
+Kxg7 34. g4 Nd7 35. Rc7 a4 36. Qc6 Kf6 37. Rxd7 Qxf4 38. Qc3+ Qe5+ 39. g5+ Kf5
+40. Qf3+ Qf4 41. Rf7+ Ke5 42. Qxf4+ Kd5 43. Rc7 e5 44. Qc4+ Kd6 45. Qc6# 1-0
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.07"]
+[Round "1"]
+[White "Revelation Glasgow"]
+[Black "D++ 6 MHz, Saitek"]
+[Result "1-0"]
+[ECO "D30"]
+[PlyCount "98"]
+[EventDate "2011.??.??"]
+
+1. c4 e6 2. d4 d5 3. Nf3 c6 4. e3 Nf6 5. Bd3 dxc4 6. Bxc4 Bd6 7. a4 Nbd7 8. O-O
+O-O 9. Nc3 c5 10. Nb5 Nb6 11. Bd3 cxd4 12. a5 Nbd5 13. e4 e5 14. exd5 e4 15.
+Bxe4 Nxe4 16. Qxd4 Bf5 17. Nxd6 Qxd6 18. Nh4 Qd7 19. Qe5 Bg6 20. Nxg6 Rfe8 21.
+Qd4 fxg6 22. Bf4 Qf5 23. Bc7 Nf6 24. d6 Nd5 25. a6 b6 26. Qc4 Qf7 27. Rfd1 Nxc7
+28. Qxc7 Re2 29. Qxf7+ Kxf7 30. b4 Rd8 31. Kf1 Rb2 32. Rd4 Rd7 33. Re1 Kf6 34.
+h4 g5 35. hxg5+ Kxg5 36. Re7 Rb1+ 37. Ke2 Rb2+ 38. Ke3 Rd8 39. Rxg7+ Kf6 40.
+Rxa7 Re8+ 41. Kf3 Rb3+ 42. Kf4 Rb2 43. d7 Rd8 44. Ke3 Ke5 45. f4+ Kf5 46. Rd5+
+Kf6 47. Rb5 Ke7 48. g4 Rxd7 49. Rb7 Rb3+ 1-0
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.08"]
+[Round "1"]
+[White "Mondial 68000XL, Mephisto"]
+[Black "Elite Avantgarde 2100, Fidelity"]
+[Result "1/2-1/2"]
+[ECO "A45"]
+[PlyCount "135"]
+[EventDate "2011.??.??"]
+
+1. d4 Nf6 2. Bg5 Ne4 3. Bh4 d5 4. e3 g5 5. Bg3 Nc6 6. Bb5 Bg7 7. Nd2 Nxg3 8.
+hxg3 a6 9. Bxc6+ bxc6 10. Ngf3 Bg4 11. c4 h6 12. cxd5 cxd5 13. Rc1 Rb8 14. Qa4+
+Bd7 15. Qxa6 Ra8 16. Qb7 g4 17. Ne5 Bxe5 18. dxe5 Rxa2 19. Qxd5 Be6 20. Qb5+
+Bd7 21. Qb7 c6 22. Nc4 c5 23. Qd5 Qa8 24. Qxa8+ Rxa8 25. e4 Be6 26. Rh5 Ra6 27.
+Ne3 Ra5 28. Nd5 Kd8 29. Rh4 Ra4 30. Rxc5 Rxe4+ 31. Ne3 h5 32. Kd2 Rh6 33. Rb5
+Ra4 34. Kc3 Ra2 35. Nd5 Kd7 36. Nf4 Kc6 37. Rb4 Ra5 38. Nxe6 fxe6 39. Rbxg4
+hxg4 40. Rxh6 Rxe5 41. Kd3 Rd5+ 42. Kc2 Re5 43. Kd2 Rd5+ 44. Kc1 Kd6 45. Rh8
+Rc5+ 46. Kb1 Rf5 47. Rd8+ Kc5 48. Rd2 Kb4 49. Re2 e5 50. Kc2 e6 51. Kd3 Kb3 52.
+Ke4 Rg5 53. Rd2 Kc4 54. Rd6 Rf5 55. f3 Rg5 56. Rc6+ Kb3 57. Rxe6 gxf3 58. Rb6+
+Kc4 59. Kxf3 Rf5+ 60. Ke4 Rg5 61. Rd6 Rxg3 62. Rc6+ Kb4 63. Rc2 Rg5 64. Kd5 Ka4
+65. Rf2 Kb3 66. Rd2 Kb4 67. Re2 Kb3 68. Rf2 {R.} 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.10"]
+[Round "1"]
+[White "Challenge 16 MHz, Krypton"]
+[Black "Mach IIb, Fidelity"]
+[Result "0-1"]
+[ECO "C47"]
+[PlyCount "106"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nc3 Nf6 3. Nf3 Nc6 {Berechnet vom Mach IIb (Buchlücke)} 4. d4 exd4
+5. Nxd4 Bb4 6. Nxc6 bxc6 7. Bd3 d5 8. exd5 cxd5 9. O-O O-O 10. Bg5 {Challenge
+letzter Buchzug} c6 {Mach IIb letzter Buchzug} 11. Ne2 h6 12. Bh4 Bc5 13. Re1
+Qb6 14. b3 Ng4 15. Rf1 Bd7 16. h3 Ne5 17. Bg3 Rae8 18. Bxe5 Rxe5 19. c3 Rfe8
+20. Qd2 Bf5 {[%eval 11,0] (Das Fidelity-Gerät bewertet stets aus seiner Sicht!)
+} 21. Rae1 {Ein böser Fehlgriff, welcher vermutlich der Spielstufe (45m/Game)
+geschuldet ist. Es bleibt zu probieren, ob der Challenge auch bei 45s/Move so
+derbe danebengreift. Hier wäre 21.Lxf5 der angebrachtere Zug.} Bxd3 {Lediglich
+0.20 zeigt Mach IIb für sich an. Mithin führt er die korrekte Antwort aus!} 22.
+Qxd3 Qb7 23. b4 Bb6 24. a3 Qe7 {Mit einer Bewertung von 2.67 zeigt der Mach
+IIb, dass er die Lage verstanden hat. Hier ist der Challenge bereits
+hoffnungslos verloren - was dieser zwischenzeitlich ebenfalls erkannt hat.} 25.
+b5 Rxe2 26. Qxe2 Qxe2 27. Rxe2 Rxe2 28. bxc6 Rc2 29. Rd1 Bxf2+ {[%eval 337,0]}
+30. Kf1 Bb6 31. Rd3 Rf2+ 32. Ke1 Rxg2 33. Rxd5 Rg3 34. Kd2 Rg6 {[%eval 422,0]}
+35. Kc1 Rxc6 36. Kc2 g6 37. Kd3 f5 {[%eval 489,0]} 38. Kc2 f4 39. Rd7 f3 40.
+Kb3 f2 41. Rd1 Re6 42. Rf1 Re1 43. Rxf2 Bxf2 44. h4 Re4 {[%eval 999,0]} 45. h5
+gxh5 46. a4 h4 47. Kc2 h3 48. Kb3 h2 49. c4 h1=Q 50. Kb2 Bd4+ {[%eval 32760,0]}
+51. Ka3 Bc5+ 52. Kb3 Qb1+ 53. Kc3 {Restzeit: über 8 Minuten! (korrigiert um
+Übertaktungsrate)} Bb4# {Restzeit: über 17 Minuten!} 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.11"]
+[Round "1"]
+[White "Schachakademie 24 MHz, Mephisto"]
+[Black "Miami 24 MHz, Mephisto"]
+[Result "1-0"]
+[ECO "A29"]
+[PlyCount "125"]
+[EventDate "2011.??.??"]
+
+1. c4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. g3 d5 5. cxd5 Nxd5 6. Bg2 Be6 7. O-O Bc5 8.
+Nxe5 Bxf2+ 9. Rxf2 Nxe5 10. Qb3 Nb6 11. Qb5+ Nc6 12. Bxc6+ bxc6 13. Qxc6+ Qd7
+14. Qxd7+ Kxd7 15. d4 Rhd8 16. e4 Ke7 17. d5 Bd7 18. b3 Rab8 19. Ba3+ Ke8 20.
+Re1 c6 21. Rf4 h6 22. Kf2 Nc8 23. g4 Ne7 24. h3 Ng6 25. Rf3 Ne5 26. Rg3 f6 27.
+Ke2 a6 28. Re3 Kf7 29. Rf1 Re8 30. Bd6 Rb7 31. Re1 Kg6 32. Kf2 Kf7 33. Kg3 Rd8
+34. Rf1 Re8 35. Kf4 Ng6+ 36. Kf3 Ne5+ 37. Kg2 g6 38. Re2 Kg7 39. Kg3 cxd5 40.
+exd5 Rc8 41. Re3 Nf7 42. Ba3 f5 43. Rc1 Rbc7 44. gxf5 gxf5 45. Bb2 Kg6 46. Kf4
+Ng5 47. h4 Nh7 48. Rg1+ Kh5 49. Ne2 Rc2 50. Ng3+ Kg6 51. Nxf5+ Ng5 52. h5+ Kh7
+53. Re7+ Kg8 54. Rxd7 Rxb2 55. Nxh6+ Kh8 56. Kxg5 Rbc2 57. Kg6 R2c6+ 58. dxc6
+Rxc6+ 59. Kf7 Rc8 60. Nf5 a5 61. Rg6 Rf8+ 62. Kxf8 a4 63. Rh6# 1-0
+
+[Event "Weihnachtspokal 2011 - Runde 1 Blitz"]
+[Site "?"]
+[Date "2011.09.14"]
+[Round "1"]
+[White "Elite Avantgarde 2100, Fidelity"]
+[Black "Mondial 68000XL, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "C54"]
+[PlyCount "145"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Bd2 Bxd2+
+8. Nbxd2 d5 9. exd5 Nxd5 10. Qb3 Nce7 11. O-O O-O 12. Rfe1 c6 13. a4 Qb6 14. a5
+Qxb3 15. Nxb3 Bf5 16. Nh4 Bc2 17. Rac1 Bxb3 18. Bxb3 Rad8 19. a6 Rd7 20. axb7
+Rxb7 21. Bc4 Rxb2 22. Bxd5 Nxd5 23. Rxc6 Rfb8 24. Rec1 g6 25. R6c5 Nf4 26. Kf1
+Nd3 27. Rc8+ Rxc8 28. Rxc8+ Kg7 29. f3 Rf2+ 30. Kg1 Rd2 31. g3 Nb4 32. Rc7 a6
+33. Rd7 Nc2 34. d5 Ne3 35. d6 g5 36. Re7 Nc4 37. Nf5+ Kf6 38. Nh6 Nxd6 39. Ra7
+Ra2 40. Ng8+ Kg7 41. Ne7 Ra1+ 42. Kf2 Nb5 43. Ra8 Ra2+ 44. Ke3 Nc7 45. Ra7 Ra3+
+46. Ke4 Nb5 47. Rd7 Ra2 48. h3 Rh2 49. h4 gxh4 50. Nf5+ Kf6 51. Nxh4 Ke6 52.
+Rd8 Re2+ 53. Kd3 Re5 54. Re8+ Kf6 55. Rh8 Kg7 56. Ra8 Re6 57. Nf5+ Kf6 58. g4
+h5 59. Rh8 hxg4 60. fxg4 Ke5 61. Rh5 Kf4 62. Nh6 Rf6 63. Kc4 Nd6+ 64. Kb4 Nb7
+65. Ka3 Nd8 66. Ka4 Ne6 67. Rh1 Kg3 68. Ka5 Ng5 69. Rh5 Rg6 70. Ka4 Nf3 71.
+Nxf7 Kxg4 72. Rh6 Rxh6 73. Nxh6+ 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Runde 1 Blitz"]
+[Site "?"]
+[Date "2011.09.15"]
+[Round "1"]
+[White "Elite Avantgarde 2100, Fidelity"]
+[Black "Mondial 68000XL, Mephisto"]
+[Result "0-1"]
+[ECO "D00"]
+[PlyCount "94"]
+[EventDate "2011.??.??"]
+
+1. Nf3 c6 2. d4 d5 3. Nc3 Nf6 4. Bf4 Bf5 5. e3 e6 6. Be2 Bd6 7. Bxd6 Qxd6 8.
+Nh4 Be4 9. f3 Bg6 10. O-O O-O 11. Nxg6 hxg6 12. e4 Qf4 13. e5 Nfd7 14. a4 c5
+15. dxc5 Nxc5 16. Qc1 Qxe5 17. f4 Qd4+ 18. Rf2 Ne4 19. Nxe4 Qxe4 20. Bf3 Qd4
+21. c3 Qc5 22. b4 Qc7 23. Qe3 Nd7 24. Rff1 Rfc8 25. Rac1 Qb6 26. Qd4 a5 27.
+bxa5 Qxa5 28. Rb1 Qxc3 29. Qxc3 Rxc3 30. Rxb7 Nc5 31. Rb4 Rxa4 32. Rxa4 Nxa4
+33. Rb1 Kf8 34. Rb8+ Ke7 35. Rb7+ Kf6 36. h4 Nc5 37. Ra7 Nd3 38. Ra4 Rc1+ 39.
+Kh2 Rc7 40. g3 Rc2+ 41. Kg1 Rc3 42. Bg2 Nc5 43. Ra5 Nb3 44. Ra7 Rxg3 45. Ra4
+Rg4 46. Rb4 Nc5 47. Rb5 Nd3 0-1
+
+[Event "Weihnachtspokal 2011 - Runde 1"]
+[Site "?"]
+[Date "2011.09.18"]
+[Round "1"]
+[White "Grandmaster 32 MHz, Excalibur"]
+[Black "Constellation Forte B, Novag"]
+[Result "1/2-1/2"]
+[ECO "E12"]
+[PlyCount "39"]
+[EventDate "2011.??.??"]
+
+1. d4 {Level 59 (75s avg)} Nf6 {Level 3 (30s avg)} 2. c4 e6 3. Nf3 b6 4. a3 Bb7
+5. Nc3 d5 6. cxd5 {Grandmaster letzter Buchzug} exd5 {Constellation Forte B
+letzter Buchzug} 7. Bg5 Be7 8. e3 O-O 9. Bd3 c5 10. dxc5 bxc5 11. O-O Nbd7 12.
+Qa4 c4 13. Bf5 Nc5 14. Qb5 a6 15. Qb4 a5 16. Qb5 Ba6 17. Qc6 Bb7 18. Qb5 Ba6
+19. Qc6 Bb7 20. Qb5 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Runde 1 Blitz"]
+[Site "?"]
+[Date "2011.09.18"]
+[Round "1"]
+[White "Constellation Forte B, Novag"]
+[Black "Grandmaster 32 MHz, Excalibur"]
+[Result "1-0"]
+[ECO "E97"]
+[PlyCount "117"]
+[EventDate "2011.??.??"]
+
+1. d4 {Level 1 (5s avg)} Nf6 {Level 48 (14s avg)} 2. c4 g6 3. Nc3 Bg7 4. e4 d6
+5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. Nd2 {Constellation Forte B
+letzter Buchzug} a5 10. a3 Nd7 11. Rb1 f5 {Grandmaster letzter Buchzug} 12. f4
+Nc5 13. fxe5 Bxe5 14. Bf3 Bd4+ 15. Kh1 Nd3 16. exf5 Nf2+ 17. Rxf2 Bxf2 18. Nde4
+Bh4 19. fxg6 Nxg6 20. Bh6 Re8 21. Qd4 Qe7 22. g3 Qf7 23. Bh5 Bd8 24. Re1 Re5
+25. Be2 Bf5 26. Rf1 Bf6 27. Nxf6+ Qxf6 28. Bd3 Ne7 29. Qf4 Qg6 30. Be2 b5 31.
+cxb5 Re8 32. Bf3 Nc8 33. Rf2 Re1+ 34. Kg2 R1e5 35. Qh4 Nb6 36. b3 Bc2 37. Bf4
+Rf5 38. Bg4 Nxd5 39. Bxf5 Bxf5 40. Bd2 Nxc3 41. Bxc3 Be4+ 42. Kg1 Bd5 43. Qd4
+Re5 44. Qf4 Re8 45. Bxa5 Qb1+ 46. Rf1 Qxb3 47. Qg5+ Kh8 48. Qf6+ Kg8 49. Bc3
+Qxc3 50. Qxc3 Re2 51. Rf5 Rg2+ 52. Kf1 Rxh2 53. Rxd5 Rh6 54. Rg5+ Rg6 55. Rxg6+
+hxg6 56. Qxc7 g5 57. b6 d5 58. b7 Kf8 {Bedenkzeit = 10:25 (entspricht 3:54
+"Echtzeit")} 59. b8=Q# 1-0
+
+[Event "Weihnachtspokal 2011 - Achtelfinale"]
+[Site "?"]
+[Date "2011.09.20"]
+[Round "2"]
+[White "Schach-Trainer, Saitek"]
+[Black "Mondial 68000XL, Mephisto"]
+[Result "1-0"]
+[ECO "D07"]
+[PlyCount "83"]
+[EventDate "2011.??.??"]
+
+1. d4 d5 2. Nf3 Nc6 3. c4 {letzter Buchzug Weiss} Bg4 4. e3 e6 {letzter
+Buchzug Schwarz} 5. cxd5 exd5 6. Bb5 Be7 7. Bxc6+ bxc6 8. Qc2 c5 9. Ne5 Be6 10.
+dxc5 Nf6 11. O-O O-O 12. b4 a5 13. Nc6 Qd7 14. b5 Ne4 15. Nxe7+ Qxe7 16. Ba3
+Qf6 17. Nd2 Nxd2 18. Qxd2 Rfb8 19. Rab1 Qg6 20. Rb2 a4 21. b6 c6 22. Re1 Bh3
+23. f3 Bf5 24. Rb4 Rb7 25. e4 dxe4 26. fxe4 Bd7 27. Rd1 Qg4 28. Qc2 Qf4 29.
+Rbd4 Qg4 30. Rxa4 Re8 31. Bb2 Be6 32. Rd6 Rc8 33. Ra6 Rd7 34. a4 Qf4 35. Qc3
+Qg5 36. Rxd7 Bxd7 37. b7 Re8 38. Ra8 f6 39. Rxe8+ Bxe8 40. b8=Q Qh5 41. Qc4+
+Kh8 42. Qbb3 1-0
+
+[Event "Weihnachtspokal 2011 - Achtelfinale"]
+[Site "?"]
+[Date "2011.09.21"]
+[Round "2"]
+[White "MM V, Mephisto"]
+[Black "Polgar, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "B17"]
+[PlyCount "200"]
+
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nd7 5. Nf3 Ngf6 6. Nxf6+ Nxf6 7. c3 Bg4
+8. h3 Bxf3 9. Qxf3 e6 10. Bd3 Be7 11. O-O O-O 12. Bf4 Nd5 13. Be5 f6 14. Bg3
+Qd7 15. Rfe1 f5 16. Be5 Rad8 17. Rad1 Bd6 18. a3 b5 19. Qg3 Bxe5 20. Rxe5 f4
+21. Qf3 Nc7 22. Qe4 g6 23. Rc5 Nd5 24. Re1 Rfe8 25. Be2 Qd6 26. c4 bxc4 27.
+Bxc4 e5 28. b4 exd4 29. Qxe8+ Rxe8 30. Rxe8+ Kg7 31. Ra5 Kh6 32. Rxa7 d3 33.
+Bb3 d2 34. Rh8 Nf6 35. Bd1 Qd4 36. Rf7 Qa1 37. Kh2 Qxd1 38. Rxf6 Qa1 39. Rd6
+Qxh8 40. Rxd2 Qc3 41. Rd6 Qxa3 42. Rxc6 Qxb4 43. Rc2 Qe1 44. f3 Kg5 45. Rc5+
+Kf6 46. Rb5 Qg3+ 47. Kg1 h5 48. Kf1 Ke6 49. Ra5 g5 50. Ra7 Kd5 51. Ra5+ Kc4 52.
+Ra8 Kd3 53. Re8 Kd4 54. Rh8 h4 55. Rd8+ Ke5 56. Rc8 Kd6 57. Rb8 Kd5 58. Re8 Kc4
+59. Rc8+ Kb5 60. Rd8 Kc5 61. Rc8+ Kb4 62. Rc2 Kb5 63. Rc8 Ka4 64. Rc3 Ka5 65.
+Rc6 Qh2 66. Rc5+ Kb4 67. Rxg5 Kc3 68. Rg7 Qh1+ 69. Kf2 Qd1 70. Rc7+ Kb4 71. Re7
+Kc5 72. Re8 Qd4+ 73. Kf1 Kc6 74. Rc8+ Kd7 75. Ra8 Qd2 76. Ra7+ Ke6 77. Ra8 Kf5
+78. Rf8+ Kg5 79. Re8 Kf6 80. Re2 Qc3 81. Kf2 Kf5 82. Re4 Qc5+ 83. Kf1 Qb5+ 84.
+Kf2 Qb6+ 85. Kf1 Qb2 86. Re2 Qc3 87. Kf2 Qc1 88. Re4 Qd1 89. Re2 Qb1 90. Re7
+Qb6+ 91. Kf1 Qb5+ 92. Re2 Qd3 93. Kf2 Qd6 94. Ke1 Qc5 95. Kd2 Qd4+ 96. Kc2 Qc4+
+97. Kd1 Qd3+ 98. Ke1 Kf6 99. Kf2 Qd4+ 100. Ke1 Kf5 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Achtelfinale Blitz"]
+[Site "?"]
+[Date "2011.09.21"]
+[Round "2"]
+[White "Polgar, Mephisto"]
+[Black "MM V, Mephisto"]
+[Result "1-0"]
+[ECO "D67"]
+[PlyCount "107"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Be7 4. Nf3 Nf6 5. Bg5 O-O 6. e3 Nbd7 7. Rc1 c6 8. Bd3
+dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 N5f6 12. Nxf6+ Qxf6 13. O-O c5 14. Bb5
+cxd4 15. Qxd4 Qxd4 16. Nxd4 Nf6 17. Rc5 b6 18. Rcc1 Bb7 19. Bc6 Rab8 20. Rfd1
+Rfd8 21. Nf5 Rxd1+ 22. Rxd1 h5 23. Bxb7 Rxb7 24. Nd4 Rc7 25. Kf1 e5 26. Nf3 Rc2
+27. Rd2 Rxd2 28. Nxd2 Kh7 29. Nc4 Nd7 30. e4 f6 31. Ke2 Nc5 32. Ke3 Kg6 33. b4
+Ne6 34. Nd6 Nf4 35. g3 Ng2+ 36. Ke2 h4 37. Nc8 Kg5 38. Nxa7 Kg4 39. Nc8 Kh3 40.
+Nxb6 g5 41. Nd5 Kxh2 42. gxh4 gxh4 43. Kf1 f5 44. b5 fxe4 45. b6 Nf4 46. Nxf4
+exf4 47. b7 Kh3 48. b8=Q e3 49. Qxf4 e2+ 50. Kxe2 Kg2 51. Qxh4 Kg1 52. Qg4+ Kh2
+53. Kf3 Kh1 54. Qg2# 1-0
+
+[Event "Weihnachtspokal 2011 - Achtelfinale"]
+[Site "?"]
+[Date "2011.09.22"]
+[Round "2"]
+[White "Milano, Mephisto"]
+[Black "Mach IIb, Fidelity"]
+[Result "1-0"]
+[ECO "B22"]
+[PlyCount "149"]
+[EventDate "2011.??.??"]
+
+1. e4 c5 2. c3 d5 3. exd5 Qxd5 4. d4 e6 5. Nf3 Nc6 6. Na3 Qd8 {Mach IIb
+letzter Buchzug} 7. Nc2 {Milano letzter Buchzug} Nf6 8. Bb5 Bd7 9. Bg5 Bd6 10.
+Nd2 cxd4 11. Nc4 Bc5 12. cxd4 Bf8 13. O-O Rc8 14. Qf3 a6 15. Bxf6 gxf6 16. Ba4
+Nxd4 17. Bxd7+ Qxd7 18. Nxd4 Rxc4 19. Nb3 f5 20. Rfc1 Rxc1+ 21. Rxc1 Bg7 22.
+Nc5 Qc7 23. Qxb7 Qxb7 24. Nxb7 Bxb2 25. Rc2 Bd4 26. Rc4 Bf6 27. Rc6 Kd7 28.
+Rxa6 Rc8 29. g3 Rc2 30. Kg2 Be5 31. Ra8 Kc7 32. Nd8 Bd4 33. Nxf7 Bxf2 34. Kh1
+Be3 35. a4 f4 36. Ne5 fxg3 37. hxg3 Bf2 38. Rg8 Kb6 39. Rg4 Ra2 40. Nd3 Ka5 41.
+Nxf2 Rxf2 42. Re4 Rf3 43. Kg2 Rf6 44. g4 h6 45. Kg3 Kb6 46. Re5 Kb7 47. Rc5 Ka6
+48. Rh5 Rg6 49. Kf4 Kb7 50. Rb5+ Ka6 51. Re5 Kb6 52. Kf3 Kc6 53. Rb5 Rg5 $4 {
+Dieser Fehlgriff verliert die Partie sofort!} 54. Rxg5 {Der Milano lässt sich
+nicht lange bitten...} hxg5 55. Ke4 Kd6 56. a5 Kc6 57. Ke5 Kb5 58. Kxe6 Kxa5
+59. Kf5 Kb5 60. Kxg5 Kc6 61. Kf6 Kd7 62. Kf7 Kd6 63. g5 Ke5 64. g6 Kf5 65. g7
+Ke5 66. g8=Q Kd4 67. Ke6 Ke3 68. Kd5 Kf4 69. Qe6 Kf3 70. Qh6 Ke2 71. Ke4 Kd1
+72. Kd3 Ke1 73. Qh4+ Kf1 74. Qh2 Ke1 75. Qe2# 1-0
+
+[Event "Weihnachtspokal 2011 - Achtelfinale"]
+[Site "?"]
+[Date "2011.09.22"]
+[Round "2"]
+[White "Super Mondial II, Mephisto"]
+[Black "Schachakademie 24 MHz, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "B15"]
+[PlyCount "200"]
+[EventDate "2011.??.??"]
+
+1. d4 c6 2. e4 d5 3. Nc3 dxe4 4. Nxe4 Nf6 5. Nxf6+ exf6 6. Be2 Bb4+ 7. c3 Bd6
+8. Be3 Nd7 9. Nf3 Nb6 10. c4 Bb4+ 11. Bd2 Bxd2+ 12. Qxd2 O-O 13. O-O Bg4 14.
+Rac1 Re8 15. h3 Bh5 16. b3 Qd6 17. Rfe1 Qd7 18. Rcd1 Re4 19. a4 Rae8 20. a5 Nc8
+21. Kf1 b6 22. axb6 Nxb6 23. Ra1 Rd8 24. Qa2 Re7 25. Kg1 Rf8 26. Bd1 Rfe8 27.
+Re2 h6 28. Rxe7 Rxe7 29. Be2 Qe6 30. Kf1 Nc8 31. b4 Nd6 32. Rc1 Rb7 33. Qa3 Re7
+34. Rc2 Rd7 35. Qa6 Qe4 36. Rd2 Qb1+ 37. Rd1 Qxb4 38. Qxc6 Bxf3 39. Qxd7 Bxe2+
+40. Kxe2 Qxc4+ 41. Ke1 Qc3+ 42. Kf1 Qc2 43. Ra1 Ne4 44. Qd8+ Kh7 45. Kg1 Qxf2+
+46. Kh1 Ng3+ 47. Kh2 Ne2 48. Qc7 Qxd4 49. Qxa7 Qd6+ 50. Kh1 Qf4 51. Re1 Kg6 52.
+Qd7 Ng3+ 53. Kg1 Nf5 54. Qd3 Kg5 55. Re4 Qc1+ 56. Kh2 Qc7+ 57. g3 h5 58. Rc4
+Qe7 59. Rf4 Qe5 60. h4+ Kg6 61. Kg2 Qe6 62. Rf3 Qc8 63. Rf1 Qa8+ 64. Kh3 Qc8
+65. Rf2 Qc5 66. Kg2 Qc6+ 67. Kh2 Qe6 68. Kg1 Qe5 69. Kg2 Qd5+ 70. Qxd5 Ne3+ 71.
+Kf3 Nxd5 72. Rd2 Nb6 73. Rc2 Nd5 74. Ke4 Ne7 75. Rc5 Ng8 76. Rc7 Nh6 77. Kf4
+Kh7 78. Re7 g6 79. Rd7 f5 80. Rc7 Kg7 81. Ke5 Ng4+ 82. Kd4 Nf6 83. Ra7 Ne4 84.
+Ra3 Kf6 85. Re3 Ke6 86. Kc4 f6 87. Kd4 Kd6 88. Rb3 Ke6 89. Ra3 Kd6 90. Re3 Ke6
+91. Rb3 Kd6 92. Ra3 Ke6 93. Ra6+ Ke7 94. Ra7+ Kd6 95. Rg7 g5 96. hxg5 fxg5 97.
+Rg6+ Ke7 98. Ke5 g4 99. Kf4 Kd7 100. Rh6 Nd6 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Achtelfinale Blitz"]
+[Site "?"]
+[Date "2011.09.22"]
+[Round "2"]
+[White "Schachakademie 24 MHz, Mephisto"]
+[Black "Super Mondial II, Mephisto"]
+[Result "0-1"]
+[ECO "A09"]
+[PlyCount "212"]
+[EventDate "2011.??.??"]
+
+1. Nf3 d5 2. c4 d4 3. g3 c5 4. Bg2 Nc6 5. O-O e5 6. d3 Nf6 7. Qb3 Be7 8. Rd1
+O-O 9. Na3 Ng4 10. h3 Nf6 11. Nc2 Na5 12. Qa4 Bd7 13. Qa3 Nc6 14. Re1 Qc8 15.
+g4 Bd6 16. Bd2 a5 17. Bg5 Nb4 18. Rec1 e4 19. Nfe1 Nxc2 20. Nxc2 exd3 21. Qxd3
+Ne8 22. Rd1 f5 23. Bd5+ Kh8 24. Qb3 Bc6 25. Bxc6 Qxc6 26. Qf3 Qxf3 27. exf3 Nc7
+28. Re1 Rae8 29. b3 Ne6 30. Bd2 Nf4 31. Rxe8 Rxe8 32. Kf1 Nxh3 33. Bxa5 fxg4
+34. fxg4 Ra8 35. Bd2 Bf4 36. Be1 d3 37. Ne3 Be5 38. Rd1 Nf4 39. Nd5 Rd8 40.
+Nxf4 Bxf4 41. Bc3 Kg8 42. Kg2 Kf7 43. Kf3 g5 44. Ke4 d2 45. Ba5 Rd6 46. f3 Ke6
+47. Bc3 Rd8 48. a3 b6 49. b4 Rd6 50. bxc5 bxc5 51. a4 h6 52. a5 Rd8 53. a6 Rd7
+54. Bh8 Kf7 55. Bc3 Kg6 56. Bb2 h5 57. gxh5+ Kxh5 58. Kf5 Kh4 59. Bf6 Kg3 60.
+Bxg5 Bxg5 61. Kxg5 Kxf3 62. a7 Rxa7 63. Rxd2 Ra4 64. Kf5 Rxc4 65. Rd3+ Ke2 66.
+Rh3 Kd2 67. Rh2+ Kd3 68. Ke6 Rg4 69. Ke5 c4 70. Rh3+ Kd2 71. Rh2+ Kc3 72. Rh7
+Rg1 73. Kd5 Rg5+ 74. Kc6 Kc2 75. Ra7 Rg6+ 76. Kc5 c3 77. Rc7 Rg1 78. Rh7 Kd2
+79. Rd7+ Ke3 80. Re7+ Kf3 81. Rf7+ Ke2 82. Re7+ Kd1 83. Rd7+ Kc1 84. Kc4 c2 85.
+Rd8 Rd1 86. Rf8 Re1 87. Rd8 Re3 88. Rd7 Kb1 89. Rb7+ Ka2 90. Ra7+ Ra3 91. Rxa3+
+Kxa3 92. Kd5 c1=Q 93. Ke4 Kb4 94. Kd5 Qd2+ 95. Ke5 Kc5 96. Ke4 Kd6 97. Kf5 Kd5
+98. Kf6 Qf4+ 99. Kg6 Ke5 100. Kh5 Qf5+ 101. Kh4 Ke4 102. Kg3 Qg5+ 103. Kf2 Qg4
+104. Ke1 Qg2 105. Kd1 Kd3 106. Ke1 Qe2# 0-1
+
+[Event "Weihnachtspokal 2011 - Achtelfinale"]
+[Site "?"]
+[Date "2011.09.26"]
+[Round "2"]
+[White "Modena, Mephisto"]
+[Black "Obsidian, Novag"]
+[Result "0-1"]
+[ECO "D25"]
+[PlyCount "90"]
+[EventDate "2011.??.??"]
+
+1. d4 d5 2. c4 dxc4 3. Nf3 Nf6 4. e3 Bg4 5. Bxc4 e6 6. O-O {Buchende Modena}
+Nbd7 7. h3 Bh5 8. Nc3 Bd6 {Buchende Obsidian} 9. Bd2 O-O 10. e4 Bxf3 11. Qxf3
+c5 12. dxc5 Ne5 13. Qe2 Bxc5 14. Rad1 Nxc4 15. Qxc4 Rc8 16. Qe2 Qb6 17. Na4 Qc6
+18. Nxc5 Qxc5 19. Rfe1 Rfd8 20. e5 Nd5 21. Bg5 Re8 22. Rc1 Qd4 23. Qb5 Qb4 24.
+Qd7 Rb8 25. Re2 h6 26. a3 Qb3 27. Bh4 g5 28. Bxg5 hxg5 29. Qd6 Rbd8 30. Qc5 Nf4
+31. Re3 Qxb2 32. Rc2 Qb1+ 33. Kh2 Rd1 34. Qc4 Rh1+ 35. Kg3 Rxh3+ 36. Kg4 {
+Modena meldet Aufgabe} Qd1+ 37. Ree2 Rh4+ 38. Kf3 Nxe2 39. Qxe2 Rf4+ 40. Kg3
+Qh1 41. Qg4 Rxg4+ 42. Kxg4 Qxg2+ 43. Kh5 Kg7 44. Rc8 Rxc8 45. a4 Rh8# 0-1
+
+[Event "Weihnachtspokal 2011 - Achtelfinale"]
+[Site "?"]
+[Date "2011.09.27"]
+[Round "2"]
+[White "Constellation Forte B, Novag"]
+[Black "Super Expert C 6 MHz, Novag"]
+[Result "1/2-1/2"]
+[ECO "D41"]
+[PlyCount "103"]
+[EventDate "2011.??.??"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. c4 Nf6 5. Nc3 e6 6. Nf3 Be7 7. cxd5 {
+buchende Forte B} Nxd5 {buchende SEC} 8. Bb5+ Bd7 9. Nxd5 exd5 10. Bxd7+ Nxd7
+11. O-O O-O 12. Bd2 Qb6 13. Re1 Rfe8 14. Qa4 Nf6 15. Bc3 Bd6 16. Rxe8+ Rxe8 17.
+h3 a6 18. Ne5 Re6 19. Re1 Ne4 20. Qd7 Qc7 21. Ba5 Qxd7 22. Nxd7 Ng5 23. Nc5
+Bxc5 24. dxc5 Rxe1+ 25. Bxe1 d4 26. f3 Ne6 27. b4 d3 28. a4 Kf8 29. Kf2 Nf4 30.
+b5 axb5 31. axb5 Ke7 32. Bc3 Ke6 33. c6 bxc6 34. b6 d2 35. Bxd2 Nd3+ 36. Ke3
+Nc5 37. Kd4 Nb3+ 38. Kd3 Nc5+ 39. Kc4 Nb7 40. Bc3 g6 41. g4 Kd6 42. f4 c5 43.
+Kb5 Kd5 44. Be5 c4 45. g5 Nd8 46. Ka6 Kc6 47. Bd4 Nb7 48. Be5 Nc5+ 49. Ka7 Nb7
+50. h4 Nc5 51. Bc3 Nb7 52. Be5 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Achtelfinale Blitz"]
+[Site "?"]
+[Date "2011.09.28"]
+[Round "2"]
+[White "Super Expert C 6 MHz, Novag"]
+[Black "Constellation Forte B, Novag"]
+[Result "0-1"]
+[ECO "C62"]
+[PlyCount "146"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. Bxc6+ bxc6 5. d4 Nf6 6. Bg5 Be7 7. Bxf6 Bxf6
+8. dxe5 dxe5 9. Qxd8+ Kxd8 10. Nc3 Bd7 11. O-O-O Ke7 12. Rd2 Rhd8 13. Rhd1 Rab8
+14. Rd3 Bg4 15. h3 Bxf3 16. gxf3 Rd6 17. b3 Bh4 18. Rg1 Kf6 19. Rg2 Rbd8 20.
+Kd2 h6 21. a3 Bg5+ 22. Ke2 Bc1 23. a4 g6 24. h4 Ke6 25. Rg1 Bb2 26. Kd2 Rd4 27.
+Rb1 Bxc3+ 28. Kxc3 f5 29. Rg1 Kf6 30. f4 Rxd3+ 31. cxd3 exf4 32. e5+ Kxe5 33.
+Rxg6 Rd6 34. Rg7 a5 35. Rxc7 f3 36. d4+ Kf4 37. h5 Kg4 38. Rg7+ Kxh5 39. Kc4
+Re6 40. Kc5 Re2 41. Rf7 Rxf2 42. Rxf5+ Kg4 43. Rf6 Kg5 44. Rf8 Rc2+ 45. Kd6 f2
+46. Ke5 Rd2 47. Rg8+ Kh4 48. Rf8 Kg3 49. Rf6 Kg2 50. Rg6+ Kf3 51. Rxh6 Re2+ 52.
+Kd6 Re4 53. Rh1 Kg2 54. Rd1 Rxd4+ 55. Rxd4 f1=Q 56. Kxc6 Qa6+ 57. Kc5 Qb7 58.
+Rd3 Kf1 59. Kd4 Qb4+ 60. Kd5 Ke2 61. Rg3 Qb7+ 62. Kd4 Qd7+ 63. Ke4 Qe6+ 64. Kf4
+Qf6+ 65. Kg4 Kf2 66. Rh3 Qe6+ 67. Kh4 Kg2 68. Rg3+ Kh2 69. Rg7 Qh6+ 70. Kg4
+Qxg7+ 71. Kf5 Qf7+ 72. Ke5 Qxb3 73. Kd4 Qxa4+ 0-1
+
+[Event "Weihnachtspokal 2011 - Achtelfinale"]
+[Site "?"]
+[Date "2011.09.29"]
+[Round "2"]
+[White "Par Excellence 10 MHz, Fidelity"]
+[Black "Amsterdam, Mephisto"]
+[Result "0-1"]
+[ECO "C50"]
+[PlyCount "136"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. d3 Nf6 5. Nc3 d6 6. Be3 Bb6 {Letzter Buchzug
+Amsterdam.} 7. Qd2 {Letzter Buchzug Fidelity Par Ex.} Bg4 8. Ng5 O-O 9. f3 Bd7
+10. O-O-O Bxe3 11. Qxe3 h6 12. Nh3 Nd4 13. a4 Qe8 14. a5 Be6 15. Nf2 Bxc4 16.
+dxc4 Qd7 17. Nd3 b6 18. a6 Rab8 19. Nd5 Nxd5 20. cxd5 Qa4 21. Qf2 Qxa6 22. f4
+f6 23. Kb1 Qa4 24. h4 a5 25. g4 c5 26. dxc6 Qxc6 27. c3 Nb3 28. Qe3 Nc5 29.
+Nxc5 bxc5 30. f5 Qb5 31. Qf2 Rb6 32. Rd2 Qc4 33. Qf3 Qb3 34. Rhd1 a4 35. Qf2 a3
+36. Rxd6 Qxb2+ 37. Qxb2 Rxb2+ 38. Kc1 Rg2 39. Ra6 Rxg4 40. Re1 Rxh4 41. Rxa3
+Rg4 42. Ra5 Rc8 43. Ra7 h5 44. Re3 h4 45. Rd7 Kf8 46. c4 Ke8 47. Rd5 g5 48.
+fxg6 Rxg6 49. Rdd3 Rg4 50. Kd1 Ke7 51. Ra3 Rd8+ 52. Ke2 Rd4 53. Kf3 Rf4+ 54.
+Kg2 Rfxe4 55. Rf3 Rf4 56. Rxf4 Rxf4 57. Ra7+ Ke6 58. Ra4 Kf5 59. Kh2 Rg4 60.
+Kh3 Rd4 61. Kg2 e4 62. Kf2 Kf4 63. Kg2 Kg4 64. Kf2 f5 65. Kf1 Rd1+ 66. Ke2 h3
+67. Kxd1 h2 68. Kd2 h1=Q 0-1
+
+[Event "Weihnachtspokal 2011 - Achtelfinale"]
+[Site "?"]
+[Date "2011.10.04"]
+[Round "2"]
+[White "Revelation Glasgow"]
+[Black "Scorpio 68000, Novag"]
+[Result "0-1"]
+[ECO "C43"]
+[PlyCount "94"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nf6 3. d4 exd4 4. e5 Qe7 5. Be2 Ng8 6. Qxd4 Nc6 7. Qd5 f6 8.
+Nc3 fxe5 9. O-O Nf6 10. Qc4 d6 11. Qb3 Qd7 12. Be3 Be7 13. Bc4 Na5 14. Bf7+ Kf8
+15. Qb4 Kxf7 16. Ng5+ Kg8 17. Qxa5 b6 18. Qb5 Qxb5 19. Nxb5 Nd5 20. Bc1 c6 21.
+c4 Nf4 22. Nc7 Ne2+ 23. Kh1 Nxc1 24. Ne4 Rb8 25. Raxc1 Bf5 26. Ng3 Bd7 27. Rfd1
+Rc8 28. Na6 d5 29. a3 Bg5 30. Ra1 d4 31. Re1 Bf4 32. Nb4 Bxg3 33. hxg3 c5 34.
+Nd5 Re8 35. b4 Kf7 36. Nc7 Rc8 37. Nd5 Rhe8 38. f3 Bc6 39. Rac1 d3 40. Rcd1
+Bxd5 41. cxd5 c4 42. Re4 c3 43. Rxd3 c2 44. Re1 c1=Q 45. Rxc1 Rxc1+ 46. Kh2 Rc4
+47. Kh3 Rd4 0-1
+
+[Event "Weihnachtspokal 2011 - Viertelfinale"]
+[Site "?"]
+[Date "2011.10.15"]
+[Round "3"]
+[White "Amsterdam, Mephisto"]
+[Black "Polgar, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "B13"]
+[PlyCount "200"]
+[EventDate "2011.??.??"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 g6 7. h3 Bg7 8. Nf3
+Nh5 9. Bh2 O-O 10. Nbd2 Nf6 11. O-O Bd7 12. Re1 Rc8 13. Qb3 b6 14. Bf4 Nh5 15.
+Bg5 h6 16. Bh4 g5 17. Bg3 Nxg3 18. fxg3 g4 19. hxg4 Bxg4 20. Nh2 Bh5 21. g4 Bg6
+22. Bxg6 fxg6 23. Re6 Rf6 24. Rxf6 exf6 25. Re1 Ne7 26. Qb5 Qd6 27. Nhf1 Kh7
+28. Qe2 Rc7 29. Qe6 Qxe6 30. Rxe6 Rd7 31. Ng3 Kg8 32. Kf2 Kf7 33. Re3 Nc6 34.
+b4 b5 35. Ne2 Ne7 36. Nf4 Rd6 37. Nb3 Ra6 38. Re2 Bf8 39. Kf3 g5 40. Nd3 Ng6
+41. g3 Bd6 42. Na5 Rb6 43. Nc5 Bc7 44. a3 Nf8 45. Re3 Ne6 46. Nab3 Rd6 47. Re2
+Rc6 48. Re1 Ng7 49. Re3 f5 50. Rd3 f4 51. gxf4 gxf4 52. Rd2 Ne6 53. Rc2 Ng5+
+54. Kf2 Rf6 55. Nd2 f3 56. Nd3 Ne4+ 57. Nxe4 dxe4 58. Nc5 Rf4 59. Ke3 Rxg4 60.
+Nxe4 Ke6 61. Kxf3 Kf5 62. Nc5 Rg3+ 63. Kf2 h5 64. a4 bxa4 65. Nxa4 h4 66. Re2
+Rd3 67. Re7 Bb8 68. Ke2 Rg3 69. Rb7 Rg2+ 70. Kd3 Rg3+ 71. Kc4 Rg8 72. Nc5 h3
+73. Rf7+ Kg4 74. Rh7 Rc8 75. Kb5 Kg3 76. Rg7+ Kf2 77. Rf7+ Kg2 78. Ne4 h2 79.
+Rg7+ Kf3 80. Ng5+ Kf2 81. Ne4+ Ke3 82. Ng3 Rxc3 83. Nf1+ Kxd4 84. Rd7+ Ke4 85.
+Rh7 Rc2 86. Rh4+ Kf3 87. Rh3+ Kg4 88. Rh7 Bf4 89. Nxh2+ Rxh2 90. Rxa7 Be3 91.
+Re7 Rh5+ 92. Kc4 Kf3 93. b5 Rh4+ 94. Kc3 Rh6 95. Rf7+ Ke2 96. Re7 Rg6 97. Kc4
+Kf3 98. Rf7+ Kg4 99. Re7 Kf4 100. Rf7+ Kg5 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Viertelfi. Blitz"]
+[Site "?"]
+[Date "2011.10.15"]
+[Round "3"]
+[White "Polgar, Mephisto"]
+[Black "Amsterdam, Mephisto"]
+[Result "0-1"]
+[ECO "C01"]
+[PlyCount "138"]
+[EventDate "2011.??.??"]
+
+1. e4 e6 2. d4 d5 3. exd5 exd5 4. Bd3 Bd6 5. Nf3 Bg4 6. O-O Nc6 7. h3 Bxf3 8.
+Qxf3 Nxd4 9. Qh5 Nf6 10. Re1+ Be7 11. Qh4 Ne6 12. Qa4+ c6 13. Bf5 b5 14. Qa6
+Qd6 15. a4 b4 16. Bxe6 fxe6 17. Bf4 Qd7 18. Qe2 Ne4 19. Nd2 O-O 20. Nxe4 Rxf4
+21. Ng3 Bc5 22. Nh1 Re8 23. Qd2 Qf7 24. g3 Rf3 25. Re5 Rf8 26. Rf1 Bd6 27. Re3
+e5 28. Rfe1 h6 29. b3 Qf5 30. Rxf3 Qxf3 31. Kh2 e4 32. Re3 Qf6 33. Re1 Bc5 34.
+Kg2 Qf3+ 35. Kg1 Bxf2+ 36. Nxf2 Qxg3+ 37. Kf1 Qxh3+ 38. Ke2 Qh5+ 39. Kf1 Qh1+
+40. Ke2 Qf3+ 41. Kf1 a5 42. Qe3 Qh1+ 43. Ke2 Qh5+ 44. Kf1 Qf5 45. Kg1 Qf4 46.
+Qxf4 Rxf4 47. Kg2 g5 48. Nh1 Kg7 49. Ng3 Kg6 50. Rd1 e3 51. Rf1 Rxf1 52. Kxf1
+h5 53. Ne2 c5 54. Kg2 Kf6 55. Kh3 Kf5 56. Ng3+ Ke5 57. Ne2 Ke4 58. Kg3 d4 59.
+Nc1 Kd5 60. Nd3 c4 61. bxc4+ Kxc4 62. Ne5+ Kc3 63. Nf3 g4 64. Ne1 e2 65. Kg2
+Kd2 66. Kf2 g3+ 67. Kg2 Kxe1 68. Kxg3 Kd2 69. Kg2 e1=Q 0-1
+
+[Event "Weihnachtspokal 2011 - Viertelfinale"]
+[Site "?"]
+[Date "2011.10.16"]
+[Round "3"]
+[White "Scorpio 68000, Novag"]
+[Black "Super Mondial II, Mephisto"]
+[Result "1-0"]
+[ECO "D02"]
+[PlyCount "87"]
+[EventDate "2011.??.??"]
+
+1. d4 d5 2. Bf4 Bf5 3. e3 Nf6 4. Nf3 Nbd7 5. Nc3 e6 6. Nb5 Bb4+ 7. c3 Ba5 8.
+Qa4 Bb6 9. c4 O-O 10. c5 a6 11. Nc3 Ba7 12. c6 bxc6 13. Qxc6 Bb6 14. Be2 Ra7
+15. Be5 Ng4 16. Bg3 Ngf6 17. O-O-O Qa8 18. Ne5 Nxe5 19. Qxa8 Raxa8 20. Bxe5 Ng4
+21. Bxg4 Bxg4 22. f3 Bh5 23. Na4 f6 24. Nxb6 cxb6 25. Bg3 Kf7 26. Kd2 Bg6 27.
+Rc1 Rfc8 28. Bc7 b5 29. Rc5 e5 30. dxe5 fxe5 31. Rhc1 Ke6 32. Rc6+ Kd7 33. Rd6+
+Ke7 34. Rxd5 e4 35. fxe4 Bxe4 36. Re5+ Kd7 37. Rxe4 Rxc7 38. Rxc7+ Kxc7 39.
+Re7+ Kc6 40. Rxg7 Rh8 41. e4 Rd8+ 42. Ke3 Rd7 43. Rxd7 Kxd7 44. Kf4 1-0
+
+[Event "Weihnachtspokal 2011 - Viertelfinale"]
+[Site "?"]
+[Date "2011.10.24"]
+[Round "3"]
+[White "Obsidian, Novag"]
+[Black "Milano, Mephisto"]
+[Result "1-0"]
+[ECO "C43"]
+[PlyCount "57"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nf6 3. d4 Nxe4 4. Bd3 d5 5. Nxe5 Bd6 6. O-O O-O 7. c4 Bxe5 8.
+dxe5 Nc6 9. Bf4 {Buchende Obsidian} Be6 {Buchende Milano} 10. Qh5 Nb4 11. Bxe4
+dxe4 12. Nd2 Nd3 13. Be3 Nxb2 14. Rfb1 Nxc4 15. Nxc4 Bxc4 16. Rxb7 a6 17. Rd1
+Qc8 18. Rb4 Bxa2 19. Rxe4 Bb3 20. Rd2 a5 {??} (20... Qe6 21. Red4 a5 22. Rh4 h6
+) 21. Rh4 h6 22. Bxh6 g6 23. Qg5 Qe6 24. Bxf8 f6 25. Qxg6+ Kxf8 26. Rd7 Qg8 27.
+Qxf6+ Bf7 28. Rh8 Qxh8 29. Qxf7# 1-0
+
+[Event "Weihnachtspokal 2011 - Viertelfinale"]
+[Site "?"]
+[Date "2011.11.04"]
+[Round "3"]
+[White "Constellation Forte B, Novag"]
+[Black "Schach-Trainer, Saitek"]
+[Result "1-0"]
+[ECO "C11"]
+[PlyCount "33"]
+[EventDate "2011.??.??"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. e5 Nfd7 5. f4 c5 6. Nf3 Nc6 7. Be3 Qb6 8. Bb5 {
+erster errechneter Zug von Weiss} cxd4 {erster errechneter Zug von Schwarz} 9.
+Nxd4 Bb4 10. Bxc6 bxc6 11. Nf5 c5 12. Nd6+ Kf8 13. Qh5 g6 14. Qh6+ Kg8 15. Ne8
+Bxc3+ 16. bxc3 Qb1+ 17. Rxb1 1-0
+
+[Event "Weihnachtspokal 2011 - Halbfinale"]
+[Site "?"]
+[Date "2011.11.12"]
+[Round "4"]
+[White "Scorpio 68000, Novag"]
+[Black "Amsterdam, Mephisto"]
+[Result "1-0"]
+[ECO "C43"]
+[PlyCount "117"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nf6 3. d4 Nxe4 4. dxe5 d5 5. Nbd2 Bb4 6. c3 Nxd2 7. Bxd2 Be7 8.
+Be2 Nc6 9. O-O Bf5 10. Qb3 Qd7 11. Rfe1 O-O-O 12. Bb5 a6 13. e6 Qe8 14. Bxc6
+bxc6 15. exf7 Qxf7 16. Ne5 Qf6 17. Qa4 Kb7 18. Nxc6 Qxc6 19. Qxc6+ Kxc6 20.
+Rxe7 Rd7 21. Rae1 Rf8 22. f3 Rf7 23. Re8 Kb7 24. Kf2 Be4 25. Ke3 Bf5 26. Kd4 h6
+27. b3 c6 28. Bc1 Bb1 29. R8e2 Bf5 30. h3 Bg6 31. Re8 Rf6 32. R8e7 Rf7 33.
+Rxd7+ Rxd7 34. Ba3 a5 35. Bc5 Bf5 36. g4 Bc2 37. f4 Be4 38. Re3 g6 39. Ke5 Rf7
+40. Bd6 h5 41. Re1 hxg4 42. hxg4 Bf3 43. f5 gxf5 44. gxf5 Be4 45. Ke6 Rg7 46.
+f6 Rg6 47. Rxe4 dxe4 48. Kf5 Rxf6+ 49. Kxf6 e3 50. Bg3 e2 51. Ke5 Kb6 52. Ke4
+a4 53. Ke3 axb3 54. axb3 e1=Q+ 55. Bxe1 Kc5 56. c4 Kd6 57. Kd4 c5+ 58. Ke4 Kc6
+59. Ke5 1-0
+
+[Event "Weihnachtspokal 2011 - Halbfinale"]
+[Site "?"]
+[Date "2011.11.17"]
+[Round "4"]
+[White "Constellation Forte B, Novag"]
+[Black "Obsidian, Novag"]
+[Result "1/2-1/2"]
+[ECO "D20"]
+[PlyCount "103"]
+[EventDate "2011.??.??"]
+
+1. d4 d5 2. c4 dxc4 3. e4 e5 4. Nf3 exd4 5. Qxd4 Qxd4 6. Nxd4 Nf6 7. Nc3 Bc5 8.
+Ndb5 Na6 9. Bxc4 c6 10. Na3 Bxa3 11. bxa3 b5 12. Be2 Nc5 13. e5 Nfe4 14. Nxe4
+Nxe4 15. Be3 Nc3 16. Bf3 Kd7 17. Rc1 Nd5 18. Rc5 a6 19. O-O Bb7 20. Rd1 Ke6 21.
+Bd4 Rad8 22. g3 h5 23. a4 g5 24. axb5 axb5 25. h3 Rd7 26. a3 Ne7 27. Bb2 Rxd1+
+28. Bxd1 Nd5 29. a4 b4 30. a5 Ba8 31. a6 h4 32. Bg4+ Ke7 33. Bc1 Rg8 34. Bd1
+Nc7 35. Ra5 Ne6 36. Be3 hxg3 37. fxg3 Rh8 38. Kh2 Rd8 39. Bc2 c5 40. Bf5 Rd1
+41. g4 Rd5 42. Bxe6 Kxe6 43. Rxc5 b3 44. Rxd5 Kxd5 45. Bc1 Kxe5 46. h4 gxh4 47.
+a7 Kd4 48. Kh3 Kc3 49. Kxh4 Kc2 50. Ba3 b2 51. Bxb2 Kxb2 52. Kg5 1/2-1/2
+
+[Event "Weihnachtspokal 2011 - Halbfinale Blitz"]
+[Site "?"]
+[Date "2011.12.01"]
+[Round "4"]
+[White "Obsidian, Novag"]
+[Black "Constellation Forte B, Novag"]
+[Result "0-1"]
+[ECO "C97"]
+[PlyCount "97"]
+[EventDate "2011.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3
+O-O 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Bg5 Bb7 13. Nbd2 h6 14. Be3 cxd4 15.
+cxd4 Rac8 16. Rc1 Nc6 17. Bb3 Qd7 18. d5 Nb4 19. Qe2 a5 20. a3 Na6 21. Bc2 a4
+22. Bd3 Nc7 23. Bb6 Nfe8 24. Rc2 f5 25. Rec1 Kh8 26. Rc3 Bd8 27. Bxc7 Nxc7 28.
+exf5 b4 29. axb4 Nxd5 30. Rxc8 Nf4 31. Qe3 Bxc8 32. Be4 Ba6 33. Nc4 Qe7 34. Qd2
+Bc7 35. Kh1 d5 36. Bxd5 e4 37. Ne1 Rd8 38. Ne3 Bb6 39. f6 Qxf6 40. b5 Bxe3 41.
+fxe3 Rxd5 42. Qf2 Rxb5 43. Qxf4 Qxf4 44. exf4 Rxb2 45. g4 a3 46. Rc6 Bb7 47.
+Rc1 a2 48. Ra1 e3+ 49. Kg1 0-1
+
+[Event "Weihnachtspokal 2011 - Finale"]
+[Site "?"]
+[Date "2012.01.15"]
+[Round "5"]
+[White "Scorpio 68000, Novag"]
+[Black "Constellation Forte B, Novag"]
+[Result "1-0"]
+[ECO "C34"]
+[PlyCount "110"]
+[EventDate "2012.??.??"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 Nf6 4. e5 Nh5 5. Be2 d6 6. O-O dxe5 7. Nxe5 Qd4+ 8.
+Kh1 Nf6 9. Nd3 Bd6 10. c3 Qe4 11. Nxf4 O-O 12. d4 Qe8 13. Nd2 Nbd7 14. Nc4 Nb6
+15. Nxd6 cxd6 16. Bf3 d5 17. Re1 Ne4 18. Qe2 f5 19. Be3 Bd7 20. Qd3 Rc8 21. Bh5
+Bb5 22. Bxe8 Bxd3 23. Bh5 Nf6 24. Bd1 Be4 25. Bg1 Rfe8 26. Re2 Rc7 27. Bb3 Rce7
+28. Rae1 Kh8 29. Bd1 Kg8 30. Bf2 a6 31. Bh4 Kf7 32. Bb3 h6 33. Bxf6 Kxf6 34.
+Nh5+ Kg5 35. Ng3 g6 36. a4 f4 37. Bxd5 Bxd5 38. Rxe7 Rxe7 39. Rxe7 fxg3 40.
+Re5+ Kf6 41. a5 Bxg2+ 42. Kxg2 Nc4 43. Rc5 Nxb2 44. Kxg3 Nd1 45. c4 g5 46. Kf3
+Nb2 47. Rc7 Kf5 48. c5 h5 49. Rxb7 Nc4 50. c6 g4+ 51. Ke2 Ke6 52. Rd7 Nd6 53.
+d5+ Kxd5 54. c7 Kc6 55. Rxd6+ Kxc7 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.11.18"]
+[Round "1.1"]
+[White "Destiny Prodigy, Chafitz"]
+[Black "Chess-Master Diamond, RFT."]
+[Result "1-0"]
+[ECO "B30"]
+[BlackElo "1111"]
+[PlyCount "123"]
+[EventDate "2007.??.??"]
+
+1. c4 c5 2. Nf3 Nc6 3. Nc3 Nf6 4. e4 e5 5. Be2 d6 6. O-O Bg4 7. d3 Be7 8. Qb3
+Na5 9. Qa4+ Bd7 10. Qc2 O-O 11. Be3 Qb6 12. Rac1 Bg4 13. Qd2 Bd7 14. Rfd1 Bg4
+15. b3 Bd7 16. Bf1 Bg4 17. Be2 Bd7 18. Ng5 Bg4 19. Bxg4 h6 20. Na4 Qa6 21. Ne6
+Rfc8 22. Nexc5 dxc5 23. Bxc8 Rxc8 24. Nc3 Ra8 25. f4 exf4 26. Bxf4 Rc8 27. e5
+Ng4 28. h3 Nxe5 29. Bxe5 Bg5 30. Bf4 Bxf4 31. Qxf4 Qf6 32. Qxf6 gxf6 33. g4 Rc6
+34. Nd5 Re6 35. Rf1 Kg7 36. Rc2 Nc6 37. Rcf2 Nb4 38. Nxf6 Nxd3 39. Nh5+ Kg6 40.
+Rxf7 Kg5 41. Rxb7 a5 42. Ra7 Kh4 43. Rf3 Re1+ 44. Kh2 Ne5 45. Rf2 Nc6 46. Rc7
+Re6 47. Rd2 Ne5 48. Rd5 Nf3+ 49. Kg2 Ne1+ 50. Kf2 Re4 51. Rcxc5 Kxh3 52. Rxa5
+Nc2 53. Rd3+ Kh4 54. Rd2 Ne3 55. Kf3 Nf1 56. Rd1 Re3+ 57. Kf4 Rg3 58. Nxg3 Kh3
+59. Rh5+ Kg2 60. Nxf1 Kf2 61. Ne3 Ke2 62. Rh2# 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.11.18"]
+[Round "1.2"]
+[White "Team-Mate, Saitek"]
+[Black "Ambassador 2 MHz, Conchess"]
+[Result "1/2-1/2"]
+[ECO "C56"]
+[PlyCount "169"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4 Nf6 5. Nxd4 Nxe4 6. Nxc6 bxc6 7. O-O Be7
+8. Nd2 Nf6 9. Re1 d5 10. Bb3 O-O 11. Nf3 Bg4 12. Bf4 Bd6 13. Bg5 h6 14. Bh4 g5
+15. Bg3 Bxg3 16. hxg3 c5 17. c4 d4 18. Qd3 Bxf3 19. Qxf3 d3 20. Rad1 d2 21. Re2
+Qd6 22. Rdxd2 Qb6 23. Re7 Rad8 24. Qd1 Rde8 25. Rde2 Qb7 26. Qd3 Rxe7 27. Rxe7
+Qc6 28. Qf5 Qd6 29. Re5 Re8 30. Rxe8+ Nxe8 31. Bc2 Nf6 32. b3 Kg7 33. Bd3 Qd4
+34. Kf1 Qa1+ 35. Bb1 Qb2 36. Qd3 Qc1+ 37. Ke2 Qb2+ 38. Kf3 g4+ 39. Ke3 Qe5+ 40.
+Kd2 Qb2+ 41. Ke1 a6 42. Qf5 Qc1+ 43. Ke2 a5 44. Bc2 c6 45. Kd3 Qf1+ 46. Kd2 a4
+47. Bd3 Qa1 48. bxa4 Qxa2+ 49. Ke3 Qa3 50. Qe5 Qxa4 51. Qxc5 Qa6 52. Bc2 Qc8
+53. Bf5 Qe8+ 54. Kd3 Qe1 55. Kc2 Qe2+ 56. Kb3 Qd2 57. Ka4 Qb2 58. Qe3 Qa2+ 59.
+Kb4 Qa1 60. Qf4 Qd1 61. Kc5 Qf1 62. Kxc6 Qxg2+ 63. Kc5 Qf1 64. Bxg4 Qxf2+ 65.
+Qxf2 Ne4+ 66. Kc6 Nxf2 67. Bf3 Nd3 68. Be4 Nf2 69. Bd5 Kf6 70. Kd6 Nd1 71. c5
+Ne3 72. Be4 Nf1 73. g4 Ne3 74. c6 Nc4+ 75. Kd5 Nb6+ 76. Kc5 Na4+ 77. Kd6 Nb6
+78. c7 Nc8+ 79. Kc5 h5 80. Bb7 Ne7 81. gxh5 Kg7 82. c8=Q Nxc8 83. Bxc8 Kh6 84.
+Bg4 f5 85. Bxf5 1/2-1/2
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.11.22"]
+[Round "1.3"]
+[White "Champion Sensory, Fidelity"]
+[Black "MGS Steinitz, Chafitz"]
+[Result "0-1"]
+[ECO "B04"]
+[PlyCount "118"]
+[EventDate "2007.??.??"]
+
+1. e4 Nf6 2. e5 Nd5 3. d4 d6 4. Nf3 g6 5. c4 Nb6 6. exd6 cxd6 7. c5 dxc5 8.
+dxc5 Qxd1+ 9. Kxd1 Na4 10. Bb5+ Bd7 11. Bxa4 Bxa4+ 12. Ke1 Nd7 13. Be3 Bg7 14.
+Nc3 Bxc3+ 15. bxc3 Bc6 16. Nh4 O-O 17. Rd1 Rfd8 18. Rd4 e5 19. Rd6 Rac8 20. Rg1
+f6 21. Kd2 Kg7 22. Rb1 Be4 23. Rb4 Bc6 24. Rg4 Kh8 25. f3 f5 26. Rg5 f4 27. Bf2
+e4 28. Bd4+ Kg8 29. fxe4 Bxe4 30. Rg4 Rc7 31. Rxf4 Re8 32. c6 Bxc6 33. Bxa7 Ra8
+34. Bf2 Rxa2+ 35. Ke1 Rc8 36. Rd2 Ra1+ 37. Rd1 Re8+ 38. Kd2 Ra2+ 39. Kc1 Ree2
+40. Kb1 Rab2+ 41. Ka1 Rxf2 42. Rxf2 Rxf2 43. Rd3 Nc5 44. Rd8+ Kf7 45. Kb1 Nb3
+46. Rd4 Nxd4 47. cxd4 b5 48. Kc1 b4 49. Nf3 Bxf3 50. gxf3 Rxf3 51. Kc2 Ke6 52.
+Kd2 Rh3 53. Kc2 Kd5 54. Kd2 Rxh2+ 55. Kc1 Kxd4 56. Kd1 b3 57. Kc1 Kc3 58. Kd1
+b2 59. Ke1 b1=Q# 0-1
+
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.11.22"]
+[Round "1.4"]
+[White "III, Mephisto"]
+[Black "Philidor, Chess King"]
+[Result "1-0"]
+[ECO "C24"]
+[WhiteElo "1536"]
+[PlyCount "197"]
+
+1. e4 e5 2. Bc4 Nf6 3. d3 d5 4. exd5 Nxd5 5. Nf3 Nc6 6. O-O Bc5 7. Re1 Bg4 8.
+h3 Bxf3 9. Qxf3 Nf6 10. Nc3 O-O 11. Bg5 Qd6 12. Bxf6 Qxf6 13. Qxf6 gxf6 14. Nd5
+Rad8 15. Nxf6+ Kg7 16. Ne4 Bb4 17. c3 Be7 18. Re3 f5 19. Rg3+ Kh6 20. Nd2 f4
+21. Rg4 Na5 22. Re1 Nxc4 23. Nxc4 Rxd3 24. Nxe5 Rd5 25. Re4 Bd6 26. Nd7 Rd1+
+27. Kh2 f3+ 28. g3 Rf7 29. Re6+ Kh5 30. Nf6+ Rxf6 31. Rxf6 Rd2 32. Rf5+ Kh6 33.
+Kg1 Rxb2 34. Rf6+ Kh5 35. a4 Rb1+ 36. Kh2 Rb2 37. Rxf3 Ra2 38. Rf7 Kh6 39. Rh4+
+Kg6 40. Rhxh7 Rxf2+ 41. Rxf2 Kxh7 42. Kg2 Kg6 43. c4 Bc5 44. Rd2 Kf6 45. Kf3
+Bb4 46. Rd7 Bd6 47. Rd8 a5 48. Rh8 Be5 49. Rh6+ Kg5 50. Rh7 Kg6 51. Rd7 Kf6 52.
+Kg4 Bd6 53. h4 Ke5 54. c5 Ke6 55. cxd6 Kxd7 56. dxc7 Kc8 57. h5 b5 58. axb5
+Kxc7 59. h6 Kb6 60. h7 Kxb5 61. Kf3 a4 62. h8=Q Kc4 63. Qh4+ Kb3 64. g4 a3 65.
+g5 a2 66. Qe1 Kb2 67. Qd2+ Kb1 68. Qb4+ Kc2 69. Qa4+ Kb2 70. Qd4+ Kb1 71. Qb6+
+Kc2 72. Qa5 Kb2 73. Qe5+ Kb1 74. Qb8+ Kc2 75. Qa7 Kb2 76. Qb7+ Kc2 77. Qa6 Kb2
+78. Qe2+ Kb1 79. Qb5+ Kc2 80. Qf1 Kb2 81. Qg2+ Ka3 82. Qh1 Kb2 83. Qh8+ Kb1 84.
+g6 a1=Q 85. Qxa1+ Kxa1 86. Ke3 Kb2 87. g7 Kc3 88. g8=Q Kb4 89. Qg4+ Kc5 90.
+Qd4+ Kb5 91. Ke4 Kc6 92. Kf5 Kb5 93. Ke6 Kc6 94. Qc3+ Kb5 95. Kd7 Ka4 96. Kc7
+Kb5 97. Qd4 Ka5 98. Kc6 Ka6 99. Qa1# 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.11.23"]
+[Round "2.1"]
+[White "Philidor, Chess King"]
+[Black "Destiny Prodigy, Chafitz"]
+[Result "1/2-1/2"]
+[ECO "B23"]
+[PlyCount "121"]
+[SourceDate "2007.11.23"]
+
+1. e4 c5 2. Nc3 d6 3. Bb5+ Bd7 4. d3 Bxb5 5. Nxb5 Nc6 6. Nf3 a6 7. Nc3 Nf6 8.
+O-O e5 9. Bg5 Be7 10. Qd2 h6 11. Be3 O-O 12. a4 Ng4 13. Nd5 Nxe3 14. Qxe3 Bf6
+15. Nxf6+ Qxf6 16. Ra3 Rfe8 17. Rb3 Rab8 18. Re1 Qe6 19. c4 b6 20. Rc1 Qf6 21.
+Ra1 Nb4 22. Rc3 Rb7 23. a5 bxa5 24. Rxa5 Ree7 25. Ra4 g5 26. h3 Qe6 27. Rc1 f5
+28. exf5 Qxf5 29. Rc3 Rbc7 30. Qe4 Qxe4 31. dxe4 Rf7 32. Ra1 Rf6 33. Kh2 Rcf7
+34. Kg3 Rf4 35. Re3 R7f6 36. Rd1 Nc2 37. Re2 Nb4 38. Red2 Rxe4 39. Rxd6 Rxd6
+40. Rxd6 Kg7 41. b3 a5 42. Rd7+ Kg8 43. Rd8+ Kg7 44. Rd6 Re2 45. h4 gxh4+ 46.
+Nxh4 h5 47. Nf5+ Kf7 48. Rh6 Rb2 49. f3 Rxb3 50. Nd6+ Kg7 51. Nf5+ Kf7 52. Rxh5
+a4 53. Nd6+ Ke7 54. Nc8+ Ke6 55. Rh6+ Kf7 56. Nd6+ Kg7 57. Nf5+ Kf7 58. Kg4 a3
+59. Nd6+ Kg7 60. Nf5+ Kf7 61. Nd6+ 1/2-1/2
+
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.11.25"]
+[Round "2.2"]
+[White "Ambassador 2 MHz, Conchess"]
+[Black "III, Mephisto"]
+[Result "0-1"]
+[ECO "C02"]
+[BlackElo "1536"]
+[PlyCount "106"]
+[EventDate "2007.??.??"]
+
+1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. Be2 cxd4 7. cxd4 Nh6 8. Bxh6
+Qxb2 9. Nc3 Bb4 10. O-O Bxc3 11. Rb1 Qxa2 12. Bxg7 Rg8 13. Bf6 Ba5 14. Bd3 h6
+15. Ra1 Qb2 16. Rb1 Qa2 17. Rb3 Bb6 18. Bh7 Rg4 19. h3 Rf4 20. Bb1 Qa4 21. Rc3
+Qxd1 22. Rxd1 Nxd4 23. Nxd4 Bxd4 24. Rc2 Bb6 25. Bg7 h5 26. Bh6 Re4 27. Rxc8+
+Rxc8 28. Bxe4 dxe4 29. h4 Rc5 30. Bf4 Bc7 31. Be3 Ra5 32. Bg5 Kf8 33. Rb1 Bxe5
+34. g4 Ra1 35. Rxa1 Bxa1 36. gxh5 a5 37. h6 b5 38. Bd2 b4 39. h5 Bh8 40. Kf1
+Ke7 41. h7 b3 42. Bg5+ Kf8 43. Bh6+ Ke8 44. Bc1 b2 45. Bxb2 Bxb2 46. Ke2 a4 47.
+Kd1 a3 48. Kc2 Kf8 49. h6 f5 50. Kb3 f4 51. h8=Q+ Bxh8 52. h7 e3 53. fxe3 fxe3
+0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.11.26"]
+[Round "2.3"]
+[White "II, Mephisto"]
+[Black "Team-Mate, Saitek"]
+[Result "0-1"]
+[ECO "C13"]
+[WhiteElo "1409"]
+[PlyCount "156"]
+[EventDate "2007.??.??"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 dxe4 5. Bxf6 gxf6 6. Nxe4 Nc6 7. Bb5 Bb4+
+8. c3 f5 9. Nf6+ Qxf6 10. Bxc6+ bxc6 11. cxb4 Rg8 12. g3 Qe7 13. Qd2 Rb8 14. a3
+Bb7 15. Nf3 c5 16. Ke2 Bxf3+ 17. Kxf3 cxb4 18. axb4 Rb7 19. Ra4 Qd7 20. Rha1
+Qd5+ 21. Ke2 Qe4+ 22. Qe3 Qc2+ 23. Qd2 Qe4+ 24. Qe3 Qc2+ 25. Qd2 Qxd2+ 26. Kxd2
+Kd7 27. Kc3 Ra8 28. f4 f6 29. b3 Rab8 30. Rxa7 Rxb4 31. R1a3 R4b6 32. R7a6 Rxa6
+33. Rxa6 h5 34. Ra7 Rg8 35. b4 Kd6 36. Ra5 Rg4 37. Ra6+ Kd7 38. Ra8 h4 39. Rf8
+hxg3 40. hxg3 Ke7 41. Rc8 Rxg3+ 42. Kc4 Kd7 43. Rf8 Rf3 44. Kc5 Rc3+ 45. Kb5
+c6+ 46. Ka5 Rf3 47. Rf7+ Kd6 48. b5 cxb5 49. Kxb5 Kd5 50. Rd7+ Ke4 51. Rd6 Rxf4
+52. Rxe6+ Kxd4 53. Kc6 Rf2 54. Rxf6 f4 55. Rd6+ Ke4 56. Re6+ Kd3 57. Rd6+ Ke2
+58. Kd5 f3 59. Re6+ Kf1 60. Re4 Rd2+ 61. Kc4 Ra2 62. Kb3 Rg2 63. Kc4 f2 64. Rf4
+Kg1 65. Kd5 f1=Q 66. Rxf1+ Kxf1 67. Kd4 Rg5 68. Kc4 Ke2 69. Kd4 Kf3 70. Kc3 Rg4
+71. Kd2 Rd4+ 72. Kc2 Ke3 73. Kc3 Rf4 74. Kc2 Rc4+ 75. Kb2 Kd3 76. Ka2 Kc2 77.
+Ka3 Rh4 78. Ka2 Ra4# 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.01"]
+[Round "2.4"]
+[White "Chess-Master Diamond, RFT."]
+[Black "Champion Sensory, Fidelity"]
+[Result "0-1"]
+[ECO "C24"]
+[WhiteElo "1111"]
+[PlyCount "96"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Bc4 Nf6 3. d4 exd4 4. Nf3 Nxe4 5. Qxd4 Nf6 6. Bg5 Be7 7. Nc3 Nc6 8.
+Qd3 Nb4 9. Qe2 O-O 10. a3 Nc6 11. O-O-O d6 12. h4 Bf5 13. Be3 Ng4 14. Bf4 Bf6
+15. Be3 Bxc3 16. bxc3 Nxe3 17. Qxe3 Re8 18. Qf4 Be6 19. Bd3 Rc8 20. Rhe1 a6 21.
+Nd4 Ne5 22. Bxh7+ Kxh7 23. Nxe6 Rxe6 24. Rxe5 Rxe5 25. Rd4 Qe8 26. Rd1 Re2 27.
+Rd4 Re1+ 28. Rd1 Qe6 29. Qh2 Qe2 30. Rxe1 Qxe1+ 31. Kb2 Qxf2 32. h5 d5 33. Qh3
+f5 34. Qh2 g6 35. h6 Qd2 36. c4 dxc4 37. Qh4 Qxg2 38. a4 Qe4 39. Qh2 g5 40. Qh5
+g4 41. Qh2 f4 42. Qh5 f3 43. Qh2 Qd4+ 44. c3 Qd1 45. Qh4 Qb3+ 46. Kc1 Re8 47.
+Qh1 Re2 48. Qxf3 Qc2# 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.02"]
+[Round "3.1"]
+[White "Champion Sensory, Fidelity"]
+[Black "Philidor, Chess King"]
+[Result "1-0"]
+[ECO "D35"]
+[PlyCount "59"]
+[EventDate "2007.??.??"]
+
+1. d4 d5 2. c4 Nc6 3. Nc3 Nf6 4. Nf3 e6 5. cxd5 exd5 6. Bf4 Bb4 7. Ne5 Bxc3+ 8.
+bxc3 Nxe5 9. Bxe5 O-O 10. Rb1 Ng4 11. Bf4 Qh4 12. g3 Qe7 13. Bg2 Nf6 14. Bg5
+Rd8 15. O-O b6 16. Qd3 Bg4 17. Bxf6 Qxf6 18. e4 a5 19. e5 Qf5 20. Qb5 Bf3 21.
+Rfe1 Bxg2 22. Kxg2 Qc2 23. Qc6 Ra7 24. a3 Qa2 25. Ra1 Qc2 26. e6 Qg6 27. e7
+Raa8 28. e8=Q+ Rxe8 29. Qxe8+ Rxe8 30. Rxe8# 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.03"]
+[Round "3.2"]
+[White "III, Mephisto"]
+[Black "II, Mephisto"]
+[Result "1-0"]
+[ECO "C48"]
+[WhiteElo "1536"]
+[BlackElo "1409"]
+[PlyCount "64"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. Bb5 Bd6 5. O-O O-O 6. d4 Nxd4 7. Nxd4 exd4 8.
+Qxd4 Ng4 9. f4 Qh4 10. h3 Nh6 11. Bc4 Qe7 12. Nd5 Qe8 13. Re1 Qd8 14. Be3 Re8
+15. Nc3 Kf8 16. Nb5 f5 17. Nxd6 cxd6 18. Qxd6+ Qe7 19. Bc5 Qxd6 20. Bxd6+ Re7
+21. Bxe7+ Kxe7 22. exf5+ Kd6 23. Re5 Kc7 24. Rd1 d6 25. Re7+ Bd7 26. Be6 Rd8
+27. Rxg7 Kc6 28. Rxh7 Nxf5 29. Rxd7 Rxd7 30. Bxf5 Re7 31. Kh2 Re2 32. Kg3 Re3+
+1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.04"]
+[Round "3.3"]
+[White "MGS Steinitz, Chafitz"]
+[Black "Chess-Master Diamond, RFT."]
+[Result "1-0"]
+[ECO "B40"]
+[BlackElo "1111"]
+[PlyCount "95"]
+[EventDate "2007.??.??"]
+
+1. e4 c5 2. Nf3 e6 3. d3 d6 4. Nc3 Nc6 5. Bf4 e5 6. Bd2 Bg4 7. h3 Be6 8. Be2
+Nf6 9. Ng5 Bc8 10. O-O Be7 11. a3 O-O 12. Qe1 Nd4 13. Rc1 Qb6 14. b3 Qd8 15.
+Qd1 Qb6 16. Bh5 Qd8 17. Nxf7 Rxf7 18. Bxf7+ Kxf7 19. b4 Qb6 20. bxc5 dxc5 21.
+f4 c4 22. fxe5 Nc6+ 23. Kh2 Bxa3 24. Qh5+ Kg8 25. exf6 Qc7+ 26. Bf4 Qd7 27. f7+
+Qxf7 28. Qxf7+ Kxf7 29. Bd6+ Kg6 30. Bxa3 Be6 31. Ne2 Re8 32. Nf4+ Kh6 33. Nxe6
+Rxe6 34. Rb1 cxd3 35. cxd3 b6 36. Bc1+ g5 37. h4 Nd4 38. Bxg5+ Kg6 39. Be3 Nc6
+40. Bf4 h5 41. Bg3 Kh6 42. Rf7 Kg6 43. Rc7 Kh6 44. Bf4+ Kg6 45. Rb5 Rf6 46.
+Rg5+ Kh6 47. Rcg7 Rxf4 48. R5g6# 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.04"]
+[Round "3.4"]
+[White "Destiny Prodigy, Chafitz"]
+[Black "Ambassador 2 MHz, Conchess"]
+[Result "1-0"]
+[ECO "C49"]
+[PlyCount "117"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nc3 Nc6 4. Bb5 Bb4 5. Bxc6 dxc6 6. Nxe5 Bxc3 7. dxc3
+Qxd1+ 8. Kxd1 Nxe4 9. Be3 f6 10. Nd3 Be6 11. Re1 f5 12. f3 Nf6 13. Bxa7 O-O 14.
+Rxe6 Rxa7 15. Re5 Nd5 16. c4 Nb6 17. c5 Nc4 18. Re7 Rd8 19. b3 Nb2+ 20. Kd2
+Nxd3 21. cxd3 Rd5 22. a4 Rxc5 23. Rxc7 h6 24. Re1 f4 25. Re8+ Kh7 26. Rce7 Rh5
+27. h3 Rg5 28. Re2 Raa5 29. R8e7 b6 30. d4 Rad5 31. Kc3 Rd6 32. Kc4 Rgd5 33.
+R2e4 Rf5 34. h4 Kg6 35. R7e6+ Rxe6 36. Rxe6+ Rf6 37. Re7 Rf7 38. Re8 Rc7 39.
+Rf8 Re7 40. Rxf4 Re2 41. Rg4+ Kf6 42. d5 cxd5+ 43. Kxd5 Re5+ 44. Kd4 Re2 45.
+Kd3 Re5 46. Rd4 g6 47. f4 Re6 48. g4 Re1 49. Rd6+ Re6 50. Rxe6+ Kxe6 51. Ke4
+Kf6 52. f5 gxf5+ 53. gxf5 Ke7 54. Ke5 Kf7 55. f6 Ke8 56. Kf5 h5 57. Ke6 Kf8 58.
+f7 Kg7 59. Ke7 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.08"]
+[Round "4.1"]
+[White "II, Mephisto"]
+[Black "Destiny Prodigy, Chafitz"]
+[Result "0-1"]
+[ECO "E26"]
+[WhiteElo "1409"]
+[PlyCount "56"]
+[EventDate "2007.??.??"]
+[SourceDate "2007.12.08"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. a3 Bxc3+ 5. bxc3 c5 6. e3 Na6 7. Bd3 O-O 8.
+Nf3 d5 9. cxd5 Qxd5 10. Bxa6 bxa6 11. Rb1 Rd8 12. Bb2 cxd4 13. cxd4 Bb7 14. O-O
+Rac8 15. Qe2 Qb5 16. Qd1 Be4 17. a4 Qb7 18. Ng5 Bxb1 19. Qxb1 Rb8 20. Qc2 Qxb2
+21. Qc6 Qb6 22. Qxb6 axb6 23. Rb1 Rdc8 24. Kf1 Rc4 25. a5 b5 26. Ke2 Ra4 27. h4
+Rc8 28. g3 Rxa5 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.11"]
+[Round "4.2"]
+[White "Ambassador 2 MHz, Conchess"]
+[Black "Champion Sensory, Fidelity"]
+[Result "1-0"]
+[ECO "B22"]
+[PlyCount "85"]
+[EventDate "2007.??.??"]
+
+1. e4 c5 2. c3 d5 3. exd5 Qxd5 4. Nf3 Nf6 5. d4 Bg4 6. Bb5+ Nbd7 7. dxc5 Qxc5
+8. Be2 Bxf3 9. Bxf3 Qe5+ 10. Be3 Qb5 11. Qb3 Qxb3 12. axb3 Ne5 13. Bxb7 Rb8 14.
+Rxa7 Rd8 15. O-O Nfg4 16. Bb6 Rd6 17. Ra8+ Kd7 18. Ba5 Ke6 19. Re1 Kf6 20. Bb4
+Rd7 21. Be4 Ng6 22. h3 N4e5 23. c4 Nd3 24. Bxd3 Rxd3 25. Nc3 e6 26. Bxf8 Rxf8
+27. Rxf8 Nxf8 28. b4 Ke7 29. c5 Rd2 30. Rb1 e5 31. b5 f5 32. b6 Kd7 33. b7 Kc7
+34. c6 e4 35. b4 Ne6 36. b5 Nd4 37. Nd5+ Kb8 38. Ne3 f4 39. Nc4 Rc2 40. Nb6
+Nxc6 41. bxc6 Rd2 42. Na8 Rc2 43. c7+ 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.11"]
+[Round "4.3"]
+[White "Team-Mate, Saitek"]
+[Black "III, Mephisto"]
+[Result "1-0"]
+[ECO "C56"]
+[BlackElo "1536"]
+[PlyCount "63"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4 Bc5 5. c3 Nf6 6. O-O dxc3 7. Nxc3 O-O 8.
+Bf4 Re8 9. Ng5 Rf8 10. Qb3 h6 11. Nxf7 Qe7 12. Nxh6+ Kh7 13. Nf5 Qd8 14. Nd5
+Nxd5 15. Qh3+ Kg8 16. Bxd5+ Rf7 17. Bxf7+ Kxf7 18. Qg3 Qf6 19. Qb3+ Qe6 20.
+Bxc7 Qxb3 21. axb3 Bd4 22. Nxd4 Nxd4 23. Bb6 Ne2+ 24. Kh1 a6 25. Rfe1 Nf4 26.
+Re3 Ke7 27. Rf3 Ne6 28. Rd1 d6 29. Rfd3 Ng5 30. e5 Bg4 31. exd6+ Kf6 32. d7 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.11"]
+[Round "4.4"]
+[White "Philidor, Chess King"]
+[Black "MGS Steinitz, Chafitz"]
+[Result "1-0"]
+[ECO "D69"]
+[PlyCount "153"]
+[EventDate "2007.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3
+dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5
+Qxe5 15. f4 Qe4 16. Qd3 Bf5 17. Qxe4 Bxe4 18. Bd3 Bd5 19. a4 f5 20. Rfc1 Rae8
+21. Kf2 Kh8 22. Bc4 Bxc4 23. Rxc4 Rd8 24. Kf3 Rd2 25. Rb4 Rd7 26. Rc5 Rff7 27.
+Rxc6 Rd8 28. Rd4 Re8 29. Rc3 g6 30. a5 Rfe7 31. b4 b6 32. a6 Kg7 33. b5 Rf8 34.
+Rdd3 Ra8 35. Kg3 Rg8 36. Rd2 Rge8 37. Kf3 Kh8 38. h3 Rf8 39. Kg3 Rfe8 40. Rdd3
+Kg7 41. Kf3 Rf7 42. Rd6 Ree7 43. Kg3 Rf8 44. Rd5 Rfe8 45. Kf3 h5 46. h4 Kh7 47.
+Rd4 Rf7 48. Rdd3 Rfe7 49. Rd2 Kg7 50. Rd1 Kh7 51. Rdd3 Kh6 52. Rd6 Re4 53. Rd7
+R8e7 54. Rd5 Kg7 55. g3 Rb4 56. Ra3 Rb1 57. Rad3 Kf6 58. Rc3 Kg7 59. Kg2 Rb2+
+60. Kh3 Kh7 61. Ra3 Kg7 62. Rad3 Kf7 63. Rc3 Kf6 64. Rc6+ Kf7 65. Rdd6 Rxb5 66.
+Rf6+ Kg8 67. Rxg6+ Kf8 68. Rc3 Rb1 69. Rf6+ Kg8 70. Rxf5 Re1 71. Rg5+ Kf7 72.
+Rxh5 Kf6 73. Rc6+ Kg7 74. f5 R7xe3 75. Rg6+ Kf8 76. Rh8+ Kf7 77. Rh7+ 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.14"]
+[Round "5.1"]
+[White "Champion Sensory, Fidelity"]
+[Black "II, Mephisto"]
+[Result "1-0"]
+[ECO "C90"]
+[BlackElo "1409"]
+[PlyCount "65"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. a4
+Na5 9. axb5 Nxb3 10. cxb3 d5 11. Nxe5 Nxe4 12. Nc3 Nxc3 13. bxc3 Bb7 14. Ba3
+O-O 15. Nc6 Bxc6 16. Bxe7 Qc8 17. bxc6 Re8 18. Qh5 f5 19. Qf3 Rb8 20. Qxd5+ Kh8
+21. Ra5 Rb6 22. b4 Qa8 23. Re6 f4 24. Qe4 Qc8 25. Rh5 h6 26. Qg6 Rf8 27. Bxf8
+Qxf8 28. Rf5 Rb8 29. Rxf8+ Rxf8 30. Re7 Rg8 31. f3 a5 32. bxa5 Ra8 33. Qxg7#
+1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.16"]
+[Round "5.2"]
+[White "Chess-Master Diamond, RFT."]
+[Black "Philidor, Chess King"]
+[Result "0-1"]
+[ECO "A03"]
+[WhiteElo "1111"]
+[PlyCount "92"]
+[EventDate "2007.??.??"]
+
+1. f4 d5 2. Nf3 Nf6 3. e3 Bg4 4. Bb5+ c6 5. Be2 Bxf3 6. Bxf3 e6 7. O-O d4 8. d3
+Bb4 9. exd4 Qxd4+ 10. Rf2 Bc5 11. Be3 Qxe3 12. Qd2 Qxf2+ 13. Qxf2 Bxf2+ 14.
+Kxf2 Na6 15. Nc3 Nb4 16. Rc1 O-O 17. a3 Nbd5 18. g3 Nxc3 19. bxc3 Rad8 20. d4
+Rd7 21. h4 Nd5 22. Bxd5 cxd5 23. Re1 Rc8 24. Re3 Rdc7 25. Ke1 Rxc3 26. Rd3 Rxc2
+27. Rb3 R8c7 28. Rd3 R7c3 29. Rxc3 Rxc3 30. a4 Rxg3 31. a5 Rg4 32. a6 bxa6 33.
+Kf2 Rxf4+ 34. Ke3 Rxh4 35. Kd3 a5 36. Kd2 Rxd4+ 37. Ke3 Rc4 38. Ke2 a4 39. Kd2
+a3 40. Ke2 a2 41. Kf3 a1=Q 42. Ke2 Qc1 43. Kf3 Qc3+ 44. Ke2 Qb3 45. Kf2 Rc2+
+46. Ke1 Qb1# 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.17"]
+[Round "5.3"]
+[White "MGS Steinitz, Chafitz"]
+[Black "Ambassador 2 MHz, Conchess"]
+[Result "0-1"]
+[ECO "B54"]
+[PlyCount "74"]
+[EventDate "2007.??.??"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 e5 5. Nb5 Be6 6. Be2 d5 7. exd5 Bxd5 8.
+Nc7+ Qxc7 9. Qxd5 Bb4+ 10. Bd2 Nc6 11. Bxb4 Nxb4 12. Qb5+ Nc6 13. Nc3 Nf6 14.
+Rd1 O-O 15. O-O Nd4 16. Qd3 Qb6 17. b3 Rac8 18. Bf3 Qa5 19. Ne4 Nxf3+ 20. Qxf3
+Nxe4 21. Qxe4 Qxa2 22. Qxb7 Qxc2 23. Rd7 e4 24. Ra1 Qc1+ 25. Rd1 Qc2 26. Rd7
+Qc1+ 27. Rd1 Qf4 28. Rxa7 Rc2 29. Qb6 Qg4 30. Rad7 Qxd7 31. Ra1 Rd2 32. h3 Rc8
+33. Ra7 Qf5 34. g4 Rc1+ 35. Kh2 Qf4+ 36. Kg2 Qf3+ 37. Kh2 Rh1# 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.23"]
+[Round "5.4"]
+[White "Destiny Prodigy, Chafitz"]
+[Black "Team-Mate, Saitek"]
+[Result "0-1"]
+[ECO "A23"]
+[PlyCount "62"]
+[EventDate "2007.??.??"]
+
+1. c4 e5 2. Nc3 Nf6 3. g3 c6 4. Nf3 e4 5. Nd4 d5 6. e3 c5 7. Qa4+ Bd7 8. Ndb5
+d4 9. exd4 cxd4 10. Ne2 Bc5 11. b4 d3 12. bxc5 dxe2 13. Bxe2 O-O 14. Bb2 a6 15.
+Qa3 Nc6 16. Nd6 Rb8 17. Bxf6 Qxf6 18. Rb1 Nd4 19. Bd1 Nf3+ 20. Bxf3 exf3 21.
+O-O Bc6 22. Qe3 b6 23. Rfe1 Rfd8 24. d4 bxc5 25. dxc5 Rxb1 26. Rxb1 a5 27. Re1
+Rb8 28. Ne4 Qf5 29. Nd6 Qh3 30. Qe8+ Bxe8 31. Rxe8+ Rxe8 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.23"]
+[Round "6.1"]
+[White "Ambassador 2 MHz, Conchess"]
+[Black "Chess-Master Diamond, RFT."]
+[Result "1-0"]
+[ECO "B06"]
+[BlackElo "1111"]
+[PlyCount "113"]
+[EventDate "2007.??.??"]
+
+1. e4 g6 2. d4 Bg7 3. Nf3 d6 4. Bb5+ c6 5. Bd3 Bg4 6. Be3 Qb6 7. Nc3 Qxb2 8.
+Ne2 Nd7 9. Rb1 Qxa2 10. Rxb7 Ngf6 11. Nc1 Qe6 12. h3 Bh5 13. g4 O-O-O 14. Ba6
+Nxe4 15. gxh5 gxh5 16. Rxa7+ Kb8 17. Rb7+ Ka8 18. Ra7+ Kxa7 19. d5+ Kxa6 20.
+Qd3+ Kb7 21. dxe6 Ndc5 22. Bxc5 Nxc5 23. Qf5 fxe6 24. Qxh5 Bc3+ 25. Kd1 e5 26.
+Ne2 Ba5 27. Qf7 Rd7 28. Qg7 Rhd8 29. Qxh7 e6 30. Qh5 Ne4 31. Qh4 Nc3+ 32. Nxc3
+Rf7 33. Qh5 Rdf8 34. Ng5 Rd7 35. Qh6 Rfd8 36. Ne2 Bb6 37. Nxe6 Rg8 38. f4 Be3
+39. Qh4 Bxf4 40. N2xf4 Re8 41. Qh5 Ree7 42. Nf8 exf4 43. Nxd7 Rxd7 44. Rf1 Re7
+45. Qg5 Rd7 46. Kc1 Rh7 47. Qf5 Re7 48. Qg5 Rh7 49. Qxf4 Rd7 50. Qb4+ Kc7 51.
+Qa5+ Kb7 52. Qb4+ Kc7 53. Rf8 Rd8 54. Qa5+ Kb7 55. Rf7+ Rd7 56. Rxd7+ Kc8 57.
+Qd8# 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.28"]
+[Round "6.2"]
+[White "II, Mephisto"]
+[Black "MGS Steinitz, Chafitz"]
+[Result "0-1"]
+[ECO "B23"]
+[WhiteElo "1409"]
+[PlyCount "54"]
+[EventDate "2007.??.??"]
+
+1. e4 c5 2. Nc3 Nc6 3. f4 e6 4. Nf3 Nf6 5. e5 Nh5 6. d3 Be7 7. Ng1 Nd4 8. Bd2
+Bh4+ 9. g3 Nxg3 10. Bg2 Nxh1+ 11. Kf1 Nf2 12. Qb1 d5 13. Nce2 Ng4 14. Nxd4
+Nxh2+ 15. Ke2 cxd4 16. Kd1 Ng4 17. Bf3 h5 18. Bxg4 hxg4 19. Bb4 Bf2 20. Ke2 Be3
+21. Qf1 Rh2+ 22. Kd1 Rh1 23. Ke2 Rxg1 24. Qxg1 Bxg1 25. Rxg1 Qh4 26. Rg2 Qh3
+27. Kf1 Qh1+ 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2007.12.28"]
+[Round "6.3"]
+[White "Team-Mate, Saitek"]
+[Black "Champion Sensory, Fidelity"]
+[Result "0-1"]
+[ECO "C44"]
+[PlyCount "124"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4 Bb4+ 5. c3 dxc3 6. Nxc3 Nf6 7. Bg5 Bxc3+
+8. bxc3 Qe7 9. Bd5 h6 10. Bxf6 Qxf6 11. Nd4 Nxd4 12. cxd4 Qe7 13. Qe2 Qb4+ 14.
+Qd2 Qxd2+ 15. Kxd2 c6 16. Bc4 b5 17. Bd3 d6 18. d5 Kd7 19. dxc6+ Kxc6 20. Rac1+
+Kb6 21. Rc2 Be6 22. Rb1 a6 23. Rbc1 Rhc8 24. Rxc8 Bxc8 25. f4 a5 26. Rc2 b4 27.
+Ke3 Be6 28. f5 Bd7 29. Kd4 Re8 30. Kd5 Ba4 31. Rc1 Rd8 32. Kd4 Re8 33. Kd5 h5
+34. Be2 g6 35. fxg6 fxg6 36. Bf3 Rd8 37. Kd4 Bb5 38. Kd5 a4 39. Rb1 Ka5 40. Rb2
+Bd3 41. Rd2 Bb5 42. Ke6 b3 43. axb3 axb3 44. Kf6 Kb4 45. Kxg6 Kc3 46. Rd1 b2
+47. Rb1 Bd3 48. Rxb2 Kxb2 49. Kf7 Rh8 50. Ke6 Rh6+ 51. Kf5 Kc3 52. h4 Kd4 53.
+Kg5 Re6 54. Bxh5 Re5+ 55. Kh6 Re6+ 56. Kg5 Bxe4 57. g4 Ke5 58. Bf7 Rf6 59. Be8
+d5 60. h5 d4 61. h6 d3 62. Ba4 d2 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.03"]
+[Round "6.4"]
+[White "III, Mephisto"]
+[Black "Destiny Prodigy, Chafitz"]
+[Result "0-1"]
+[ECO "D02"]
+[WhiteElo "1536"]
+[PlyCount "56"]
+[EventDate "2008.??.??"]
+
+1. d4 d5 2. Nf3 Nc6 3. Na3 Bd7 4. Bf4 Nf6 5. Nb5 Rc8 6. e3 e6 7. Be2 Be7 8. O-O
+O-O 9. c4 dxc4 10. Bxc4 Nd5 11. Bxd5 exd5 12. Qb3 Be6 13. Rac1 g5 14. Bg3 g4
+15. Ne5 a6 16. Nxc6 bxc6 17. Na7 Rb8 18. Qc2 Qd7 19. Nxc6 Rb7 20. Nxe7+ Qxe7
+21. h3 gxh3 22. Qc6 Rxb2 23. Qxa6 Bc8 24. Qa8 Qe4 25. gxh3 Bxh3 26. Qxf8+ Kxf8
+27. f3 Qg6 28. Kh1 Qxg3 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.08"]
+[Round "7.1"]
+[White "Philidor, Chess King"]
+[Black "Ambassador 2 MHz, Conchess"]
+[Result "1-0"]
+[ECO "A80"]
+[PlyCount "143"]
+
+1. d4 f5 2. Nc3 e6 3. Nf3 Bb4 4. Bg5 Nf6 5. e3 Bxc3+ 6. bxc3 O-O 7. Rb1 Qe8 8.
+Bxf6 Rxf6 9. Bb5 a6 10. Be2 Nc6 11. O-O d6 12. Qd3 e5 13. Qc4+ Kh8 14. d5 Ne7
+15. a4 c6 16. dxc6 bxc6 17. Rb6 Be6 18. Qh4 Nd5 19. Rb3 Rh6 20. Qg5 e4 21. Nd2
+Rg6 22. Qh4 Qe7 23. Qxe7 Nxe7 24. Rb6 a5 25. Rfb1 Rc8 26. c4 d5 27. Ra6 dxc4
+28. Nxc4 Nd5 29. Ne5 Rf6 30. Rxa5 Nc3 31. Re1 Bd5 32. Bh5 g6 33. Be2 Re8 34.
+Nd7 Rf7 35. Nb6 Rb7 36. Ra6 Rbe7 37. Bc4 Rf8 38. Ra1 Rfe8 39. Ra3 Rd8 40. Nxd5
+cxd5 41. Bb5 Nb1 42. Rb3 Nd2 43. Rc3 d4 44. exd4 Rxd4 45. a5 Rd8 46. Rh3 Kg7
+47. Rb6 Rc7 48. a6 Rd5 49. c3 Nb1 50. g3 Nxc3 51. Bf1 Rdd7 52. Kg2 h6 53. Rb3
+Nd1 54. Be2 Nc3 55. Rb2 Ra7 56. Bc4 Rdc7 57. Rb4 Nd1 58. Rh4 e3 59. f3 Re7 60.
+Rb8 e2 61. Bxe2 Rxe2+ 62. Kf1 Re3 63. Kg2 Re2+ 64. Kf1 Rf2+ 65. Ke1 Rb2 66.
+Rhb4 Rxb4 67. Rxb4 Ne3 68. Rb7+ Rxb7 69. axb7 Nc2+ 70. Kf2 Kf6 71. b8=Q Ke6 72.
+Qb3+ 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.08"]
+[Round "7.2"]
+[White "MGS Steinitz, Chafitz"]
+[Black "Team-Mate, Saitek"]
+[Result "0-1"]
+[ECO "D33"]
+[PlyCount "120"]
+[EventDate "2008.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 c4 7. Bg2 Bb4 8. O-O
+Nge7 9. a3 Ba5 10. Bf4 O-O 11. Qd2 Bf5 12. Nh4 Be6 13. e4 dxe4 14. Bxe4 f5 15.
+Bf3 Nd5 16. Rae1 Nxf4 17. Bxc6 bxc6 18. Qxf4 Bc7 19. Qe3 Re8 20. Qf3 Qd7 21.
+Na4 Qd5 22. Nc5 Qxf3 23. Nxf3 Bd5 24. Kg2 Rad8 25. Re3 Rxe3 26. fxe3 Rb8 27.
+Rf2 Re8 28. Re2 Kf7 29. Na6 Bd6 30. Re1 Ke7 31. Nc5 Rb8 32. Re2 Bxc5 33. dxc5
+Rb5 34. a4 Rxc5 35. Re1 c3 36. bxc3 Rxc3 37. Kf2 c5 38. Ng5 h6 39. e4 Rc2+ 40.
+Kg1 fxe4 41. Nxe4 c4 42. Nc3+ Kd6 43. Nxd5 Kxd5 44. Re7 g6 45. Rxa7 Ra2 46. Ra6
+c3 47. Ra5+ Kd4 48. Ra8 c2 49. Rd8+ Ke3 50. Re8+ Kd2 51. Rd8+ Ke2 52. Re8+ Kd1
+53. Rd8+ Ke2 54. Re8+ Kd2 55. Rd8+ Kc3 56. Rc8+ Kb2 57. Rb8+ Ka3 58. Rc8 Ra1+
+59. Kf2 c1=Q 60. Rxc1 Rxc1 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.10"]
+[Round "7.3"]
+[White "Champion Sensory, Fidelity"]
+[Black "III, Mephisto"]
+[Result "1-0"]
+[ECO "D31"]
+[BlackElo "1536"]
+[PlyCount "101"]
+[EventDate "2008.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nc3 c6 4. e4 dxe4 5. Nxe4 Bb4+ 6. Bd2 Qxd4 7. Nc3 Nf6 8.
+Be2 O-O 9. Nf3 Qg4 10. O-O Rd8 11. Ng5 Qf5 12. Qc1 Bc5 13. Bf4 h6 14. Nf3 Nbd7
+15. Bc7 Re8 16. Bd1 e5 17. Bb3 e4 18. Bc2 Ng4 19. h3 Bxf2+ 20. Kh1 Ngf6 21.
+Rxf2 Qc5 22. Qf1 exf3 23. Rxf3 Ne5 24. Rf4 Nh5 25. Ne4 Qxc4 26. Nf6+ gxf6 27.
+Qxc4 Ng3+ 28. Kh2 Nxc4 29. Rxc4 Ne2 30. Re1 Bd7 31. Rh4 f5 32. Bd3 Rac8 33. Ba5
+Re5 34. Bc3 Nxc3 35. Rxe5 Nxa2 36. Rxh6 Nc1 37. Bc2 a6 38. h4 Rd8 39. Rd6 Kf8
+40. Re1 Na2 41. Red1 Ke7 42. Bxf5 Bxf5 43. Rxd8 Bg4 44. R1d6 Bf5 45. Kg3 Nb4
+46. Kf4 Be6 47. h5 Nd5+ 48. Kf3 Nf6 49. h6 Bd5+ 50. Kf4 Bxg2 51. Rxf6 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.11"]
+[Round "7.4"]
+[White "Chess-Master Diamond, RFT."]
+[Black "II, Mephisto"]
+[Result "0-1"]
+[ECO "D13"]
+[WhiteElo "1111"]
+[BlackElo "1409"]
+[PlyCount "116"]
+[EventDate "2008.??.??"]
+
+1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. cxd5 cxd5 5. Nc3 Nc6 6. Bf4 e6 7. e3 Bb4 8. a3
+Bxc3+ 9. bxc3 Ne4 10. c4 Qa5+ 11. Nd2 Nxd2 12. Qxd2 Qxd2+ 13. Kxd2 Na5 14. Kc3
+dxc4 15. Rb1 b6 16. Bxc4 Nxc4 17. Kxc4 Bb7 18. f3 Rc8+ 19. Kd3 Ba6+ 20. Kd2 O-O
+21. h4 Rfe8 22. g4 Bb7 23. Rh3 Red8 24. Bg5 f6 25. Bf4 e5 26. Bxe5 fxe5 27. Rb4
+exd4 28. Rxd4 Ba6 29. Rxd8+ Rxd8+ 30. Kc2 Rd3 31. e4 Rxa3 32. Rg3 Be2 33. Kb2
+Re3 34. Rg1 Bxf3 35. Rg3 Re2+ 36. Kc1 Bxe4 37. Ra3 a5 38. Rb3 Rc2+ 39. Kd1 Rh2
+40. Rxb6 Bf3+ 41. Kc1 Bxg4 42. Rb8+ Kf7 43. Rb7+ Ke6 44. Rb6+ Kd7 45. Rb7+ Kc6
+46. Rxg7 Rxh4 47. Rg5 a4 48. Ra5 Be2 49. Re5 Bd3 50. Re6+ Kd5 51. Re3 Kd4 52.
+Re6 Rh2 53. Rd6+ Kc3 54. Rc6+ Bc4 55. Rd6 a3 56. Rd4 Kxd4 57. Kb1 Kc3 58. Ka1
+Rh1# 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.13"]
+[Round "8.1"]
+[White "Destiny Prodigy, Chafitz"]
+[Black "Champion Sensory, Fidelity"]
+[Result "0-1"]
+[ECO "D60"]
+[PlyCount "78"]
+[EventDate "2008.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Bd3 dxc4 8.
+Bxc4 Bb4 9. O-O Bxc3 10. bxc3 h6 11. Bf4 g5 12. Bg3 Ne4 13. Qd3 Nxg3 14. fxg3
+Nb6 15. Bb3 Bd7 16. Ne5 Qe8 17. Nxd7 Qxd7 18. Rf6 Kg7 19. Raf1 Qe7 20. Bc2 Rh8
+21. Rg6+ Kf8 22. Qe4 Ke8 23. Qe5 Kd7 24. Rgf6 Raf8 25. Rxf7 Rxf7 26. Rxf7 Qxf7
+27. Qxh8 h5 28. Qb8 a5 29. Qxb7 Nd5 30. Ba4+ Kd8 31. Qa8+ Ke7 32. Qxa5 Qf5 33.
+Qc5+ Kf7 34. Bb3 Qb1+ 35. Kf2 Qb2+ 36. Kf3 g4+ 37. Ke4 Qb1+ 38. Bc2 Qxc2+ 39.
+Ke5 Qf5# 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.16"]
+[Round "8.2"]
+[White "Team-Mate, Saitek"]
+[Black "Chess-Master Diamond, RFT."]
+[Result "1-0"]
+[ECO "B01"]
+[BlackElo "1111"]
+[PlyCount "121"]
+[EventDate "2008.??.??"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Bc4 Bf5 6. Nge2 Nbd7 7. O-O c5 8.
+Bf4 cxd4 9. Nxd4 e5 10. Nxf5 exf4 11. Re1+ Kd8 12. Qd3 g6 13. Nd4 Qb4 14. Nb3
+Rc8 15. Bxf7 Rc6 16. Rad1 Rc8 17. Re8+ Kc7 18. Qxd7+ Nxd7 19. Nd5+ Kb8 20.
+Rxc8+ Kxc8 21. Nxb4 Bxb4 22. Rd4 a5 23. c3 Bc5 24. Rxd7 Bxf2+ 25. Kxf2 Kxd7 26.
+Nxa5 Rf8 27. Bd5 b6 28. Nc4 b5 29. Nd2 Rh8 30. Ne4 Rf8 31. Kf3 Rf5 32. Bg8 h6
+33. Bh7 Rf8 34. Bxg6 Ke6 35. Nc5+ Kd6 36. Nd3 Ra8 37. a3 Ra4 38. Be8 Ra5 39.
+Kxf4 Ke7 40. Bc6 Kd6 41. Ne5 Ra4+ 42. c4 Rxc4+ 43. Nxc4+ Kxc6 44. Ne5+ Kc5 45.
+Nf7 h5 46. Kg5 b4 47. h4 bxa3 48. bxa3 Kd5 49. Kxh5 Ke6 50. Kg6 Kd5 51. g4 Kd4
+52. h5 Ke3 53. h6 Kd4 54. h7 Ke3 55. h8=Q Ke4 56. Qc3 Kf4 57. Qd4+ Kf3 58. Kf5
+Ke2 59. Ke4 Ke1 60. Kf3 Kf1 61. Qf2# 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.17"]
+[Round "8.3"]
+[White "II, Mephisto"]
+[Black "Philidor, Chess King"]
+[Result "0-1"]
+[ECO "B23"]
+[WhiteElo "1409"]
+[PlyCount "112"]
+[EventDate "2008.??.??"]
+
+1. e4 c5 2. Nc3 Nc6 3. f4 e6 4. Nf3 d5 5. Bb5 Nge7 6. exd5 exd5 7. d4 a6 8.
+Bxc6+ Nxc6 9. dxc5 Bxc5 10. Qxd5 Qxd5 11. Nxd5 O-O 12. Nc7 Rb8 13. Bd2 Bf5 14.
+O-O-O Rbd8 15. Rhe1 Bb6 16. Nxa6 bxa6 17. Ne5 Nxe5 18. Rxe5 Bg4 19. Rde1 Bd4
+20. Rg5 Be6 21. Ba5 Rb8 22. b3 h6 23. Rh5 Rfc8 24. Re4 Bf6 25. Bb4 Rb6 26. f5
+Rb5 27. g4 Bd5 28. Rf4 Be5 29. Bd2 Bxf4 30. Bxf4 Bf3 31. h3 Rb4 32. c4 Rbxc4+
+33. bxc4 Rxc4+ 34. Kb2 Rxf4 35. a3 Bg2 36. Ka2 Rf2+ 37. Ka1 Rf3 38. Kb2 Bxh3
+39. g5 hxg5 40. Rxg5 Bxf5 41. Rh5 Be6 42. Ra5 Bc4 43. Kc2 Rg3 44. Rc5 Bb3+ 45.
+Kd2 Be6 46. Rc3 Rg4 47. Ke3 Bc4 48. a4 Be6 49. a5 Rg5 50. Rc7 Rxa5 51. Ra7 Ra3+
+52. Kd4 Ra4+ 53. Ke3 f5 54. Re7 f4+ 55. Ke2 Bd5 56. Ra7 g5 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.24"]
+[Round "8.4"]
+[White "III, Mephisto"]
+[Black "MGS Steinitz, Chafitz"]
+[Result "1-0"]
+[ECO "B00"]
+[WhiteElo "1536"]
+[PlyCount "117"]
+[EventDate "2008.??.??"]
+
+1. e4 d6 2. Nf3 Nf6 3. Nc3 Nc6 4. d4 Bg4 5. Bb5 a6 6. Bxc6+ bxc6 7. O-O Rb8 8.
+h3 Bd7 9. Qd3 Qc8 10. e5 Nd5 11. Nxd5 cxd5 12. Qc3 dxe5 13. Nxe5 Bb5 14. Qf3
+Qe6 15. Rd1 Ba4 16. b3 Bb5 17. a4 Bc6 18. Nxc6 Qxc6 19. c4 e6 20. c5 Be7 21.
+Bf4 O-O 22. Qg3 Rfc8 23. Rd3 h5 24. Be5 f6 25. Bf4 Kh7 26. Rc1 g5 27. Bd2 Rg8
+28. Re3 Kg7 29. Rce1 e5 30. Qf3 Rh8 31. dxe5 Bxc5 32. Rd3 Rbd8 33. exf6+ Qxf6
+34. b4 Bb6 35. a5 Ba7 36. Qg3 c6 37. Bxg5 Bxf2+ 38. Qxf2 Qxf2+ 39. Kxf2 Rdf8+
+40. Ke2 Kg6 41. h4 Rb8 42. Rd4 Rhf8 43. g3 Kg7 44. Be7 Rfe8 45. Kf2 Ra8 46. Kg2
+Kg8 47. Rf4 Ra7 48. Bc5 Rxe1 49. Bxa7 Re7 50. Bc5 Re2+ 51. Kh3 Kg7 52. Bd4+ Kg8
+53. Rf6 Re4 54. Bc5 d4 55. Rxc6 d3 56. Rg6+ Kf7 57. Rxa6 d2 58. Rd6 Re7 59.
+Rxd2 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.27"]
+[Round "9.1"]
+[White "MGS Steinitz, Chafitz"]
+[Black "Destiny Prodigy, Chafitz"]
+[Result "1-0"]
+[ECO "E15"]
+[PlyCount "95"]
+[EventDate "2008.??.??"]
+
+1. d4 Nf6 2. c4 e6 3. Nf3 b6 4. g3 Ba6 5. Qa4 Be7 6. Nc3 O-O 7. Bg2 Bb7 8. Bf4
+Bc6 9. Qc2 Nh5 10. Bd2 Na6 11. a3 Bd6 12. O-O Qf6 13. Bg5 Qf5 14. Qxf5 exf5 15.
+d5 Bb7 16. Nb5 Bc5 17. b4 f6 18. bxc5 fxg5 19. cxb6 g4 20. bxc7 gxf3 21. Bxf3
+Nf6 22. Rfb1 Ne4 23. g4 Nd2 24. Re1 Nxc4 25. g5 Nd2 26. Bg2 Ne4 27. d6 Nac5 28.
+Rac1 a6 29. Nd4 Na4 30. Rb1 Nac5 31. Rec1 h6 32. gxh6 gxh6 33. Rb6 Rae8 34.
+Bxe4 Rxe4 35. Rxc5 Rg4+ 36. Kf1 Rxd4 37. Rxb7 Rd1+ 38. Kg2 Rxd6 39. c8=Q Rxc8
+40. Rxc8+ Kf7 41. Rcc7 Ke6 42. Ra7 Ke7 43. Kf3 h5 44. Rc5 Rb6 45. Re5+ Kd6 46.
+Kf4 h4 47. Kxf5 Kc6 48. Re7 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.28"]
+[Round "9.2"]
+[White "Ambassador 2 MHz, Conchess"]
+[Black "II, Mephisto"]
+[Result "1-0"]
+[ECO "A09"]
+[WhiteElo "1409"]
+[PlyCount "53"]
+[EventDate "2008.??.??"]
+
+1. Nf3 Nf6 2. c4 d5 3. cxd5 Qxd5 4. Nc3 Qd8 5. d4 Bf5 6. Qb3 Qc8 7. Bf4 e6 8.
+Qa4+ c6 9. h3 Nbd7 10. Rd1 Nb6 11. Qb3 Be7 12. g4 Nbd5 13. Nxd5 Nxd5 14. gxf5
+Nxf4 15. e3 Nd5 16. Bc4 Bb4+ 17. Kf1 Bd6 18. fxe6 fxe6 19. e4 Nf4 20. Ng5 e5
+21. Nf7 Ke7 22. Nxh8 Qxh8 23. Qxb7+ Kf6 24. Qf7+ Kg5 25. Qf5+ Kh6 26. dxe5 Rf8
+27. Rxd6+ 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.01.28"]
+[Round "9.3"]
+[White "Chess-Master Diamond, RFT."]
+[Black "III, Mephisto"]
+[Result "0-1"]
+[ECO "C02"]
+[WhiteElo "1111"]
+[BlackElo "1535"]
+[PlyCount "127"]
+[EventDate "2008.??.??"]
+
+1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3 c4 7. Be2 Nh6 8. Bxh6
+Qxb2 9. Bxg7 Bxg7 10. Nbd2 Qxc3 11. Qc1 Qxc1+ 12. Rxc1 f6 13. exf6 Bxf6 14. Rd1
+O-O 15. Nb1 Bd7 16. O-O Rf7 17. Nc3 Rg7 18. h3 Rf8 19. a4 Rg6 20. Rd2 Rg7 21.
+Rb1 Be8 22. Rf1 Bg6 23. Rdd1 Bc2 24. Rd2 Bf5 25. Kh1 Rg6 26. Rdd1 Bc2 27. Rd2
+Bb3 28. Kg1 Rg7 29. Rc1 Rg6 30. Rf1 Rf7 31. Rc1 Rfg7 32. Bf1 Bg5 33. Nxg5 Rxg5
+34. Re1 R7g6 35. Re3 Rf5 36. Re1 Rf4 37. Re3 Rxd4 38. Rxd4 Nxd4 39. f4 Nf5 40.
+Re1 d4 41. Ne4 b6 42. Rc1 c3 43. Bb5 Ne3 44. Nxc3 a6 45. Bxa6 Nxg2 46. Ne4
+Nxf4+ 47. Kh2 Rh6 48. Rc8+ Kg7 49. Ng5 Kg6 50. Rg8+ Kf5 51. Rg7 Kf6 52. Rg8
+Bxa4 53. Bc4 b5 54. Ba2 Rh5 55. Ne4+ Ke5 56. Nf2 h6 57. Rh8 b4 58. Ng4+ Kf5 59.
+Nxh6+ Ke4 60. Nf7 Rxh8 61. Nxh8 d3 62. Bb1 Bc2 63. Ba2 d2 64. Kg3 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U1600"]
+[Site "?"]
+[Date "2008.02.03"]
+[Round "9.4"]
+[White "Philidor, Chess King"]
+[Black "Team-Mate, Saitek"]
+[Result "1-0"]
+[ECO "C42"]
+[PlyCount "97"]
+[EventDate "2008.??.??"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 d5 6. Bd3 Bd6 7. O-O O-O 8.
+Qe1 Re8 9. Nc3 Nxc3 10. Qxc3 Nc6 11. Bg5 f6 12. Be3 Bg4 13. Qb3 Bxf3 14. Qxb7
+Na5 15. Qa6 Bxg2 16. Kxg2 c6 17. Bd2 Bc7 18. Rae1 Rxe1 19. Rxe1 Qc8 20. Qxc8+
+Rxc8 21. b3 Nb7 22. Ba6 Rb8 23. Re7 Ba5 24. Bf4 Kf8 25. Rxb7 Rxb7 26. Bxb7 Ke7
+27. Bxc6 Ke6 28. c4 dxc4 29. bxc4 Bc3 30. d5+ Ke7 31. d6+ Kd8 32. Be3 Be5 33.
+c5 Bc3 34. Be4 g6 35. c6 Be5 36. d7 Bb8 37. Bd4 Be5 38. Bxa7 Bc7 39. Bd4 Ke7
+40. Bd5 Kd6 41. Bf3 Bd8 42. a4 Kc7 43. a5 Kb8 44. a6 Bc7 45. d8=Q+ Bxd8 46. a7+
+Kc7 47. a8=Q Be7 48. Qb7+ Kd6 49. Qd7# 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.11.17"]
+[Round "1.1"]
+[White "Prestige, Fidelity"]
+[Black "Super Constellation, Novag"]
+[Result "0-1"]
+[ECO "A05"]
+[BlackElo "1773"]
+[PlyCount "78"]
+[EventDate "2007.??.??"]
+
+1. Nf3 Nf6 2. g3 c5 3. Nc3 d5 4. e3 Nc6 5. d4 Bg4 6. Be2 e6 7. h3 Bf5 8. g4 Bg6
+9. Ne5 Nxe5 10. dxe5 Nd7 11. Bb5 a6 12. Bxd7+ Qxd7 13. h4 h6 14. h5 Bh7 15. f3
+Qc7 16. f4 Be7 17. b3 Qc6 18. Rh2 O-O 19. Bb2 b5 20. a3 Rad8 21. Qf3 b4 22. Na4
+c4 23. axb4 cxb3 24. c3 Rc8 25. f5 Qc7 26. Rd1 Qxe5 27. Qf4 Qxf4 28. exf4 exf5
+29. gxf5 Rc4 30. Rxd5 Rxf4 31. Ra5 Re8 32. Rxa6 Bg5+ 33. Re2 Bh4+ 34. Kd2 Rd8+
+35. Ke3 Rxf5 36. Rxh6 Bg5+ 37. Ke4 gxh6 38. Re3 Rf2+ 39. Ke5 Bf6# 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.11.18"]
+[Round "1.2"]
+[White "Kishon Chesster"]
+[Black "Excel 68000, Fidelity"]
+[Result "1/2-1/2"]
+[ECO "B85"]
+[WhiteElo "1852"]
+[BlackElo "1923"]
+[PlyCount "133"]
+[EventDate "2007.??.??"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e6 6. Be2 a6 7. O-O Qc7 8. f4
+Nc6 9. Be3 Be7 10. Qe1 O-O 11. Qg3 Bd7 12. Nf3 Nb4 13. Rac1 d5 14. exd5 Nbxd5
+15. Nxd5 Nxd5 16. Bd4 Bf6 17. Ne5 Nb4 18. Bc4 Bxe5 19. Bxe5 Qc5+ 20. Kh1 f6 21.
+Rfd1 Nd5 22. Bxd5 exd5 23. Bd4 Qa5 24. Qb3 Bc6 25. Bb6 Qb5 26. Qxb5 axb5 27. a3
+Kf7 28. Re1 Rfe8 29. Rxe8 Rxe8 30. c3 Re2 31. b3 Kg6 32. Kg1 Rb2 33. b4 d4 34.
+g3 dxc3 35. Rxc3 Rg2+ 36. Kf1 Rxh2 37. Bf2 f5 38. Re3 Kf6 39. Rd3 Ke6 40. Ke2
+Bd5 41. Rc3 g6 42. Rc7 Kd6 43. Rg7 b6 44. Ke3 Be4 45. Rf7 Bc6 46. Rf6+ Kd5 47.
+Rf7 Rh1 48. Kd3 Rd1+ 49. Kc2 Rf1 50. Bxb6 Rf3 51. Rxh7 Rxa3 52. Rh3 Kc4 53. Bc5
+Bg2 54. Rh8 Rxg3 55. Kd2 Rd3+ 56. Ke1 Bf3 57. Rg8 Bh5 58. Rg7 Rd1+ 59. Kf2 Rd2+
+60. Kg3 Rd8 61. Kh4 Ra8 62. Kg5 Ra6 63. Rd7 Re6 64. Rb7 Re2 65. Kf6 Rd2 66. Ra7
+Rd8 67. Ra3 1/2-1/2
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.11.22"]
+[Round "1.3"]
+[White "MM II 7.4 MHz, Mephisto"]
+[Black "Constellation Expert, Novag"]
+[Result "1-0"]
+[ECO "A34"]
+[BlackElo "1878"]
+[PlyCount "129"]
+[EventDate "2007.??.??"]
+
+1. Nf3 Nf6 2. c4 c5 3. Nc3 d5 4. cxd5 Nxd5 5. d4 Nxc3 6. bxc3 g6 7. e3 Bg7 8.
+Bb2 O-O 9. Qd2 Nc6 10. Be2 Qd5 11. Ba3 b6 12. dxc5 Qxd2+ 13. Nxd2 Bxc3 14. Rc1
+Bxd2+ 15. Kxd2 Rd8+ 16. Kc3 e5 17. Bc4 bxc5 18. Bxc5 Bb7 19. Rhd1 Kg7 20. Rb1
+Rac8 21. Rxd8 Nxd8 22. Bxa7 Bxg2 23. Rd1 e4 24. Bd4+ f6 25. Bb6 Ne6 26. Rd7+
+Kh6 27. Kb4 Nf8 28. Rb7 Bh3 29. a4 Nd7 30. Bd4 Kg5 31. a5 h6 32. a6 Nb8 33. Bb5
+Nxa6+ 34. Bxa6 Rc2 35. Bb5 Rxf2 36. Rb6 Rxh2 37. Bxf6+ Kg4 38. Be8 h5 39. Bxg6
+Kf3 40. Bd4 Bg2 41. Re6 Kf2 42. Bxe4 Bf1 43. Bd5 Ke1 44. Rc6 Rf2 45. Rh6 Be2
+46. e4 Rf8 47. e5 Bg4 48. e6 Bxe6 49. Bxe6 Rf4 50. Kc3 Rh4 51. Bf6 Ra4 52. Rxh5
+Ke2 53. Re5+ Kf3 54. Bg5 Kg3 55. Kd3 Kf3 56. Rf5+ Kg3 57. Be3 Ra6 58. Rg5+ Kh4
+59. Rg6 Ra4 60. Bd2 Ra6 61. Ke4 Ra7 62. Rh6+ Kg3 63. Bf4+ Kg2 64. Bh3+ Kf2 65.
+Be3+ 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.11.23"]
+[Round "1.4"]
+[White "Sphinx Galaxy V1.03, CXG."]
+[Black "Monte Carlo IV, Mephisto"]
+[Result "0-1"]
+[ECO "D55"]
+[BlackElo "1961"]
+[PlyCount "56"]
+
+1. d4 d5 2. Nf3 e6 3. c4 Nf6 4. Bg5 Be7 5. Nc3 O-O 6. e3 Nbd7 7. Qc2 b6 8. cxd5
+exd5 9. Bd3 c5 10. O-O Bb7 11. a3 Ne4 12. Bxe7 Qxe7 13. Ne2 f5 14. Nf4 a6 15.
+Rfd1 Rae8 16. Rac1 c4 17. Be2 Nxf2 18. Kxf2 Qxe3+ 19. Kg3 g5 20. Nh3 Nf6 21.
+Nhxg5 Nh5+ 22. Kh3 Nf4+ 23. Kh4 Nxe2 24. Kh5 Qf4 25. Ne5 Rxe5 26. Qe4 Rxe4 27.
+g3 Qg4+ 28. Kh6 Rf6# 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.11.23"]
+[Round "2.1"]
+[White "Simultano, Saitek"]
+[Black "Sphinx Galaxy V1.03, CXG."]
+[Result "1/2-1/2"]
+[ECO "D55"]
+[WhiteElo "1853"]
+[PlyCount "77"]
+[SourceDate "2007.11.23"]
+
+1. d4 d5 2. Nf3 Nf6 3. c4 e6 4. Nc3 Be7 5. Bg5 O-O 6. e3 h6 7. Bxf6 Bxf6 8. Rc1
+c6 9. Bd3 Nd7 10. O-O Re8 11. Qb3 dxc4 12. Bxc4 b5 13. Be2 Bb7 14. Ne4 Be7 15.
+Rfd1 Rc8 16. Bd3 Qb6 17. Kf1 Rcd8 18. h3 c5 19. dxc5 Nxc5 20. Nxc5 Bxc5 21.
+Qxb5 Qxb5 22. Bxb5 Rxd1+ 23. Rxd1 Bxf3 24. gxf3 Rb8 25. a4 Kf8 26. Rd7 a6 27.
+Bxa6 Rxb2 28. Rb7 Ra2 29. Bb5 g5 30. Rd7 h5 31. Rb7 Bb4 32. Ra7 Bc5 33. Rc7 Bb4
+34. Rb7 h4 35. Ra7 Bc5 36. Rb7 Bb4 37. Rc7 Ba5 38. Ra7 Bb6 39. Rd7 1/2-1/2
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.11.25"]
+[Round "2.2"]
+[White "Excel 68000, Fidelity"]
+[Black "MM II 7.4 MHz, Mephisto"]
+[Result "0-1"]
+[ECO "C61"]
+[WhiteElo "1923"]
+[PlyCount "125"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 exd4 5. O-O Bc5 6. Qh5 Qe7 7. e5 c6 8.
+Bc4 d5 9. exd6 Bxd6 10. c3 dxc3 11. dxc3 Nf6 12. Qh4 O-O 13. Bg5 Be5 14. f4
+Qc5+ 15. Kh1 Qxc4 16. Na3 Qd5 17. c4 Qd4 18. fxe5 Ng4 19. Be7 Re8 20. h3 Qxe5
+21. hxg4 Qxe7 22. Qxe7 Rxe7 23. g5 Be6 24. Rad1 Rae8 25. Rf4 Bc8 26. Rdf1 Re2
+27. Rxf7 Rxb2 28. R1f2 Rxa2 29. Rxg7+ Kxg7 30. Rxa2 a5 31. c5 Re1+ 32. Kh2 Kg6
+33. Rf2 Re5 34. Rf8 Bf5 35. Rg8+ Kh5 36. Rg7 Rxc5 37. Rxb7 Rc3 38. Nb1 Bxb1 39.
+Rxb1 Kxg5 40. Rb7 Rc4 41. Rg7+ Kh6 42. Rd7 a4 43. Kg1 a3 44. Ra7 Rc1+ 45. Kf2
+Rc2+ 46. Kf3 a2 47. g3 c5 48. Ke4 c4 49. Kd4 Kg5 50. Ra3 Kg4 51. Kd5 h6 52. Kc5
+c3 53. Ra4+ Kxg3 54. Kc4 Kf2 55. Kd3 Rd2+ 56. Kxc3 Ke1 57. Re4+ Kd1 58. Ra4 Kc1
+59. Ra6 h5 60. Ra5 h4 61. Kb3 h3 62. Rxa2 Rxa2 63. Kxa2 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.11.27"]
+[Round "2.3"]
+[White "Super Constellation, Novag"]
+[Black "Kishon Chesster"]
+[Result "1/2-1/2"]
+[ECO "C88"]
+[WhiteElo "1773"]
+[BlackElo "1852"]
+[PlyCount "85"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 O-O 8. a4
+Bb7 9. d3 d6 10. Bd2 Nd7 11. axb5 axb5 12. Nc3 Na5 13. Ba2 b4 14. Nd5 c5 15. c3
+bxc3 16. bxc3 Nf6 17. h3 Nxd5 18. Bxd5 Qd7 19. Bxb7 Qxb7 20. Rb1 Qd7 21. d4 Nc4
+22. Be3 Nxe3 23. Rxe3 Qc7 24. Qe2 Rfb8 25. Rxb8+ Qxb8 26. Qd2 exd4 27. cxd4 c4
+28. Qc1 Qb4 29. Rc3 Rc8 30. Nd2 Bg5 31. Rxc4 Rxc4 32. Qxc4 Qb7 33. Nf1 Be7 34.
+f3 Bf6 35. Ne3 Bg5 36. Nf5 Qb8 37. Qd5 Bf4 38. g3 Qb1+ 39. Kf2 Qc2+ 40. Kf1
+Qd1+ 41. Kg2 Qe2+ 42. Kg1 Qd1+ 43. Kf2 1/2-1/2
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.11.27"]
+[Round "2.4"]
+[White "Monte Carlo IV, Mephisto"]
+[Black "Prestige, Fidelity"]
+[Result "1-0"]
+[ECO "D25"]
+[WhiteElo "1961"]
+[PlyCount "109"]
+[EventDate "2007.??.??"]
+
+1. d4 d5 2. Nf3 Nf6 3. c4 dxc4 4. e3 b5 5. b3 Be6 6. bxc4 Bxc4 7. Bxc4 bxc4 8.
+Qa4+ Qd7 9. Qxc4 Nc6 10. Nc3 Rb8 11. Rb1 Rxb1 12. Nxb1 e6 13. O-O Bd6 14. Nc3
+O-O 15. e4 Rb8 16. e5 Rb4 17. Qe2 Nxd4 18. Nxd4 Bxe5 19. Qxe5 Ng4 20. Qc5 Rxd4
+21. Qxa7 h6 22. Qb8+ Kh7 23. Qf8 Rc4 24. Bb2 Qd6 25. Qxd6 cxd6 26. f3 Ne3 27.
+Re1 Nf5 28. a4 d5 29. Rd1 d4 30. Nb5 e5 31. f4 f6 32. fxe5 fxe5 33. Re1 Ne3 34.
+Bc1 Rxa4 35. Bxe3 dxe3 36. Rxe3 Kg6 37. Rxe5 Kf6 38. Re2 Kg5 39. Kf2 Rb4 40.
+Nd6 Rd4 41. Re6 Ra4 42. g3 Kg4 43. Re4+ Rxe4 44. Nxe4 g5 45. Nd6 Kh3 46. Kg1
+Kg4 47. Kg2 Kh5 48. Kf3 Kg6 49. h3 Kf6 50. Ke4 h5 51. Kd5 h4 52. g4 Kg7 53. Ke6
+Kh7 54. Kf6 Kg8 55. Ne4 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.02"]
+[Round "3.1"]
+[White "Constellation Expert, Novag"]
+[Black "Excel 68000, Fidelity"]
+[Result "0-1"]
+[ECO "C83"]
+[WhiteElo "1878"]
+[BlackElo "1923"]
+[PlyCount "63"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Nxe4 6. d4 b5 7. Bb3 d5 8. dxe5
+Be6 9. c3 Be7 10. Nbd2 O-O 11. Qe2 Nc5 12. Nd4 Nxb3 13. Nxc6 Nxc1 14. Raxc1 Qd7
+15. Nxe7+ Qxe7 16. Nb3 c5 17. Rcd1 d4 18. cxd4 Bc4 19. Qh5 Bxf1 20. Rxf1 cxd4
+21. Nxd4 Qc5 22. Nf5 Kh8 23. Qe2 f6 24. Qg4 g6 25. Nd4 Qxe5 26. Rd1 Rfe8 27. g3
+Qd5 28. Qh4 Kg7 29. Rc1 Rac8 30. Rf1 Rc4 31. Rd1 Re4 32. Rf1 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.02"]
+[Round "3.2"]
+[White "Prestige, Fidelity"]
+[Black "Simultano, Saitek"]
+[Result "1-0"]
+[ECO "B45"]
+[BlackElo "1853"]
+[PlyCount "99"]
+[EventDate "2007.??.??"]
+[SourceDate "2007.12.02"]
+
+1. e4 c5 2. Nf3 e6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 Nc6 6. Ndb5 Bb4 7. a3 Bxc3+ 8.
+Nxc3 d5 9. exd5 Nxd5 10. Bc4 Nxc3 11. Qxd8+ Nxd8 12. bxc3 e5 13. Be3 Bf5 14.
+O-O-O Nc6 15. Bc5 b6 16. Bb4 a5 17. Bd6 Rc8 18. Ba6 Rd8 19. Bc7 Rxd1+ 20. Rxd1
+Ke7 21. Bxb6 Rb8 22. Bc5+ Ke8 23. c4 Be4 24. f3 Bf5 25. Bb5 Rc8 26. c3 f6 27.
+Bb6 Ke7 28. Be3 Nd8 29. Kb2 h6 30. Kb3 Nb7 31. Ba6 Rb8 32. Ka2 Nd6 33. c5 Be6+
+34. Ka1 Nf5 35. Bc1 Nh4 36. Rd2 Rb3 37. Bb2 Nf5 38. Bd3 Ne3 39. Be2 Rb7 40. g3
+Rc7 41. a4 Bb3 42. Bb5 g5 43. c6 Be6 44. Ba3+ Ke8 45. Bd6 Rc8 46. c7+ Kf7 47.
+Ba6 Ra8 48. Bb7 Re8 49. Bc5 Nc4 50. Rd8 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.04"]
+[Round "3.3"]
+[White "Kishon Chesster"]
+[Black "Monte Carlo IV, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "C14"]
+[WhiteElo "1852"]
+[BlackElo "1961"]
+[PlyCount "129"]
+[EventDate "2007.??.??"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Be7 5. e5 Nfd7 6. Bxe7 Qxe7 7. f4 O-O 8.
+Qd2 c5 9. Nf3 Nc6 10. dxc5 Nxc5 11. O-O-O b6 12. Bb5 Bb7 13. Bxc6 Bxc6 14. Qe3
+Na4 15. Nd4 Nxc3 16. Qxc3 Ba4 17. h4 Rac8 18. Qe3 Rc7 19. g4 Rfc8 20. Qd3 Bxc2
+21. Nxc2 Rxc2+ 22. Qxc2 Rxc2+ 23. Kxc2 Qc5+ 24. Kb1 Qf2 25. Rc1 h5 26. Rcf1 Qe2
+27. gxh5 d4 28. h6 gxh6 29. Re1 Qd3+ 30. Ka1 Kf8 31. Rhg1 Ke7 32. Rc1 Kd7 33.
+Rg7 Qf5 34. Rf1 Ke7 35. Rf3 Qc2 36. Rg1 d3 37. Rff1 Qh2 38. Rh1 Qd2 39. Rhg1 a6
+40. Rg4 Qh2 41. Rgg1 Qxh4 42. Rh1 Qg4 43. Rxh6 d2 44. Rhh1 f6 45. Rd1 Qe2 46.
+a3 Kf7 47. Rhg1 b5 48. Rh1 a5 49. Rh7+ Kg6 50. Rhh1 fxe5 51. fxe5 Kf5 52. Kb1
+Ke4 53. Rh4+ Kd3 54. Rh3+ Kc4 55. b3+ Kd4 56. Kc2 Kxe5 57. Rxd2 Qe4+ 58. Kb2
+Qf4 59. Rhh2 Qf6 60. Rdf2 Qg6 61. Rhg2 Qh6 62. Rc2 Kd4 63. Rcd2+ Ke4 64. Rge2+
+Kf3 65. Kc1 1/2-1/2
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.04"]
+[Round "3.4"]
+[White "MM II 7.4 MHz, Mephisto"]
+[Black "Super Constellation, Novag"]
+[Result "1-0"]
+[ECO "C68"]
+[BlackElo "1773"]
+[PlyCount "59"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. d4 exd4 6. Qxd4 Bd7 7. O-O Nf6 8.
+e5 c5 9. Qd3 Ng8 10. Nc3 Be7 11. Rd1 Be6 12. Qe2 Bd7 13. Ne4 b6 14. c4 Rb8 15.
+b3 Rb7 16. Bb2 Kf8 17. e6 fxe6 18. Ne5 c6 19. Qf3+ Bf6 20. Nd6 Rb8 21. Ndf7 Qe8
+22. Rxd7 Bxe5 23. Bxe5 Qxd7 24. Nxh8+ Nf6 25. Bxb8 Qe8 26. Ba7 Kg8 27. Bxb6 e5
+28. Rd1 e4 29. Qf5 Nd5 30. cxd5 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.06"]
+[Round "4.1"]
+[White "Monte Carlo IV, Mephisto"]
+[Black "MM II 7.4 MHz, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "E38"]
+[WhiteElo "1961"]
+[PlyCount "122"]
+[EventDate "2007.??.??"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Qc2 c5 5. a3 cxd4 6. axb4 dxc3 7. Qxc3 O-O 8.
+Be3 a6 9. Bg5 Ne4 10. Bxd8 Nxc3 11. Bh4 Ne4 12. f3 Nf6 13. e4 Nh5 14. Be7 Re8
+15. Bc5 d5 16. b3 dxe4 17. fxe4 Bd7 18. Be2 Nf4 19. g3 Nxe2 20. Nxe2 Bc6 21.
+Nc3 Nd7 22. O-O Nf6 23. e5 Ng4 24. Bd4 Rad8 25. Rad1 Rd7 26. h3 Nh6 27. Bb6 Nf5
+28. Rxd7 Bxd7 29. g4 Nh4 30. Kh2 Ng6 31. Ne4 Nxe5 32. Nd6 Rf8 33. Bd4 Nc6 34.
+Be3 Bc8 35. Bc5 e5 36. Kg2 h6 37. Rd1 Rd8 38. Bb6 Rf8 39. Bc5 f6 40. Kf3 g6 41.
+Nxc8 Rxc8 42. Rd7 b5 43. h4 f5 44. cxb5 fxg4+ 45. Kxg4 axb5 46. Be3 h5+ 47. Kg5
+Nxb4 48. Kxg6 Rc6+ 49. Kxh5 Nc2 50. Bf2 Rc3 51. Kg6 Rf3 52. Rg7+ Kf8 53. Bc5+
+Ke8 54. Re7+ Kd8 55. b4 Nxb4 56. Bxb4 Rf4 57. Bd6 Rxh4 58. Kf6 e4 59. Kg5 Rh8
+60. Bb4 Re8 61. Rxe8+ Kxe8 1/2-1/2
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.07"]
+[Round "4.2"]
+[White "Sphinx Galaxy V1.03, CXG."]
+[Black "Prestige, Fidelity"]
+[Result "1-0"]
+[ECO "A35"]
+[PlyCount "81"]
+[EventDate "2007.??.??"]
+
+1. c4 c5 2. Nc3 Nc6 3. Nf3 g6 4. e3 Bg7 5. d4 d6 6. Be2 Nf6 7. d5 Na5 8. Bd2
+O-O 9. O-O Bg4 10. b3 Bf5 11. Ng5 Bh6 12. Nf3 Bg7 13. Ng5 h6 14. e4 Bd7 15. Nf3
+Qb6 16. Re1 Ng4 17. Rb1 Bxc3 18. Bxc3 Nf6 19. Bd3 Bg4 20. Qd2 Bxf3 21. Bxa5 Qa6
+22. gxf3 e5 23. dxe6 fxe6 24. e5 dxe5 25. Bxg6 Kg7 26. Bd3 Nd7 27. Be4 Nf6 28.
+Bc7 Rh8 29. Rbd1 Nxe4 30. Rxe4 Kg6 31. Bxe5 Rhg8 32. Rg4+ Kh5 33. Bg7 e5 34.
+Bxe5 Rg5 35. h3 Rf5 36. Bg3 Rh8 37. Qd7 Qf6 38. Rd5 Rf8 39. Rf4 Kg6 40. Rdxf5
+Qxf5 41. Rxf5 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.07"]
+[Round "4.3"]
+[White "Simultano, Saitek"]
+[Black "Kishon Chesster"]
+[Result "0-1"]
+[ECO "C85"]
+[WhiteElo "1853"]
+[BlackElo "1852"]
+[PlyCount "78"]
+[SourceDate "2007.12.07"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Bxc6 dxc6 7. d3 Nd7 8.
+Nbd2 O-O 9. Nc4 f6 10. Ne3 Nb6 11. d4 exd4 12. Qxd4 Qxd4 13. Nxd4 Bc5 14. Rd1
+Re8 15. f3 Bd7 16. Nb3 Bd6 17. Na5 Rab8 18. Nac4 Nxc4 19. Nxc4 Bc5+ 20. Be3
+Bxe3+ 21. Nxe3 Rbd8 22. Kf2 Kf7 23. Nc4 Be6 24. Na5 Bc8 25. Ke3 c5 26. c4 b6
+27. Nc6 Rd6 28. Rxd6 cxd6 29. Rd1 Ke6 30. Na7 Bb7 31. Rd3 Ra8 32. Rb3 Rxa7 33.
+Rxb6 a5 34. b3 Bc8 35. Rb8 Kd7 36. Rb5 Kc7 37. a3 Bd7 38. a4 Ra6 39. Kd3 Bxb5
+0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.10"]
+[Round "4.4"]
+[White "Super Constellation, Novag"]
+[Black "Constellation Expert, Novag"]
+[Result "1-0"]
+[ECO "B01"]
+[WhiteElo "1773"]
+[BlackElo "1878"]
+[PlyCount "103"]
+[EventDate "2007.??.??"]
+
+1. e4 d5 2. exd5 Nf6 3. d4 Nxd5 4. c4 Nb6 5. Nf3 Bg4 6. Be2 e6 7. O-O Nc6 8. b3
+Bxf3 9. Bxf3 Nxd4 10. Bxb7 Rb8 11. Be3 Rxb7 12. Qxd4 Be7 13. Nc3 O-O 14. Qe4
+Qa8 15. Rad1 Bf6 16. Rd3 Bxc3 17. Rxc3 Rd8 18. Bd4 Nd7 19. Rg3 g6 20. Rd3 c5
+21. Bb2 Re8 22. Qg4 a5 23. Rfd1 Qa7 24. Bc3 a4 25. bxa4 Qxa4 26. h3 e5 27. Qe4
+Ra7 28. R3d2 f5 29. Qd5+ Kf8 30. Kh2 e4 31. f4 Qa6 32. Be5 Qb6 33. Bd6+ Kg7 34.
+Re2 h6 35. Red2 e3 36. Re2 Ra3 37. Kg1 Ra6 38. Kh1 Ra3 39. Kh2 Qa7 40. Rb1 Kh8
+41. Rb7 Qa8 42. Rxd7 Qxd5 43. cxd5 Rd3 44. Bxc5 g5 45. fxg5 hxg5 46. d6 f4 47.
+Re7 Rd8 48. Rb2 g4 49. hxg4 Rd5 50. Rc2 Kg8 51. Rc4 Rd2 52. Bb6 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.13"]
+[Round "5.1"]
+[White "MM II 7.4 MHz, Mephisto"]
+[Black "Simultano, Saitek"]
+[Result "0-1"]
+[ECO "D36"]
+[BlackElo "1853"]
+[PlyCount "168"]
+[EventDate "2007.??.??"]
+[SourceDate "2007.12.13"]
+
+1. d4 d5 2. Nf3 Nf6 3. c4 e6 4. Bg5 Be7 5. cxd5 exd5 6. Nc3 c6 7. e3 O-O 8. Bd3
+Nbd7 9. Qc2 Re8 10. O-O Nf8 11. a4 Ng6 12. Qb3 Ng4 13. Bxe7 Qxe7 14. Qa3 Qxa3
+15. Rxa3 Be6 16. h3 Nf6 17. Ne2 Ne4 18. Rc1 Bf5 19. Bb1 h6 20. Rb3 Rab8 21. a5
+Rf8 22. Ba2 Ne7 23. Ra3 Rfe8 24. b3 Nd6 25. Ng3 Nb5 26. Ra4 Bc8 27. Ne2 f6 28.
+Nf4 Ra8 29. Nh4 g5 30. Nh5 gxh4 31. Nxf6+ Kf7 32. Nxe8 Kxe8 33. f4 Nf5 34. Kf2
+Ng3 35. Bb1 Bd7 36. Ra2 Kd8 37. a6 b6 38. Kf3 Kc8 39. Bd3 Nd6 40. Bh7 Kc7 41.
+Rac2 Re8 42. Bg6 Re7 43. Rf2 Rg7 44. f5 Ndxf5 45. Bxf5 Bxf5 46. Kf4 Bxh3 47. e4
+Nxe4 48. Rfc2 Bd7 49. Rh1 Ng3 50. Rxh4 Nf5 51. Rh1 Re7 52. Rb2 Bc8 53. Rh5 Re4+
+54. Kf3 Nxd4+ 55. Kf2 Re6 56. g3 Kd6 57. Rh1 c5 58. b4 c4 59. Rd2 Rf6+ 60. Kg2
+Nb3 61. Rf2 Rxf2+ 62. Kxf2 c3 63. Rxh6+ Be6 64. Ke2 c2 65. Rh1 Bg4+ 66. Kd3 Bd1
+67. Rh6+ Kd7 68. Rh7+ Kc8 69. Rh8+ Kc7 70. Rh7+ Kd8 71. Rh8+ Kc7 72. Rh7+ Kc6
+73. b5+ Kxb5 74. Rc7 c1=Q 75. Rxc1 Nxc1+ 76. Kd2 Ne2 77. g4 Nc3 78. Kxc3 Bxg4
+79. Kd4 Be6 80. Kd3 Kxa6 81. Ke3 b5 82. Kd3 b4 83. Ke3 b3 84. Kd2 d4 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.16"]
+[Round "5.2"]
+[White "Excel 68000, Fidelity"]
+[Black "Super Constellation, Novag"]
+[Result "1-0"]
+[ECO "D28"]
+[WhiteElo "1923"]
+[BlackElo "1773"]
+[PlyCount "88"]
+[EventDate "2007.??.??"]
+
+1. d4 d5 2. c4 dxc4 3. Nf3 Nf6 4. e3 e6 5. Bxc4 c5 6. O-O a6 7. Qe2 b5 8. Bb3
+Nc6 9. Nc3 Be7 10. dxc5 Bd7 11. e4 Bxc5 12. Be3 Bxe3 13. Qxe3 O-O 14. e5 Ne8
+15. Rfd1 Qe7 16. Qb6 Rb8 17. Qe3 f6 18. exf6 Nxf6 19. Ng5 b4 20. Nxe6 bxc3 21.
+Nxf8+ Kxf8 22. Qxc3 Rc8 23. Re1 Qb4 24. Qd3 Nd4 25. Qxa6 Nxb3 26. axb3 Rc2 27.
+Qa3 Qxa3 28. bxa3 Kf7 29. f3 Nd5 30. Rad1 Be6 31. Rd4 Kf6 32. a4 Rb2 33. Rde4
+Bf7 34. a5 Rxb3 35. Ra4 Rb4 36. Raa1 Rb2 37. g3 Bh5 38. g4 Bg6 39. a6 Nf4 40.
+a7 Nh3+ 41. Kh1 Nf2+ 42. Kg2 Nd3+ 43. Kh3 Kg5 44. Ra5+ Kf6 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.16"]
+[Round "5.3"]
+[White "Kishon Chesster"]
+[Black "Sphinx Galaxy V1.03, CXG."]
+[Result "0-1"]
+[ECO "D37"]
+[WhiteElo "1852"]
+[PlyCount "128"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 d5 4. Nf3 Be7 5. Qa4+ Nbd7 6. cxd5 exd5 7. Bf4 O-O 8.
+Qc2 Nb6 9. e3 Bg4 10. Be2 h6 11. O-O Bxf3 12. Bxf3 Qd7 13. a4 a5 14. Qb3 Rac8
+15. Be5 Rfd8 16. Be2 Kh8 17. Nb5 Na8 18. Na7 Rb8 19. Rfc1 Ne4 20. Nb5 Rbc8 21.
+f3 f6 22. Na7 Nd2 23. Qc2 Rb8 24. Bf4 Nc4 25. Bxc4 dxc4 26. Qxc4 Bd6 27. Bxd6
+Qxd6 28. Nb5 Qe7 29. Qd3 f5 30. e4 c6 31. Na3 Nb6 32. Nc4 fxe4 33. fxe4 Nxc4
+34. Rxc4 Re8 35. Rf1 Rbd8 36. Qc2 Kg8 37. e5 Qe6 38. b3 Kh8 39. Qc3 Rd5 40. Rc5
+Rxc5 41. Qxc5 Qxb3 42. Ra1 Rd8 43. Kh1 Qb4 44. Qxb4 axb4 45. Rd1 Kg8 46. Kg1
+Kf7 47. Kf2 Ke6 48. Ke3 Ra8 49. Ra1 Ra5 50. Ke4 h5 51. h4 b3 52. Rb1 b5 53.
+Rxb3 bxa4 54. Rb6 Kd7 55. Rb7+ Kd8 56. Rxg7 a3 57. Rg8+ Ke7 58. Rg7+ Kf8 59.
+Rg6 a2 60. Rf6+ Ke7 61. Rf1 a1=Q 62. Rxa1 Rxa1 63. Ke3 Ke6 64. Ke4 Ra4 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.18"]
+[Round "5.4"]
+[White "Constellation Expert, Novag"]
+[Black "Monte Carlo IV, Mephisto"]
+[Result "0-1"]
+[ECO "D37"]
+[WhiteElo "1878"]
+[BlackElo "1961"]
+[PlyCount "97"]
+[EventDate "2007.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 Be7 5. Bf4 O-O 6. e3 c5 7. dxc5 Nc6 8. Bg5
+dxc4 9. Qxd8 Rxd8 10. Bxc4 Bxc5 11. O-O Be7 12. Rad1 b6 13. Rxd8+ Nxd8 14. e4
+h6 15. Bxf6 Bxf6 16. e5 Be7 17. Rd1 a6 18. Kf1 Nc6 19. Ke2 Na5 20. Bd3 Bb7 21.
+Na4 b5 22. Nb6 Rb8 23. Nd7 Rd8 24. Nb6 Bc5 25. b4 Bxb6 26. bxa5 Bc7 27. h3 Bd5
+28. a4 bxa4 29. Ra1 Bb3 30. Bxa6 Bxa5 31. Bd3 Bc3 32. Rc1 Bb2 33. Rc6 a3 34.
+Rd6 Rc8 35. Ra6 a2 36. Nd2 Bd5 37. f4 a1=Q 38. Rxa1 Bxa1 39. g4 g5 40. Ke3 Rc1
+41. f5 Rh1 42. Be4 Rxh3+ 43. Nf3 Bxe4 44. Kxe4 Rg3 45. fxe6 fxe6 46. Nh2 Kg7
+47. Nf3 Kg6 48. Nh2 Bb2 49. Nf3 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.22"]
+[Round "6.1"]
+[White "Prestige, Fidelity"]
+[Black "Kishon Chesster"]
+[Result "1/2-1/2"]
+[ECO "C98"]
+[BlackElo "1852"]
+[PlyCount "121"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 O-O 8. c3
+d6 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. Nbd2 Nc6 13. dxc5 dxc5 14. Nf1 Be6 15.
+Ne3 Rad8 16. Qe2 c4 17. Nf5 Rfe8 18. N3h4 Nd7 19. Nxe7+ Nxe7 20. Be3 Nc5 21.
+Red1 Ng6 22. Nxg6 fxg6 23. b4 cxb3 24. Rxd8 Rxd8 25. axb3 Rd6 26. b4 Bc4 27.
+Qf3 Rf6 28. Qg4 Nd3 29. Rd1 Be6 30. Qe2 Nb2 31. Rd2 Qxc3 32. Bc5 h6 33. Qe3
+Qxe3 34. Rd8+ Kh7 35. Bxe3 Bf7 36. Bc5 Rc6 37. Rd6 Rxd6 38. Bxd6 Nc4 39. Bc7 g5
+40. Bb3 Kg6 41. Bxc4 bxc4 42. Bxe5 Be6 43. f3 Bd7 44. Kf2 h5 45. Bc3 Kf7 46.
+Ke3 g6 47. Kd4 Be6 48. e5 Ke7 49. g4 Kd7 50. Bd2 hxg4 51. hxg4 Kc7 52. Bxg5 Kb6
+53. Bd2 Kb5 54. Bc3 Kb6 55. Ke4 Kb5 56. Ke3 Kc6 57. Kf4 Bd5 58. g5 Be6 59. Ke4
+Bh3 60. Kd4 Be6 61. Bd2 1/2-1/2
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.29"]
+[Round "6.2"]
+[White "Monte Carlo IV, Mephisto"]
+[Black "Excel 68000, Fidelity"]
+[Result "1-0"]
+[ECO "C97"]
+[WhiteElo "1961"]
+[BlackElo "1923"]
+[PlyCount "113"]
+[EventDate "2007.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 O-O 8. c3
+d6 9. h3 Na5 10. Bc2 c5 11. d4 Qc7 12. d5 Bd7 13. Nbd2 h6 14. b3 b4 15. cxb4
+cxb4 16. Bb2 Rac8 17. Bd3 Qb6 18. Qe2 Ra8 19. Rac1 Nh5 20. Qe3 Qxe3 21. Rxe3
+Nb7 22. a3 bxa3 23. Bxa3 Bg5 24. Nxg5 hxg5 25. Rc7 Bc8 26. Nc4 Nf4 27. Nb6 Rb8
+28. Bxa6 Nc5 29. Bxc8 Rxb6 30. Bxc5 dxc5 31. g3 Rb8 32. Bf5 Nh5 33. Rxc5 g6 34.
+Bg4 Nf6 35. Bf3 Rfd8 36. Rd3 Ne8 37. Kg2 Nd6 38. Rc6 f5 39. Re3 Kf7 40. exf5
+gxf5 41. Rxe5 Rxb3 42. g4 Rb7 43. gxf5 Kf8 44. f6 Nf7 45. Rf5 Kg8 46. Bh5 Rbd7
+47. Re6 g4 48. hxg4 Nh6 49. Rf3 Kf8 50. Rfe3 Nf7 51. Re7 Nd6 52. g5 Rb7 53. g6
+Kg8 54. Rxb7 Nxb7 55. Re8+ Rxe8 56. f7+ Kf8 57. g7+ 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2007.12.30"]
+[Round "6.3"]
+[White "Sphinx Galaxy V1.03, CXG."]
+[Black "MM II 7.4 MHz, Mephisto"]
+[Result "1-0"]
+[ECO "E11"]
+[PlyCount "103"]
+[EventDate "2007.??.??"]
+
+1. d4 Nf6 2. c4 e6 3. Nf3 Bb4+ 4. Bd2 Qe7 5. g3 O-O 6. a3 Bxd2+ 7. Nbxd2 d5 8.
+Bg2 Nbd7 9. O-O dxc4 10. Nxc4 c5 11. Qc2 cxd4 12. Nxd4 Rd8 13. Rfd1 Ng4 14. Nf3
+Ndf6 15. Rxd8+ Qxd8 16. Rd1 Qc7 17. Ne3 Qe7 18. Nxg4 Nxg4 19. Qd3 Qe8 20. Qd8
+Nf6 21. Qxe8+ Nxe8 22. g4 Kf8 23. Kf1 f5 24. g5 Ke7 25. Ne5 Nd6 26. Rd4 h6 27.
+g6 a5 28. f4 h5 29. Kf2 a4 30. Kg3 Ra6 31. Kh4 Rb6 32. Rd2 Bd7 33. Kxh5 Bb5 34.
+Rc2 Ba6 35. Rc7+ Ke8 36. Bf3 Rxb2 37. Rxg7 Bxe2 38. Bxe2 Rxe2 39. h4 Rg2 40.
+Rg8+ Ke7 41. Kh6 Rh2 42. Rg7+ Ke8 43. h5 Ne4 44. Rxb7 Nf6 45. g7 Rh3 46. Kg6
+Ng8 47. Rb8+ Ke7 48. Rxg8 Rg3+ 49. Kh6 Rxa3 50. Rc8 Rg3 51. Ng6+ Kd6 52. g8=Q
+1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.05"]
+[Round "7.1"]
+[White "Excel 68000, Fidelity"]
+[Black "Simultano, Saitek"]
+[Result "1-0"]
+[ECO "D34"]
+[WhiteElo "1923"]
+[BlackElo "1853"]
+[PlyCount "65"]
+[EventDate "2008.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O
+O-O 9. Bg5 cxd4 10. Nxd4 Re8 11. e3 Be6 12. Nxe6 fxe6 13. Qd3 Qb6 14. Bf4 Kh8
+15. Qe2 e5 16. Bg5 d4 17. Bxf6 dxc3 18. Bxc6 cxb2 19. Rab1 Qxc6 20. Bxe5 Ba3
+21. Bxb2 Bxb2 22. Qxb2 b6 23. Rbc1 Qf3 24. Rc7 Rg8 25. Rfc1 h6 26. Rd7 Qg4 27.
+Rc6 Qh5 28. Qd4 Raf8 29. h4 a6 30. Rd5 Rc8 31. Rxb6 Rc1+ 32. Kh2 Rh1+ 33. Kxh1
+1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.06"]
+[Round "6.4"]
+[White "Simultano, Saitek"]
+[Black "Constellation Expert, Novag"]
+[Result "1-0"]
+[ECO "E92"]
+[WhiteElo "1853"]
+[BlackElo "1878"]
+[PlyCount "109"]
+[EventDate "2008.??.??"]
+[SourceDate "2008.01.06"]
+
+1. d4 Nf6 2. Nf3 g6 3. c4 Bg7 4. Nc3 O-O 5. e4 d6 6. Be2 e5 7. dxe5 dxe5 8.
+Qxd8 Rxd8 9. Bg5 Nbd7 10. O-O-O h6 11. Bxf6 Bxf6 12. Nd5 Bg7 13. Nxc7 Rb8 14.
+Kb1 b6 15. Nd5 Bb7 16. Nd2 Nc5 17. Ka1 Kh7 18. g3 f5 19. f3 Rd7 20. b4 Ne6 21.
+Nb3 Rbd8 22. Bd3 Ng5 23. Rhf1 fxe4 24. fxe4 Ne6 25. a4 Bc6 26. b5 Bb7 27. a5
+Kg8 28. Bc2 Rd6 29. a6 Ba8 30. Ka2 Nd4 31. Nxd4 exd4 32. Nc7 R6d7 33. Nd5 Be5
+34. Bb3 Kg7 35. Ka1 Rd6 36. Kb2 Rf8 37. Rxf8 Kxf8 38. Rf1+ Kg7 39. Nc7 d3+ 40.
+Ka3 Bxe4 41. Ne8+ Kh8 42. Rf8+ Kh7 43. Rf7+ Kg8 44. Re7 Kf8 45. Rxe5 Rd4 46.
+Nf6 Bf5 47. c5 bxc5 48. Nh7+ Kg7 49. Re7+ Kh8 50. Nf6 g5 51. Rxa7 c4 52. b6 d2
+53. b7 d1=Q 54. Bxd1 Rd3+ 55. Kb4 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.07"]
+[Round "7.2"]
+[White "MM II 7.4 MHz, Mephisto"]
+[Black "Prestige, Fidelity"]
+[Result "1-0"]
+[ECO "D60"]
+[PlyCount "87"]
+[EventDate "2008.??.??"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Bd3 dxc4 8.
+Bxc4 Nb6 9. Bb3 Bd7 10. O-O Nfd5 11. Bxe7 Qxe7 12. Ne5 Nxc3 13. bxc3 Rfd8 14.
+Nxd7 Rxd7 15. Qh5 Rad8 16. e4 Qa3 17. Rab1 c6 18. Rfe1 Qa6 19. Re3 Nc4 20. Rh3
+h6 21. Rg3 Kh7 22. Qe2 b5 23. Bxc4 bxc4 24. h3 f5 25. exf5 exf5 26. Rb4 c5 27.
+dxc5 Rd1+ 28. Kh2 R8d3 29. Rxd3 Rxd3 30. Qe5 Qg6 31. c6 Rd2 32. c7 a5 33. Rxc4
+Rxf2 34. Qd5 Rxg2+ 35. Qxg2 Qd6+ 36. Kg1 Qb6+ 37. Qf2 Qb1+ 38. Kh2 Qb5 39. c8=Q
+Qe5+ 40. Kg1 Qf6 41. Qcxf5+ g6 42. Qxf6 h5 43. Qa7+ Kg8 44. Qfg7# 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.09"]
+[Round "7.3"]
+[White "Super Constellation, Novag"]
+[Black "Monte Carlo IV, Mephisto"]
+[Result "0-1"]
+[ECO "C83"]
+[WhiteElo "1773"]
+[BlackElo "1961"]
+[PlyCount "94"]
+[EventDate "2008.??.??"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Nxe4 6. d4 b5 7. Bb3 d5 8. dxe5
+Be6 9. c3 Be7 10. Nbd2 O-O 11. Qe2 Nc5 12. Nd4 Nxb3 13. N2xb3 Nxd4 14. cxd4 f6
+15. exf6 Rxf6 16. Bg5 Rg6 17. Nc5 Bxg5 18. Nxe6 Qe7 19. Rfe1 Re8 20. Nf4 Qxe2
+21. Rxe2 Rxe2 22. Nxe2 Rf6 23. b4 Rc6 24. a4 Rc2 25. Kf1 Bf6 26. axb5 axb5 27.
+Ra7 Rc4 28. Rb7 Rxb4 29. Ke1 c6 30. Rb6 Rc4 31. f3 Kf7 32. Rb7+ Ke6 33. Kf2
+Bxd4+ 34. Nxd4+ Rxd4 35. Rxg7 Rh4 36. Kg3 Rh6 37. Rb7 d4 38. Rb8 Kd5 39. Re8 c5
+40. Re7 b4 41. Rb7 Kc4 42. Rc7 d3 43. Rd7 Kc3 44. Rd8 b3 45. Kf2 b2 46. Rb8 d2
+47. Rb7 d1=Q 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.11"]
+[Round "7.4"]
+[White "Constellation Expert, Novag"]
+[Black "Sphinx Galaxy V1.03, CXG."]
+[Result "1-0"]
+[ECO "D26"]
+[WhiteElo "1878"]
+[PlyCount "87"]
+[EventDate "2008.??.??"]
+
+1. d4 d5 2. c4 dxc4 3. Nf3 Nf6 4. e3 e6 5. Bxc4 c5 6. O-O cxd4 7. exd4 Nc6 8.
+Nc3 Be7 9. d5 Nxd5 10. Nxd5 exd5 11. Bxd5 Bg4 12. h3 Bxf3 13. Qxf3 Ne5 14. Qe4
+Qc7 15. Bf4 Bd6 16. Rfe1 f6 17. Rac1 Qb6 18. Bxb7 Rd8 19. Qc6+ Kf8 20. Qxb6
+axb6 21. Rcd1 g6 22. Rxe5 fxe5 23. Bxe5 Bxe5 24. Rxd8+ Ke7 25. Rd2 Rd8 26. Bd5
+Bxb2 27. Re2+ Kf8 28. Rxb2 Rxd5 29. Rxb6 Rd1+ 30. Kh2 Rd2 31. a4 Rxf2 32. Rb7
+h6 33. a5 Ra2 34. Ra7 g5 35. a6 h5 36. Kg3 Ke8 37. Kf3 h4 38. g4 Rh2 39. Ke4
+Rxh3 40. Rh7 Ra3 41. a7 h3 42. a8=Q+ Rxa8 43. Rh8+ Kf7 44. Rxa8 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.13"]
+[Round "8.1"]
+[White "Simultano, Saitek"]
+[Black "Super Constellation, Novag"]
+[Result "1-0"]
+[ECO "C19"]
+[WhiteElo "1853"]
+[BlackElo "1773"]
+[PlyCount "169"]
+[EventDate "2008.??.??"]
+[SourceDate "2008.01.13"]
+
+1. d4 e6 2. e4 d5 3. Nc3 Bb4 4. e5 c5 5. a3 Bxc3+ 6. bxc3 Ne7 7. a4 Nbc6 8. Nf3
+Qa5 9. Bd2 Bd7 10. c4 Qb6 11. cxd5 exd5 12. dxc5 Qxc5 13. Rb1 Nd4 14. Nxd4 Qxd4
+15. Rxb7 Qxe5+ 16. Be2 Bc6 17. Rb4 a5 18. Bf4 Qe6 19. Rd4 Nf5 20. Rd3 Qe4 21.
+Qd2 Nh4 22. Bg5 Nxg2+ 23. Kf1 h6 24. Qc3 d4 25. Rxd4 Ne3+ 26. Qxe3 Qxe3 27.
+Bxe3 Bxh1 28. f3 Rc8 29. Kg1 Bxf3 30. Bxf3 Rxc2 31. Rd5 O-O 32. Rxa5 Rb8 33.
+Bf2 Kf8 34. Be4 Re2 35. Bf5 g6 36. Bd3 Rd2 37. Bb5 Rc8 38. Be3 Rd1+ 39. Kf2 Kg7
+40. Ra7 Rd5 41. Kf3 Rc2 42. Ke4 Rd1 43. Bd4+ Kh7 44. Rxf7+ Kg8 45. Rg7+ Kf8 46.
+Rxg6 Rxh2 47. Bg7+ Kf7 48. Rxh6 Rc2 49. Bd4 Ke7 50. Rh7+ Ke6 51. Bd3 Rg2 52.
+Bc4+ Kd6 53. Rh6+ Ke7 54. Bf6+ Kd7 55. Bb5+ Kc8 56. Rh7 Re1+ 57. Kd5 Rd1+ 58.
+Kc5 Rc2+ 59. Kb4 Kb8 60. Be5+ Ka8 61. Kb3 Rcc1 62. Be2 Rb1+ 63. Ka3 Rd5 64. Re7
+Re1 65. Bc3 Rd3 66. Kb2 Rxe2+ 67. Rxe2 Kb7 68. Re7+ Kb6 69. Kb3 Kc5 70. Rc7+
+Kb6 71. Rg7 Kc5 72. Rg5+ Kc6 73. Kc4 Rd6 74. Rf5 Rd1 75. Rf6+ Kc7 76. Kb5 Rd5+
+77. Ka6 Rd1 78. Ba5+ Kd7 79. Bb6 Ke7 80. Rh6 Kd7 81. Rh7+ Kc6 82. Rc7+ Kd6 83.
+a5 Kd5 84. Kb7 Ke6 85. a6 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.17"]
+[Round "8.2"]
+[White "Kishon Chesster"]
+[Black "MM II 7.4 MHz, Mephisto"]
+[Result "0-1"]
+[ECO "D17"]
+[WhiteElo "1852"]
+[PlyCount "118"]
+[EventDate "2008.??.??"]
+[SourceDate "2008.01.17"]
+
+1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 dxc4 5. a4 Bf5 6. Ne5 e6 7. f3 Nd5 8. e4 f6
+9. Nxc4 Nxc3 10. bxc3 Bg6 11. Bf4 c5 12. dxc5 Qxd1+ 13. Rxd1 Bxc5 14. Nd6+ Bxd6
+15. Bxd6 Nc6 16. Bc4 Bf7 17. O-O O-O-O 18. f4 Na5 19. Bb5 Bh5 20. Rd4 a6 21.
+Bc4 Rxd6 22. Rxd6 Nxc4 23. Rxe6 Re8 24. Rxe8+ Bxe8 25. e5 Bxa4 26. e6 Kd8 27.
+Re1 Ke7 28. f5 Ne5 29. Re2 g6 30. g4 Nxg4 31. Re4 Bd1 32. Rd4 Bf3 33. Rd7+ Ke8
+34. Rxh7 gxf5 35. h3 Ne5 36. h4 Bd5 37. Kf2 b6 38. Ra7 a5 39. e7 Bf7 40. Kg3
+Nd7 41. Kf4 Bg6 42. Ra8+ Kxe7 43. Rh8 Nf8 44. h5 Bh7 45. Ke3 Kf7 46. h6 Bg8 47.
+Kd4 Ng6 48. Rxg8 Kxg8 49. c4 a4 50. Kc3 f4 51. c5 bxc5 52. Kc4 Kh7 53. Kc3 f3
+54. Kd2 Kxh6 55. Ke3 Ne5 56. Kd2 c4 57. Ke1 Nd3+ 58. Kd1 f2 59. Kd2 f1=Q 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.18"]
+[Round "8.3"]
+[White "Prestige, Fidelity"]
+[Black "Constellation Expert, Novag"]
+[Result "0-1"]
+[ECO "B99"]
+[BlackElo "1878"]
+[PlyCount "117"]
+[EventDate "2008.??.??"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7 8. Qf3
+Qc7 9. O-O-O Nbd7 10. g4 b5 11. Bxf6 Nxf6 12. g5 Nd7 13. a3 Rb8 14. h4 b4 15.
+axb4 Rxb4 16. Bh3 Qb6 17. Nf5 Bf8 18. Ne3 Be7 19. Qe2 Bb7 20. Nc4 Qc5 21. Nd2
+O-O 22. Nb3 Qb6 23. f5 Nc5 24. Nxc5 dxc5 25. Rd7 Bd6 26. Qd2 Rd4 27. Qf2 Bf4+
+28. Qxf4 Rxd7 29. f6 Qd6 30. Qf3 Rfd8 31. fxg7 Qd4 32. Kb1 Qxg7 33. Qf6 Qxf6
+34. gxf6 Kh8 35. Rg1 Rg8 36. Rg5 Rxg5 37. hxg5 Rd4 38. Bf1 c4 39. Bg2 Rd2 40.
+Bf3 Kg8 41. Na4 Rf2 42. Nc5 Rxf3 43. Nxb7 Rg3 44. Nd6 c3 45. bxc3 Rxc3 46. Kb2
+Rc6 47. Ne8 a5 48. Kb3 Kf8 49. Ng7 Rc5 50. c4 Re5 51. Ka4 Rxg5 52. Kb3 h5 53.
+Kc3 h4 54. c5 Rxc5+ 55. Kd4 h3 56. Kxc5 h2 57. Kb6 h1=Q 58. Kxa5 Qa1+ 59. Kb6
+0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.22"]
+[Round "8.4"]
+[White "Sphinx Galaxy V1.03, CXG."]
+[Black "Excel 68000, Fidelity"]
+[Result "0-1"]
+[ECO "A03"]
+[BlackElo "1923"]
+[PlyCount "104"]
+
+1. f4 d5 2. Nf3 Nf6 3. e3 g6 4. b3 Bg7 5. Bb2 O-O 6. Bxf6 exf6 7. Be2 Nc6 8.
+Nc3 Bf5 9. Nh4 Be6 10. Nf3 a6 11. O-O Qd6 12. a3 d4 13. Nxd4 Nxd4 14. exd4
+Qxd4+ 15. Rf2 Rad8 16. Bc4 Bxc4 17. bxc4 Qxc4 18. Qe2 Qc5 19. f5 Rfe8 20. Qd1
+Bh6 21. Na4 Qxf2+ 22. Kxf2 Rxd2+ 23. Kf1 Rxd1+ 24. Rxd1 gxf5 25. Nc5 Bf8 26.
+Nd7 Re6 27. Nxf8 Kxf8 28. Kf2 Rc6 29. Rd2 Rc3 30. a4 Rc4 31. a5 Rc5 32. Kf3
+Rxa5 33. Rd4 Ke7 34. Rh4 Rc5 35. c4 Kf8 36. Rxh7 Rxc4 37. Rh5 Rc5 38. h4 Kg7
+39. Kf4 Rc4+ 40. Kg3 f4+ 41. Kf3 c5 42. Rd5 b5 43. Kg4 a5 44. Kf3 a4 45. h5 a3
+46. Kg4 a2 47. Rd1 b4 48. Rh1 b3 49. h6+ Kh7 50. Ra1 Ra4 51. Rd1 b2 52. Kh3
+b1=Q 0-1
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.29"]
+[Round "9.1"]
+[White "Monte Carlo IV, Mephisto"]
+[Black "Simultano, Saitek"]
+[Result "1-0"]
+[ECO "D86"]
+[WhiteElo "1961"]
+[BlackElo "1853"]
+[PlyCount "67"]
+[EventDate "2008.??.??"]
+[SourceDate "2008.01.29"]
+
+1. d4 Nf6 2. c4 g6 3. Nc3 d5 4. cxd5 Nxd5 5. e4 Nxc3 6. bxc3 Bg7 7. Bc4 c5 8.
+Ne2 Nc6 9. Bb2 O-O 10. O-O Qa5 11. Qb3 e5 12. d5 Nb8 13. Rad1 f5 14. d6+ Kh8
+15. exf5 Rxf5 16. Ng3 Rf8 17. Ne4 Nd7 18. Ng5 Bf6 19. Ne6 b5 20. Bd5 Ba6 21.
+Nxf8 Rxf8 22. Bc6 Nb8 23. Be4 Bg7 24. d7 Qc7 25. Qe6 b4 26. c4 Qd8 27. Bxe5
+Bxc4 28. Bxg7+ Kxg7 29. Qxc4 Nxd7 30. Qe6 Rf7 31. Bc6 Qa5 32. Rxd7 Rxd7 33.
+Qxd7+ Kh6 34. Bd5 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.29"]
+[Round "9.2"]
+[White "Constellation Expert, Novag"]
+[Black "Kishon Chesster"]
+[Result "1-0"]
+[ECO "E77"]
+[WhiteElo "1878"]
+[BlackElo "1852"]
+[PlyCount "183"]
+[EventDate "2008.??.??"]
+
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. f4 O-O 6. Nf3 c5 7. d5 e6 8. Be2 exd5
+9. exd5 Nh5 10. O-O Bxc3 11. bxc3 f5 12. a4 Kg7 13. Re1 Nf6 14. Nd2 Na6 15. Kh1
+Bd7 16. Qb3 Qc7 17. Bf3 Rae8 18. Bb2 Ng4 19. Kg1 h6 20. Rab1 Ne3 21. Re2 Ng4
+22. Rbe1 Rxe2 23. Rxe2 Rf7 24. Bxg4 fxg4 25. Re4 Qb6 26. a5 Qxb3 27. Nxb3 Nc7
+28. Nc1 Kf6 29. Kf2 g5 30. Ne2 Bf5 31. Re3 gxf4 32. Nxf4 Rf8 33. g3 Re8 34.
+Rxe8 Nxe8 35. Ke3 Nc7 36. Ke2 b6 37. axb6 axb6 38. Kd2 Ke5 39. Ke3 Bc2 40. Nd3+
+Kf5 41. Nf4 Ne8 42. Ne6 Nf6 43. Nd8 Ne4 44. Nc6 Bb3 45. Ne7+ Ke5 46. Nc8 Bxc4
+47. Nxb6 Ba6 48. c4+ Kf5 49. Kd3 Bb7 50. Bg7 h5 51. Bf8 Nf2+ 52. Ke2 Ne4 53.
+Ke3 Ke5 54. Bg7+ Kf5 55. Ke2 Nf6 56. Kd3 Ne4 57. Nd7 Nf2+ 58. Ke3 Ne4 59. Nb8
+Nf6 60. Bf8 Bxd5 61. cxd5 Nxd5+ 62. Ke2 Ke6 63. Bg7 Nb4 64. Kd2 Kf7 65. Bc3 d5
+66. Nd7 Na6 67. Bh8 d4 68. Kd3 Ke6 69. Nf6 Nb8 70. Nxh5 Nd7 71. Ke4 Nf8 72.
+Nf4+ Kf7 73. Kf5 Kg8 74. Be5 Nd7 75. Ke6 Nb6 76. Bd6 c4 77. Nd5 d3 78. Nc3 Kh7
+79. Bc5 Na8 80. Kd5 d2 81. Kxc4 Kg6 82. Kd3 Nc7 83. Nd1 Ne6 84. Be7 Kh5 85. Kc3
+Kg6 86. Bh4 Kh5 87. Kd3 Kg6 88. Ke3 Kh5 89. Be7 Ng5 90. Bxg5 Kxg5 91. Kxd2 Kf5
+92. Ne3+ 1-0
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.01.31"]
+[Round "9.3"]
+[White "Super Constellation, Novag"]
+[Black "Sphinx Galaxy V1.03, CXG."]
+[Result "1/2-1/2"]
+[ECO "C42"]
+[WhiteElo "1773"]
+[PlyCount "118"]
+[EventDate "2008.??.??"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. Qe2 Qe7 6. d3 Nf6 7. Bg5 Nbd7 8.
+Nc3 h6 9. Bf4 Nc5 10. Qxe7+ Bxe7 11. Be2 O-O 12. O-O Ne6 13. Bg3 Bd7 14. d4 d5
+15. Bd3 Rfe8 16. Bf5 Ng5 17. Bxd7 Nxf3+ 18. gxf3 Nxd7 19. Nxd5 Bd8 20. Rfe1 Nf6
+21. Bxc7 Bxc7 22. Nxc7 Rxe1+ 23. Rxe1 Rc8 24. Nb5 Rxc2 25. Re7 Rxb2 26. Rxb7 a6
+27. Nd6 Rxa2 28. Rxf7 Ne8 29. Rd7 Nxd6 30. Rxd6 a5 31. d5 Kf7 32. Ra6 Ke7 33.
+Kg2 a4 34. Ra7+ Kd6 35. Rxg7 Kxd5 36. Rh7 Re2 37. Rxh6 a3 38. h4 Re6 39. Rh5+
+Kc4 40. Ra5 Kb3 41. Rb5+ Kc4 42. Rb7 a2 43. Ra7 Kb3 44. Rb7+ Kc4 45. Rc7+ Kb4
+46. Rc1 Kb3 47. h5 Kb2 48. Rd1 a1=Q 49. Rxa1 Kxa1 50. Kh3 Kb2 51. Kh4 Kc3 52.
+Kg5 Re2 53. h6 Kd3 54. h7 Re8 55. Kg6 Ke2 56. Kf7 Rd8 57. Kg7 Kxf2 58. h8=Q
+Rxh8 59. Kxh8 Kxf3 1/2-1/2
+
+[Event "Oldie Turnier 2008 / Gruppe U2000"]
+[Site "?"]
+[Date "2008.02.05"]
+[Round "9.4"]
+[White "Excel 68000, Fidelity"]
+[Black "Prestige, Fidelity"]
+[Result "1-0"]
+[ECO "C09"]
+[WhiteElo "1923"]
+[PlyCount "153"]
+[EventDate "2008.??.??"]
+
+1. e4 e6 2. d4 d5 3. Nd2 c5 4. exd5 exd5 5. Ngf3 Nc6 6. Bb5 Bd6 7. O-O cxd4 8.
+Nb3 Nge7 9. Nbxd4 O-O 10. c3 a6 11. Bd3 Nxd4 12. Nxd4 Bd7 13. Qh5 f5 14. Bg5
+Qe8 15. Qf3 Qf7 16. Rfe1 Ng6 17. a4 Ne5 18. Qh3 Ng4 19. Nf3 Rfe8 20. a5 h6 21.
+Bd2 f4 22. Qh4 Bc5 23. Rf1 Be7 24. Qh3 Bf6 25. Ne1 Ne3 26. Bg6 Qe7 27. Qf3 Nxf1
+28. Kxf1 Rf8 29. Qxd5+ Be6 30. Qe4 Bg5 31. Nd3 f3 32. Bxg5 fxg2+ 33. Kg1 hxg5
+34. Bh7+ Kh8 35. Ne5 Rf6 36. Ng6+ Rxg6 37. Bxg6 Rf8 38. Qxg2 Qc5 39. Be4 Qb5
+40. b4 Rc8 41. Qg3 Re8 42. Bd3 Bc4 43. Bxc4 Qxc4 44. Qxg5 Re4 45. Qh5+ Kg8 46.
+Qf3 Rg4+ 47. Kh1 Rf4 48. Qxb7 Rxf2 49. Kg1 Rc2 50. Re1 Rxc3 51. Re8+ Kh7 52.
+Qe4+ Qxe4 53. Rxe4 Rc1+ 54. Kf2 Rc2+ 55. Kg3 Kg8 56. Re6 Rb2 57. Rxa6 Rxb4 58.
+Rd6 Ra4 59. a6 Ra3+ 60. Kf4 Kf7 61. Rb6 Ke8 62. h4 Ra4+ 63. Kg5 Kd8 64. Rb8+
+Kc7 65. Rb7+ Kc8 66. Rxg7 Rxa6 67. h5 Ra1 68. h6 Rg1+ 69. Kh5 Rh1+ 70. Kg6 Rg1+
+71. Kf7 Rf1+ 72. Kg8 Rd1 73. Rf7 Rg1+ 74. Kf8 Rh1 75. h7 Kd8 76. Kg8 Ke8 77.
+Rg7 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.10.10"]
+[Round "1.1"]
+[White "III Glasgow 68000 12 MHz, Mephisto"]
+[Black "P/M, Conchess"]
+[Result "1-0"]
+[ECO "D00"]
+[PlyCount "137"]
+[EventDate "2013.??.??"]
+
+1. d4 Nf6 2. Bg5 d5 3. Bxf6 exf6 4. e3 Be7 5. Bd3 Nc6 6. Nc3 Nb4 7. Nge2 Nxd3+
+8. Qxd3 O-O 9. O-O c6 10. f3 b6 11. e4 dxe4 12. Qxe4 Bb7 13. Rfe1 Re8 14. Qf5
+Bb4 15. a3 Bxc3 16. bxc3 Re3 17. Kf1 Ba6 18. Kf2 Qe7 19. Ng3 Rxe1 20. Rxe1 Qxa3
+21. Qd7 Bb5 22. Re7 Rf8 23. Re8 Rxe8 24. Qxe8+ Qf8 25. Qd7 Qb8 26. d5 Ba4 27.
+dxc6 Qf8 28. Qxa7 Qc5+ 29. Ke2 Bb5+ 30. Kd2 Qxc6 31. Qb8+ Qe8 32. Qxb6 h6 33.
+Ne4 Bf1 34. g3 f5 35. Qf2 fxe4 36. Qxf1 Qd7+ 37. Ke3 Qa4 38. Qd1 exf3 39. Qxf3
+Qxc2 40. Qa8+ Kh7 41. Qe4+ Qxe4+ 42. Kxe4 g5 43. h4 gxh4 44. gxh4 Kg6 45. Ke5
+f6+ 46. Ke4 Kf7 47. Kf5 Ke7 48. Kg6 h5 49. Kxh5 Kf7 50. Kg4 Ke6 51. Kf4 Kf7 52.
+c4 Ke7 53. Kf5 Kf7 54. c5 Ke7 55. h5 Kd7 56. Kxf6 Kc6 57. Ke7 Kxc5 58. Kd7 Kd4
+59. Ke6 Ke4 60. Kf6 Kf4 61. h6 Kg4 62. Ke5 Kh5 63. h7 Kg5 64. h8=Q Kg4 65. Ke4
+Kg3 66. Qh1 Kg4 67. Qg1+ Kh4 68. Kf4 Kh5 69. Qg5# 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.10.29"]
+[Round "1.2"]
+[White "532 XL, Yeno"]
+[Black "Super VIP, Novag"]
+[Result "1-0"]
+[ECO "B52"]
+[PlyCount "123"]
+[EventDate "2013.??.??"]
+
+1. Nf3 c5 2. e4 d6 3. Bb5+ Bd7 4. Bxd7+ Nxd7 5. Nc3 Ngf6 6. d3 e5 7. Be3 Be7 8.
+Nh4 O-O 9. Nf5 Ne8 10. Nxe7+ Qxe7 11. Nd5 Qd8 12. O-O Nc7 13. Nxc7 Qxc7 14. c4
+f5 15. Bd2 fxe4 16. dxe4 Nb6 17. b3 Rf7 18. a4 Kh8 19. Qh5 Raf8 20. Rad1 Nd7
+21. a5 Nf6 22. Qh4 b6 23. a6 Qc8 24. Bg5 Qxa6 25. Rxd6 Qb7 26. Bxf6 Rxf6 27.
+Rxf6 Rxf6 28. Rd1 Qc7 29. Rd5 h6 30. Qh5 Re6 31. h3 a6 32. Qd1 Re7 33. Rd8+ Kh7
+34. Qd5 Re6 35. Rd7 Qc6 36. Qxc6 Rxc6 37. Rb7 Kg6 38. Kh2 Kf6 39. Kg3 a5 40.
+Kh4 Rd6 41. Kh5 Rc6 42. h4 Rd6 43. g3 Re6 44. g4 Rc6 45. Rd7 b5 46. cxb5 Rb6
+47. g5+ hxg5 48. hxg5+ Ke6 49. Rxg7 Rxb5 50. Rg6+ Kd7 51. Ra6 Rxb3 52. Rxa5 Kc6
+53. g6 Rh3+ 54. Kg4 Rh2 55. Ra6+ Kb5 56. Ra3 Kb4 57. Rh3 Rg2+ 58. Rg3 Rxg3+ 59.
+Kxg3 c4 60. g7 c3 61. g8=Q c2 62. Qc8 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.10.03"]
+[Round "1.3"]
+[White "Regency, Krypton"]
+[Black "Turbostar 432 KSO, SciSys"]
+[Result "1/2-1/2"]
+[ECO "A28"]
+[PlyCount "62"]
+[EventDate "2013.??.??"]
+
+1. c4 e5 2. Nc3 Nc6 3. Nf3 Nf6 4. e3 Be7 5. d4 exd4 6. Nxd4 O-O 7. Nxc6 dxc6 8.
+Bd3 Qd6 9. O-O Rd8 10. Be2 Bf5 11. Qb3 Qb4 12. Rd1 Qxb3 13. axb3 Rxd1+ 14. Bxd1
+Bc5 15. Ra5 b6 16. Ra6 Bc8 17. Ra4 a5 18. Bf3 Bb7 19. e4 Rd8 20. Bf4 Ne8 21.
+Kf1 f6 22. h4 Nd6 23. e5 fxe5 24. Bxe5 Re8 25. Bg3 Bb4 26. Ra1 Re7 27. Rd1 h6
+28. Na2 Bc5 29. Nc3 Bb4 30. Na2 Bc5 31. Nc3 Bb4 1/2-1/2
+
+[Event "Pokalturnier 2013 Blitzpartie 5 Sek/Zug"]
+[Site "?"]
+[Date "2013.10.03"]
+[Round "1.3"]
+[White "Turbostar 432 KSO, SciSys"]
+[Black "Regency, Krypton"]
+[Result "1-0"]
+[ECO "C42"]
+[PlyCount "107"]
+[EventDate "2013.??.??"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 d5 6. Bd3 Be7 7. O-O Bf5 8.
+Re1 Nc6 9. c4 O-O 10. g4 Bg6 11. cxd5 Qxd5 12. Bxe4 Bxe4 13. Nc3 Bxf3 14. Nxd5
+Bxd1 15. Nxe7+ Nxe7 16. Rxd1 f5 17. g5 Nd5 18. Bd2 Rae8 19. Re1 c6 20. Kg2 Kf7
+21. Kg3 Kg6 22. Re5 Rd8 23. Rae1 Rd6 24. a3 Rfd8 25. h4 h5 26. gxh6 gxh6 27.
+h5+ Kf6 28. Kf3 Rh8 29. Rg1 Ne7 30. Bb4 Rxd4 31. Ra5 Rd3+ 32. Ke2 Rb3 33. Bc3+
+Rxc3 34. bxc3 Ra8 35. Rb1 b5 36. Rg1 Ke6 37. Kf3 Kd6 38. Rg7 Rh8 39. Rxa7 Nd5
+40. Rh7 Rxh7 41. Rxh7 Nxc3 42. Rxh6+ Kd5 43. Rf6 f4 44. h6 c5 45. h7 Ne4 46.
+Rf5+ Ke6 47. Kxe4 b4 48. h8=Q Kd7 49. Rd5+ Ke7 50. Qg7+ Ke6 51. Re5+ Kd6 52.
+Qf6+ Kd7 53. Re7+ Kc8 54. Qf8# 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.10.09"]
+[Round "1.4"]
+[White "Elite A/S Budapest, Fidelity"]
+[Black "Sensory 9 8 MHz, Fidelity"]
+[Result "0-1"]
+[ECO "C39"]
+[PlyCount "140"]
+[EventDate "2013.??.??"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 Nf6 6. d4 d6 7. Nd3 Nxe4 8. Bxf4
+Qe7 9. Qe2 Bg7 10. c3 h5 11. Nd2 Nxd2 12. Kxd2 Qxe2+ 13. Bxe2 Nc6 14. Rae1 Be6
+15. Bxg4 hxg4 16. d5 Kd7 17. dxe6+ fxe6 18. h5 Rhf8 19. h6 Bf6 20. Re4 Rae8 21.
+Bg3 Rg8 22. Nf2 d5 23. Rxg4 e5 24. h7 Rgf8 25. Kc1 a6 26. Rg6 Bh8 27. Rg5 Bf6
+28. Rgh5 Kc8 29. Ng4 Bh8 30. Re1 Rf7 31. Nxe5 Nxe5 32. Bxe5 Rfe7 33. Rd1 Rxe5
+34. Rxd5 Rxd5 35. Rxd5 Re7 36. Rh5 Rg7 37. Rh2 Rg4 38. Kd2 Rg3 39. Kc2 Kd7 40.
+Kd2 Ke7 41. Ke2 Rg5 42. Kf3 Ra5 43. a3 Rf5+ 44. Ke3 Kf6 45. g4 Re5+ 46. Kf4 Kg6
+47. g5 Rxg5 48. Rh4 Rf5+ 49. Ke3 Re5+ 50. Kf3 c6 51. Rh1 Re7 52. Kg4 Rxh7 53.
+Rxh7 Kxh7 54. Kf5 Bg7 55. Ke6 Bh6 56. b3 Kg6 57. Kd7 Bf4 58. a4 Kf5 59. Kc8 b5
+60. Kb7 bxa4 61. bxa4 c5 62. Kxa6 Ke5 63. Kb5 Kd5 64. a5 c4 65. a6 Be3 66. Ka5
+Ke4 67. Kb5 Kd3 68. Kb4 Bf2 69. Ka3 Kxc3 70. Ka2 Kd2 0-1
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.10.06"]
+[Round "1.5"]
+[White "Mondial II, Mephisto"]
+[Black "Leonardo Maestro A 4 MHz, SciSys"]
+[Result "1/2-1/2"]
+[ECO "D74"]
+[PlyCount "172"]
+[EventDate "2013.??.??"]
+
+1. d4 Nf6 2. Nf3 g6 3. c4 Bg7 4. g3 O-O 5. Bg2 d5 6. cxd5 Bf5 7. Nc3 Nxd5 8.
+Nxd5 Qxd5 9. Bf4 Nc6 10. e3 Qa5+ 11. Qd2 Qb6 12. O-O Be4 13. Rac1 f6 14. Qe2 g5
+15. Qc4+ Kh8 16. Bxc7 Qxc7 17. d5 g4 18. Nh4 f5 19. Bxe4 fxe4 20. dxc6 Qxc6 21.
+Qxc6 bxc6 22. Rfd1 Bxb2 23. Rxc6 Kg7 24. Rd7 Ba3 25. Rd5 Rf6 26. Nf5+ Kf8 27.
+Nd4 Rxc6 28. Nxc6 Rc8 29. Nxa7 Rc2 30. Nb5 Rxa2 31. Nxa3 Rxa3 32. Kg2 h6 33.
+Rd4 Ra5 34. Rxe4 h5 35. h3 gxh3+ 36. Kxh3 Ra2 37. Kg2 Ra5 38. f3 Kf7 39. Kh3
+Ra1 40. Re5 Rf1 41. Kg2 Re1 42. e4 Re2+ 43. Kf1 Rh2 44. Kg1 Rb2 45. Rxh5 Kg6
+46. g4 Rb1+ 47. Kg2 Rb3 48. f4 Rb2+ 49. Kg3 Rb3+ 50. Kh4 Rb2 51. Re5 Kf6 52.
+g5+ Kf7 53. Kg4 Re2 54. Kf5 Rf2 55. g6+ Ke8 56. Rd5 Rg2 57. Rd3 Rb2 58. Rg3 Rb8
+59. e5 Ra8 60. g7 Kf7 61. e6+ Kg8 62. Ke5 Ra5+ 63. Ke4 Rh5 64. f5 Rh1 65. Rg2
+Rh5 66. Kf4 Rh1 67. Ke3 Rh5 68. Ke4 Rh1 69. Rg6 Rh4+ 70. Kf3 Rh1 71. Ke3 Rh5
+72. Kf4 Rh2 73. Kf3 Rh1 74. Rg3 Rh6 75. Ke4 Rh5 76. Rg6 Rh4+ 77. Ke3 Rh1 78.
+Kd3 Rh5 79. f6 exf6 80. Kd4 Rh2 81. Ke3 Ra2 82. e7 Ra8 83. Ke4 Re8 84. Kf5 Rxe7
+85. Kxf6 Rf7+ 86. Kg5 Rxg7 1/2-1/2
+
+[Event "Pokalturnier 2013 Blitzpartie 5 Sek/Zug"]
+[Site "?"]
+[Date "2013.10.06"]
+[Round "1.5"]
+[White "Leonardo Maestro A 4 MHz, SciSys"]
+[Black "Mondial II, Mephisto"]
+[Result "1-0"]
+[ECO "C42"]
+[PlyCount "119"]
+[EventDate "2013.??.??"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 d5 6. Bd3 Be7 7. O-O Nc6 8. c4
+Bg4 9. cxd5 Qxd5 10. Re1 Bf5 11. Nc3 Nxc3 12. bxc3 Bxd3 13. Qxd3 O-O-O 14. Bf4
+h5 15. c4 Qa5 16. d5 Bb4 17. Qf5+ Rd7 18. Re3 h4 19. Be5 Ne7 20. Qg5 Ng6 21.
+Bxg7 Rg8 22. h3 Qa6 23. Re4 f5 24. Re6 Qxc4 25. Qxg6 Rgxg7 26. Re8+ Rd8 27.
+Qxf5+ Rgd7 28. Rxd8+ Kxd8 29. Qxd7+ Kxd7 30. Ne5+ Kd6 31. Nxc4+ Kxd5 32. Rc1
+Bc5 33. Ne3+ Bxe3 34. fxe3 c5 35. Rd1+ Ke4 36. Rd7 c4 37. Rxb7 c3 38. Kf2 c2
+39. Rc7 Kd3 40. Ke1 a6 41. e4 Kxe4 42. Rxc2 Kd5 43. Rc7 a5 44. Rh7 Kc6 45. Rxh4
+Kb6 46. Rh7 Kc6 47. g4 a4 48. g5 Kd5 49. g6 Kd4 50. Ra7 Kc5 51. Rf7 a3 52. h4
+Kd5 53. g7 Ke6 54. g8=Q Kd6 55. Qd8+ Ke5 56. Qd3 Ke6 57. Qd7+ Ke5 58. Rf5+ Ke4
+59. Qd5+ Ke3 60. Rf3# 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.10.12"]
+[Round "1.6"]
+[White "416 XL, Yeno"]
+[Black "B&P, Mephisto"]
+[Result "0-1"]
+[ECO "E12"]
+[PlyCount "150"]
+[EventDate "2013.??.??"]
+
+1. d4 Nf6 2. Nf3 e6 3. c4 b6 4. Nc3 Bb4 5. Bg5 Bb7 6. Qb3 Na6 7. O-O-O d5 8.
+cxd5 exd5 9. Bxf6 gxf6 10. e3 Bxc3 11. Qa4+ Qd7 12. Qxd7+ Kxd7 13. bxc3 c6 14.
+Bd3 Rag8 15. Bf5+ Kc7 16. Rhg1 Re8 17. Nd2 Rd8 18. e4 Kb8 19. h4 Nc7 20. Rge1
+Nb5 21. Re3 Rdg8 22. exd5 cxd5 23. Bh3 Bc8 24. Rde1 Bxh3 25. gxh3 Rg2 26. Rf3
+Rc8 27. Kb2 Rg6 28. h5 Rh6 29. Re7 Rxh5 30. Rxf7 Rc6 31. Kb3 f5 32. Re7 Nc7 33.
+Rf7 Rch6 34. Rg3 Rg6 35. Rxh7 Rxh7 36. Rxg6 Rxh3 37. Nf1 f4 38. Kb4 Rh1 39.
+Rg8+ Kb7 40. Nd2 Rh2 41. Kb3 Rxf2 42. Kc2 Nb5 43. Rg7+ Kc6 44. a4 Nd6 45. Kd3
+a6 46. Rh7 b5 47. axb5+ axb5 48. Rh6 Kd7 49. Rh7+ Ke8 50. Rh8+ Kf7 51. Rh7+ Kg6
+52. Ra7 Nc4 53. Ra2 Rg2 54. Ra6+ Kg5 55. Ra2 Rg3+ 56. Ke2 Re3+ 57. Kf2 Rxc3 58.
+Nxc4 Rxc4 59. Ra5 Rb4 60. Ke2 Kg4 61. Kd3 f3 62. Ra7 Rb3+ 63. Kd2 b4 64. Rd7 f2
+65. Rg7+ Kf3 66. Rf7+ Kg2 67. Ke2 Rb2+ 68. Ke3 f1=N+ 69. Rxf1 Kxf1 70. Kd3 Ke1
+71. Ke3 Rf2 72. Kd3 b3 73. Kc3 b2 74. Kb3 b1=Q+ 75. Ka3 Ra2# 0-1
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.10.20"]
+[Round "1.7"]
+[White "Sensory 12, Fidelity"]
+[Black "Europa A, Mephisto"]
+[Result "1-0"]
+[ECO "A08"]
+[PlyCount "105"]
+[EventDate "2013.??.??"]
+
+1. Nf3 c5 2. g3 d5 3. Bg2 Nc6 4. O-O e5 5. d3 Nf6 6. e4 dxe4 7. dxe4 Be6 8. Nc3
+Be7 9. Be3 O-O 10. Ng5 Bc4 11. Re1 Qb6 12. b3 Rad8 13. Nd5 Bxd5 14. exd5 h6 15.
+Nh3 Rd7 16. c4 Nd4 17. f4 Bd6 18. Bf2 Re8 19. fxe5 Bxe5 20. Nf4 Rde7 21. Nd3
+Bd6 22. Rxe7 Rxe7 23. b4 Ne2+ 24. Kh1 Nd7 25. Qd2 f5 26. Bf1 Nxg3+ 27. hxg3 Qc7
+28. Re1 cxb4 29. Rxe7 Bxe7 30. Nxb4 Kf7 31. Kg2 Ne5 32. Qc3 Nxc4 33. Bxc4 b5
+34. d6+ Qxc4 35. Qxc4+ bxc4 36. dxe7 Kxe7 37. a4 Kd6 38. Bxa7 Ke5 39. Bc5 g5
+40. a5 f4 41. a6 f3+ 42. Kxf3 g4+ 43. Kxg4 c3 44. a7 h5+ 45. Kxh5 Kf6 46. Bd4+
+Ke7 47. g4 c2 48. Nxc2 Kd6 49. a8=Q Kd7 50. Qd5+ Kc7 51. g5 Kb8 52. Qd7 Ka8 53.
+Qa7# 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.10.13"]
+[Round "1.8"]
+[White "Merlin 16K 4 MHz, Mephisto"]
+[Black "Sphinx 40, CXG."]
+[Result "1-0"]
+[ECO "B31"]
+[PlyCount "151"]
+[EventDate "2013.??.??"]
+
+1. e4 c5 2. Nf3 Nc6 3. Bb5 g6 4. O-O Bg7 5. c3 Nf6 6. d3 O-O 7. Bf4 a6 8. Bxc6
+dxc6 9. Na3 Be6 10. Be5 Qb6 11. b3 Rfc8 12. Nd2 Qd8 13. Ndc4 b5 14. Ne3 Qb6 15.
+Nac2 Rd8 16. f3 a5 17. Re1 Bh6 18. d4 Bg7 19. Qe2 a4 20. b4 cxb4 21. cxb4 Qb7
+22. Red1 Bh6 23. Qd3 Qd7 24. Bxf6 exf6 25. d5 Bg7 26. Nd4 cxd5 27. exd5 Bxd5
+28. Nxb5 Be6 29. Qxd7 Bxd7 30. Nc7 Rab8 31. Ncd5 Bb5 32. Rac1 f5 33. Rc7 Be5
+34. Rc2 h6 35. Rcd2 Re8 36. Rc1 Re6 37. Rcd1 Rbe8 38. Nc2 Bc6 39. Na3 Bb8 40.
+b5 Bxd5 41. Rxd5 Ba7+ 42. Kf1 Re2 43. R5d2 Rxd2 44. Rxd2 Bc5 45. Nc4 Bb4 46.
+Rd1 Kg7 47. b6 Kf6 48. Rb1 Bc5 49. b7 Rb8 50. Na5 Ke6 51. Nc6 Bd6 52. Nxb8 Bxb8
+53. Rc1 Bxh2 54. Rc8 f6 55. b8=Q Bxb8 56. Rxb8 h5 57. Ra8 Ke5 58. Ra5+ Kd4 59.
+Rxa4+ Kd5 60. Ke2 g5 61. Ra5+ Ke6 62. g3 h4 63. gxh4 gxh4 64. Ra7 h3 65. Rh7
+Ke5 66. Rxh3 f4 67. Kd3 Kf5 68. a4 Ke5 69. a5 Kd6 70. Rh7 Kd5 71. a6 Ke5 72. a7
+Kf5 73. a8=Q Ke5 74. Qe4+ Kd6 75. Kc4 f5 76. Qd5# 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.11.01"]
+[Round "2.1"]
+[White "B&P, Mephisto"]
+[Black "Sensory 12, Fidelity"]
+[Result "1-0"]
+[ECO "B26"]
+[PlyCount "101"]
+[EventDate "2013.??.??"]
+
+1. e4 c5 2. Nc3 Nc6 3. g3 g6 4. Bg2 Bg7 5. d3 d6 6. Nge2 Nf6 7. O-O O-O 8. Be3
+Ng4 9. Qd2 f5 10. f3 Nxe3 11. Qxe3 Bd7 12. Qc1 Qb6 13. exf5 c4+ 14. Kh1 cxd3
+15. cxd3 Bxf5 16. Qd2 Nb4 17. d4 e5 18. Na4 Qa5 19. a3 Qxa4 20. axb4 Qc2 21.
+Qxc2 Bxc2 22. d5 a6 23. Nc3 Bd3 24. Rfc1 Bh6 25. Rd1 Bc4 26. Ne4 Rad8 27. Ra3
+Bg7 28. Rc3 Bb5 29. Rdc1 h6 30. Rc7 Be2 31. R1c3 b5 32. b3 g5 33. R7c6 Rd7 34.
+Rxa6 Rfd8 35. Ra2 Bd1 36. Ra1 Be2 37. Re3 Bxf3 38. Rxf3 Kh8 39. Bf1 Rb7 40. Ra5
+Rc7 41. Bxb5 Rc2 42. Ra7 Rb2 43. Rff7 Rb1+ 44. Kg2 Rb8 45. Rxg7 Rb2+ 46. Kg1
+Rb1+ 47. Bf1 Rxf1+ 48. Kxf1 Rf8+ 49. Kg1 Rf3 50. Rgd7 Rf7 51. Rxf7 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.11.04"]
+[Round "2.2"]
+[White "Merlin 16 K 4 Mhz, Mephisto"]
+[Black "Turbostar 432 KSO, SciSys"]
+[Result "0-1"]
+[ECO "D52"]
+[PlyCount "190"]
+[EventDate "2013.??.??"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 d5 4. Bg5 Nbd7 5. e3 c6 6. Nf3 Qa5 7. cxd5 Nxd5 8.
+Qd2 N7b6 9. Nxd5 Qxd2+ 10. Nxd2 exd5 11. Bd3 a5 12. O-O f6 13. Bf4 Bb4 14. Rfd1
+O-O 15. a3 Bxd2 16. Rxd2 Be6 17. Bd6 Rfe8 18. Rc1 Nc4 19. Bxc4 dxc4 20. e4 Red8
+21. Bc7 Rd7 22. Bf4 Rad8 23. Be3 Kf7 24. f4 Re8 25. Bf2 Kf8 26. Rc3 Bg4 27. Rg3
+Bh5 28. Rh3 Bf7 29. Re3 Re6 30. f5 Re8 31. a4 Rde7 32. Rde2 Bh5 33. Re1 Bg4 34.
+h3 Bh5 35. g4 Bf7 36. e5 Bd5 37. e6 Rd8 38. Bh4 h6 39. Bg3 Ke8 40. Ra1 Kf8 41.
+Bh2 b6 42. Bg3 Ke8 43. Raa3 Kf8 44. Re2 g6 45. Rae3 gxf5 46. gxf5 Ke8 47. Bf4
+Rg7+ 48. Kh2 h5 49. Bg3 Rc8 50. e7 Rg5 51. Rf2 Kf7 52. Bc7 Rcg8 53. Ree2 b5 54.
+axb5 cxb5 55. Bxa5 Ke8 56. b3 Rg1 57. Re1 R8g2+ 58. Rxg2 Rxg2+ 59. Kh1 Ra2+ 60.
+Kg1 Rxa5 61. bxc4 Bxc4 62. d5 Bxd5 63. Rd1 Be4 64. Rd6 Bxf5 65. Rxf6 Bxh3 66.
+Rh6 Bg4 67. Kf2 Ra2+ 68. Ke3 Kxe7 69. Rb6 Bd7 70. Rh6 Rh2 71. Kd4 Bf5 72. Ke5
+Bb1 73. Re6+ Kd7 74. Rb6 Rb2 75. Rd6+ Kc7 76. Rh6 Rh2 77. Kf4 Bd3 78. Kg3 Rh1
+79. Kg2 Be4+ 80. Kg3 Rg1+ 81. Kf4 Bg6 82. Ke5 Rg2 83. Kf6 Be8 84. Rh8 Kd7 85.
+Rh7+ Kd6 86. Rh8 Re2 87. Rh6 Re6+ 88. Kg5 Rxh6 89. Kxh6 h4 90. Kg7 h3 91. Kf8
+Bc6 92. Kf7 b4 93. Kf6 b3 94. Kf5 h2 95. Kf4 h1=Q 0-1
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.11.07"]
+[Round "2.3"]
+[White "Sensory 9 8 MHz, Fidelity"]
+[Black "III Glasgow 68000 12 MHz, Mephisto"]
+[Result "1/2-1/2"]
+[ECO "A09"]
+[PlyCount "116"]
+[EventDate "2013.??.??"]
+
+1. Nf3 d5 2. c4 d4 3. g3 Nc6 4. Bg2 e5 5. d3 Bb4+ 6. Kf1 Nge7 7. a3 Bd6 8. b4
+Nf5 9. b5 Nce7 10. g4 Nh6 11. c5 Bxc5 12. Bxh6 gxh6 13. Nxe5 Qd6 14. Nc4 Qf4
+15. h3 O-O 16. Qd2 Qf6 17. a4 a6 18. Qb2 Rd8 19. Nbd2 Qf4 20. bxa6 Rxa6 21.
+Bxb7 Rb6 22. Nxb6 Bxb7 23. Nd7 Rxd7 24. Qxb7 Qxd2 25. Qb5 Qc3 26. Qxd7 Qxa1+
+27. Kg2 Qa3 28. Qxc7 Ng6 29. Rb1 Bf8 30. Rb7 Qa2 31. Kg1 Nh8 32. Qd7 Bc5 33.
+Rb8+ Bf8 34. Qxd4 Ng6 35. Kf1 Qc2 36. Qe4 Qd1+ 37. Kg2 Nh4+ 38. Kh2 Qf1 39. Kg3
+Ng6 40. e3 Qg1+ 41. Qg2 Qa1 42. d4 Qxa4 43. Qa8 Qd1 44. Qf3 Qg1+ 45. Qg2 Qd1
+46. Kh2 Qd2 47. Qg3 Qc2 48. Kh1 Kg7 49. Rb6 Qc3 50. Ra6 Qd2 51. Ra7 Bb4 52. Kg2
+Qc3 53. Qb8 Qc6+ 54. Kg1 Nh4 55. Qe5+ Kg8 56. Qb8+ Kg7 57. Qe5+ Kg8 58. Qb8+
+Kg7 1/2-1/2
+
+[Event "Pokalturnier 2013 Blitzpartie 5 Sek/Zug"]
+[Site "?"]
+[Date "2013.11.07"]
+[Round "2.3"]
+[White "III Glasgow 68000 12 MHz, Mephisto"]
+[Black "Sensory 9 8 MHz, Fidelity"]
+[Result "0-1"]
+[ECO "B52"]
+[PlyCount "78"]
+[EventDate "2013.??.??"]
+
+1. e4 c5 2. Nf3 d6 3. Bb5+ Bd7 4. Bxd7+ Qxd7 5. O-O g6 6. d4 Bg7 7. Be3 cxd4 8.
+Bxd4 Bxd4 9. Qxd4 Nf6 10. Nc3 Nc6 11. Qc4 O-O 12. Qb5 Ne5 13. Nxe5 Qxb5 14.
+Nxb5 dxe5 15. f3 a6 16. Nc3 Rad8 17. Rfd1 Kg7 18. Kf2 b5 19. a3 h5 20. h3 e6
+21. Ne2 Kh6 22. Kg3 Rg8 23. a4 Rxd1 24. Rxd1 bxa4 25. Nc3 a3 26. bxa3 Rc8 27.
+Rd3 Rb8 28. Rd6 Rb2 29. Rxa6 Rxc2 30. Nb5 h4+ 31. Kh2 Nh5 32. Nd6 Rc7 33. a4
+Kg5 34. Kg1 Rc1+ 35. Kf2 Rc2+ 36. Kf1 Ng3+ 37. Kg1 Rc1+ 38. Kf2 Kf4 39. Nf5
+Rf1# 0-1
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.11.04"]
+[Round "2.4"]
+[White "532 XL, Yeno"]
+[Black "Leonardo Maestro A 4 MHz, SciSys"]
+[Result "1-0"]
+[ECO "A22"]
+[PlyCount "71"]
+[EventDate "2013.??.??"]
+
+1. e4 c6 2. c4 e5 3. Nf3 Nf6 4. Nc3 Bb4 5. Nxe5 Qe7 6. Qb3 Bxc3 7. Qxc3 Nxe4 8.
+Qd4 d6 9. Qxe4 dxe5 10. Be2 O-O 11. O-O f5 12. Qe3 f4 13. Qc3 Bf5 14. d3 Rd8
+15. b3 Nd7 16. Bb2 Qd6 17. d4 Qxd4 18. Qxd4 exd4 19. Bxd4 c5 20. Bc3 Rab8 21.
+Rfe1 Re8 22. Bf3 b6 23. h4 h6 24. g3 fxg3 25. fxg3 Kh7 26. Rad1 Bh3 27. Be4+
+Kh8 28. Rd6 Kg8 29. Kh2 Bg4 30. Rg6 h5 31. Rxg7+ Kf8 32. Rf1+ Nf6 33. Bxf6 Be2
+34. Bd5 Re6 35. Bxe6 Bxf1 36. Rg8# 1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.11.10"]
+[Round "3.1"]
+[White "532 XL, Yeno"]
+[Black "Sensory 9 8 MHz, Fidelity"]
+[Result "0-1"]
+[ECO "A28"]
+[PlyCount "97"]
+[EventDate "2013.??.??"]
+
+1. c4 e5 2. Nc3 Nc6 3. e4 Nf6 4. Nf3 Bc5 5. Be2 O-O 6. d3 d6 7. Bg5 Nd4 8. Nd5
+Nxf3+ 9. Bxf3 Be6 10. Nxf6+ gxf6 11. Bh6 Re8 12. O-O Kh8 13. Qe2 Rg8 14. a4 Qd7
+15. Be3 Rae8 16. Bxc5 dxc5 17. Ra3 c6 18. a5 f5 19. Rd1 Qd4 20. exf5 Bxf5 21.
+a6 bxa6 22. Rxa6 Rb8 23. Rd2 Rgd8 24. Bxc6 Bxd3 25. Qe1 Qf4 26. Bb5 Rd4 27. g3
+Rg8 28. b3 Qe4 29. Qxe4 Bxe4 30. Rxd4 exd4 31. Rxa7 f5 32. Rd7 Ra8 33. Ba4 Ra5
+34. h4 Bd3 35. Rf7 Kg8 36. Rc7 Be4 37. Rd7 Ra6 38. Re7 Rd6 39. Re8+ Kf7 40. Rc8
+d3 41. Be8+ Ke6 42. Bh5 d2 43. Bd1 Ra6 44. Re8+ Kd7 45. Rh8 Ra1 46. Rxh7+ Ke6
+47. Kh2 Rxd1 48. Rh6+ Ke5 49. f4+ 0-1
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.11.10"]
+[Round "3.2"]
+[White "B&P, Mephisto"]
+[Black "Turbostar 432 KSO, SciSys"]
+[Result "1-0"]
+[ECO "B54"]
+[PlyCount "51"]
+[EventDate "2013.??.??"]
+
+1. e4 c5 2. Ne2 d6 3. d4 cxd4 4. Nxd4 e5 5. Bb5+ Bd7 6. Bxd7+ Qxd7 7. Nf3 Qg4
+8. O-O Qxe4 9. Nc3 Qc6 10. Qd3 Be7 11. Nd5 f5 12. Nxe7 Nxe7 13. Bg5 e4 14. Qd4
+Rg8 15. Rfe1 Nd7 16. Nh4 Qc5 17. Qxc5 Nxc5 18. Bxe7 Kxe7 19. Nxf5+ Ke6 20. Nd4+
+Ke5 21. Rad1 Na4 22. Nf3+ Kf5 23. g4+ Kf4 24. Rxe4+ Kxe4 25. Kg2 Nxb2 26. Rd4#
+1-0
+
+[Event "Pokalturnier 2013"]
+[Site "?"]
+[Date "2013.11.12"]
+[Round "4.1"]
+[White "Sensory 9 8 MHz, Fidelity"]
+[Black "B&P, Mephisto"]
+[Result "1-0"]
+[ECO "B33"]
+[PlyCount "75"]
+[EventDate "2013.??.??"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 e5 5. Nf3 Nf6 6. Nc3 Nc6 7. Bb5 Be7 8.
+Bxc6+ bxc6 9. O-O Ba6 10. Re1 O-O 11. Rb1 c5 12. Ng5 Bb7 13. Bd2 a5 14. Qf3 Nd7
+15. Qf5 Bxg5 16. Bxg5 Qc7 17. Rbd1 g6 18. Qh3 Nb8 19. Bh6 Rd8 20. Qh4 Nd7 21.
+Bg5 Rf8 22. Be7 Rfe8 23. Nb5 Qc6 24. Nxd6 Reb8 25. Re3 Ba6 26. Rf3 f6 27. Rh3
+h5 28. Rg3 Be2 29. Rd2 Bg4 30. Bxf6 Rxb2 31. h3 Rxc2 32. Rxg4 Nxf6 33. Rxg6+
+Kh7 34. Qxf6 Rc1+ 35. Kh2 Rh1+ 36. Kxh1 Qc7 37. Rh6+ Kg8 38. Rh8# 1-0
+

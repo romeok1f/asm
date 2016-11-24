@@ -1,0 +1,24 @@
+How to test Numa:
+
+1.) Start Brainfish in the console window
+
+2.) Enter the string:  "setoption name Threads value 36"  (without quotation marks)
+    
+    replace 36 by the number of cores your computer has (all Processors together)   
+
+3.) Enter "info"
+    
+    If you have a Numa machine, at least 2 Numa lines should appear, like that:
+ 
+    Numa Hardware Configuration:
+    nodeNr.: 0, cores: 18, cmh: 40040, Group: 0, Mask: 3ffff
+    nodeNr.: 1, cores: 18, cmh: f40040, Group: 0, Mask: ffffc0000
+
+    If all Mask: and cmh: are != 0 and different, Numa works.
+
+
+
+    You can enter "info" also after start, the only diference is that the second and furhter cmh values should be zero then.    
+
+    
+    
